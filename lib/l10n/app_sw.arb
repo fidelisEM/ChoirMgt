@@ -1,0 +1,369 @@
+{
+  "@@locale": "sw",
+  "@@last_modified": "2024-01-01T00:00:00.000Z",
+  
+  "appName": "Mfumo wa Usimamizi wa Kwaya",
+  "@appName": {
+    "description": "The name of the application"
+  },
+  
+  "appSubtitle": "Umoja katika Utaratibu",
+  "@appSubtitle": {
+    "description": "The subtitle of the application"
+  },
+  
+  "loading": "Inapakia...",
+  "@loading": {
+    "description": "Loading text"
+  },
+  
+  "welcomeBack": "Karibu Tena",
+  "@welcomeBack": {
+    "description": "Welcome back message"
+  },
+  
+  "welcomeBackSubtitle": "Ingia ili kuendelea na safari yako ya muziki",
+  "@welcomeBackSubtitle": {
+    "description": "Welcome back subtitle"
+  },
+  
+  "signIn": "Ingia",
+  "@signIn": {
+    "description": "Sign in button text"
+  },
+  
+  "signUp": "Jisajili",
+  "@signUp": {
+    "description": "Sign up button text"
+  },
+  
+  "email": "Barua Pepe",
+  "@email": {
+    "description": "Email label"
+  },
+  
+  "emailAddress": "Anwani ya Barua Pepe",
+  "@emailAddress": {
+    "description": "Email address label"
+  },
+  
+  "enterEmail": "Ingiza barua pepe yako",
+  "@enterEmail": {
+    "description": "Email hint text"
+  },
+  
+  "password": "Nenosiri",
+  "@password": {
+    "description": "Password label"
+  },
+  
+  "enterPassword": "Ingiza nenosiri lako",
+  "@enterPassword": {
+    "description": "Password hint text"
+  },
+  
+  "forgotPassword": "Umesahau Nenosiri?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  
+  "dontHaveAccount": "Haujna akaunti? ",
+  "@dontHaveAccount": {
+    "description": "Don't have account text"
+  },
+  
+  "alreadyHaveAccount": "Tayari una akaunti? ",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  
+  "dashboard": "Dashibodi",
+  "@dashboard": {
+    "description": "Dashboard tab label"
+  },
+  
+  "choirs": "Kwaya",
+  "@choirs": {
+    "description": "Choirs tab label"
+  },
+  
+  "members": "Wanachama",
+  "@members": {
+    "description": "Members tab label"
+  },
+  
+  "attendance": "Mahudhurio",
+  "@attendance": {
+    "description": "Attendance tab label"
+  },
+  
+  "payments": "Malipo",
+  "@payments": {
+    "description": "Payments tab label"
+  },
+  
+  "reports": "Ripoti",
+  "@reports": {
+    "description": "Reports tab label"
+  },
+  
+  "overview": "Muhtasari",
+  "@overview": {
+    "description": "Overview section title"
+  },
+  
+  "quickActions": "Vitendo vya Haraka",
+  "@quickActions": {
+    "description": "Quick actions section title"
+  },
+  
+  "recentActivity": "Shughuli za Hivi Karibuni",
+  "@recentActivity": {
+    "description": "Recent activity section title"
+  },
+  
+  "totalMembers": "Jumla ya Wanachama",
+  "@totalMembers": {
+    "description": "Total members stat label"
+  },
+  
+  "activeChoirs": "Kwaya Zinazofanya Kazi",
+  "@activeChoirs": {
+    "description": "Active choirs stat label"
+  },
+  
+  "thisWeek": "Wiki Hii",
+  "@thisWeek": {
+    "description": "This week label"
+  },
+  
+  "collections": "Mikusanyiko",
+  "@collections": {
+    "description": "Collections label"
+  },
+  
+  "thisMonth": "Mwezi huu",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+  
+  "addMember": "Ongeza Mwanachama",
+  "@addMember": {
+    "description": "Add member action"
+  },
+  
+  "takeAttendance": "Chukua Mahudhurio",
+  "@takeAttendance": {
+    "description": "Take attendance action"
+  },
+  
+  "recordPayment": "Rekodi Malipo",
+  "@recordPayment": {
+    "description": "Record payment action"
+  },
+  
+  "viewReports": "Tazama Ripoti",
+  "@viewReports": {
+    "description": "View reports action"
+  },
+  
+  "myProfile": "Wasifu Wangu",
+  "@myProfile": {
+    "description": "My profile action"
+  },
+  
+  "myAttendance": "Mahudhurio Yangu",
+  "@myAttendance": {
+    "description": "My attendance action"
+  },
+  
+  "paymentHistory": "Historia ya Malipo",
+  "@paymentHistory": {
+    "description": "Payment history action"
+  },
+  
+  "notifications": "Arifa",
+  "@notifications": {
+    "description": "Notifications action"
+  },
+  
+  "noRecentActivity": "Hakuna shughuli za hivi karibuni",
+  "@noRecentActivity": {
+    "description": "No recent activity message"
+  },
+  
+  "activityWillAppear": "Shughuli zitaonekana hapa unapotumia mfumo",
+  "@activityWillAppear": {
+    "description": "Activity will appear message"
+  },
+  
+  "accessRestricted": "Ufikiaji Umezuiliwa",
+  "@accessRestricted": {
+    "description": "Access restricted title"
+  },
+  
+  "noPermission": "Huna ruhusa ya kufikia sehemu hii.",
+  "@noPermission": {
+    "description": "No permission message"
+  },
+  
+  "restricted": "Imezuiliwa",
+  "@restricted": {
+    "description": "Restricted label"
+  },
+  
+  "profile": "Wasifu",
+  "@profile": {
+    "description": "Profile label"
+  },
+  
+  "settings": "Mipangilio",
+  "@settings": {
+    "description": "Settings label"
+  },
+  
+  "logout": "Toka",
+  "@logout": {
+    "description": "Logout label"
+  },
+  
+  "accountMenu": "Menyu ya Akaunti",
+  "@accountMenu": {
+    "description": "Account menu title"
+  },
+  
+  "administrator": "Msimamizi",
+  "@administrator": {
+    "description": "Administrator role"
+  },
+  
+  "choirLeader": "Kiongozi wa Kwaya",
+  "@choirLeader": {
+    "description": "Choir leader role"
+  },
+  
+  "choirMember": "Mwanachama wa Kwaya",
+  "@choirMember": {
+    "description": "Choir member role"
+  },
+  
+  "google": "Google",
+  "@google": {
+    "description": "Google label"
+  },
+  
+  "apple": "Apple",
+  "@apple": {
+    "description": "Apple label"
+  },
+  
+  "comingSoon": "Inakuja Hivi Karibuni",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+  
+  "googleSignInSoon": "Kuingia kwa Google kutapatikana hivi karibuni",
+  "@googleSignInSoon": {
+    "description": "Google sign in coming soon message"
+  },
+  
+  "appleSignInSoon": "Kuingia kwa Apple kutapatikana hivi karibuni",
+  "@appleSignInSoon": {
+    "description": "Apple sign in coming soon message"
+  },
+  
+  "or": "AU",
+  "@or": {
+    "description": "OR divider text"
+  },
+  
+  "loginFailed": "Kuingia Kumeshindikana",
+  "@loginFailed": {
+    "description": "Login failed title"
+  },
+  
+  "checkCredentials": "Tafadhali angalia taarifa zako na ujaribu tena",
+  "@checkCredentials": {
+    "description": "Check credentials message"
+  },
+  
+  "profileScreenSoon": "Skrini ya wasifu inakuja hivi karibuni!",
+  "@profileScreenSoon": {
+    "description": "Profile screen coming soon message"
+  },
+  
+  "settingsScreenSoon": "Skrini ya mipangilio inakuja hivi karibuni!",
+  "@settingsScreenSoon": {
+    "description": "Settings screen coming soon message"
+  },
+  
+  "quickActionMenuSoon": "Menyu ya vitendo vya haraka inakuja hivi karibuni!",
+  "@quickActionMenuSoon": {
+    "description": "Quick action menu coming soon message"
+  },
+  
+  "language": "Lugha",
+  "@language": {
+    "description": "Language label"
+  },
+  
+  "selectLanguage": "Chagua Lugha",
+  "@selectLanguage": {
+    "description": "Select language title"
+  },
+  
+  "english": "Kiingereza",
+  "@english": {
+    "description": "English language name"
+  },
+  
+  "swahili": "Kiswahili",
+  "@swahili": {
+    "description": "Swahili language name"
+  },
+  
+  "languageChanged": "Lugha imebadilishwa kwa mafanikio",
+  "@languageChanged": {
+    "description": "Language changed success message"
+  },
+  
+  "welcomeBackName": "Karibu tena,",
+  "@welcomeBackName": {
+    "description": "Welcome back with name"
+  },
+  
+  "attendancePercentage": "Mahudhurio",
+  "@attendancePercentage": {
+    "description": "Attendance percentage label"
+  },
+  
+  "plusThisMonth": "+{count} mwezi huu",
+  "@plusThisMonth": {
+    "description": "Plus count this month",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "active": "Hai",
+  "@active": {
+    "description": "Active status label"
+  },
+
+  "noMembers": "Hakuna washiriki",
+  "@noMembers": {
+    "description": "No members message"
+  },
+
+  "managing": "Inasimamia",
+  "@managing": {
+    "description": "Managing label"
+  },
+
+  "noChoirs": "Hakuna vikundi",
+  "@noChoirs": {
+    "description": "No choirs message"
+  }
+}

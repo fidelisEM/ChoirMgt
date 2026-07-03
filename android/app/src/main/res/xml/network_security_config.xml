@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <!-- Production domains -->
+        <domain includeSubdomains="true">your-prod-project.supabase.co</domain>
+        <domain includeSubdomains="true">choirmanagement.com</domain>
+        
+        <!-- Trust user added CAs -->
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+        
+        <!-- Certificate pinning for production -->
+        <pin-set expiration="2025-12-31">
+            <!-- Replace with actual certificate pins -->
+            <pin digest="SHA-256">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</pin>
+            <pin digest="SHA-256">BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=</pin>
+        </pin-set>
+    </domain-config>
+    
+    <!-- Debug configuration -->
+    <debug-overrides>
+        <domain-config cleartextTrafficPermitted="true">
+            <!-- Development domains -->
+            <domain includeSubdomains="true">your-dev-project.supabase.co</domain>
+            <domain includeSubdomains="true">localhost</domain>
+            <domain includeSubdomains="true">10.0.2.2</domain>
+            <domain includeSubdomains="true">127.0.0.1</domain>
+        </domain-config>
+    </debug-overrides>
+    
+    <!-- Base configuration -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

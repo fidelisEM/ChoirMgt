@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude sensitive directories and files -->
+    <exclude domain="database" />
+    <exclude domain="sharedpref" path="user_session.xml" />
+    <exclude domain="sharedpref" path="auth_tokens.xml" />
+    <exclude domain="file" path="secure/" />
+    <exclude domain="file" path="cache/" />
+    <exclude domain="file" path="temp/" />
+    
+    <!-- Include app preferences but exclude sensitive ones -->
+    <include domain="sharedpref" path="app_preferences.xml" />
+    <include domain="file" path="documents/" />
+    <include domain="file" path="exports/" />
+</full-backup-content>
