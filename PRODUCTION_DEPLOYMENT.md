@@ -241,16 +241,18 @@ The project includes automated CI/CD workflows:
 Add these secrets to your GitHub repository:
 
 ```bash
-# Firebase
-FIREBASE_SERVICE_ACCOUNT_STAGING
-FIREBASE_SERVICE_ACCOUNT_PROD
-FIREBASE_PROJECT_ID_STAGING
-FIREBASE_PROJECT_ID_PROD
+# Firebase - one project (see .firebaserc), staging and production are
+# separate Hosting channels ("staging" preview channel vs "live"), not
+# separate Firebase projects.
+FIREBASE_SERVICE_ACCOUNT
+FIREBASE_PROJECT_ID
 
 # Google Play
 GOOGLE_PLAY_SERVICE_ACCOUNT
 
-# Supabase
+# Supabase - separate projects: choir_management_system (dev/test) and
+# choir-management-production (production). CI's build-web job picks
+# _STAGING vs _PROD based on branch (develop vs main).
 SUPABASE_URL_PROD
 SUPABASE_ANON_KEY_PROD
 SUPABASE_URL_STAGING

@@ -83,19 +83,17 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Deploy to Firebase
+# Deploy to Firebase. There is a single Firebase Hosting project (set as
+# "default" in .firebaserc) - staging deploys to a temporary preview
+# channel on that same project rather than a separate project/alias.
 print_status "Deploying to Firebase Hosting..."
 
 if [ "$ENVIRONMENT" == "production" ]; then
-    # Production deployment
-    firebase deploy \
-        --only hosting \
-        --project production
+    # Production deployment - the live channel
+    firebase deploy --only hosting
 else
-    # Staging deployment
-    firebase hosting:channel:deploy staging \
-        --project staging \
-        --expires 30d
+    # Staging deployment - a preview channel that auto-expires
+    firebase hosting:channel:deploy staging --expires 30d
 fi
 
 if [ $? -eq 0 ]; then
