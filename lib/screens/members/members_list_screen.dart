@@ -7,6 +7,8 @@ import '../../controllers/choir_controller.dart';
 import '../../controllers/member_controller.dart';
 import '../../models/models.dart';
 import '../../services/export_service.dart';
+import '../../utils/app_translations.dart';
+import '../../utils/currency_utils.dart';
 import '../../utils/helpers.dart';
 import 'add_member_screen.dart';
 import 'edit_member_screen.dart';
@@ -40,7 +42,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
       final authController = Provider.of<AuthController>(context, listen: false);
       
       if (authController.currentUser != null) {
-        if (authController.currentUser!.role == UserRole.admin) {
+        if (authController.currentUser!.isAdmin) {
           await choirController.loadChoirs(adminView: true);
         } else {
           await choirController.loadChoirs(
@@ -58,8 +60,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
     } catch (e) {
       if (mounted) {
         Get.snackbar(
-          'Error',
-          'Failed to load choirs: $e',
+          context.tr('error'),
+          '${context.tr('memberLoadChoirsFailed')}: $e',
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
@@ -120,15 +122,15 @@ class _MembersListScreenState extends State<MembersListScreen> {
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
-            SizedBox(width: 12),
-            Text('Loading choirs...'),
+            const SizedBox(width: 12),
+            Text(context.tr('memberLoadingChoirs')),
           ],
         ),
       );
@@ -145,10 +147,10 @@ class _MembersListScreenState extends State<MembersListScreen> {
           children: [
             const Icon(Icons.info_outline, color: Colors.orange),
             const SizedBox(width: 12),
-            const Expanded(child: Text('No choirs available')),
+            Expanded(child: Text(context.tr('memberNoChoirsAvailable'))),
             TextButton(
               onPressed: _loadChoirs,
-              child: const Text('Retry'),
+              child: Text(context.tr('retry')),
             ),
           ],
         ),
@@ -157,11 +159,11 @@ class _MembersListScreenState extends State<MembersListScreen> {
 
     return DropdownButtonFormField<String>(
       initialValue: _selectedChoirId,
-      decoration: const InputDecoration(
-        labelText: 'Select Choir',
-        border: OutlineInputBorder(),
-        prefixIcon: Icon(Icons.music_note),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: InputDecoration(
+        labelText: context.tr('memberSelectChoir'),
+        border: const OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.music_note),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
       items: choirController.choirs.map((choir) {
         return DropdownMenuItem<String>(
@@ -184,9 +186,13 @@ class _MembersListScreenState extends State<MembersListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // The bottom area holds the choir dropdown and, once a choir is chosen,
+    // the search field. Reserve what they need so they don't spill over the list.
+    final hasChoir = context.watch<ChoirController>().selectedChoir != null;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choir Members'),
+        title: Text(context.tr('memberChoirMembersTitle')),
         actions: [
           Consumer2<AuthController, ChoirController>(
             builder: (context, authController, choirController, child) {
@@ -202,13 +208,13 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'export',
                     child: Row(
                       children: [
-                        Icon(Icons.download, size: 20),
-                        SizedBox(width: 8),
-                        Text('Export Members'),
+                        const Icon(Icons.download, size: 20),
+                        const SizedBox(width: 8),
+                        Text(context.tr('memberExportMembers')),
                       ],
                     ),
                   ),
@@ -218,7 +224,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(120), // Increased height for choir selection
+          preferredSize: Size.fromHeight(hasChoir ? 168 : 92),
           child: Consumer<ChoirController>(
             builder: (context, choirController, child) {
               return Padding(
@@ -232,10 +238,10 @@ class _MembersListScreenState extends State<MembersListScreen> {
                     if (choirController.selectedChoir != null)
                       TextField(
                         controller: _searchController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search members...',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          hintText: context.tr('memberSearchHint'),
+                          prefixIcon: const Icon(Icons.search),
+                          border: const OutlineInputBorder(),
                           filled: true,
                           fillColor: Colors.white,
                         ),
@@ -262,7 +268,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Select a choir to view members',
+                    context.tr('memberSelectChoirPrompt'),
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[600],
@@ -271,7 +277,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Choose a choir from the dropdown above',
+                    context.tr('memberChooseChoirHint'),
                     style: TextStyle(
                       color: Colors.grey[500],
                       fontSize: 14,
@@ -298,7 +304,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Error loading members',
+                    context.tr('memberErrorLoadingMembers'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
@@ -313,7 +319,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                       memberController.clearError();
                       _loadMembers();
                     },
-                    child: const Text('Retry'),
+                    child: Text(context.tr('retry')),
                   ),
                 ],
               ),
@@ -337,9 +343,9 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    _searchController.text.isEmpty 
-                        ? 'No members found'
-                        : 'No matching members',
+                    _searchController.text.isEmpty
+                        ? context.tr('memberNoMembersFound')
+                        : context.tr('memberNoMatchingMembers'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -347,8 +353,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   const SizedBox(height: 8),
                   Text(
                     _searchController.text.isEmpty
-                        ? 'Add your first member to get started'
-                        : 'Try adjusting your search terms',
+                        ? context.tr('memberAddFirstPrompt')
+                        : context.tr('memberAdjustSearchPrompt'),
                     style: TextStyle(color: Colors.grey[600]),
                     textAlign: TextAlign.center,
                   ),
@@ -357,7 +363,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                     ElevatedButton.icon(
                       onPressed: () => _showAddMemberDialog(),
                       icon: const Icon(Icons.person_add),
-                      label: const Text('Add Member'),
+                      label: Text(context.tr('addMember')),
                     ),
                   ],
                 ],
@@ -371,7 +377,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 color: Theme.of(context).colorScheme.surface,
-                child: _buildStatisticsBar(memberController.memberStatistics),
+                child: _buildStatisticsBar(context, memberController.memberStatistics),
               ),
               
               // Members list
@@ -400,7 +406,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
           
           return FloatingActionButton(
             onPressed: _showAddMemberDialog,
-            tooltip: 'Add Member',
+            tooltip: context.tr('addMember'),
             child: const Icon(Icons.person_add),
           );
         },
@@ -408,14 +414,13 @@ class _MembersListScreenState extends State<MembersListScreen> {
     );
   }
 
-  Widget _buildStatisticsBar(Map<String, dynamic> stats) {
+  Widget _buildStatisticsBar(BuildContext context, Map<String, dynamic> stats) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildStatItem('Total', stats['total_members']?.toString() ?? '0', Colors.blue),
-        _buildStatItem('Active', stats['active_members']?.toString() ?? '0', Colors.green),
-        _buildStatItem('Inactive', stats['inactive_members']?.toString() ?? '0', Colors.orange),
-        _buildStatItem('Suspended', stats['suspended_members']?.toString() ?? '0', Colors.red),
+        Expanded(child: _buildStatItem(context.tr('memberTotal'), stats['total_members']?.toString() ?? '0', Colors.blue)),
+        Expanded(child: _buildStatItem(context.tr('active'), stats['active_members']?.toString() ?? '0', Colors.green)),
+        Expanded(child: _buildStatItem(context.tr('inactive'), stats['inactive_members']?.toString() ?? '0', Colors.orange)),
+        Expanded(child: _buildStatItem(context.tr('memberSuspended'), stats['suspended_members']?.toString() ?? '0', Colors.red)),
       ],
     );
   }
@@ -433,6 +438,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
         ),
         Text(
           label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey[600],
@@ -444,7 +451,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
 
   Widget _buildMemberCard(BuildContext context, Map<String, dynamic> member, AuthController authController) {
     final userData = member['users'];
-    final name = userData?['full_name'] ?? 'Unknown User';
+    final name = userData?['full_name'] ?? context.tr('memberUnknownUser');
     final email = userData?['email'] ?? '';
     final regNumber = member['registration_number'] ?? '';
     final status = member['status'] ?? 'active';
@@ -481,6 +488,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
                       children: [
                         Text(
                           name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -490,6 +499,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
                           const SizedBox(height: 2),
                           Text(
                             email,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: 14,
@@ -503,33 +514,33 @@ class _MembersListScreenState extends State<MembersListScreen> {
                     PopupMenuButton<String>(
                       onSelected: (value) => _handleMemberAction(context, member, value),
                       itemBuilder: (context) => [
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'edit',
                           child: Row(
                             children: [
-                              Icon(Icons.edit, size: 16),
-                              SizedBox(width: 8),
-                              Text('Edit'),
+                              const Icon(Icons.edit, size: 16),
+                              const SizedBox(width: 8),
+                              Text(context.tr('edit')),
                             ],
                           ),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'status',
                           child: Row(
                             children: [
-                              Icon(Icons.swap_horiz, size: 16),
-                              SizedBox(width: 8),
-                              Text('Change Status'),
+                              const Icon(Icons.swap_horiz, size: 16),
+                              const SizedBox(width: 8),
+                              Text(context.tr('memberChangeStatus')),
                             ],
                           ),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'remove',
                           child: Row(
                             children: [
-                              Icon(Icons.remove_circle, size: 16, color: Colors.red),
-                              SizedBox(width: 8),
-                              Text('Remove', style: TextStyle(color: Colors.red)),
+                              const Icon(Icons.remove_circle, size: 16, color: Colors.red),
+                              const SizedBox(width: 8),
+                              Text(context.tr('remove'), style: const TextStyle(color: Colors.red)),
                             ],
                           ),
                         ),
@@ -538,31 +549,34 @@ class _MembersListScreenState extends State<MembersListScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
                 children: [
                   _buildInfoChip(
                     icon: Icons.badge,
                     label: regNumber,
                     color: Colors.blue,
                   ),
-                  const SizedBox(width: 8),
                   _buildInfoChip(
                     icon: Icons.circle,
                     label: status.toUpperCase(),
                     color: _getStatusColor(status),
                   ),
-                  const SizedBox(width: 8),
                   if (outstandingFees > 0)
                     _buildInfoChip(
                       icon: Icons.payment,
-                      label: '\$${outstandingFees.toStringAsFixed(2)}',
+                      label: CurrencyUtils.formatAmount(
+                        (outstandingFees as num).toDouble(),
+                        CurrencyUtils.getDefaultCurrency(),
+                      ),
                       color: Colors.red,
                     ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                'Joined: ${_formatDate(joinDate)}',
+                '${context.tr('memberJoinedLabel')}: ${_formatDate(joinDate)}',
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 12,
@@ -591,12 +605,16 @@ class _MembersListScreenState extends State<MembersListScreen> {
         children: [
           Icon(icon, size: 12, color: color),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -665,7 +683,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Change Member Status'),
+          title: Text(context.tr('memberChangeStatusTitle')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: MemberStatus.values.map((status) {
@@ -684,14 +702,14 @@ class _MembersListScreenState extends State<MembersListScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(context.tr('cancel')),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _updateMemberStatus(member, selectedStatus);
               },
-              child: const Text('Update'),
+              child: Text(context.tr('update')),
             ),
           ],
         ),
@@ -711,17 +729,18 @@ class _MembersListScreenState extends State<MembersListScreen> {
       choirId: choirController.selectedChoir!.id,
     );
 
+    if (!mounted) return;
     if (success) {
       Get.snackbar(
-        'Success',
-        'Member status updated successfully',
+        context.tr('memberSuccessTitle'),
+        context.tr('memberStatusUpdateSuccess'),
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
     } else {
       Get.snackbar(
-        'Error',
-        memberController.errorMessage ?? 'Failed to update member status',
+        context.tr('error'),
+        memberController.errorMessage ?? context.tr('memberStatusUpdateFailed'),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -730,19 +749,19 @@ class _MembersListScreenState extends State<MembersListScreen> {
 
   void _showRemoveMemberDialog(Map<String, dynamic> member) {
     final userData = member['users'];
-    final name = userData?['full_name'] ?? 'Unknown User';
+    final name = userData?['full_name'] ?? context.tr('memberUnknownUser');
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remove Member'),
+        title: Text(context.tr('memberRemoveTitle')),
         content: Text(
-          'Are you sure you want to remove "$name" from the choir? This action cannot be undone.',
+          '${context.tr('memberRemoveConfirmPrefix')} "$name" ${context.tr('memberRemoveConfirmSuffix')}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -750,7 +769,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
               _removeMember(member);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Remove', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('remove'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -768,17 +787,18 @@ class _MembersListScreenState extends State<MembersListScreen> {
       choirController.selectedChoir!.id,
     );
 
+    if (!mounted) return;
     if (success) {
       Get.snackbar(
-        'Success',
-        'Member removed successfully',
+        context.tr('memberSuccessTitle'),
+        context.tr('memberRemovedSuccess'),
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
     } else {
       Get.snackbar(
-        'Error',
-        memberController.errorMessage ?? 'Failed to remove member',
+        context.tr('error'),
+        memberController.errorMessage ?? context.tr('memberRemoveFailed'),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -788,18 +808,18 @@ class _MembersListScreenState extends State<MembersListScreen> {
   void _showExportOptions() {
     final memberController = Provider.of<MemberController>(context, listen: false);
     final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+
     if (choirController.selectedChoir == null) {
-      Helpers.showErrorSnackbar('Please select a choir first');
+      Helpers.showErrorSnackbar(context.tr('memberSelectChoirFirst'));
       return;
     }
 
-    final members = _searchController.text.isNotEmpty 
-        ? _filteredMembers 
+    final members = _searchController.text.isNotEmpty
+        ? _filteredMembers
         : memberController.membersWithUserInfo;
 
     if (members.isEmpty) {
-      Helpers.showErrorSnackbar('No members to export');
+      Helpers.showErrorSnackbar(context.tr('memberNoMembersToExport'));
       return;
     }
 
@@ -811,23 +831,23 @@ class _MembersListScreenState extends State<MembersListScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Export Member List',
-              style: TextStyle(
+            Text(
+              context.tr('memberExportListTitle'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Export ${members.length} members from ${choirController.selectedChoir!.name}',
+              '${context.tr('memberExportCountPrefix')} ${members.length} ${context.tr('memberExportCountSuffix')} ${choirController.selectedChoir!.name}',
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 20),
             ListTile(
               leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
-              title: const Text('Export as PDF'),
-              subtitle: const Text('Generate PDF document'),
+              title: Text(context.tr('memberExportAsPdf')),
+              subtitle: Text(context.tr('memberGeneratePdfDoc')),
               onTap: () {
                 Navigator.pop(context);
                 _exportMembers('pdf', members);
@@ -835,8 +855,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.table_chart, color: Colors.green),
-              title: const Text('Export as Excel'),
-              subtitle: const Text('Generate Excel spreadsheet'),
+              title: Text(context.tr('memberExportAsExcel')),
+              subtitle: Text(context.tr('memberGenerateExcelDoc')),
               onTap: () {
                 Navigator.pop(context);
                 _exportMembers('excel', members);
@@ -844,8 +864,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.text_snippet, color: Colors.blue),
-              title: const Text('Export as CSV'),
-              subtitle: const Text('Generate CSV file'),
+              title: Text(context.tr('memberExportAsCsv')),
+              subtitle: Text(context.tr('memberGenerateCsvDoc')),
               onTap: () {
                 Navigator.pop(context);
                 _exportMembers('csv', members);
@@ -907,17 +927,19 @@ class _MembersListScreenState extends State<MembersListScreen> {
         Get.back();
       }
 
+      if (!mounted) return;
       if (result != null) {
-        Helpers.showSuccessSnackbar('Members exported successfully');
+        Helpers.showSuccessSnackbar(context.tr('memberExportSuccess'));
       } else {
-        Helpers.showErrorSnackbar('Failed to export members');
+        Helpers.showErrorSnackbar(context.tr('memberExportFailed'));
       }
     } catch (e) {
       // Hide loading dialog
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }
-      Helpers.showErrorSnackbar('Export failed: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('memberExportFailedWithError')}: $e');
     }
   }
 

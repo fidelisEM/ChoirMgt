@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/report_controller.dart';
 import '../../models/models.dart';
 import '../../services/choir_service.dart';
+import '../../services/export_service.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/helpers.dart';
 import '../../widgets/custom_widgets.dart';
 import 'member_roles_screen.dart';
@@ -56,7 +59,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choir Settings'),
+        title: Text(context.tr('settingsChoirSettings')),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         actions: [
@@ -71,9 +74,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                       color: Colors.white,
                     ),
                   )
-                : const Text(
-                    'Save',
-                    style: TextStyle(color: Colors.white),
+                : Text(
+                    context.tr('save'),
+                    style: const TextStyle(color: Colors.white),
                   ),
           ),
         ],
@@ -84,7 +87,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           padding: const EdgeInsets.all(16),
           children: [
             // Basic Information
-            _buildSectionHeader('Basic Information'),
+            _buildSectionHeader(context.tr('settingsBasicInformation')),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -92,10 +95,10 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   children: [
                     CustomTextField(
                       controller: _nameController,
-                      label: 'Choir Name',
+                      label: context.tr('settingsChoirName'),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Choir name is required';
+                          return context.tr('settingsChoirNameRequired');
                         }
                         return null;
                       },
@@ -103,18 +106,18 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _descriptionController,
-                      label: 'Description',
+                      label: context.tr('description'),
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _locationController,
-                      label: 'Location',
+                      label: context.tr('settingsLocation'),
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _contactController,
-                      label: 'Contact Information',
+                      label: context.tr('settingsContactInformation'),
                     ),
                   ],
                 ),
@@ -122,13 +125,13 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ),
 
             // Privacy Settings
-            _buildSectionHeader('Privacy & Access'),
+            _buildSectionHeader(context.tr('settingsPrivacyAccess')),
             Card(
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: const Text('Public Choir'),
-                    subtitle: const Text('Make this choir visible to everyone'),
+                    title: Text(context.tr('settingsPublicChoir')),
+                    subtitle: Text(context.tr('settingsPublicChoirDesc')),
                     value: _isPublic,
                     onChanged: (value) {
                       setState(() => _isPublic = value);
@@ -136,8 +139,8 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   ),
                   const Divider(height: 1),
                   SwitchListTile(
-                    title: const Text('Allow Self-Registration'),
-                    subtitle: const Text('Let users join without invitation'),
+                    title: Text(context.tr('settingsAllowSelfRegistration')),
+                    subtitle: Text(context.tr('settingsAllowSelfRegistrationDesc')),
                     value: _allowSelfRegistration,
                     onChanged: (value) {
                       setState(() => _allowSelfRegistration = value);
@@ -145,8 +148,8 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   ),
                   const Divider(height: 1),
                   SwitchListTile(
-                    title: const Text('Require Leader Approval'),
-                    subtitle: const Text('Leaders must approve new members'),
+                    title: Text(context.tr('settingsRequireLeaderApproval')),
+                    subtitle: Text(context.tr('settingsRequireLeaderApprovalDesc')),
                     value: _requireApproval,
                     onChanged: _allowSelfRegistration ? (value) {
                       setState(() => _requireApproval = value);
@@ -157,13 +160,13 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ),
 
             // Notification Settings
-            _buildSectionHeader('Notifications'),
+            _buildSectionHeader(context.tr('settingsNotifications')),
             Card(
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: const Text('Automatic Reminders'),
-                    subtitle: const Text('Send attendance and payment reminders'),
+                    title: Text(context.tr('settingsAutomaticReminders')),
+                    subtitle: Text(context.tr('settingsAutomaticRemindersDesc')),
                     value: _autoReminders,
                     onChanged: (value) {
                       setState(() => _autoReminders = value);
@@ -171,15 +174,15 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text('Reminder Schedule'),
-                    subtitle: const Text('Set when to send reminders'),
+                    title: Text(context.tr('settingsReminderSchedule')),
+                    subtitle: Text(context.tr('settingsReminderScheduleDesc')),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configureReminders(),
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text('Notification Templates'),
-                    subtitle: const Text('Customize notification messages'),
+                    title: Text(context.tr('settingsNotificationTemplates')),
+                    subtitle: Text(context.tr('settingsNotificationTemplatesDesc')),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configureTemplates(),
                   ),
@@ -188,29 +191,29 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ),
 
             // Member Management
-            _buildSectionHeader('Member Management'),
+            _buildSectionHeader(context.tr('settingsMemberManagement')),
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text('Member Roles'),
-                    subtitle: const Text('Manage member permissions'),
+                    title: Text(context.tr('settingsMemberRoles')),
+                    subtitle: Text(context.tr('settingsMemberRolesDesc')),
                     leading: const Icon(Icons.people),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _manageMemberRoles(),
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text('Attendance Tracking'),
-                    subtitle: const Text('Configure attendance settings'),
+                    title: Text(context.tr('settingsAttendanceTracking')),
+                    subtitle: Text(context.tr('settingsAttendanceTrackingDesc')),
                     leading: const Icon(Icons.check_circle),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configureAttendance(),
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text('Payment Settings'),
-                    subtitle: const Text('Set up fees and payment options'),
+                    title: Text(context.tr('settingsPaymentSettings')),
+                    subtitle: Text(context.tr('settingsPaymentSettingsDesc')),
                     leading: const Icon(Icons.payment),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configurePayments(),
@@ -220,24 +223,16 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ),
 
             // Data & Export
-            _buildSectionHeader('Data Management'),
+            _buildSectionHeader(context.tr('settingsDataManagement')),
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text('Export Choir Data'),
-                    subtitle: const Text('Download all choir information'),
+                    title: Text(context.tr('settingsExportChoirData')),
+                    subtitle: Text(context.tr('settingsExportChoirDataDesc')),
                     leading: const Icon(Icons.download),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _exportChoirData(),
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    title: const Text('Backup & Restore'),
-                    subtitle: const Text('Backup or restore choir data'),
-                    leading: const Icon(Icons.backup),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _backupRestore(),
                   ),
                 ],
               ),
@@ -252,7 +247,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                 
                 return Column(
                   children: [
-                    _buildSectionHeader('Danger Zone'),
+                    _buildSectionHeader(context.tr('settingsDangerZone')),
                     Card(
                       color: Colors.red[50],
                       child: Padding(
@@ -260,17 +255,17 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Delete Choir',
-                              style: TextStyle(
+                            Text(
+                              context.tr('settingsDeleteChoir'),
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red,
                               ),
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'Permanently delete this choir and all its data. This action cannot be undone.',
+                            Text(
+                              context.tr('settingsDeleteChoirWarning'),
                             ),
                             const SizedBox(height: 16),
                             ElevatedButton(
@@ -279,7 +274,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                               ),
-                              child: const Text('Delete Choir'),
+                              child: Text(context.tr('settingsDeleteChoir')),
                             ),
                           ],
                         ),
@@ -332,16 +327,19 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
       );
       
       final success = await choirService.updateChoir(updatedChoir);
-      
+      if (!mounted) return;
+
       if (success) {
-        Helpers.showSuccessSnackbar('Choir settings updated successfully');
-        Get.back();
+        final updatedMessage = context.tr('settingsChoirSettingsUpdated');
+        Get.back(); // pop before the snackbar, which is itself a route
+        Helpers.showSuccessSnackbar(updatedMessage);
       } else {
         throw Exception('Failed to update choir settings');
       }
-      
+
     } catch (e) {
-      Helpers.showErrorSnackbar('Failed to update settings: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('settingsUpdateSettingsFailed')}: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -352,41 +350,41 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _configureReminders() {
     Get.dialog(
       AlertDialog(
-        title: const Text('Reminder Schedule'),
-        content: const Column(
+        title: Text(context.tr('settingsReminderSchedule')),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.event),
-              title: Text('Event Reminders'),
-              subtitle: Text('Send 24 hours before events'),
-              trailing: Switch(value: true, onChanged: null),
+              leading: const Icon(Icons.event),
+              title: Text(context.tr('settingsEventReminders')),
+              subtitle: Text(context.tr('settingsEventRemindersDesc')),
+              trailing: const Switch(value: true, onChanged: null),
             ),
             ListTile(
-              leading: Icon(Icons.payment),
-              title: Text('Payment Reminders'),
-              subtitle: Text('Send 3 days before due date'),
-              trailing: Switch(value: true, onChanged: null),
+              leading: const Icon(Icons.payment),
+              title: Text(context.tr('settingsPaymentReminders')),
+              subtitle: Text(context.tr('settingsPaymentRemindersDueDesc')),
+              trailing: const Switch(value: true, onChanged: null),
             ),
             ListTile(
-              leading: Icon(Icons.check_circle),
-              title: Text('Attendance Reminders'),
-              subtitle: Text('Send 1 hour before practice'),
-              trailing: Switch(value: false, onChanged: null),
+              leading: const Icon(Icons.check_circle),
+              title: Text(context.tr('settingsAttendanceReminders')),
+              subtitle: Text(context.tr('settingsAttendanceRemindersPracticeDesc')),
+              trailing: const Switch(value: false, onChanged: null),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Close'),
+            child: Text(context.tr('close')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar('Reminder schedule updated');
+              Helpers.showSuccessSnackbar(context.tr('settingsReminderScheduleUpdated'));
             },
-            child: const Text('Save'),
+            child: Text(context.tr('save')),
           ),
         ],
       ),
@@ -396,46 +394,46 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _configureTemplates() {
     Get.dialog(
       AlertDialog(
-        title: const Text('Message Templates'),
-        content: const Column(
+        title: Text(context.tr('settingsMessageTemplates')),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Available Templates:'),
-            SizedBox(height: 12),
+            Text(context.tr('settingsAvailableTemplates')),
+            const SizedBox(height: 12),
             ListTile(
-              leading: Icon(Icons.event_note),
-              title: Text('Event Reminder'),
-              subtitle: Text('Template for upcoming event notifications'),
+              leading: const Icon(Icons.event_note),
+              title: Text(context.tr('settingsTemplateEventReminder')),
+              subtitle: Text(context.tr('settingsTemplateEventReminderDesc')),
             ),
             ListTile(
-              leading: Icon(Icons.attach_money),
-              title: Text('Payment Due'),
-              subtitle: Text('Template for payment reminder messages'),
+              leading: const Icon(Icons.attach_money),
+              title: Text(context.tr('settingsTemplatePaymentDue')),
+              subtitle: Text(context.tr('settingsTemplatePaymentDueDesc')),
             ),
             ListTile(
-              leading: Icon(Icons.celebration),
-              title: Text('Welcome Message'),
-              subtitle: Text('Template for new member welcome'),
+              leading: const Icon(Icons.celebration),
+              title: Text(context.tr('settingsTemplateWelcomeMessage')),
+              subtitle: Text(context.tr('settingsTemplateWelcomeMessageDesc')),
             ),
             ListTile(
-              leading: Icon(Icons.info),
-              title: Text('General Announcement'),
-              subtitle: Text('Template for choir announcements'),
+              leading: const Icon(Icons.info),
+              title: Text(context.tr('settingsTemplateGeneralAnnouncement')),
+              subtitle: Text(context.tr('settingsTemplateGeneralAnnouncementDesc')),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Close'),
+            child: Text(context.tr('close')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showInfoSnackbar('Template editor coming soon!');
+              Helpers.showInfoSnackbar(context.tr('settingsTemplateEditorComingSoon'));
             },
-            child: const Text('Edit Templates'),
+            child: Text(context.tr('settingsEditTemplates')),
           ),
         ],
       ),
@@ -449,38 +447,38 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _configureAttendance() {
     Get.dialog(
       AlertDialog(
-        title: const Text('Attendance Settings'),
-        content: const Column(
+        title: Text(context.tr('settingsAttendanceSettings')),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.timer),
-              title: Text('Grace Period'),
-              subtitle: Text('5 minutes late arrival tolerance'),
+              leading: const Icon(Icons.timer),
+              title: Text(context.tr('settingsGracePeriod')),
+              subtitle: Text(context.tr('settingsGracePeriodDesc')),
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text('Auto Reminders'),
-              subtitle: Text('Send attendance reminders 1 hour before'),
+              leading: const Icon(Icons.notifications),
+              title: Text(context.tr('settingsAutoReminders')),
+              subtitle: Text(context.tr('settingsAutoRemindersDesc')),
             ),
             ListTile(
-              leading: Icon(Icons.qr_code),
-              title: Text('QR Code Check-in'),
-              subtitle: Text('Allow members to check-in via QR code'),
+              leading: const Icon(Icons.qr_code),
+              title: Text(context.tr('settingsQrCodeCheckIn')),
+              subtitle: Text(context.tr('settingsQrCodeCheckInDesc')),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Close'),
+            child: Text(context.tr('close')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar('Attendance settings updated');
+              Helpers.showSuccessSnackbar(context.tr('settingsAttendanceSettingsUpdated'));
             },
-            child: const Text('Save'),
+            child: Text(context.tr('save')),
           ),
         ],
       ),
@@ -490,38 +488,38 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _configurePayments() {
     Get.dialog(
       AlertDialog(
-        title: const Text('Payment Settings'),
-        content: const Column(
+        title: Text(context.tr('settingsPaymentSettings')),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.money),
-              title: Text('Monthly Fee'),
-              subtitle: Text('KSH 500 per month'),
+              leading: const Icon(Icons.money),
+              title: Text(context.tr('settingsMonthlyFee')),
+              subtitle: Text('KSH 500 ${context.tr('settingsPerMonth')}'),
             ),
             ListTile(
-              leading: Icon(Icons.card_membership),
-              title: Text('Registration Fee'),
-              subtitle: Text('KSH 1,000 one-time fee'),
+              leading: const Icon(Icons.card_membership),
+              title: Text(context.tr('settingsRegistrationFee')),
+              subtitle: Text('KSH 1,000 ${context.tr('settingsOneTimeFee')}'),
             ),
             ListTile(
-              leading: Icon(Icons.calendar_month),
-              title: Text('Payment Due Date'),
-              subtitle: Text('5th of every month'),
+              leading: const Icon(Icons.calendar_month),
+              title: Text(context.tr('settingsPaymentDueDate')),
+              subtitle: Text(context.tr('settingsPaymentDueDateDesc')),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Close'),
+            child: Text(context.tr('close')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar('Payment settings updated');
+              Helpers.showSuccessSnackbar(context.tr('settingsPaymentSettingsUpdated'));
             },
-            child: const Text('Save'),
+            child: Text(context.tr('save')),
           ),
         ],
       ),
@@ -531,39 +529,38 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _exportChoirData() async {
     Get.dialog(
       AlertDialog(
-        title: const Text('Export Choir Data'),
-        content: const Column(
+        title: Text(context.tr('settingsExportChoirData')),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Export all choir data including:'),
-            SizedBox(height: 12),
-            Text('• Member information'),
-            Text('• Attendance records'),
-            Text('• Payment history'),
-            Text('• Communication logs'),
-            SizedBox(height: 16),
-            Text('Choose export format:'),
+            Text(context.tr('settingsExportIncludes')),
+            const SizedBox(height: 12),
+            Text('• ${context.tr('settingsExportMemberInfo')}'),
+            Text('• ${context.tr('settingsExportAttendanceRecords')}'),
+            Text('• ${context.tr('settingsExportPaymentHistory')}'),
+            const SizedBox(height: 16),
+            Text(context.tr('settingsChooseExportFormat')),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
               _performDataExport('PDF');
             },
-            child: const Text('Export PDF'),
+            child: Text(context.tr('settingsExportPdf')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
               _performDataExport('Excel');
             },
-            child: const Text('Export Excel'),
+            child: Text(context.tr('settingsExportExcel')),
           ),
         ],
       ),
@@ -571,131 +568,65 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   }
 
   Future<void> _performDataExport(String format) async {
+    final reportController = Provider.of<ReportController>(context, listen: false);
+    final choirId = widget.choir.id;
+    final exportedMsg = context.tr('settingsChoirDataExported');
+    final noDataMsg = context.tr('choirNoDataForExportMessage');
+    final failedMsg = context.tr('settingsExportDataFailed');
+
     try {
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
 
-      // Simulate export process
-      await Future.delayed(const Duration(seconds: 2));
-
-      Get.back(); // Close loading
-
-      Helpers.showSuccessSnackbar('Choir data exported successfully as $format');
-    } catch (e) {
-      if (Get.isDialogOpen ?? false) Get.back();
-      Helpers.showErrorSnackbar('Failed to export data: $e');
-    }
-  }
-
-  void _backupRestore() {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Backup & Restore'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Backup Options:'),
-            SizedBox(height: 12),
-            ListTile(
-              leading: Icon(Icons.cloud_upload),
-              title: Text('Create Backup'),
-              subtitle: Text('Save all choir data to cloud storage'),
-            ),
-            ListTile(
-              leading: Icon(Icons.cloud_download),
-              title: Text('Restore from Backup'),
-              subtitle: Text('Restore choir data from previous backup'),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Note: Backups include all member data, attendance records, and payment history.',
-              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              _createBackup();
-            },
-            child: const Text('Create Backup'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _createBackup() async {
-    try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+      // Same overview report and export path as the choir page's Export action.
+      await reportController.generateChoirOverviewReport(
+        choirId: choirId,
+        fromDate: DateTime.now().subtract(const Duration(days: 180)),
+        toDate: DateTime.now(),
       );
 
-      // Simulate backup process
-      await Future.delayed(const Duration(seconds: 3));
+      if (!reportController.hasReportData) {
+        if (Get.isDialogOpen ?? false) Get.back();
+        Helpers.showErrorSnackbar(noDataMsg);
+        return;
+      }
 
-      Get.back(); // Close loading
+      final reportData = reportController.currentReport;
+      final exportService = ExportService();
+      final filePath = format == 'PDF'
+          ? await exportService.exportMembershipToPDF(reportData)
+          : await exportService.exportMembershipToExcel(reportData);
 
-      final backupId = DateTime.now().millisecondsSinceEpoch.toString();
-      
-      Get.dialog(
-        AlertDialog(
-          title: const Text('Backup Created'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Backup created successfully!'),
-              const SizedBox(height: 12),
-              Text('Backup ID: $backupId'),
-              const SizedBox(height: 8),
-              Text('Created: ${DateTime.now().toString().split('.')[0]}'),
-              const SizedBox(height: 12),
-              const Text(
-                'Keep this backup ID safe for future restoration.',
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      );
+      if (Get.isDialogOpen ?? false) Get.back();
+
+      if (filePath != null) {
+        Helpers.showSuccessSnackbar('$exportedMsg $format: $filePath');
+      } else {
+        Helpers.showErrorSnackbar(failedMsg);
+      }
     } catch (e) {
       if (Get.isDialogOpen ?? false) Get.back();
-      Helpers.showErrorSnackbar('Failed to create backup: $e');
+      Helpers.showErrorSnackbar('$failedMsg: $e');
     }
   }
 
   void _deleteChoir() {
     Get.dialog(
       AlertDialog(
-        title: const Text(
-          'Delete Choir',
-          style: TextStyle(color: Colors.red),
+        title: Text(
+          context.tr('settingsDeleteChoir'),
+          style: const TextStyle(color: Colors.red),
         ),
         content: Text(
-          'Are you sure you want to delete "${widget.choir.name}"? '
-          'This will permanently delete all choir data including members, '
-          'attendance records, and payments. This action cannot be undone.',
+          '${context.tr('settingsDeleteChoirConfirm')} "${widget.choir.name}"? '
+          '${context.tr('settingsDeleteChoirWarningDetailed')}',
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -706,7 +637,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Delete'),
+            child: Text(context.tr('delete')),
           ),
         ],
       ),
@@ -716,22 +647,22 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   void _confirmDeleteChoir() {
     Get.dialog(
       AlertDialog(
-        title: const Text('Final Confirmation'),
+        title: Text(context.tr('settingsFinalConfirmation')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Please type "${widget.choir.name}" to confirm deletion:'),
+            Text('${context.tr('settingsTypeToConfirmDeletion')} "${widget.choir.name}" ${context.tr('settingsToConfirmDeletionSuffix')}'),
             const SizedBox(height: 16),
-            const CustomTextField(
-              label: 'Type choir name to confirm',
+            CustomTextField(
+              label: context.tr('settingsTypeChoirNameToConfirm'),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -742,7 +673,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Delete Choir'),
+            child: Text(context.tr('settingsDeleteChoir')),
           ),
         ],
       ),
@@ -750,6 +681,12 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   }
 
   Future<void> _performChoirDeletion() async {
+    // Resolved before any await: the choir is gone either way, so navigation
+    // must not depend on this screen still being mounted.
+    final deletedMsg = context.tr('settingsChoirDeletedSuccess');
+    final deleteRetryMsg = context.tr('settingsChoirDeleteFailedRetry');
+    final deleteFailedMsg = context.tr('settingsChoirDeleteFailed');
+
     try {
       // Show loading indicator
       Get.dialog(
@@ -766,18 +703,18 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
       Get.back();
 
       if (success) {
-        Helpers.showSuccessSnackbar('Choir deleted successfully');
+        Helpers.showSuccessSnackbar(deletedMsg);
         // Navigate back to choir list
         Get.offAllNamed('/dashboard');
       } else {
-        Helpers.showErrorSnackbar('Failed to delete choir. Please try again.');
+        Helpers.showErrorSnackbar(deleteRetryMsg);
       }
     } catch (e) {
       // Hide loading if still showing
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }
-      Helpers.showErrorSnackbar('Failed to delete choir: $e');
+      Helpers.showErrorSnackbar('$deleteFailedMsg: $e');
     }
   }
 }

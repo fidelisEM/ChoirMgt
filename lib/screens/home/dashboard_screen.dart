@@ -12,8 +12,11 @@ import '../../services/activity_service.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/app_translations.dart';
 import '../../utils/logger.dart';
+import '../../utils/responsive_utils.dart';
 import '../../widgets/custom_widgets.dart';
 import '../../widgets/language_selector.dart';
+import '../../widgets/navigation/app_sidebar.dart';
+import '../../widgets/navigation/app_top_header.dart';
 import '../attendance/attendance_screen.dart';
 import '../auth/login_screen.dart';
 import '../choirs/choir_list_screen.dart';
@@ -57,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     NavItem(icon: Icons.dashboard_rounded, label: context.tr('dashboard')),
     NavItem(icon: Icons.music_note_rounded, label: context.tr('choirs')),
     NavItem(icon: Icons.people_rounded, label: context.tr('members')),
-    NavItem(icon: Icons.library_music_rounded, label: 'Music'),
+    NavItem(icon: Icons.library_music_rounded, label: context.tr('dashMusic')),
     NavItem(icon: Icons.check_circle_rounded, label: context.tr('attendance')),
     NavItem(icon: Icons.payment_rounded, label: context.tr('payments')),
     NavItem(icon: Icons.analytics_rounded, label: context.tr('reports')),
@@ -123,13 +126,13 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 
       // Load choirs safely
       try {
-        await choirController.loadChoirs(userId: user.id, adminView: user.role == UserRole.admin);
+        await choirController.loadChoirs(userId: user.id, adminView: user.isAdmin);
       } catch (e) {
         Logger.error('Error loading choirs', e);
       }
-      
+
       // Calculate stats based on user role
-      if (user.role == UserRole.admin || user.role == UserRole.choirLeader) {
+      if (user.isAdmin || user.role == UserRole.choirLeader) {
         // Admin/Leader view: aggregate data from all accessible choirs
         int totalMembers = 0;
         double totalAttendance = 0;
@@ -241,11 +244,13 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         _recentActivities = [];
       }
 
+      if (!mounted) return;
       setState(() {
         _isDashboardLoading = false;
       });
     } catch (e) {
       Logger.error('Error loading dashboard data', e);
+      if (!mounted) return;
       setState(() {
         _isDashboardLoading = false;
       });
@@ -268,6 +273,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           return const LoginScreen();
         }
 
+        if (ResponsiveUtils.isDesktop(context)) {
+          return _buildDesktopShell(user);
+        }
+
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: _buildAppBar(user),
@@ -283,6 +292,42 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           floatingActionButton: _selectedIndex == 0 ? _buildFAB() : null,
         );
       },
+    );
+  }
+
+  /// Wide-window layout: a persistent sidebar in place of the mobile bottom
+  /// nav, plus a top header (search/notifications/profile) above the same
+  /// tab content the mobile layout shows via [_buildBody].
+  Widget _buildDesktopShell(UserModel user) {
+    return Scaffold(
+      body: Row(
+        children: [
+          AppSidebar(
+            items: _getNavItems(context),
+            selectedIndex: _selectedIndex,
+            canAccess: (index) => _canAccessTab(user.role, index),
+            onSelect: (index) => setState(() => _selectedIndex = index),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                AppTopHeader(
+                  user: user,
+                  searchHint: context.tr('dashSearchHint'),
+                  onProfileTap: () => _showUserMenu(user),
+                ),
+                Expanded(
+                  child: Container(
+                    color: const Color(0xFFF5F8FC),
+                    child: _buildBody(user),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: _selectedIndex == 0 ? _buildFAB() : null,
     );
   }
 
@@ -548,9 +593,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Welcome back,',
-                  style: TextStyle(
+                Text(
+                  context.tr('welcomeBackName'),
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.gray500,
                   ),
@@ -671,7 +716,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 iconColor: _attendancePercentage >= 75 ? AppColors.success : 
                            _attendancePercentage >= 50 ? AppColors.warning : AppColors.error,
                 subtitle: context.tr('attendancePercentage'),
-                onTap: () => setState(() => _selectedIndex = 3),
+                onTap: () => setState(() => _selectedIndex = 4),
               ),
             ),
             const SizedBox(width: 16),
@@ -682,7 +727,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 icon: Icons.payment_rounded,
                 iconColor: AppColors.warning,
                 subtitle: context.tr('thisMonth'),
-                onTap: () => setState(() => _selectedIndex = 4),
+                onTap: () => setState(() => _selectedIndex = 5),
               ),
             ),
           ],
@@ -693,22 +738,22 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           children: [
             Expanded(
               child: AnimatedStatCard(
-                title: 'This Week',
+                title: context.tr('thisWeek'),
                 value: '${_getWeeklyAttendanceEstimate()}%',
                 icon: Icons.trending_up_rounded,
                 iconColor: AppColors.info,
-                subtitle: 'Activity rate',
-                onTap: () => setState(() => _selectedIndex = 3),
+                subtitle: context.tr('dashActivityRate'),
+                onTap: () => setState(() => _selectedIndex = 4),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: AnimatedStatCard(
-                title: 'Messages',
+                title: context.tr('dashMessages'),
                 value: '${_getMessageCount()}',
                 icon: Icons.message_rounded,
                 iconColor: AppColors.secondary,
-                subtitle: 'Communication',
+                subtitle: context.tr('dashCommunication'),
                 onTap: () => _showMessagingOptions(user),
               ),
             ),
@@ -719,23 +764,23 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           children: [
             Expanded(
               child: AnimatedStatCard(
-                title: 'Events',
+                title: context.tr('dashEvents'),
                 value: '${_getUpcomingEventsCount()}',
                 icon: Icons.event_rounded,
                 iconColor: AppColors.warning,
-                subtitle: 'Upcoming',
+                subtitle: context.tr('dashUpcoming'),
                 onTap: () => _showUpcomingEvents(),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: AnimatedStatCard(
-                title: 'Growth',
+                title: context.tr('dashGrowth'),
                 value: '+${_getGrowthRate()}%',
                 icon: Icons.show_chart_rounded,
                 iconColor: AppColors.success,
-                subtitle: 'This month',
-                onTap: () => setState(() => _selectedIndex = 5),
+                subtitle: context.tr('thisMonth'),
+                onTap: () => setState(() => _selectedIndex = 6),
               ),
             ),
           ],
@@ -921,13 +966,13 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     final difference = now.difference(dateTime);
     
     if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
+      return '${difference.inDays}${context.tr('dashDaysAgoSuffix')}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}${context.tr('dashHoursAgoSuffix')}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}${context.tr('dashMinutesAgoSuffix')}';
     } else {
-      return 'Just now';
+      return context.tr('dashJustNow');
     }
   }
 
@@ -1024,7 +1069,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   List<Widget> _getQuickActions(UserRole role) {
     final List<QuickAction> actions = [];
     
-    if (role == UserRole.admin || role == UserRole.choirLeader) {
+    if (role == UserRole.superAdmin || role == UserRole.admin || role == UserRole.choirLeader) {
       actions.addAll([
         QuickAction(
           icon: Icons.person_add_rounded,
@@ -1036,7 +1081,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           icon: Icons.check_circle_rounded,
           title: context.tr('takeAttendance'),
           gradient: AppColors.secondaryGradient,
-          onTap: () => setState(() => _selectedIndex = 3),
+          onTap: () => setState(() => _selectedIndex = 4),
         ),
         QuickAction(
           icon: Icons.payment_rounded,
@@ -1044,7 +1089,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           gradient: const LinearGradient(
             colors: [AppColors.warning, AppColors.accent],
           ),
-          onTap: () => setState(() => _selectedIndex = 4),
+          onTap: () => setState(() => _selectedIndex = 5),
         ),
         QuickAction(
           icon: Icons.analytics_rounded,
@@ -1052,7 +1097,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           gradient: const LinearGradient(
             colors: [Color(0xFF8B5CF6), Color(0xFFA855F7)],
           ),
-          onTap: () => setState(() => _selectedIndex = 5),
+          onTap: () => setState(() => _selectedIndex = 6),
         ),
       ]);
     } else {
@@ -1067,7 +1112,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           icon: Icons.history_rounded,
           title: context.tr('myAttendance'),
           gradient: AppColors.secondaryGradient,
-          onTap: () => setState(() => _selectedIndex = 3),
+          onTap: () => setState(() => _selectedIndex = 4),
         ),
         QuickAction(
           icon: Icons.receipt_rounded,
@@ -1075,7 +1120,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           gradient: const LinearGradient(
             colors: [AppColors.warning, AppColors.accent],
           ),
-          onTap: () => setState(() => _selectedIndex = 4),
+          onTap: () => setState(() => _selectedIndex = 5),
         ),
         QuickAction(
           icon: Icons.notifications_rounded,
@@ -1133,13 +1178,14 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   }
 
   bool _canAccessTab(UserRole role, int tabIndex) {
+    final isAdminOrLeader = role == UserRole.superAdmin || role == UserRole.admin || role == UserRole.choirLeader;
     switch (tabIndex) {
       case 0: // Dashboard
         return true;
       case 1: // Choirs
-        return role == UserRole.admin || role == UserRole.choirLeader;
+        return isAdminOrLeader;
       case 2: // Members
-        return role == UserRole.admin || role == UserRole.choirLeader;
+        return isAdminOrLeader;
       case 3: // Music
         return true; // Music is accessible to all users
       case 4: // Attendance
@@ -1147,7 +1193,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       case 5: // Payments
         return true;
       case 6: // Reports
-        return role == UserRole.admin || role == UserRole.choirLeader;
+        return isAdminOrLeader;
       default:
         return false;
     }
@@ -1158,7 +1204,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       case 0: return context.tr('dashboard');
       case 1: return context.tr('choirs');
       case 2: return context.tr('members');
-      case 3: return 'Music';
+      case 3: return context.tr('dashMusic');
       case 4: return context.tr('attendance');
       case 5: return context.tr('payments');
       case 6: return context.tr('reports');
@@ -1168,6 +1214,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 
   String _getRoleDisplayName(BuildContext context, UserRole role) {
     switch (role) {
+      case UserRole.superAdmin:
+        return context.tr('superAdministrator');
       case UserRole.admin:
         return context.tr('administrator');
       case UserRole.choirLeader:
@@ -1270,14 +1318,14 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     
     if (choirs.isEmpty) {
       Get.snackbar(
-        'No Choirs',
-        'You need to create a choir first before adding members',
+        context.tr('dashNoChoirsTitle'),
+        context.tr('dashNoChoirsMessage'),
         backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
       return;
     }
-    
+
     if (choirs.length == 1) {
       // If only one choir, go directly to add member
       final choir = choirs.first;
@@ -1290,12 +1338,12 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Select Choir'),
+          title: Text(context.tr('dashSelectChoir')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: choirs.map((choir) => ListTile(
               title: Text(choir.name),
-              subtitle: Text('${choir.memberCount} members'),
+              subtitle: Text('${choir.memberCount} ${context.tr('members')}'),
               leading: const Icon(Icons.music_note),
               onTap: () {
                 Navigator.pop(context);
@@ -1366,7 +1414,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => CustomBottomSheet(
-        title: 'Communication',
+        title: context.tr('dashCommunication'),
         child: Column(
           children: [
             ListTile(
@@ -1378,8 +1426,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 ),
                 child: const Icon(Icons.message, color: AppColors.primary),
               ),
-              title: const Text('Send Message'),
-              subtitle: const Text('Send a message to choir members'),
+              title: Text(context.tr('dashSendMessage')),
+              subtitle: Text(context.tr('dashSendMessageSubtitle')),
               onTap: () {
                 Navigator.pop(context);
                 Get.to(() => const ComposeMessageScreen());
@@ -1394,12 +1442,12 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 ),
                 child: const Icon(Icons.announcement, color: AppColors.info),
               ),
-              title: const Text('Send Announcement'),
-              subtitle: const Text('Important announcements'),
+              title: Text(context.tr('dashSendAnnouncement')),
+              subtitle: Text(context.tr('dashSendAnnouncementSubtitle')),
               onTap: () {
                 Navigator.pop(context);
-                Get.to(() => const ComposeMessageScreen(
-                  subject: 'Important Announcement',
+                Get.to(() => ComposeMessageScreen(
+                  subject: context.tr('dashImportantAnnouncementSubject'),
                 ));
               },
             ),
@@ -1412,16 +1460,16 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 ),
                 child: const Icon(Icons.schedule, color: AppColors.warning),
               ),
-              title: const Text('Send Reminder'),
-              subtitle: const Text('Gentle reminders for events'),
+              title: Text(context.tr('dashSendReminder')),
+              subtitle: Text(context.tr('dashSendReminderSubtitle')),
               onTap: () {
                 Navigator.pop(context);
-                Get.to(() => const ComposeMessageScreen(
-                  subject: 'Reminder: Upcoming Event',
+                Get.to(() => ComposeMessageScreen(
+                  subject: context.tr('dashReminderUpcomingEventSubject'),
                 ));
               },
             ),
-            if (user.role == UserRole.admin || user.role == UserRole.choirLeader) ...[
+            if (user.isAdmin || user.role == UserRole.choirLeader) ...[
               const Divider(),
               ListTile(
                 leading: Container(
@@ -1432,8 +1480,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                   ),
                   child: const Icon(Icons.inbox, color: AppColors.success),
                 ),
-                title: const Text('View All Messages'),
-                subtitle: const Text('Manage communication history'),
+                title: Text(context.tr('dashViewAllMessages')),
+                subtitle: Text(context.tr('dashViewAllMessagesSubtitle')),
                 onTap: () {
                   Navigator.pop(context);
                   Get.to(() => const MessagesListScreen());
@@ -1452,26 +1500,26 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => CustomBottomSheet(
-        title: 'Upcoming Events',
+        title: context.tr('dashUpcomingEvents'),
         child: Column(
           children: [
             _buildEventCard(
-              title: 'Sunday Service',
-              date: 'Tomorrow at 10:00 AM',
+              title: context.tr('dashSundayService'),
+              date: context.tr('dashTomorrowAt10am'),
               icon: Icons.church,
               color: AppColors.primary,
             ),
             const SizedBox(height: 12),
             _buildEventCard(
-              title: 'Choir Practice',
-              date: 'Wednesday at 7:00 PM',
+              title: context.tr('dashChoirPractice'),
+              date: context.tr('dashWednesdayAt7pm'),
               icon: Icons.music_note,
               color: AppColors.secondary,
             ),
             const SizedBox(height: 12),
             _buildEventCard(
-              title: 'Special Performance',
-              date: 'Next Sunday at 3:00 PM',
+              title: context.tr('dashSpecialPerformance'),
+              date: context.tr('dashNextSundayAt3pm'),
               icon: Icons.star,
               color: AppColors.warning,
             ),
@@ -1479,14 +1527,14 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                Get.snackbar('Feature Coming Soon', 'Full calendar will be available soon');
+                Get.snackbar(context.tr('dashFeatureComingSoon'), context.tr('dashCalendarComingSoon'));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 minimumSize: const Size(double.infinity, 48),
               ),
-              child: const Text('View Full Calendar'),
+              child: Text(context.tr('dashViewFullCalendar')),
             ),
           ],
         ),

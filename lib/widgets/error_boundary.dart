@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/app_config.dart';
@@ -29,11 +30,11 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   @override
   void initState() {
     super.initState();
-    
+
     // Set up global error handlers
     FlutterError.onError = (FlutterErrorDetails details) {
       ErrorHandler.handleFlutterError(details);
-      if (mounted) {
+      if (mounted && _isFatal(details.exception)) {
         setState(() {
           _error = details.exception;
           _stackTrace = details.stack;
@@ -67,8 +68,8 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
       onError: (error, stackTrace) {
         widget.onError?.call(error, stackTrace);
         Logger.exception('Error Boundary', error, stackTrace);
-        
-        if (mounted) {
+
+        if (mounted && _isFatal(error)) {
           setState(() {
             _error = error;
             _stackTrace = stackTrace;
@@ -77,6 +78,25 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
       },
       child: widget.child,
     );
+  }
+
+  // Flutter reports some purely cosmetic, debug-mode-only layout warnings
+  // (e.g. an overflowing Row/Column, or a rebuild scheduled mid-frame)
+  // through the same FlutterError.onError channel as genuine crashes.
+  // Those are already visually indicated (the yellow/black stripes) and
+  // never affect release builds, so treating them as fatal here would
+  // replace the whole screen with an error page over what is, from the
+  // user's perspective, a minor visual glitch. Only escalate to the
+  // full-screen fallback for errors that aren't one of these known
+  // non-fatal, debug-only warnings.
+  static bool _isFatal(Object error) {
+    final message = error.toString();
+    const nonFatalPatterns = [
+      'A RenderFlex overflowed',
+      'A RenderFlow overflowed',
+      'Build scheduled during frame',
+    ];
+    return !nonFatalPatterns.any(message.contains);
   }
 }
 
@@ -106,6 +126,11 @@ class _ErrorBoundaryWrapperState extends State<ErrorBoundaryWrapper> {
     
     // Catch errors in the widget tree
     FlutterError.onError = (FlutterErrorDetails details) {
+      // Replacing the default handler drops Flutter's report, which names the
+      // widget behind errors like overflows. Keep it while debugging.
+      if (kDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      }
       widget.onError(details.exception, details.stack ?? StackTrace.current);
     };
   }
