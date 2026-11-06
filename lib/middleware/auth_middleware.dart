@@ -128,8 +128,9 @@ class RoleMiddleware extends GetMiddleware {
   }
   
   bool _hasRequiredRole(String userRole, String requiredRole) {
-    // Role hierarchy: admin > leader > member > guest
+    // Role hierarchy: super_admin > admin > leader > member > guest
     const roleHierarchy = {
+      'super_admin': 5,
       'admin': 4,
       'leader': 3,
       'member': 2,
@@ -145,6 +146,8 @@ class RoleMiddleware extends GetMiddleware {
 
 String _roleToString(UserRole? role) {
   switch (role) {
+    case UserRole.superAdmin:
+      return 'super_admin';
     case UserRole.admin:
       return 'admin';
     case UserRole.choirLeader:

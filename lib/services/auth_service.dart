@@ -291,7 +291,7 @@ class AuthService {
   }) async {
     try {
       final currentUserData = await getCurrentUserProfile();
-      if (currentUserData?.role != UserRole.admin && 
+      if (currentUserData?.isAdmin != true &&
           currentUserData?.role != UserRole.choirLeader) {
         throw Exception('Insufficient permissions to update user profiles');
       }
@@ -475,14 +475,36 @@ class AuthService {
     try {
       Logger.debug('Updating user profile image for user: $userId');
       Logger.debug('Image URL: $profileImageUrl');
-      
+
       final result = await _supabase
           .from('users')
           .update({'profile_image_url': profileImageUrl})
           .eq('id', userId)
           .select();
-      
+
       Logger.debug('User profile image update result: $result');
+
+      if (result.isEmpty) {
+        // No row matched - the profile was never created (e.g. the
+        // registration insert failed silently). Create it now so the
+        // photo isn't lost, instead of updating a row that doesn't exist.
+        Logger.warning('No profile row found for $userId, creating one with the photo attached');
+        final authUser = _supabase.auth.currentUser;
+        if (authUser != null && authUser.id == userId) {
+          final userModel = UserModel(
+            id: userId,
+            email: authUser.email ?? '',
+            fullName: authUser.userMetadata?['full_name'] ?? 'User',
+            phoneNumber: authUser.userMetadata?['phone_number'] ?? '',
+            role: UserRole.choirMember,
+            createdAt: DateTime.now(),
+            lastLogin: DateTime.now(),
+            profileImageUrl: profileImageUrl,
+          );
+          await _supabase.from('users').upsert(userModel.toJson());
+        }
+      }
+
       Logger.info('User profile image updated successfully');
     } catch (e) {
       Logger.error('Failed to update user profile image: $e');
@@ -499,10 +521,12 @@ class AuthService {
       if (userProfile == null) return false;
 
       switch (requiredRole) {
+        case UserRole.superAdmin:
+          return userProfile.role == UserRole.superAdmin;
         case UserRole.admin:
-          return userProfile.role == UserRole.admin;
+          return userProfile.isAdmin;
         case UserRole.choirLeader:
-          return userProfile.role == UserRole.admin || 
+          return userProfile.isAdmin ||
                  userProfile.role == UserRole.choirLeader;
         case UserRole.choirMember:
           return true;
@@ -621,6 +645,8 @@ class AuthService {
         return 'Please check your email and confirm your account.';
       case 'Too many requests':
         return 'Too many requests. Please try again later.';
+      case 'User already registered':
+        return 'An account with this email already exists. Try signing in instead.';
       default:
         return e.message;
     }
