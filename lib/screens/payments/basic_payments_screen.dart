@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../controllers/auth_controller.dart';
 import '../../controllers/choir_controller.dart';
 import '../../controllers/payment_controller.dart';
+import '../../models/choir_model.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/currency_utils.dart';
 import '../../utils/helpers.dart';
 import '../../widgets/custom_widgets.dart';
+import '../choirs/choir_list_screen.dart';
 import 'add_payment_screen.dart';
 
 class BasicPaymentsScreen extends StatefulWidget {
@@ -24,19 +28,98 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadPayments();
+      _initializeAndLoad();
     });
+  }
+
+  Future<void> _initializeAndLoad() async {
+    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final authController = Provider.of<AuthController>(context, listen: false);
+
+    // Load choirs for selection if not already loaded, so this screen
+    // doesn't force the user out to the Choirs tab just to pick one.
+    if (choirController.choirs.isEmpty) {
+      await choirController.loadChoirs(userId: authController.currentUser?.id);
+    }
+
+    await _loadPayments();
   }
 
   Future<void> _loadPayments() async {
     final choirController = Provider.of<ChoirController>(context, listen: false);
     final paymentController = Provider.of<PaymentController>(context, listen: false);
-    
+
     if (choirController.selectedChoir != null) {
       await paymentController.loadChoirPayments(
         choirId: choirController.selectedChoir!.id,
       );
     }
+  }
+
+  Future<void> _selectChoir(ChoirModel choir) async {
+    final choirController = Provider.of<ChoirController>(context, listen: false);
+    await choirController.selectChoir(choir);
+    await _loadPayments();
+  }
+
+  void _showChoirSwitcher(ChoirController choirController) {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
+        // The Container above paints its own background color, which
+        // hides ListTile's ink splashes unless the ListTiles get their
+        // own Material ancestor to paint against.
+        child: Material(
+          color: Colors.transparent,
+          child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Text(
+                context.tr('paySwitchChoirTitle'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                children: choirController.choirs.map((choir) {
+                  final isSelected = choir.id == choirController.selectedChoir?.id;
+                  return ListTile(
+                    leading: Icon(
+                      Icons.group,
+                      color: isSelected ? AppColors.primary : Colors.grey,
+                    ),
+                    title: Text(choir.name),
+                    trailing: isSelected ? const Icon(Icons.check, color: AppColors.primary) : null,
+                    onTap: () {
+                      Get.back();
+                      if (!isSelected) _selectChoir(choir);
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.list),
+              title: Text(context.tr('payBrowseAllChoirs')),
+              onTap: () {
+                Get.back();
+                Get.to(() => const ChoirListScreen());
+              },
+            ),
+          ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -50,26 +133,107 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
             decoration: const BoxDecoration(
               gradient: AppColors.backgroundGradient,
             ),
-            child: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.info_outline, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No Choir Selected'),
-                  Text('Please select a choir from the Choirs tab first'),
-                ],
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.payment,
+                        size: 64,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      context.tr('paySelectChoirHeadline'),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      context.tr('paySelectChoirSubtitle'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                    ),
+                    const SizedBox(height: 32),
+                    if (choirController.choirs.isNotEmpty) ...[
+                      Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(maxWidth: 400),
+                        child: DropdownButtonFormField<ChoirModel>(
+                          decoration: InputDecoration(
+                            labelText: context.tr('paySelectChoirLabel'),
+                            prefixIcon: const Icon(Icons.group),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          ),
+                          hint: Text(context.tr('payChooseChoirHint')),
+                          isExpanded: true,
+                          items: choirController.choirs.map((choir) {
+                            return DropdownMenuItem<ChoirModel>(
+                              value: choir,
+                              child: Text(
+                                choir.name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (choir) {
+                            if (choir != null) _selectChoir(choir);
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(context.tr('or'), style: TextStyle(color: Colors.grey[500], fontSize: 14)),
+                      const SizedBox(height: 16),
+                    ] else if (choirController.isLoading) ...[
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16),
+                    ],
+                    OutlinedButton.icon(
+                      onPressed: () => Get.to(() => const ChoirListScreen()),
+                      icon: const Icon(Icons.list),
+                      label: Text(context.tr('payBrowseAllChoirs')),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         }
 
         final payments = paymentController.payments;
-        final stats = paymentController.paymentStats;
         
-        // Convert all amounts to the selected currency for totals
-        final totalRevenue = stats['completed_amount']?.toDouble() ?? 0.0;
-        final pendingAmount = stats['pending_amount']?.toDouble() ?? 0.0;
+        // Convert each payment into the selected currency before summing, so
+        // the totals follow the currency picker like the list does.
+        double sumByStatus(String status) => payments
+            .where((p) => p['status'] == status)
+            .fold<double>(0, (sum, p) {
+          final amount = (p['amount'] as num?)?.toDouble() ?? 0.0;
+          final currency = (p['currency'] ?? _selectedCurrency) as String;
+          return sum + CurrencyUtils.convertCurrency(amount, currency, _selectedCurrency);
+        });
+        final totalRevenue = sumByStatus('completed');
+        final pendingAmount = sumByStatus('pending');
+        final horizontalPadding = MediaQuery.of(context).size.width < 600 ? 16.0 : 32.0;
 
         return Container(
           decoration: const BoxDecoration(
@@ -78,9 +242,36 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
           child: SafeArea(
             child: Column(
               children: [
+                // Choir header + switcher -- payments always belong to a
+                // choir, but there was previously no way to see which one
+                // was active or change it without leaving this screen.
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.group, size: 18, color: AppColors.primary),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          selectedChoir.name,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () => _showChoirSwitcher(choirController),
+                        icon: const Icon(Icons.swap_horiz, size: 18),
+                        label: Text(context.tr('paySwitch')),
+                      ),
+                    ],
+                  ),
+                ),
+
                 // Financial Summary
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 16),
                   child: Row(
                     children: [
                       Expanded(
@@ -96,27 +287,30 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                                   size: 32,
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  CurrencyUtils.formatAmount(totalRevenue, _selectedCurrency),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.success,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    CurrencyUtils.formatAmount(totalRevenue, _selectedCurrency),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.success,
+                                    ),
                                   ),
                                 ),
-                                const Row(
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Total Revenue',
-                                      style: TextStyle(
+                                      context.tr('payTotalRevenue'),
+                                      style: const TextStyle(
                                         color: AppColors.gray600,
                                         fontSize: 12,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
-                                    SizedBox(width: 4),
-                                    Icon(
+                                    const SizedBox(width: 4),
+                                    const Icon(
                                       Icons.arrow_forward_ios,
                                       size: 12,
                                       color: AppColors.gray400,
@@ -131,6 +325,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: GlassCard(
+                          onTap: () => _showPaymentHistory(status: 'pending'),
                           child: Padding(
                             padding: const EdgeInsets.all(16),
                             child: Column(
@@ -141,21 +336,35 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                                   size: 32,
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  CurrencyUtils.formatAmount(pendingAmount, _selectedCurrency),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.warning,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    CurrencyUtils.formatAmount(pendingAmount, _selectedCurrency),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.warning,
+                                    ),
                                   ),
                                 ),
-                                const Text(
-                                  'Pending',
-                                  style: TextStyle(
-                                    color: AppColors.gray600,
-                                    fontSize: 12,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      context.tr('pending'),
+                                      style: const TextStyle(
+                                        color: AppColors.gray600,
+                                        fontSize: 12,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 12,
+                                      color: AppColors.gray400,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -169,7 +378,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                 // Payments List
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -178,12 +387,16 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                             // Header row with title and currency
                             Row(
                               children: [
-                                const Text(
-                                  'Recent Payments',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.gray800,
+                                Flexible(
+                                  child: Text(
+                                    context.tr('payRecentPayments'),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.gray800,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -248,7 +461,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                               children: [
                                 const Spacer(),
                                 GradientButton(
-                                  text: 'Record Payment',
+                                  text: context.tr('recordPayment'),
                                   onPressed: _showRecordPaymentDialog,
                                   height: 36,
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -264,19 +477,19 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                                   child: CircularProgressIndicator(),
                                 )
                               : payments.isEmpty
-                                  ? const Center(
+                                  ? Center(
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.payment,
                                             size: 64,
                                             color: Colors.grey,
                                           ),
-                                          SizedBox(height: 16),
+                                          const SizedBox(height: 16),
                                           Text(
-                                            'No payments found',
-                                            style: TextStyle(
+                                            context.tr('payNoPaymentsFound'),
+                                            style: const TextStyle(
                                               fontSize: 18,
                                               color: Colors.grey,
                                               fontWeight: FontWeight.w500,
@@ -308,7 +521,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
     final id = payment['id'] as String;
     final memberData = payment['choir_members'] ?? {};
     final userData = memberData['users'] ?? {};
-    final memberName = userData['full_name'] ?? 'Unknown Member';
+    final memberName = userData['full_name'] ?? context.tr('payUnknownMemberFallback');
     final amount = payment['amount']?.toDouble() ?? 0.0;
     final currency = payment['currency'] ?? _selectedCurrency;
     final type = payment['type'] as String;
@@ -343,14 +556,18 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        memberName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      Expanded(
+                        child: Text(
+                          memberName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 8),
                       Text(
                         CurrencyUtils.formatAmount(displayAmount, _selectedCurrency),
                         style: TextStyle(
@@ -372,22 +589,18 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
-                        Helpers.formatDate(date),
-                        style: const TextStyle(
-                          color: AppColors.gray500,
-                          fontSize: 12,
+                      Expanded(
+                        child: Text(
+                          '${Helpers.formatDate(date)} • ${id.length > 8 ? id.substring(0, 8) : id}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.gray500,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        '• $id',
-                        style: const TextStyle(
-                          color: AppColors.gray400,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
@@ -408,10 +621,64 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                 ],
               ),
             ),
+            if (_canManagePayments())
+              IconButton(
+                tooltip: context.tr('payDeletePayment'),
+                icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                onPressed: () => _confirmDeletePayment(id),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  bool _canManagePayments() {
+    final authController = Provider.of<AuthController>(context, listen: false);
+    final choir = Provider.of<ChoirController>(context, listen: false).selectedChoir;
+    final userId = authController.currentUser?.id;
+    return authController.isAdmin ||
+        (userId != null && (choir?.leaderId == userId || choir?.adminId == userId));
+  }
+
+  Future<void> _confirmDeletePayment(String paymentId) async {
+    final choirId = Provider.of<ChoirController>(context, listen: false).selectedChoir?.id;
+    if (choirId == null) return;
+    final paymentController = Provider.of<PaymentController>(context, listen: false);
+    final deletedMsg = context.tr('payPaymentDeleted');
+    final failedMsg = context.tr('payFailedDeletePayment');
+
+    final confirmed = await Get.dialog<bool>(
+      AlertDialog(
+        title: Text(context.tr('payDeletePayment')),
+        content: Text(context.tr('payDeletePaymentConfirm')),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(context.tr('cancel')),
+          ),
+          ElevatedButton(
+            onPressed: () => Get.back(result: true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(context.tr('delete')),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    final success = await paymentController.deletePayment(
+      paymentId: paymentId,
+      choirId: choirId,
+    );
+    if (success) {
+      Helpers.showSuccessSnackbar(deletedMsg);
+    } else {
+      Helpers.showErrorSnackbar(failedMsg);
+    }
   }
 
   Color _getStatusColor(String status) {
@@ -445,8 +712,8 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
     
     if (choirController.selectedChoir == null) {
       Get.snackbar(
-        'Error',
-        'Please select a choir first',
+        context.tr('error'),
+        context.tr('payPleaseSelectChoirFirst'),
         backgroundColor: AppColors.error,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
@@ -458,12 +725,12 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
         ?.then((_) => _loadPayments());
   }
 
-  void _showPaymentHistory() {
+  void _showPaymentHistory({String status = 'completed'}) {
     final paymentController = Provider.of<PaymentController>(context, listen: false);
     
-    // Filter completed payments for history
+    // Payments with the requested status (completed history, or pending)
     final completedPayments = paymentController.payments
-        .where((p) => p['status'] == 'completed')
+        .where((p) => p['status'] == status)
         .toList();
     
     Get.bottomSheet(
@@ -493,9 +760,9 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                 children: [
                   const Icon(Icons.history, color: AppColors.primary),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Payment History',
-                    style: TextStyle(
+                  Text(
+                    status == 'pending' ? context.tr('pending') : context.tr('paymentHistory'),
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppColors.gray800,
@@ -503,7 +770,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                   ),
                   const Spacer(),
                   Text(
-                    '${completedPayments.length} payments',
+                    '${completedPayments.length} ${context.tr('payPaymentsCountSuffix')}',
                     style: const TextStyle(
                       color: AppColors.gray600,
                       fontSize: 16,
@@ -536,9 +803,9 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        'Total Payments',
-                        style: TextStyle(
+                      Text(
+                        context.tr('payTotalPaymentsLabel'),
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 12,
                         ),
@@ -571,9 +838,9 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        'Total Amount',
-                        style: TextStyle(
+                      Text(
+                        context.tr('payTotalAmountLabel'),
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 12,
                         ),
@@ -608,7 +875,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
     final id = payment['id'] as String;
     final memberData = payment['choir_members'] ?? {};
     final userData = memberData['users'] ?? {};
-    final memberName = userData['full_name'] ?? 'Unknown Member';
+    final memberName = userData['full_name'] ?? context.tr('payUnknownMemberFallback');
     final amount = payment['amount']?.toDouble() ?? 0.0;
     final currency = payment['currency'] ?? _selectedCurrency;
     final type = payment['type'] as String;
@@ -663,15 +930,19 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      memberName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: AppColors.gray800,
+                    Expanded(
+                      child: Text(
+                        memberName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: AppColors.gray800,
+                        ),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Text(
                       CurrencyUtils.formatAmount(displayAmount, _selectedCurrency),
                       style: const TextStyle(
@@ -683,7 +954,10 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Row(
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 4,
+                  runSpacing: 4,
                   children: [
                     const Icon(Icons.category, size: 14, color: AppColors.gray500),
                     const SizedBox(width: 4),
@@ -694,7 +968,7 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                         fontSize: 14,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     const Icon(Icons.calendar_today, size: 14, color: AppColors.gray500),
                     const SizedBox(width: 4),
                     Text(
@@ -708,7 +982,9 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'ID: $id',
+                  '${context.tr('payIdPrefix')}: $id',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: AppColors.gray400,
                     fontSize: 12,
@@ -725,17 +1001,17 @@ class _BasicPaymentsScreenState extends State<BasicPaymentsScreen> {
   String _getPaymentTypeLabel(String type) {
     switch (type.toLowerCase()) {
       case 'registration':
-        return 'Registration Fee';
+        return context.tr('payRegistrationFee');
       case 'monthly':
-        return 'Monthly Fee';
+        return context.tr('payMonthlyFee');
       case 'quarterly':
-        return 'Quarterly Fee';
+        return context.tr('payQuarterlyFee');
       case 'annual':
-        return 'Annual Fee';
+        return context.tr('payAnnualFee');
       case 'special':
-        return 'Special Fee';
+        return context.tr('paySpecialFee');
       case 'other':
-        return 'Other';
+        return context.tr('payOther');
       default:
         return type;
     }

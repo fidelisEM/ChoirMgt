@@ -3,7 +3,10 @@ import '../models/models.dart';
 import '../services/payment_service.dart';
 
 class PaymentController extends ChangeNotifier {
-  final PaymentService _paymentService = PaymentService();
+  PaymentController({PaymentService? paymentService})
+      : _paymentService = paymentService ?? PaymentService();
+
+  final PaymentService _paymentService;
 
   List<Map<String, dynamic>> _payments = [];
   List<Map<String, dynamic>> _outstandingFees = [];
@@ -88,7 +91,7 @@ class PaymentController extends ChangeNotifier {
     required String description,
     String? reference,
     String? receivedBy,
-    String currency = 'KES',
+    String currency = 'TZS',
     String? memberName,
   }) async {
     try {
@@ -106,7 +109,6 @@ class PaymentController extends ChangeNotifier {
         reference: reference,
         receivedBy: receivedBy,
         currency: currency,
-        memberName: memberName,
       );
 
       if (payment != null) {
@@ -166,6 +168,31 @@ class PaymentController extends ChangeNotifier {
       }
     } catch (e) {
       _setError('Error processing payment: $e');
+      _setLoading(false);
+      return false;
+    }
+  }
+
+  // Delete a payment and refresh the choir's list and totals
+  Future<bool> deletePayment({
+    required String paymentId,
+    required String choirId,
+  }) async {
+    try {
+      _setLoading(true);
+      _clearError();
+
+      final success = await _paymentService.deletePayment(paymentId);
+      if (!success) {
+        _setError('Failed to delete payment');
+        _setLoading(false);
+        return false;
+      }
+
+      await loadChoirPayments(choirId: choirId);
+      return true;
+    } catch (e) {
+      _setError('Error deleting payment: $e');
       _setLoading(false);
       return false;
     }

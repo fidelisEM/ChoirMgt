@@ -9,6 +9,7 @@ import '../../controllers/member_controller.dart';
 import '../../controllers/payment_controller.dart';
 import '../../models/models.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/currency_utils.dart';
 import '../../utils/helpers.dart';
 import '../../utils/validators.dart';
@@ -84,7 +85,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       }
     } catch (e) {
       if (mounted) {
-        Helpers.showErrorSnackbar('Failed to load choirs: $e');
+        Helpers.showErrorSnackbar('${context.tr('payFailedLoadChoirs')}: $e');
       }
     }
   }
@@ -101,7 +102,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       }
     } catch (e) {
       if (mounted) {
-        Helpers.showErrorSnackbar('Failed to load members: $e');
+        Helpers.showErrorSnackbar('${context.tr('payFailedLoadMembers')}: $e');
       }
     }
   }
@@ -119,7 +120,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Record Payment'),
+        title: Text(context.tr('recordPayment')),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
       ),
@@ -184,18 +185,18 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Record New Payment',
-            style: TextStyle(
+          Text(
+            context.tr('payRecordNewPayment'),
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppColors.gray800,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Enter payment details below',
-            style: TextStyle(
+          Text(
+            context.tr('payEnterDetailsBelow'),
+            style: const TextStyle(
               color: AppColors.gray600,
               fontSize: 16,
             ),
@@ -210,9 +211,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Select Choir',
-            style: TextStyle(
+          Text(
+            context.tr('paySelectChoirLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -221,10 +222,10 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
             initialValue: _selectedChoirId,
-            decoration: const InputDecoration(
-              labelText: 'Choir',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.music_note),
+            decoration: InputDecoration(
+              labelText: context.tr('payChoirLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.music_note),
             ),
             items: _choirs.map((choir) {
               return DropdownMenuItem<String>(
@@ -257,9 +258,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Select Member',
-            style: TextStyle(
+          Text(
+            context.tr('paySelectMemberLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -268,10 +269,10 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
             initialValue: _selectedMemberId,
-            decoration: const InputDecoration(
-              labelText: 'Member',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.person),
+            decoration: InputDecoration(
+              labelText: context.tr('payMemberLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.person),
             ),
             items: _members.map((member) {
               final userData = member['users'] ?? {};
@@ -299,9 +300,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Payment Type',
-            style: TextStyle(
+          Text(
+            context.tr('payPaymentTypeLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -338,9 +339,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Amount',
-            style: TextStyle(
+          Text(
+            context.tr('amount'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -354,11 +355,11 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
             ],
             decoration: InputDecoration(
-              labelText: 'Amount',
+              labelText: context.tr('amount'),
               prefixText: '${CurrencyUtils.getCurrencySymbol(_selectedCurrency)} ',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.money),
-              helperText: 'Amount in ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
+              helperText: '${context.tr('payAmountInPrefix')} ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
             ),
             validator: (value) => Validators.amount(value),
           ),
@@ -372,9 +373,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Currency',
-            style: TextStyle(
+          Text(
+            context.tr('payCurrencyLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -383,10 +384,10 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
             initialValue: _selectedCurrency,
-            decoration: const InputDecoration(
-              labelText: 'Select Currency',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.attach_money),
+            decoration: InputDecoration(
+              labelText: context.tr('paySelectCurrencyLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.attach_money),
             ),
             items: CurrencyUtils.getSupportedCurrencies().map((currency) {
               return DropdownMenuItem<String>(
@@ -431,7 +432,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Selected: ${CurrencyUtils.getCurrencySymbol(_selectedCurrency)} ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
+                    '${context.tr('paySelectedPrefix')}: ${CurrencyUtils.getCurrencySymbol(_selectedCurrency)} ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
                     style: const TextStyle(
                       color: Colors.blue,
                       fontSize: 12,
@@ -452,9 +453,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Payment Method',
-            style: TextStyle(
+          Text(
+            context.tr('payPaymentMethodLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -491,9 +492,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Payment Date',
-            style: TextStyle(
+          Text(
+            context.tr('payPaymentDateLabel'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -532,9 +533,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Description',
-            style: TextStyle(
+          Text(
+            context.tr('description'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -543,10 +544,10 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           TextFormField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Payment description',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.description),
+            decoration: InputDecoration(
+              labelText: context.tr('payPaymentDescriptionLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.description),
             ),
             validator: (value) => Validators.required(value, 'description'),
             maxLines: 2,
@@ -561,9 +562,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Reference Number (Optional)',
-            style: TextStyle(
+          Text(
+            context.tr('payReferenceNumberOptional'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -572,11 +573,11 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           TextFormField(
             controller: _referenceController,
-            decoration: const InputDecoration(
-              labelText: 'Transaction reference',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.confirmation_number),
-              hintText: 'e.g., MPesa transaction ID',
+            decoration: InputDecoration(
+              labelText: context.tr('payTransactionReferenceLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.confirmation_number),
+              hintText: context.tr('payMpesaHint'),
             ),
           ),
         ],
@@ -589,9 +590,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Notes (Optional)',
-            style: TextStyle(
+          Text(
+            context.tr('payNotesOptional'),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
               color: AppColors.gray800,
@@ -600,10 +601,10 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 12),
           TextFormField(
             controller: _notesController,
-            decoration: const InputDecoration(
-              labelText: 'Additional notes',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.note),
+            decoration: InputDecoration(
+              labelText: context.tr('payAdditionalNotesLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.note),
             ),
             maxLines: 3,
           ),
@@ -637,9 +638,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : const Text(
-              'Record Payment',
-              style: TextStyle(
+            : Text(
+              context.tr('recordPayment'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.5,
@@ -667,9 +668,16 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedChoirId == null || _selectedMemberId == null) {
-      Helpers.showErrorSnackbar('Please select choir and member');
+      Helpers.showErrorSnackbar(context.tr('payPleaseSelectChoirAndMember'));
       return;
     }
+
+    // Resolve translated strings before any async gap so we don't touch
+    // BuildContext after an await.
+    final authRequiredMessage = context.tr('payAuthenticationRequired');
+    final successMessage = context.tr('paySuccessRecorded');
+    final failureMessage = context.tr('payFailedRecordPayment');
+    final errorPrefix = context.tr('error');
 
     if (mounted) {
       setState(() {
@@ -684,7 +692,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       // Get the current authenticated user's ID
       final currentUser = authController.currentUser;
       if (currentUser == null) {
-        Helpers.showErrorSnackbar('Authentication required');
+        Helpers.showErrorSnackbar(authRequiredMessage);
         return;
       }
       
@@ -698,10 +706,17 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
         memberName = 'Member ${_selectedMemberId!.substring(0, 8)}';
       }
 
+      // Attribute the payment to the member's account, not the recorder's.
+      String paymentUserId = currentUser.id;
+      try {
+        final selectedMember = _members.firstWhere((m) => m['id'] == _selectedMemberId);
+        paymentUserId = selectedMember['user_id'] ?? selectedMember['users']?['id'] ?? currentUser.id;
+      } catch (_) {}
+
       final success = await paymentController.createPayment(
         choirId: _selectedChoirId!,
         memberId: _selectedMemberId!,
-        userId: currentUser.id, // Use the authenticated user's ID
+        userId: paymentUserId,
         amount: double.parse(_amountController.text),
         type: _selectedType,
         method: _selectedMethod,
@@ -713,13 +728,15 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       );
 
       if (success) {
-        Helpers.showSuccessSnackbar('Payment recorded successfully');
-        Get.back(); // Return to previous screen
+        // Pop first: Get.back() right after a snackbar pops the snackbar
+        // route instead of this page, leaving the form open.
+        Get.back();
+        Helpers.showSuccessSnackbar(successMessage);
       } else {
-        Helpers.showErrorSnackbar('Failed to record payment');
+        Helpers.showErrorSnackbar(failureMessage);
       }
     } catch (e) {
-      Helpers.showErrorSnackbar('Error: $e');
+      Helpers.showErrorSnackbar('$errorPrefix: $e');
     } finally {
       if (mounted) {
         setState(() {
@@ -732,30 +749,30 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
   String _getPaymentTypeLabel(PaymentType type) {
     switch (type) {
       case PaymentType.registration:
-        return 'Registration Fee';
+        return context.tr('payRegistrationFee');
       case PaymentType.monthly:
-        return 'Monthly Fee';
+        return context.tr('payMonthlyFee');
       case PaymentType.quarterly:
-        return 'Quarterly Fee';
+        return context.tr('payQuarterlyFee');
       case PaymentType.annual:
-        return 'Annual Fee';
+        return context.tr('payAnnualFee');
       case PaymentType.special:
-        return 'Special Fee';
+        return context.tr('paySpecialFee');
       case PaymentType.other:
-        return 'Other';
+        return context.tr('payOther');
     }
   }
 
   String _getPaymentMethodLabel(PaymentMethod method) {
     switch (method) {
       case PaymentMethod.cash:
-        return 'Cash';
+        return context.tr('payCash');
       case PaymentMethod.bankTransfer:
-        return 'Bank Transfer';
+        return context.tr('payBankTransfer');
       case PaymentMethod.mobilePayment:
-        return 'Mobile Payment';
+        return context.tr('payMobilePayment');
       case PaymentMethod.other:
-        return 'Other';
+        return context.tr('payOther');
     }
   }
 }
