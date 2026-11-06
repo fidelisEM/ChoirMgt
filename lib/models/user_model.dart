@@ -1,4 +1,4 @@
-enum UserRole { admin, choirLeader, choirMember }
+enum UserRole { superAdmin, admin, choirLeader, choirMember }
 
 class UserModel {
 
@@ -44,6 +44,11 @@ class UserModel {
   final bool isActive;
   final String? profileImageUrl;
   final String suggestedChoir;
+
+  // Super Admin sits above Admin in the role hierarchy, so anywhere an
+  // Admin has access, a Super Admin must too - use this instead of
+  // `role == UserRole.admin` for any "is this user an admin" check.
+  bool get isAdmin => role == UserRole.admin || role == UserRole.superAdmin;
 
   Map<String, dynamic> toJson() {
     return {
