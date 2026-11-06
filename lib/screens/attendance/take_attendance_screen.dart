@@ -8,6 +8,7 @@ import '../../controllers/choir_controller.dart';
 import '../../controllers/member_controller.dart';
 import '../../models/models.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/logger.dart';
 
 class TakeAttendanceScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
       _selectedEventType = _currentSession!.eventType;
       _graceMinutes = _currentSession!.graceMinutes;
     } else {
-      _sessionTitleController.text = 'Attendance Session - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
+      _sessionTitleController.text = '${context.tr('attDefaultSessionTitlePrefix')} ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
     }
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -158,11 +159,18 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     final memberController = Provider.of<MemberController>(context, listen: false);
     final authController = Provider.of<AuthController>(context, listen: false);
     final choirController = Provider.of<ChoirController>(context, listen: false);
+    final trAttFailedCreateAttendanceSession = context.tr('attFailedCreateAttendanceSession'); // resolved before awaits
+    final trAttFailedSaveAttendancePrefix = context.tr('attFailedSaveAttendancePrefix'); // resolved before awaits
+    final trAttFailedSaveRecords = context.tr('attFailedSaveRecords'); // resolved before awaits
+    final trAttRecordedSuccessMsg = context.tr('attRecordedSuccessMsg'); // resolved before awaits
+    final trAttRecordsSavedSuffix = context.tr('attRecordsSavedSuffix'); // resolved before awaits
+    final trAttSuccessTitle = context.tr('attSuccessTitle'); // resolved before awaits
+    final trError = context.tr('error'); // resolved before awaits
     
     if (_sessionTitleController.text.trim().isEmpty) {
       Get.snackbar(
-        'Error',
-        'Please enter a session title',
+        context.tr('error'),
+        context.tr('attEnterSessionTitleError'),
         backgroundColor: AppColors.error,
         colorText: Colors.white,
       );
@@ -173,8 +181,8 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     final selectedChoir = choirController.selectedChoir;
     if (selectedChoir == null) {
       Get.snackbar(
-        'Error',
-        'No choir selected. Please select a choir first.',
+        context.tr('error'),
+        context.tr('attNoChoirSelectedError'),
         backgroundColor: AppColors.error,
         colorText: Colors.white,
       );
@@ -196,6 +204,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
         final success = await attendanceController.createAttendanceSession(
           choirId: choirId,
           title: _sessionTitleController.text.trim(),
+          leaderId: authController.currentUser!.id,
           eventType: _selectedEventType,
           description: _sessionDescriptionController.text.trim(),
           graceMinutes: _graceMinutes,
@@ -203,17 +212,17 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
         
         if (!success) {
           Get.snackbar(
-            'Error',
-            'Failed to create attendance session',
+            trError,
+            trAttFailedCreateAttendanceSession,
             backgroundColor: AppColors.error,
             colorText: Colors.white,
           );
           return;
         }
         
-        // Reload sessions to get the newly created session
-        await attendanceController.loadAttendanceSessions(choirId: choirId);
-        sessionId = attendanceController.sessions.first.id;
+        final created = attendanceController.lastCreatedSession;
+        if (created == null) return;
+        sessionId = created.id;
       } else {
         sessionId = _currentSession!.id;
       }
@@ -228,7 +237,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
         final status = _attendanceStatus[memberId] ?? AttendanceStatus.absent;
         
         final attendanceRecord = AttendanceModel(
-          id: '${sessionId}_${memberId}_${now.millisecondsSinceEpoch}_$i',
+          id: '', // assigned a UUID by AttendanceService
           sessionId: sessionId,
           memberId: memberId,
           userId: member['user_id'] ?? '',
@@ -254,8 +263,8 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
       
       if (!batchSuccess) {
         Get.snackbar(
-          'Error',
-          'Failed to save attendance records',
+          trError,
+          trAttFailedSaveRecords,
           backgroundColor: AppColors.error,
           colorText: Colors.white,
         );
@@ -263,18 +272,18 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
       }
 
       Logger.info('Batch save completed successfully');
-      
+
       Get.back();
       Get.snackbar(
-        'Success',
-        'Attendance recorded successfully! ${attendanceRecords.length} records saved.',
+        trAttSuccessTitle,
+        '$trAttRecordedSuccessMsg ${attendanceRecords.length} $trAttRecordsSavedSuffix',
         backgroundColor: AppColors.success,
         colorText: Colors.white,
       );
     } catch (e) {
       Get.snackbar(
-        'Error',
-        'Failed to save attendance: $e',
+        trError,
+        '$trAttFailedSaveAttendancePrefix: $e',
         backgroundColor: AppColors.error,
         colorText: Colors.white,
       );
@@ -285,11 +294,11 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isNewSession ? 'Take Attendance' : 'Edit Attendance'),
+        title: Text(_isNewSession ? context.tr('takeAttendance') : context.tr('attEditAttendanceTitle')),
         actions: [
           TextButton(
             onPressed: _saveAttendance,
-            child: const Text('Save', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+            child: Text(context.tr('save'), style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -310,7 +319,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Session Details',
+                        context.tr('attSessionDetailsHeading'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -318,17 +327,17 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                       const SizedBox(height: 12),
                       TextField(
                         controller: _sessionTitleController,
-                        decoration: const InputDecoration(
-                          labelText: 'Session Title',
-                          prefixIcon: Icon(Icons.title),
+                        decoration: InputDecoration(
+                          labelText: context.tr('attSessionTitleLabel'),
+                          prefixIcon: const Icon(Icons.title),
                         ),
                       ),
                       const SizedBox(height: 12),
                       TextField(
                         controller: _sessionDescriptionController,
-                        decoration: const InputDecoration(
-                          labelText: 'Description (Optional)',
-                          prefixIcon: Icon(Icons.description),
+                        decoration: InputDecoration(
+                          labelText: context.tr('attDescriptionOptionalLabel'),
+                          prefixIcon: const Icon(Icons.description),
                         ),
                         maxLines: 2,
                       ),
@@ -338,9 +347,9 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                           Expanded(
                             child: DropdownButtonFormField<EventType>(
                               initialValue: _selectedEventType,
-                              decoration: const InputDecoration(
-                                labelText: 'Event Type',
-                                prefixIcon: Icon(Icons.event),
+                              decoration: InputDecoration(
+                                labelText: context.tr('attEventTypeLabel'),
+                                prefixIcon: const Icon(Icons.event),
                               ),
                               items: EventType.values.map((type) {
                                 return DropdownMenuItem(
@@ -361,9 +370,9 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                           Expanded(
                             child: TextFormField(
                               initialValue: _graceMinutes.toString(),
-                              decoration: const InputDecoration(
-                                labelText: 'Grace Minutes',
-                                prefixIcon: Icon(Icons.timer),
+                              decoration: InputDecoration(
+                                labelText: context.tr('attGraceMinutesLabel'),
+                                prefixIcon: const Icon(Icons.timer),
                               ),
                               keyboardType: TextInputType.number,
                               onChanged: (value) {
@@ -389,15 +398,15 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: _buildStatCard('Present', _presentCount, AppColors.success),
+                      child: _buildStatCard(context.tr('attPresent'), _presentCount, AppColors.success),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: _buildStatCard('Late', _lateCount, AppColors.warning),
+                      child: _buildStatCard(context.tr('attLate'), _lateCount, AppColors.warning),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: _buildStatCard('Absent', _absentCount, AppColors.error),
+                      child: _buildStatCard(context.tr('attAbsent'), _absentCount, AppColors.error),
                     ),
                   ],
                 ),
@@ -412,7 +421,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                     TextField(
                       controller: _searchController,
                       decoration: InputDecoration(
-                        hintText: 'Search members...',
+                        hintText: context.tr('attSearchMembersHint'),
                         prefixIcon: const Icon(Icons.search),
                         suffixIcon: _searchController.text.isNotEmpty
                             ? IconButton(
@@ -435,7 +444,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _markAllPresent,
                             icon: const Icon(Icons.check_circle, color: AppColors.success),
-                            label: const Text('All Present'),
+                            label: Text(context.tr('attAllPresent')),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -443,7 +452,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _markAllAbsent,
                             icon: const Icon(Icons.cancel, color: AppColors.error),
-                            label: const Text('All Absent'),
+                            label: Text(context.tr('attAllAbsent')),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -453,7 +462,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                             _showOnlyUnmarked ? Icons.filter_alt : Icons.filter_alt_outlined,
                             color: _showOnlyUnmarked ? AppColors.primary : Colors.grey,
                           ),
-                          tooltip: 'Show only unmarked',
+                          tooltip: context.tr('attShowOnlyUnmarked'),
                         ),
                       ],
                     ),
@@ -471,7 +480,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                             Icon(Icons.people_outline, size: 64, color: Colors.grey[400]),
                             const SizedBox(height: 16),
                             Text(
-                              _showOnlyUnmarked ? 'All members marked!' : 'No members found',
+                              _showOnlyUnmarked ? context.tr('attAllMembersMarked') : context.tr('attNoMembersFoundFiltered'),
                               style: const TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey,
@@ -487,7 +496,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                           final member = _filteredMembers[index];
                           final memberId = member['id'] ?? '';
                           final status = _attendanceStatus[memberId] ?? AttendanceStatus.absent;
-                          final fullName = member['full_name'] ?? 'Unknown Member';
+                          final fullName = member['full_name'] ?? context.tr('attUnknownMember');
                           final email = member['email'] ?? '';
                           final regNumber = member['registration_number'] ?? '';
                           
@@ -520,7 +529,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                                   children: [
                                     if (regNumber.isNotEmpty)
                                       Text(
-                                        'ID: $regNumber',
+                                        '${context.tr('attIdPrefix')} $regNumber',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ),
@@ -535,33 +544,33 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                                 trailing: PopupMenuButton<AttendanceStatus>(
                                   onSelected: (newStatus) => _markAttendance(memberId, newStatus),
                                   itemBuilder: (context) => [
-                                    const PopupMenuItem(
+                                    PopupMenuItem(
                                       value: AttendanceStatus.present,
                                       child: Row(
                                         children: [
-                                          Icon(Icons.check_circle, color: AppColors.success, size: 20),
-                                          SizedBox(width: 8),
-                                          Text('Present'),
+                                          const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                                          const SizedBox(width: 8),
+                                          Text(context.tr('attPresent')),
                                         ],
                                       ),
                                     ),
-                                    const PopupMenuItem(
+                                    PopupMenuItem(
                                       value: AttendanceStatus.late,
                                       child: Row(
                                         children: [
-                                          Icon(Icons.schedule, color: AppColors.warning, size: 20),
-                                          SizedBox(width: 8),
-                                          Text('Late'),
+                                          const Icon(Icons.schedule, color: AppColors.warning, size: 20),
+                                          const SizedBox(width: 8),
+                                          Text(context.tr('attLate')),
                                         ],
                                       ),
                                     ),
-                                    const PopupMenuItem(
+                                    PopupMenuItem(
                                       value: AttendanceStatus.absent,
                                       child: Row(
                                         children: [
-                                          Icon(Icons.cancel, color: AppColors.error, size: 20),
-                                          SizedBox(width: 8),
-                                          Text('Absent'),
+                                          const Icon(Icons.cancel, color: AppColors.error, size: 20),
+                                          const SizedBox(width: 8),
+                                          Text(context.tr('attAbsent')),
                                         ],
                                       ),
                                     ),

@@ -530,6 +530,11 @@ class AttendanceController extends ChangeNotifier {
     }
   }
 
+  // The session created by the latest successful createAttendanceSession call,
+  // so callers can attach records to its real ID.
+  AttendanceSessionModel? _lastCreatedSession;
+  AttendanceSessionModel? get lastCreatedSession => _lastCreatedSession;
+
   // Create a new attendance session
   Future<bool> createAttendanceSession({
     required String choirId,
@@ -561,6 +566,7 @@ class AttendanceController extends ChangeNotifier {
 
       // Add to local sessions list
       _sessions.insert(0, newSession);
+      _lastCreatedSession = newSession;
       _setLoading(false);
       return true;
     } catch (e) {

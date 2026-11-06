@@ -7,6 +7,7 @@ import '../../controllers/auth_controller.dart';
 import '../../controllers/member_controller.dart';
 import '../../models/models.dart';
 import '../../services/export_service.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/helpers.dart';
 import '../qr_scanner_screen.dart';
 
@@ -50,7 +51,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load session data: $e'),
+            content: Text('${context.tr('attFailedLoadSessionData')}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -104,45 +105,45 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'qr_scan',
                     child: Row(
                       children: [
-                        Icon(Icons.qr_code_scanner, color: Colors.blue),
-                        SizedBox(width: 8),
-                        Text('QR Code Scanner'),
+                        const Icon(Icons.qr_code_scanner, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attQrCodeScanner')),
                       ],
                     ),
                   ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'bulk_present',
                     child: Row(
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green),
-                        SizedBox(width: 8),
-                        Text('Mark All Present'),
+                        const Icon(Icons.check_circle, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attMarkAllPresent')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'bulk_absent',
                     child: Row(
                       children: [
-                        Icon(Icons.cancel, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Mark All Absent'),
+                        const Icon(Icons.cancel, color: Colors.red),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attMarkAllAbsent')),
                       ],
                     ),
                   ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'export',
                     child: Row(
                       children: [
-                        Icon(Icons.download),
-                        SizedBox(width: 8),
-                        Text('Export Data'),
+                        const Icon(Icons.download),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attExportData')),
                       ],
                     ),
                   ),
@@ -167,7 +168,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
-                    'Error loading attendance data',
+                    context.tr('attErrorLoadingData'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
@@ -179,7 +180,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => _loadSessionData(),
-                    child: const Text('Retry'),
+                    child: Text(context.tr('retry')),
                   ),
                 ],
               ),
@@ -188,20 +189,20 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
           // Handle case where members list is empty
           if (memberController.membersWithUserInfo.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.people_outline, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
+                  const Icon(Icons.people_outline, size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
                   Text(
-                    'No choir members found',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    context.tr('attNoMembersFound'),
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'Add members to this choir to track attendance',
-                    style: TextStyle(color: Colors.grey),
+                    context.tr('attAddMembersPrompt'),
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
@@ -269,9 +270,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                                 color: Colors.green.withAlpha(30),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Text(
-                                'ACTIVE',
-                                style: TextStyle(
+                              child: Text(
+                                context.tr('active').toUpperCase(),
+                                style: const TextStyle(
                                   color: Colors.green,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
@@ -292,10 +293,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
                   controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Search members...',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: context.tr('attSearchMembersHint'),
+                    prefixIcon: const Icon(Icons.search),
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -310,10 +311,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               // Members List
               Expanded(
                 child: members.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
-                          'No members found',
-                          style: TextStyle(color: Colors.grey),
+                          context.tr('attNoMembersFoundFiltered'),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       )
                     : ListView.builder(
@@ -358,7 +359,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       children: [
         Expanded(
           child: _buildStatChip(
-            'Present',
+            context.tr('attPresent'),
             present.toString(),
             Colors.green,
           ),
@@ -366,7 +367,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Late',
+            context.tr('attLate'),
             late.toString(),
             Colors.orange,
           ),
@@ -374,7 +375,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Absent',
+            context.tr('attAbsent'),
             absent.toString(),
             Colors.red,
           ),
@@ -382,7 +383,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Total',
+            context.tr('attTotal'),
             totalMembers.toString(),
             Colors.blue,
           ),
@@ -471,7 +472,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                   if (checkInTime != null)
                     Text(
-                      'Checked in: ${_formatTime(checkInTime)}',
+                      '${context.tr('attCheckedInPrefix')} ${_formatTime(checkInTime)}',
                       style: TextStyle(
                         color: Colors.grey[500],
                         fontSize: 11,
@@ -502,33 +503,33 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 onSelected: (status) => _markAttendance(member, status),
                 child: const Icon(Icons.more_vert),
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.present,
                     child: Row(
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 20),
-                        SizedBox(width: 8),
-                        Text('Present'),
+                        const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attPresent')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.late,
                     child: Row(
                       children: [
-                        Icon(Icons.schedule, color: Colors.orange, size: 20),
-                        SizedBox(width: 8),
-                        Text('Late'),
+                        const Icon(Icons.schedule, color: Colors.orange, size: 20),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attLate')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.absent,
                     child: Row(
                       children: [
-                        Icon(Icons.cancel, color: Colors.red, size: 20),
-                        SizedBox(width: 8),
-                        Text('Absent'),
+                        const Icon(Icons.cancel, color: Colors.red, size: 20),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attAbsent')),
                       ],
                     ),
                   ),
@@ -569,16 +570,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   void _markAllAs(AttendanceStatus status) async {
     final result = await Get.dialog<bool>(
       AlertDialog(
-        title: Text('Mark All ${status.toString().split('.').last.toUpperCase()}'),
-        content: Text('Are you sure you want to mark all members as ${status.toString().split('.').last}?'),
+        title: Text('${context.tr('attMarkAll')} ${status.toString().split('.').last.toUpperCase()}'),
+        content: Text('${context.tr('attConfirmMarkAllPrefix')} ${status.toString().split('.').last}?'),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () => Get.back(result: true),
-            child: const Text('Confirm'),
+            child: Text(context.tr('confirm')),
           ),
         ],
       ),
@@ -603,10 +604,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         recordedBy: authController.currentUser!.id,
       );
 
+      if (!mounted) return;
       if (success) {
         Get.snackbar(
-          'Success',
-          'Attendance recorded for all members',
+          context.tr('attSuccessTitle'),
+          context.tr('attRecordedAllMembers'),
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -626,23 +628,25 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: Column(
+        child: Material(
+          color: Colors.transparent,
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Export Session Attendance',
+              context.tr('attExportSessionTitle'),
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Choose export format for "${widget.session.title}"',
+              '${context.tr('attChooseExportFormatPrefix')} "${widget.session.title}"',
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 20),
-            
+
             // PDF Export Option
             ListTile(
               leading: Container(
@@ -653,14 +657,14 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 ),
                 child: const Icon(Icons.picture_as_pdf, color: Colors.red),
               ),
-              title: const Text('Export as PDF'),
-              subtitle: const Text('Detailed report with formatting'),
+              title: Text(context.tr('attExportAsPdf')),
+              subtitle: Text(context.tr('attPdfDescription')),
               onTap: () {
                 Get.back();
                 _exportSessionToPDF();
               },
             ),
-            
+
             // CSV Export Option
             ListTile(
               leading: Container(
@@ -671,8 +675,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 ),
                 child: const Icon(Icons.table_chart, color: Colors.green),
               ),
-              title: const Text('Export as CSV'),
-              subtitle: const Text('Spreadsheet format for data analysis'),
+              title: Text(context.tr('attExportAsCsv')),
+              subtitle: Text(context.tr('attCsvDescription')),
               onTap: () {
                 Get.back();
                 _exportSessionToCSV();
@@ -681,6 +685,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             
             const SizedBox(height: 10),
           ],
+          ),
         ),
       ),
     );
@@ -693,12 +698,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       
       // Show loading
       Get.dialog(
-        const AlertDialog(
+        AlertDialog(
           content: Row(
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text('Generating PDF report...'),
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Text(context.tr('attGeneratingPdf')),
             ],
           ),
         ),
@@ -707,7 +712,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       // Prepare session data for export
       final sessionData = await _prepareSessionDataForExport(
-        memberController, 
+        memberController,
         attendanceController
       );
 
@@ -716,15 +721,17 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       Get.back(); // Close loading dialog
 
+      if (!mounted) return;
       if (filePath != null) {
-        Helpers.showSuccessSnackbar('PDF exported successfully');
+        Helpers.showSuccessSnackbar(context.tr('attPdfExportedSuccess'));
         _showExportSuccessDialog(filePath, 'PDF');
       } else {
-        Helpers.showErrorSnackbar('Failed to export PDF');
+        Helpers.showErrorSnackbar(context.tr('attFailedExportPdf'));
       }
     } catch (e) {
       Get.back(); // Close loading dialog if open
-      Helpers.showErrorSnackbar('Error exporting PDF: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('attErrorExportingPdfPrefix')}: $e');
     }
   }
 
@@ -735,12 +742,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       
       // Show loading
       Get.dialog(
-        const AlertDialog(
+        AlertDialog(
           content: Row(
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text('Generating CSV file...'),
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Text(context.tr('attGeneratingCsv')),
             ],
           ),
         ),
@@ -749,7 +756,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       // Prepare session data for export
       final sessionData = await _prepareSessionDataForExport(
-        memberController, 
+        memberController,
         attendanceController
       );
 
@@ -758,15 +765,17 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       Get.back(); // Close loading dialog
 
+      if (!mounted) return;
       if (filePath != null) {
-        Helpers.showSuccessSnackbar('CSV exported successfully');
+        Helpers.showSuccessSnackbar(context.tr('attCsvExportedSuccess'));
         _showExportSuccessDialog(filePath, 'CSV');
       } else {
-        Helpers.showErrorSnackbar('Failed to export CSV');
+        Helpers.showErrorSnackbar(context.tr('attFailedExportCsv'));
       }
     } catch (e) {
       Get.back(); // Close loading dialog if open
-      Helpers.showErrorSnackbar('Error exporting CSV: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('attErrorExportingCsvPrefix')}: $e');
     }
   }
 
@@ -836,15 +845,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   void _showExportSuccessDialog(String filePath, String format) {
     Get.dialog(
       AlertDialog(
-        title: const Text('Export Successful'),
+        title: Text(context.tr('attExportSuccessfulTitle')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('$format file has been exported successfully!'),
+            Text('$format ${context.tr('attFileExportedSuccess')}'),
             const SizedBox(height: 10),
             Text(
-              'Location: $filePath',
+              '${context.tr('attLocationPrefix')} $filePath',
               style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
             ),
           ],
@@ -852,7 +861,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('OK'),
+            child: Text(context.tr('attOk')),
           ),
         ],
       ),
@@ -936,12 +945,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   String _getMemberName(Map<String, dynamic> member) {
-    return member['users']?['full_name'] as String? ?? 'Unknown Member';
+    return member['users']?['full_name'] as String? ?? context.tr('attUnknownMember');
   }
 
   String _getMemberRegistration(Map<String, dynamic> member) {
     final registration = member['registration_number'] as String?;
-    return registration?.isNotEmpty == true ? registration! : 'No Registration';
+    return registration?.isNotEmpty == true ? registration! : context.tr('attNoRegistration');
   }
 
   @override

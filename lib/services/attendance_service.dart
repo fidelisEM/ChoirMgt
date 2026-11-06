@@ -12,6 +12,14 @@ class AttendanceService {
 
   final SupabaseClient _supabase = Supabase.instance.client;
   final Uuid _uuid = const Uuid();
+  static final RegExp _uuidPattern = RegExp(
+    r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+  );
+
+  /// uuid columns reject placeholders like '', 'unknown' or 'current-user-id',
+  /// so send null instead of failing the whole write.
+  String? _uuidOrNull(String? value) =>
+      value != null && _uuidPattern.hasMatch(value) ? value : null;
   static const String _attendanceKey = 'attendance_records';
   static const String _sessionsKey = 'attendance_sessions';
 
@@ -34,48 +42,7 @@ class AttendanceService {
 
     Logger.debug('AttendanceService.getChoirAttendance - Looking for key: ${_attendanceKey}_$choirId');
 
-    if (attendanceJson == null) {
-      Logger.debug('AttendanceService.getChoirAttendance - No data found, checking for migration');
-
-      // Try to find attendance records for any choir and migrate them
-      final allKeys = prefs.getKeys();
-      final attendanceKeys = allKeys.where((key) => key.startsWith(_attendanceKey)).toList();
-
-      if (attendanceKeys.isNotEmpty) {
-        Logger.debug('AttendanceService.getChoirAttendance - Found ${attendanceKeys.length} attendance keys, checking for migration');
-
-        for (final key in attendanceKeys) {
-          final existingData = prefs.getString(key);
-          if (existingData != null) {
-            try {
-              final List<dynamic> attendanceData = jsonDecode(existingData);
-              final records = attendanceData.map((data) => AttendanceModel.fromJson(data)).toList();
-
-              Logger.debug('AttendanceService.getChoirAttendance - Found ${records.length} attendance records in key: $key');
-
-              if (records.isNotEmpty) {
-                Logger.info('AttendanceService.getChoirAttendance - Migrating ${records.length} attendance records to current choir: $choirId');
-
-                // Update the choir ID in all records
-                final migratedRecords = records.map((record) => record.copyWith(choirId: choirId)).toList();
-
-                // Save under the new choir ID
-                final migratedJson = jsonEncode(migratedRecords.map((r) => r.toJson()).toList());
-                await prefs.setString('${_attendanceKey}_$choirId', migratedJson);
-
-                Logger.info('AttendanceService.getChoirAttendance - Successfully migrated ${migratedRecords.length} attendance records');
-                return migratedRecords;
-              }
-            } catch (e) {
-              Logger.error('AttendanceService.getChoirAttendance - Error parsing attendance from key $key', e);
-            }
-          }
-        }
-      }
-
-      // Return empty list instead of creating sample data
-      return [];
-    }
+    if (attendanceJson == null) return [];
 
     final List<dynamic> attendanceData = jsonDecode(attendanceJson);
     final records = attendanceData.map((data) => AttendanceModel.fromJson(data)).toList();
@@ -164,6 +131,7 @@ class AttendanceService {
 
     Logger.debug('AttendanceService - Recording ${attendanceList.length} records for session $sessionId in choir $choirId');
 
+    var failedRecords = 0;
     try {
       // Save to Supabase database
       for (final attendance in attendanceList) {
@@ -171,20 +139,26 @@ class AttendanceService {
           'id': attendance.id.isNotEmpty ? attendance.id : _uuid.v4(),
           'session_id': sessionId,
           'member_id': attendance.memberId,
-          'user_id': attendance.userId,
+          'user_id': _uuidOrNull(attendance.userId),
           'status': attendance.status.toString().split('.').last,
           'check_in_time': attendance.status == AttendanceStatus.present || attendance.status == AttendanceStatus.late
               ? attendance.recordedAt.toIso8601String()
               : null,
           'notes': attendance.notes,
           'recorded_at': attendance.recordedAt.toIso8601String(),
-          'recorded_by': attendance.recordedBy,
+          'recorded_by': _uuidOrNull(attendance.recordedBy),
         };
 
         // Insert or update attendance record
-        await _supabase
-            .from('attendance_records')
-            .upsert(attendanceRecord);
+        try {
+          await _supabase
+              .from('attendance_records')
+              .upsert(attendanceRecord, onConflict: 'session_id,member_id');
+        } catch (e) {
+          // Keep going: one bad row must not drop the rest of the session.
+          failedRecords++;
+          Logger.error('AttendanceService - Error saving record for member ${attendance.memberId}', e);
+        }
       }
 
       Logger.info('AttendanceService - Successfully saved ${attendanceList.length} records to database');
@@ -219,6 +193,14 @@ class AttendanceService {
     await prefs.setString('${_attendanceKey}_$choirId', attendanceJson);
 
     Logger.debug('AttendanceService - Successfully saved attendance data to SharedPreferences');
+
+    // The local copy above keeps the data, but the caller must not be told the
+    // save succeeded when the server rejected some of it.
+    if (failedRecords > 0) {
+      throw Exception(
+        '$failedRecords of ${attendanceList.length} attendance records could not be saved to the server',
+      );
+    }
     return sessionId;
   }
 
@@ -306,75 +288,64 @@ class AttendanceService {
   }
 
   // Session Management
+  //
+  // Sessions are read from Supabase first so they are the same on every device
+  // and browser; SharedPreferences is a cache and an offline fallback. Newest
+  // first, so callers can treat `.first` as the latest session.
   Future<List<AttendanceSessionModel>> getSessions(String choirId) async {
     final prefs = await SharedPreferences.getInstance();
-    final sessionsJson = prefs.getString('${_sessionsKey}_$choirId');
+    final cacheKey = '${_sessionsKey}_$choirId';
 
-    Logger.debug('AttendanceService.getSessions - Looking for key: ${_sessionsKey}_$choirId');
-    Logger.debug('AttendanceService.getSessions - Found data: ${sessionsJson != null ? 'YES' : 'NO'}');
+    try {
+      final rows = await _supabase
+          .from('attendance_sessions')
+          .select()
+          .eq('choir_id', choirId)
+          .order('created_at', ascending: false);
 
-    if (sessionsJson == null) {
-      // Debug: Show all keys in SharedPreferences
-      final allKeys = prefs.getKeys();
-      Logger.debug('AttendanceService.getSessions - All keys in SharedPreferences: $allKeys');
-
-      // Try to find sessions for any choir and migrate them
-      final sessionKeys = allKeys.where((key) => key.startsWith(_sessionsKey)).toList();
-
-      if (sessionKeys.isNotEmpty) {
-        Logger.debug('AttendanceService.getSessions - Found ${sessionKeys.length} session keys, checking for migration');
-
-        for (final key in sessionKeys) {
-          final existingSessions = prefs.getString(key);
-          if (existingSessions != null) {
-            try {
-              final List<dynamic> existingData = jsonDecode(existingSessions);
-              final sessions = existingData.map((data) => AttendanceSessionModel.fromJson(data)).toList();
-
-              Logger.debug('AttendanceService.getSessions - Found ${sessions.length} sessions in key: $key');
-
-              // Check if any of these sessions should belong to the current choir
-              // For now, let's migrate the first set of sessions we find
-              if (sessions.isNotEmpty) {
-                Logger.info('AttendanceService.getSessions - Migrating ${sessions.length} sessions to current choir: $choirId');
-
-                // Update the choir ID in all sessions
-                final migratedSessions = sessions.map((session) => AttendanceSessionModel(
-                  id: session.id,
-                  choirId: choirId, // Update to current choir ID
-                  leaderId: session.leaderId,
-                  date: session.date,
-                  startTime: session.startTime,
-                  endTime: session.endTime,
-                  eventType: session.eventType,
-                  title: session.title,
-                  description: session.description,
-                  graceMinutes: session.graceMinutes,
-                  isActive: session.isActive,
-                  createdAt: session.createdAt,
-                )).toList();
-
-                // Save under the new choir ID
-                final migratedJson = jsonEncode(migratedSessions.map((s) => s.toJson()).toList());
-                await prefs.setString('${_sessionsKey}_$choirId', migratedJson);
-
-                Logger.info('AttendanceService.getSessions - Successfully migrated ${migratedSessions.length} sessions');
-                return migratedSessions;
-              }
-            } catch (e) {
-              Logger.error('AttendanceService.getSessions - Error parsing sessions from key $key', e);
-            }
-          }
-        }
+      if (rows.isNotEmpty) {
+        final sessions = rows.map<AttendanceSessionModel>(_sessionFromRow).toList();
+        await prefs.setString(
+          cacheKey,
+          jsonEncode(sessions.map((s) => s.toJson()).toList()),
+        );
+        Logger.debug('AttendanceService.getSessions - Loaded ${sessions.length} sessions from database');
+        return sessions;
       }
-
-      return [];
+    } catch (e) {
+      Logger.error('AttendanceService.getSessions - Error loading from database', e);
     }
 
+    final sessionsJson = prefs.getString(cacheKey);
+    if (sessionsJson == null) return [];
+
     final List<dynamic> sessionsData = jsonDecode(sessionsJson);
-    final sessions = sessionsData.map((data) => AttendanceSessionModel.fromJson(data)).toList();
-    Logger.debug('AttendanceService.getSessions - Loaded ${sessions.length} sessions');
+    final sessions = sessionsData
+        .map((data) => AttendanceSessionModel.fromJson(data))
+        .toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    Logger.debug('AttendanceService.getSessions - Loaded ${sessions.length} sessions from local cache');
     return sessions;
+  }
+
+  AttendanceSessionModel _sessionFromRow(Map<String, dynamic> row) {
+    return AttendanceSessionModel(
+      id: row['id'] ?? '',
+      choirId: row['choir_id'] ?? '',
+      leaderId: row['leader_id'] ?? '',
+      date: DateTime.tryParse(row['date'] ?? '') ?? DateTime.now(),
+      startTime: DateTime.tryParse(row['start_time'] ?? '') ?? DateTime.now(),
+      endTime: DateTime.tryParse(row['end_time'] ?? ''),
+      eventType: EventType.values.firstWhere(
+        (type) => type.toString().split('.').last == row['event_type'],
+        orElse: () => EventType.other,
+      ),
+      title: row['title'] ?? '',
+      description: row['description'],
+      graceMinutes: row['grace_minutes'] ?? 15,
+      isActive: row['is_active'] ?? true,
+      createdAt: DateTime.tryParse(row['created_at'] ?? '') ?? DateTime.now(),
+    );
   }
 
   Future<AttendanceSessionModel> createSession({
@@ -405,7 +376,7 @@ class AttendanceService {
       final sessionRecord = {
         'id': session.id,
         'choir_id': session.choirId,
-        'leader_id': session.leaderId,
+        'leader_id': _uuidOrNull(session.leaderId),
         'date': session.date.toIso8601String().split('T')[0], // Date only
         'start_time': session.startTime.toIso8601String(),
         'end_time': session.endTime?.toIso8601String(),
@@ -429,8 +400,11 @@ class AttendanceService {
     }
 
     // Also save to SharedPreferences for backward compatibility
+    // getSessions already includes the session if the database save worked.
     final sessions = await getSessions(choirId);
-    sessions.add(session);
+    if (!sessions.any((s) => s.id == session.id)) {
+      sessions.insert(0, session);
+    }
 
     Logger.debug('AttendanceService.createSession - Creating session ${session.id} for choir $choirId');
     Logger.debug('AttendanceService.createSession - Total sessions after adding: ${sessions.length}');
