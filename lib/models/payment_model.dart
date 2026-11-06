@@ -21,7 +21,7 @@ class PaymentModel {
     required this.paymentDate,
     this.receivedBy,
     this.notes,
-    this.currency = 'KES',
+    this.currency = 'TZS',
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
@@ -50,7 +50,7 @@ class PaymentModel {
           : DateTime.now(),
       receivedBy: json['received_by'] ?? json['receivedBy'],
       notes: json['notes'],
-      currency: json['currency'] ?? 'KES',
+      currency: json['currency'] ?? 'TZS',
     );
   }
   final String id;

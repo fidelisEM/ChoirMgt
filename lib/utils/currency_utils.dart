@@ -156,17 +156,17 @@ class CurrencyUtils {
   }
   
   static String getDefaultCurrency() {
-    // Default to KES for Kenyan Shilling (KSH)
-    return 'KES';
+    // Default to TZS for Tanzanian Shilling
+    return 'TZS';
   }
-  
-  // Quick helper method to format amounts in KSH
+
+  // Quick helper method to format amounts in the default currency (TZS)
   static String formatKSH(double amount) {
-    return formatAmount(amount, 'KES');
+    return formatAmount(amount, 'TZS');
   }
-  
-  // Helper to get KSH symbol
+
+  // Helper to get the default currency's symbol
   static String getKSHSymbol() {
-    return getCurrencySymbol('KES'); // Returns 'KSh'
+    return getCurrencySymbol('TZS'); // Returns 'TSh'
   }
 }
