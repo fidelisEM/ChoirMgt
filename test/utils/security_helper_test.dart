@@ -43,6 +43,19 @@ void main() {
   });
 
   group('SecurityHelper.hasPermission', () {
+    test('super_admin has every admin permission', () {
+      for (final permission in ['manage_users', 'manage_payments', 'delete']) {
+        expect(SecurityHelper.hasPermission('super_admin', permission), isTrue);
+      }
+    });
+
+    test('leader can manage payments and attendance but not users', () {
+      expect(SecurityHelper.hasPermission('leader', 'manage_payments'), isTrue);
+      expect(SecurityHelper.hasPermission('leader', 'manage_attendance'), isTrue);
+      expect(SecurityHelper.hasPermission('leader', 'manage_users'), isFalse);
+      expect(SecurityHelper.hasPermission('leader', 'delete'), isFalse);
+    });
+
     test('admin has the broadest permission set', () {
       expect(SecurityHelper.hasPermission('admin', 'manage_users'), isTrue);
       expect(SecurityHelper.hasPermission('admin', 'delete'), isTrue);

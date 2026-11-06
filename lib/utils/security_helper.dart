@@ -169,9 +169,20 @@ class SecurityHelper {
   
   // Validate user permissions
   static bool hasPermission(String userRole, String requiredPermission) {
+    const adminPermissions = [
+      'read',
+      'write',
+      'delete',
+      'manage_users',
+      'manage_payments',
+      'manage_attendance',
+      'view_reports',
+    ];
     const rolePermissions = {
-      'admin': ['read', 'write', 'delete', 'manage_users', 'manage_payments', 'view_reports'],
-      'leader': ['read', 'write', 'manage_attendance', 'view_reports'],
+      'super_admin': adminPermissions,
+      'admin': adminPermissions,
+      // Leaders record payments and attendance for their own choir (see RLS).
+      'leader': ['read', 'write', 'manage_payments', 'manage_attendance', 'view_reports'],
       'member': ['read'],
       'guest': [],
     };

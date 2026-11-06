@@ -29,8 +29,8 @@ void main() {
       expect(CurrencyUtils.getCurrencySymbol('ZZZ'), 'ZZZ');
     });
 
-    test('getDefaultCurrency is KES', () {
-      expect(CurrencyUtils.getDefaultCurrency(), 'KES');
+    test('getDefaultCurrency is TZS', () {
+      expect(CurrencyUtils.getDefaultCurrency(), 'TZS');
     });
 
     test('getSupportedCurrencies includes all documented currencies', () {

@@ -120,4 +120,22 @@ void main() {
       expect(updated.email, original.email);
     });
   });
+
+  group('UserModel.isAdmin', () {
+    UserModel withRole(UserRole role) => UserModel(
+          id: 'u',
+          email: 'e@example.com',
+          fullName: 'n',
+          phoneNumber: '',
+          role: role,
+          createdAt: DateTime.utc(2026),
+        );
+
+    test('is true only for admin and superAdmin', () {
+      expect(withRole(UserRole.superAdmin).isAdmin, isTrue);
+      expect(withRole(UserRole.admin).isAdmin, isTrue);
+      expect(withRole(UserRole.choirLeader).isAdmin, isFalse);
+      expect(withRole(UserRole.choirMember).isAdmin, isFalse);
+    });
+  });
 }
