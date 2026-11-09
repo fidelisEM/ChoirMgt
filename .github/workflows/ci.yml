@@ -80,7 +80,7 @@ jobs:
           --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
 
     - name: Upload web artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: web-build
         path: build/web/
@@ -97,7 +97,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
@@ -133,14 +133,14 @@ jobs:
 
 
     - name: Upload APK artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: android-apk
         path: build/app/outputs/flutter-apk/app-release.apk
         retention-days: 30
         
     - name: Upload App Bundle artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: android-aab
         path: build/app/outputs/bundle/release/app-release.aab
@@ -149,6 +149,9 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     
     steps:
     - name: Checkout code
@@ -163,8 +166,10 @@ jobs:
         output: 'trivy-results.sarif'
         
     - name: Upload Trivy scan results
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v4
       if: always()
+      # Uploading SARIF needs GitHub code scanning, which private repos only get with Advanced Security.
+      continue-on-error: true
       with:
         sarif_file: 'trivy-results.sarif'
 
@@ -177,7 +182,7 @@ jobs:
     
     steps:
     - name: Download web artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: web-build
         path: build/web/
@@ -199,7 +204,7 @@ jobs:
     
     steps:
     - name: Download web artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: web-build
         path: build/web/
