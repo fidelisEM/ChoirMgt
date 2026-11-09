@@ -17,10 +17,7 @@ class UserService {
           .eq('id', userId)
           .single();
 
-      return UserModel.fromJson({
-        'id': response['id'],
-        ...response,
-      });
+      return UserModel.fromJson({'id': response['id'], ...response});
     } catch (e) {
       Logger.error('Error getting user', e);
       return null;
@@ -62,10 +59,7 @@ class UserService {
 
   Future<bool> updateUser(UserModel user) async {
     try {
-      await _supabase
-          .from('users')
-          .update(user.toJson())
-          .eq('id', user.id);
+      await _supabase.from('users').update(user.toJson()).eq('id', user.id);
       return true;
     } catch (e) {
       Logger.error('Error updating user', e);
@@ -136,7 +130,9 @@ class UserService {
       final response = await _supabase
           .from('users')
           .select()
-          .or('full_name.ilike.%$query%,email.ilike.%$query%,phone_number.ilike.%$query%')
+          .or(
+            'full_name.ilike.%$query%,email.ilike.%$query%,phone_number.ilike.%$query%',
+          )
           .order('full_name');
 
       return response

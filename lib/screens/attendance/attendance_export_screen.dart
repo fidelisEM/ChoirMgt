@@ -26,7 +26,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
   bool _isExporting = false;
 
   final List<String> _exportFormats = ['PDF', 'Excel'];
-  final List<String> _filterOptions = ['All Members', 'Active Only', 'With Low Attendance'];
+  final List<String> _filterOptions = [
+    'All Members',
+    'Active Only',
+    'With Low Attendance',
+  ];
 
   @override
   void initState() {
@@ -45,9 +49,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -101,10 +103,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
           const SizedBox(height: 8),
           Text(
             context.tr('attExportHeaderSubtitle'),
-            style: const TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -175,7 +174,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     );
   }
 
-  Widget _buildDateField(String label, DateTime? date, Function(DateTime) onDateChanged) {
+  Widget _buildDateField(
+    String label,
+    DateTime? date,
+    Function(DateTime) onDateChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -198,10 +201,16 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.calendar_today, size: 20, color: AppColors.gray600),
+                const Icon(
+                  Icons.calendar_today,
+                  size: 20,
+                  color: AppColors.gray600,
+                ),
                 const SizedBox(width: 12),
                 Text(
-                  date != null ? DateFormat('MMM dd, yyyy').format(date) : context.tr('attSelectDatePlaceholder'),
+                  date != null
+                      ? DateFormat('MMM dd, yyyy').format(date)
+                      : context.tr('attSelectDatePlaceholder'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Spacer(),
@@ -238,7 +247,9 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      format == 'PDF' ? Icons.picture_as_pdf : Icons.table_chart,
+                      format == 'PDF'
+                          ? Icons.picture_as_pdf
+                          : Icons.table_chart,
                       size: 16,
                       color: isSelected ? Colors.white : AppColors.gray600,
                     ),
@@ -268,7 +279,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+                const Icon(
+                  Icons.info_outline,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -325,10 +340,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
           const SizedBox(height: 12),
           Text(
             _getFilterDescription(),
-            style: const TextStyle(
-              color: AppColors.gray600,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 12),
           ),
         ],
       ),
@@ -352,7 +364,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     return Consumer2<AttendanceController, ChoirController>(
       builder: (context, attendanceController, choirController, child) {
         final selectedChoir = choirController.selectedChoir;
-        
+
         if (selectedChoir == null) {
           return GlassCard(
             child: Container(
@@ -382,14 +394,20 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildPreviewItem(context.tr('attChoirLabel'), selectedChoir.name),
+              _buildPreviewItem(
+                context.tr('attChoirLabel'),
+                selectedChoir.name,
+              ),
               _buildPreviewItem(
                 context.tr('attDateRangeHeading'),
                 '${DateFormat('MMM dd').format(_fromDate!)} - ${DateFormat('MMM dd, yyyy').format(_toDate!)}',
               ),
               _buildPreviewItem(context.tr('attFormatLabel'), _selectedFormat),
               _buildPreviewItem(context.tr('attFilterLabel'), _selectedFilter),
-              _buildPreviewItem(context.tr('attEstimatedMembersLabel'), '${selectedChoir.memberCount}'),
+              _buildPreviewItem(
+                context.tr('attEstimatedMembersLabel'),
+                '${selectedChoir.memberCount}',
+              ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -399,7 +417,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                    const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -433,10 +455,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -449,9 +468,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: _isExporting
           ? const SizedBox(
@@ -479,7 +496,10 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     );
   }
 
-  Future<void> _selectDate(DateTime? currentDate, Function(DateTime) onDateChanged) async {
+  Future<void> _selectDate(
+    DateTime? currentDate,
+    Function(DateTime) onDateChanged,
+  ) async {
     final date = await showDatePicker(
       context: context,
       initialDate: currentDate ?? DateTime.now(),
@@ -518,7 +538,10 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
       return;
     }
 
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     if (choirController.selectedChoir == null) {
       Helpers.showErrorSnackbar(context.tr('attSelectChoirFirstError'));
       return;
@@ -530,13 +553,17 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
 
     try {
       // Generate attendance report data
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      final reportData = await attendanceController.generateAttendanceReportData(
-        choirId: choirController.selectedChoir!.id,
-        fromDate: _fromDate!,
-        toDate: _toDate!,
-        filter: _selectedFilter,
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
       );
+      final reportData = await attendanceController
+          .generateAttendanceReportData(
+            choirId: choirController.selectedChoir!.id,
+            fromDate: _fromDate!,
+            toDate: _toDate!,
+            filter: _selectedFilter,
+          );
 
       if (!mounted) return;
       if (reportData == null || reportData.isEmpty) {
@@ -593,10 +620,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
               ),
               child: Text(
                 '${context.tr('attFileSavedToPrefix')} $filePath',
-                style: const TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                ),
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
               ),
             ),
           ],

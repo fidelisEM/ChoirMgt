@@ -74,7 +74,8 @@ class AppTranslations {
       'welcomeBackName': 'Welcome back,',
       'attendancePercentage': 'Attendance',
       'joinUs': 'Join Us',
-      'createAccountSubtitle': 'Create your account to start your musical journey',
+      'createAccountSubtitle':
+          'Create your account to start your musical journey',
       'fullName': 'Full Name',
       'enterFullName': 'Enter your full name',
       'phoneNumber': 'Phone Number',
@@ -144,7 +145,8 @@ class AppTranslations {
       'choirAddMemberTooltip': 'Add Member',
       'choirAddPhotoLabel': 'Add Photo',
       'choirAdjustSearchFilters': 'Try adjusting your search or filters',
-      'choirAdminNoteMessage': 'You will be set as the choir administrator. You can add members and assign leaders after creating the choir.',
+      'choirAdminNoteMessage':
+          'You will be set as the choir administrator. You can add members and assign leaders after creating the choir.',
       'choirAllAbsentLabel': 'All Absent',
       'choirAllActivitiesTitle': 'All Activities',
       'choirAllFilterLabel': 'All',
@@ -174,7 +176,8 @@ class AppTranslations {
       'choirCreateNewTooltip': 'Create New Choir',
       'choirCreatedLabel': 'Created',
       'choirCreatedSuccessMessage': 'Choir created successfully!',
-      'choirCreatingWithoutPhotoMessage': 'Creating the choir without a photo. You can add one later.',
+      'choirCreatingWithoutPhotoMessage':
+          'Creating the choir without a photo. You can add one later.',
       'choirCsvSavedToPrefix': 'CSV file saved to:',
       'choirCustomDioceseArchdioceseLabel': 'Custom Diocese/Archdiocese',
       'choirCustomDioceseNameLabel': 'Custom Diocese Name *',
@@ -187,7 +190,8 @@ class AppTranslations {
       'choirDeletedMessage': 'Choir deleted successfully',
       'choirDescribeChoirHint': 'Describe the choir (optional)',
       'choirDescriptionLabelPrefix': 'Description:',
-      'choirDescriptionTooLongError': 'Description must be less than 500 characters',
+      'choirDescriptionTooLongError':
+          'Description must be less than 500 characters',
       'choirDetailedReportsLabel': 'Detailed Reports',
       'choirDetailedSpreadsheetLabel': 'Detailed spreadsheet with all data',
       'choirDioceseArchdioceseLabel': 'Diocese/Archdiocese',
@@ -226,7 +230,8 @@ class AppTranslations {
       'choirFailedToSaveExcelMessage': 'Failed to save Excel file',
       'choirFailedToSavePdfMessage': 'Failed to save PDF file',
       'choirFeesLabel': 'Fees',
-      'choirFillDetailsPrompt': 'Fill in the details below to create a new choir',
+      'choirFillDetailsPrompt':
+          'Fill in the details below to create a new choir',
       'choirFinancialReportsLabel': 'Financial reports',
       'choirForEventSuffix': 'for',
       'choirFullPerformanceReportLabel': 'Full choir performance report',
@@ -288,11 +293,13 @@ class AppTranslations {
       'choirRegistrationNumberHint': 'e.g., CM001',
       'choirRegistrationNumberLabel': 'Registration Number',
       'choirRemoveImageLabel': 'Remove image',
-      'choirRemoveMemberConfirm': 'Are you sure you want to remove this member from the choir?',
+      'choirRemoveMemberConfirm':
+          'Are you sure you want to remove this member from the choir?',
       'choirRemoveMemberFailedMessage': 'Failed to remove member',
       'choirRemoveMemberTitle': 'Remove Member',
       'choirResetAllLabel': 'Reset All',
-      'choirSaveAttendanceFailedMessage': 'Failed to save attendance. Please try again.',
+      'choirSaveAttendanceFailedMessage':
+          'Failed to save attendance. Please try again.',
       'choirSaveAttendanceLabel': 'Save Attendance',
       'choirSavingLabel': 'Saving...',
       'choirScheduleLabel': 'Schedule',
@@ -302,7 +309,8 @@ class AppTranslations {
       'choirSearchSelectCountryHint': 'Search or select a country',
       'choirSearchSelectParishHint': 'Search or select a parish',
       'choirSelectAllVisibleLabel': 'Select All Visible',
-      'choirSelectCountryDioceseFirstMessage': 'Please select country and diocese first',
+      'choirSelectCountryDioceseFirstMessage':
+          'Please select country and diocese first',
       'choirSelectCountryFirstHint': 'Please select a country first',
       'choirSelectDioceseOrCustomHint': 'Select a diocese or enter custom',
       'choirSelectFromListTooltip': 'Select from List',
@@ -311,7 +319,8 @@ class AppTranslations {
       'choirSessionDetailsLabel': 'Session Details',
       'choirSessionSummaryLabel': 'Session Summary',
       'choirSessionsLabel': 'Sessions',
-      'choirSmartDefaultsAppliedMessage': 'Applied smart defaults based on attendance history',
+      'choirSmartDefaultsAppliedMessage':
+          'Applied smart defaults based on attendance history',
       'choirSmartDefaultsLabel': 'Smart Defaults',
       'choirStatisticsLabel': 'Statistics',
       'choirSuccessTitle': 'Success',
@@ -355,7 +364,8 @@ class AppTranslations {
       'memberStatusUpdateFailed': 'Failed to update member status',
       'memberRemoveTitle': 'Remove Member',
       'memberRemoveConfirmPrefix': 'Are you sure you want to remove',
-      'memberRemoveConfirmSuffix': 'from the choir? This action cannot be undone.',
+      'memberRemoveConfirmSuffix':
+          'from the choir? This action cannot be undone.',
       'memberRemovedSuccess': 'Member removed successfully',
       'memberRemoveFailed': 'Failed to remove member',
       'memberSelectChoirFirst': 'Please select a choir first',
@@ -379,7 +389,8 @@ class AppTranslations {
       'memberAddingPrefix': 'Adding',
       'memberAddingSuffix': 'to choir...',
       'memberAddedSuccessSuffix': 'has been added to the choir!',
-      'memberAddFailedRetry': 'Failed to add member to choir. Please try again.',
+      'memberAddFailedRetry':
+          'Failed to add member to choir. Please try again.',
       'memberRoleLabel': 'Member Role',
       'memberRoleLeader': 'Leader',
       'memberRoleCommittee': 'Committee',
@@ -390,18 +401,25 @@ class AppTranslations {
       'memberRoleDescLeader': 'Leadership and administrative responsibilities',
       'memberRoleDescCommittee': 'Committee member with specific duties',
       'memberRoleDescBoard': 'Board member with governance responsibilities',
-      'memberRoleDescChoir': 'Regular choir member who participates in performances',
-      'memberRoleDescPatron': 'Patron who supports the choir financially or otherwise',
-      'memberRoleDescTrainer': 'Trainer responsible for teaching and development',
+      'memberRoleDescChoir':
+          'Regular choir member who participates in performances',
+      'memberRoleDescPatron':
+          'Patron who supports the choir financially or otherwise',
+      'memberRoleDescTrainer':
+          'Trainer responsible for teaching and development',
       'memberLevelLabel': 'Member Level',
       'memberLevelNational': 'National',
       'memberLevelDiocese': 'Diocese',
       'memberLevelParish': 'Parish',
       'memberLevelChoir': 'Choir',
-      'memberLevelDescNational': 'National level authority with oversight across the entire country',
-      'memberLevelDescDiocese': 'Diocese level authority with oversight within a specific diocese',
-      'memberLevelDescParish': 'Parish level authority with oversight within a specific parish',
-      'memberLevelDescChoir': 'Choir level authority limited to the specific choir',
+      'memberLevelDescNational':
+          'National level authority with oversight across the entire country',
+      'memberLevelDescDiocese':
+          'Diocese level authority with oversight within a specific diocese',
+      'memberLevelDescParish':
+          'Parish level authority with oversight within a specific parish',
+      'memberLevelDescChoir':
+          'Choir level authority limited to the specific choir',
       'memberAddToChoirTitle': 'Add Member to',
       'memberSearchUserLabel': 'Search User',
       'memberSearchByNameEmailHint': 'Search by name or email...',
@@ -424,7 +442,8 @@ class AppTranslations {
       'memberMembershipInfoSection': 'Membership Information',
       'memberRegistrationNumberFieldName': 'registration number',
       'memberStatusLabel': 'Member Status',
-      'memberRoleStatusChangeNotice': 'Role and status changes will affect member access and permissions',
+      'memberRoleStatusChangeNotice':
+          'Role and status changes will affect member access and permissions',
       'memberSaveChangesButton': 'Save Changes',
       'memberRoleChoirMemberLabel': 'Choir Member',
       'memberRoleDescLeaderShort': 'Leadership & management',
@@ -463,11 +482,13 @@ class AppTranslations {
 
       // Attendance batch
       'attSelectChoir': 'Select a Choir',
-      'attSelectChoirSubtitle': 'Choose a choir to view attendance records,\ntake attendance, and manage sessions',
+      'attSelectChoirSubtitle':
+          'Choose a choir to view attendance records,\ntake attendance, and manage sessions',
       'attSelectChoirLabel': 'Select Choir',
       'attChooseChoirHint': 'Choose a choir...',
       'attBrowseAllChoirs': 'Browse All Choirs',
-      'attNoChoirsFound': 'No choirs found. You may need to join or create a choir first.',
+      'attNoChoirsFound':
+          'No choirs found. You may need to join or create a choir first.',
       'attLoadingChoirs': 'Loading choirs...',
       'attTrackingTitle': 'Attendance Tracking',
       'attNoSessionsYetFor': 'No attendance sessions yet for',
@@ -483,15 +504,18 @@ class AppTranslations {
       'attExport': 'Export',
       'attSearchSessionsHint': 'Search sessions...',
       'attNoSessionsTitle': 'No Attendance Sessions',
-      'attNoSessionsLeaderMsg': 'Start by taking attendance for your first session',
-      'attNoSessionsMemberMsg': 'Attendance sessions will appear here when available',
+      'attNoSessionsLeaderMsg':
+          'Start by taking attendance for your first session',
+      'attNoSessionsMemberMsg':
+          'Attendance sessions will appear here when available',
       'attTakeFirstAttendance': 'Take First Attendance',
       'attNoMatchingSessions': 'No matching sessions found',
       'attTryAdjustingSearch': 'Try adjusting your search terms',
       'attSessionSuffix': 'session',
       'attViewDetails': 'View Details',
       'attDeleteSessionTitle': 'Delete Session',
-      'attDeleteSessionConfirmPrefix': 'Are you sure you want to delete the attendance session for',
+      'attDeleteSessionConfirmPrefix':
+          'Are you sure you want to delete the attendance session for',
       'attSessionDeletedTitle': 'Session Deleted',
       'attSessionDeletedMsg': 'Attendance session has been deleted',
       'attFailedDeleteSession': 'Failed to delete session',
@@ -544,7 +568,8 @@ class AppTranslations {
       'attScheduleHeading': 'Schedule',
       'attStartTimeLabel': 'Start Time',
       'attGracePeriodLabel': 'Grace Period (minutes)',
-      'attGracePeriodHelper': 'How long after start time members can still mark as present',
+      'attGracePeriodHelper':
+          'How long after start time members can still mark as present',
       'attMinutesSuffix': 'minutes',
       'attCreateSessionButton': 'Create Session',
       'attSessionCreatedSuccess': 'Attendance session created successfully',
@@ -556,7 +581,8 @@ class AppTranslations {
       'attEventOther': 'Other',
       'attDefaultSessionTitlePrefix': 'Attendance Session -',
       'attEnterSessionTitleError': 'Please enter a session title',
-      'attNoChoirSelectedError': 'No choir selected. Please select a choir first.',
+      'attNoChoirSelectedError':
+          'No choir selected. Please select a choir first.',
       'attFailedCreateAttendanceSession': 'Failed to create attendance session',
       'attFailedSaveRecords': 'Failed to save attendance records',
       'attRecordedSuccessMsg': 'Attendance recorded successfully!',
@@ -571,7 +597,8 @@ class AppTranslations {
       'attIdPrefix': 'ID:',
       'attExportAttendanceTitle': 'Export Attendance',
       'attExportAttendanceDataHeading': 'Export Attendance Data',
-      'attExportHeaderSubtitle': 'Generate detailed attendance reports for analysis',
+      'attExportHeaderSubtitle':
+          'Generate detailed attendance reports for analysis',
       'attDateRangeHeading': 'Date Range',
       'attFromDateLabel': 'From Date',
       'attToDateLabel': 'To Date',
@@ -580,16 +607,20 @@ class AppTranslations {
       'attLast3Months': 'Last 3 months',
       'attSelectDatePlaceholder': 'Select date',
       'attExportFormatHeading': 'Export Format',
-      'attPdfFormatDescription': 'PDF format is ideal for viewing and printing reports',
-      'attExcelFormatDescription': 'Excel format allows for detailed data analysis and filtering',
+      'attPdfFormatDescription':
+          'PDF format is ideal for viewing and printing reports',
+      'attExcelFormatDescription':
+          'Excel format allows for detailed data analysis and filtering',
       'attFilterOptionsHeading': 'Filter Options',
       'attMemberFilterLabel': 'Member Filter',
       'attFilterAllDescription': 'Include all members in the attendance report',
       'attFilterActiveDescription': 'Include only active members in the report',
-      'attFilterLowAttendanceDescription': 'Include only members with attendance rate below 75%',
+      'attFilterLowAttendanceDescription':
+          'Include only members with attendance rate below 75%',
       'attExportPreviewHeading': 'Export Preview',
       'attNoChoirSelectedTitle': 'No Choir Selected',
-      'attSelectChoirExportPrompt': 'Please select a choir to export attendance data',
+      'attSelectChoirExportPrompt':
+          'Please select a choir to export attendance data',
       'attChoirLabel': 'Choir',
       'attFormatLabel': 'Format',
       'attFilterLabel': 'Filter',
@@ -597,11 +628,13 @@ class AppTranslations {
       'attReadyToExport': 'Ready to export attendance data',
       'attSelectDateRangeError': 'Please select date range',
       'attSelectChoirFirstError': 'Please select a choir first',
-      'attNoDataFoundPeriod': 'No attendance data found for the selected period',
+      'attNoDataFoundPeriod':
+          'No attendance data found for the selected period',
       'attExportedSuccessfully': 'Attendance exported successfully',
       'attFailedExportData': 'Failed to export attendance data',
       'attErrorExportingPrefix': 'Error exporting attendance',
-      'attDataExportedSuccessMsg': 'Attendance data has been exported successfully.',
+      'attDataExportedSuccessMsg':
+          'Attendance data has been exported successfully.',
       'attFileSavedToPrefix': 'File saved to:',
 
       // Payments & Reports batch
@@ -620,9 +653,11 @@ class AppTranslations {
       'payFailedLoadMembers': 'Failed to load members',
       'payFailedRecordPayment': 'Failed to record payment',
       'payDeletePayment': 'Delete payment',
-      'payDeletePaymentConfirm': 'Delete this payment permanently? Totals will be recalculated. This cannot be undone.',
+      'payDeletePaymentConfirm':
+          'Delete this payment permanently? Totals will be recalculated. This cannot be undone.',
       'payPaymentDeleted': 'Payment deleted',
-      'payFailedDeletePayment': 'Could not delete the payment. You may not have permission.',
+      'payFailedDeletePayment':
+          'Could not delete the payment. You may not have permission.',
       'payIdPrefix': 'ID',
       'payMemberLabel': 'Member',
       'payMobilePayment': 'Mobile Payment',
@@ -663,12 +698,14 @@ class AppTranslations {
       'reportAllTimeLabel': 'All time',
       'reportAttendanceOverviewTitle': 'Attendance Overview',
       'reportAttendanceRateLabel': 'Attendance Rate',
-      'reportAttendanceReportDescription': 'Session attendance and member participation',
+      'reportAttendanceReportDescription':
+          'Session attendance and member participation',
       'reportAttendanceReportTitle': 'Attendance Report',
       'reportAttendanceScoreLabel': 'Attendance',
       'reportAverageAttendanceLabel': 'Average Attendance',
       'reportAvgAttendanceLabel': 'Avg Attendance',
-      'reportChoirOverviewDescription': 'Comprehensive choir performance summary',
+      'reportChoirOverviewDescription':
+          'Comprehensive choir performance summary',
       'reportChoirOverviewFallback': 'Choir Overview',
       'reportChoirOverviewTitle': 'Choir Overview',
       'reportChooseChoirHint': 'Choose a choir from the dropdown above',
@@ -680,13 +717,15 @@ class AppTranslations {
       'reportExportAsPdf': 'Export as PDF',
       'reportExportFailed': 'Export failed',
       'reportExportOptionsTitle': 'Export Options',
-      'reportExportableDescription': 'This report contains data that can be exported to various formats.',
+      'reportExportableDescription':
+          'This report contains data that can be exported to various formats.',
       'reportExportedSuccessfully': 'Report exported successfully',
       'reportFailedGenerate': 'Failed to generate report',
       'reportFailedToExport': 'Failed to export report',
       'reportFairScoreLabel': 'Fair',
       'reportFinancialOverviewTitle': 'Financial Overview',
-      'reportFinancialReportDescription': 'Payment collections and outstanding fees',
+      'reportFinancialReportDescription':
+          'Payment collections and outstanding fees',
       'reportFinancialReportTitle': 'Financial Report',
       'reportFinancialScoreLabel': 'Financial',
       'reportFromLabel': 'From',
@@ -707,7 +746,8 @@ class AppTranslations {
       'reportMembersListTitle': 'Members List',
       'reportMembershipFilterLabel': 'Membership Filter',
       'reportMembershipOverviewTitle': 'Membership Overview',
-      'reportMembershipReportDescription': 'Member statistics and growth analysis',
+      'reportMembershipReportDescription':
+          'Member statistics and growth analysis',
       'reportMembershipReportTitle': 'Membership Report',
       'reportMembershipScoreLabel': 'Membership',
       'reportMembershipSummaryTitle': 'Membership Summary',
@@ -749,7 +789,8 @@ class AppTranslations {
 
       // Music batch
       'musicLibraryTitle': 'Music Library',
-      'musicLibrarySubtitle': "Manage your choir's songs, lyrics, scores, PDFs and MIDI files.",
+      'musicLibrarySubtitle':
+          "Manage your choir's songs, lyrics, scores, PDFs and MIDI files.",
       'musicSearchWeb': 'Search Web',
       'musicAddNewSong': 'Add New Song',
       'musicTotalSongs': 'Total Songs',
@@ -831,7 +872,8 @@ class AppTranslations {
       'musicLyricsOptional': 'Lyrics (optional)',
       'musicEnterSongLyricsHint': 'Enter song lyrics if available...',
       'musicMusicNotes': 'Music Notes',
-      'musicEnterChordProgressionsHint': 'Enter chord progressions, key signatures, etc...',
+      'musicEnterChordProgressionsHint':
+          'Enter chord progressions, key signatures, etc...',
       'musicTagsCommaSeparated': 'Tags (comma-separated)',
       'musicTagsHintExample': 'e.g., traditional, praise, worship',
       'musicMediaResources': 'Media Resources',
@@ -854,7 +896,8 @@ class AppTranslations {
       'musicUnexpectedErrorPrefix': 'An unexpected error occurred: ',
       'musicSelectedPdfCouldNotBeRead': 'The selected PDF could not be read.',
       'musicPdfSelectionFailed': 'PDF selection failed',
-      'musicSelectedMidiCouldNotBeRead': 'The selected MIDI file could not be read.',
+      'musicSelectedMidiCouldNotBeRead':
+          'The selected MIDI file could not be read.',
       'musicMidiSelectionFailed': 'MIDI selection failed',
       'musicEnterAtLeast2Chars': 'Enter at least 2 characters to search',
       'musicCouldNotOpenPdf': 'Could not open PDF',
@@ -864,10 +907,12 @@ class AppTranslations {
       'musicSavedToLibrary': 'Saved to library',
       'musicNowAvailableOfflineSuffix': 'is now available offline in this app',
       'musicCouldNotSave': 'Could not save',
-      'musicPdfCouldNotBeDownloadedSaved': 'The PDF could not be downloaded or saved. Try again in a moment.',
+      'musicPdfCouldNotBeDownloadedSaved':
+          'The PDF could not be downloaded or saved. Try again in a moment.',
       'musicSearchingSite': 'Searching swahilimusicnotes.com…',
       'musicSearchSitePrompt': 'Search swahilimusicnotes.com for a song title',
-      'musicSearchSiteSubMessage': 'Find sheet music PDFs and MIDI files, then save them straight into your library.',
+      'musicSearchSiteSubMessage':
+          'Find sheet music PDFs and MIDI files, then save them straight into your library.',
       'musicSearchSongTitleHint': 'Search a song title…',
       'musicClear': 'Clear',
       'musicSongFoundSingular': 'song found',
@@ -914,10 +959,13 @@ class AppTranslations {
       'msgSentToPrefix': 'Message sent to',
       'msgMembersSuffix': 'member(s)!',
       'msgTemplateReminder': 'Practice session reminder: Tomorrow at 6 PM',
-      'msgTemplateSundayService': 'Sunday service at 9 AM. Please arrive 30 minutes early.',
+      'msgTemplateSundayService':
+          'Sunday service at 9 AM. Please arrive 30 minutes early.',
       'msgTemplateCongrats': 'Congratulations on your excellent performance!',
-      'msgTemplateConfirmAttendance': "Please confirm your attendance for this weekend's event.",
-      'msgTemplateVenueChange': 'Important: Change of venue for next practice session.',
+      'msgTemplateConfirmAttendance':
+          "Please confirm your attendance for this weekend's event.",
+      'msgTemplateVenueChange':
+          'Important: Change of venue for next practice session.',
       'msgRecipientAll': 'All Members',
       'msgRecipientAllDesc': 'Send to all choir members',
       'msgRecipientLeaders': 'Leaders Only',
@@ -946,7 +994,8 @@ class AppTranslations {
       'msgForwardSubtitle': 'Share this message with others',
       'msgComposeSubtitle': 'Share information with choir members',
       'msgSendTo': 'Send To',
-      'msgChooseSpecificMembers': 'Choose specific members to receive this message',
+      'msgChooseSpecificMembers':
+          'Choose specific members to receive this message',
       'msgSelectChoirFirst': 'Please select a choir first',
       'msgNoMembersInChoir': 'No members found in this choir',
       'msgSelectMembersLabel': 'Select Members:',
@@ -965,7 +1014,8 @@ class AppTranslations {
       'msgSelectMembersToSend': 'Please select members to send the message to',
       'msgSelectedMembersSuffix': 'selected member(s)',
       'msgSendReply': 'Send Reply',
-      'msgSelectAtLeastOneMember': 'Please select at least one member to send the message to',
+      'msgSelectAtLeastOneMember':
+          'Please select at least one member to send the message to',
       'msgLoginRequiredToSend': 'You must be logged in to send messages',
       'msgUpdatedSuccess': 'Message updated successfully',
       'msgSentSuccess': 'Message sent successfully',
@@ -1020,18 +1070,22 @@ class AppTranslations {
       'msgLoginRequiredAction': 'You must be logged in to perform this action',
       'msgMarkedAsReadTitle': 'Marked as Read',
       'msgMarkedAsReadBody': 'This message has been marked as read',
-      'msgMarkUnreadPlaceholder': 'Mark as unread functionality would be implemented here',
+      'msgMarkUnreadPlaceholder':
+          'Mark as unread functionality would be implemented here',
       'msgFailedUpdateStatusPrefix': 'Failed to update message status:',
       'msgMessageCopiedTitle': 'Message Copied',
       'msgMessageCopiedBody': 'Message content has been copied to clipboard',
       'msgShareMessageTitle': 'Share Message',
       'msgShareFunctionalityPlaceholder': 'Share functionality would open here',
       'msgReportMessageTitle': 'Report Message',
-      'msgReportConfirm': 'Are you sure you want to report this message as inappropriate?',
+      'msgReportConfirm':
+          'Are you sure you want to report this message as inappropriate?',
       'msgMessageReportedTitle': 'Message Reported',
-      'msgMessageReportedBody': 'This message has been reported to administrators',
+      'msgMessageReportedBody':
+          'This message has been reported to administrators',
       'msgDeleteMessageTitle': 'Delete Message',
-      'msgDeleteMessageConfirm': 'Are you sure you want to delete this message? This action cannot be undone.',
+      'msgDeleteMessageConfirm':
+          'Are you sure you want to delete this message? This action cannot be undone.',
       'msgSuccessTitle': 'Success',
       'msgMessageDeletedSuccess': 'Message deleted successfully',
       'msgDeleteFailedRetry': 'Failed to delete message. Please try again.',
@@ -1050,26 +1104,31 @@ class AppTranslations {
       'profileSaving': 'Saving...',
       'profileSaveProfile': 'Save Profile',
       'profileDangerZone': 'Danger Zone',
-      'profileDeleteAccountWarning': 'Once you delete your account, there is no going back. Please be certain.',
+      'profileDeleteAccountWarning':
+          'Once you delete your account, there is no going back. Please be certain.',
       'profileDeleteAccount': 'Delete Account',
       'profileSelectedImage': 'Selected Profile Image',
       'profileChangeImage': 'Change Image',
       'profileImageTitle': 'Profile Image',
       'profileImageLoadFailed': 'Failed to load image',
       'profileNoImage': 'No Profile Image',
-      'profileNoImagePrompt': "You don't have a profile image yet. Would you like to add one?",
+      'profileNoImagePrompt':
+          "You don't have a profile image yet. Would you like to add one?",
       'profileAddImage': 'Add Image',
-      'profilePictureSelected': 'Profile picture selected! Save to apply changes.',
+      'profilePictureSelected':
+          'Profile picture selected! Save to apply changes.',
       'profileImageSelectError': 'Error selecting image',
       'profileUploadFailed': 'Failed to upload profile picture',
       'profileUpdatedSuccess': 'Profile updated successfully',
       'profileUpdateFailed': 'Failed to update profile',
-      'profileDeleteAccountConfirm': 'Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be permanently lost.',
+      'profileDeleteAccountConfirm':
+          'Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be permanently lost.',
       'profileTypeDeleteToConfirm': 'Please type',
       'profileToConfirmAccountDeletionSuffix': 'to confirm account deletion:',
       'profileTypeDeleteLabel': 'Type DELETE to confirm',
       'profileAccountDeletedSuccess': 'Account deleted successfully',
-      'profileAccountDeleteFailedRetry': 'Failed to delete account. Please try again.',
+      'profileAccountDeleteFailedRetry':
+          'Failed to delete account. Please try again.',
       'profileAccountDeleteFailed': 'Failed to delete account',
 
       'qrInvalidFormat': 'Invalid QR code format',
@@ -1106,7 +1165,8 @@ class AppTranslations {
       'rolesUpdateRoleError': 'Error updating role',
       'rolesLoadMembersFailed': 'Failed to load members',
       'rolesLeaderTitle': 'Choir Leader',
-      'rolesLeaderDescription': 'Full access to manage choir, members, and settings',
+      'rolesLeaderDescription':
+          'Full access to manage choir, members, and settings',
       'rolesPermManageMembers': 'Manage Members',
       'rolesPermEditSettings': 'Edit Settings',
       'rolesPermDeleteChoir': 'Delete Choir',
@@ -1128,24 +1188,32 @@ class AppTranslations {
 
       'sampleDataGeneratorTitle': 'Sample Data Generator',
       'sampleGenerateSampleData': 'Generate Sample Data',
-      'sampleGenerateSampleDataDesc': 'This will populate your database with realistic sample data to test all the choir management features.',
+      'sampleGenerateSampleDataDesc':
+          'This will populate your database with realistic sample data to test all the choir management features.',
       'sampleGenerateCompleteSampleData': 'Generate Complete Sample Data',
       'sampleGenerateQuickTestData': 'Generate Quick Test Data',
       'sampleWhatWillBeGenerated': 'What will be generated:',
       'sampleFeatureUsersTitle': 'Users',
-      'sampleFeatureUsersDesc': '13 realistic users (admin, choir leaders, members)',
+      'sampleFeatureUsersDesc':
+          '13 realistic users (admin, choir leaders, members)',
       'sampleFeatureChoirsTitle': 'Choirs',
-      'sampleFeatureChoirsDesc': '5 diverse choirs with different characteristics',
+      'sampleFeatureChoirsDesc':
+          '5 diverse choirs with different characteristics',
       'sampleFeatureMembershipsTitle': 'Memberships',
-      'sampleFeatureMembershipsDesc': '30+ choir memberships with realistic data',
+      'sampleFeatureMembershipsDesc':
+          '30+ choir memberships with realistic data',
       'sampleFeatureStatisticsTitle': 'Statistics',
-      'sampleFeatureStatisticsDesc': 'Attendance rates, payment records, and activity logs',
+      'sampleFeatureStatisticsDesc':
+          'Attendance rates, payment records, and activity logs',
       'sampleFeatureFeaturesTitle': 'Features',
-      'sampleFeatureFeaturesDesc': 'All updated features will work with real data',
+      'sampleFeatureFeaturesDesc':
+          'All updated features will work with real data',
       'sampleGenerationLog': 'Generation Log:',
       'sampleGeneratingSampleData': 'Generating sample data...',
-      'sampleStartingGeneration': 'Starting comprehensive sample data generation...',
-      'sampleGenerationCompleted': 'Sample data generation completed successfully!',
+      'sampleStartingGeneration':
+          'Starting comprehensive sample data generation...',
+      'sampleGenerationCompleted':
+          'Sample data generation completed successfully!',
       'sampleGeneratedDataIncludes': 'Generated data includes:',
       'sampleLogUsers': '13 sample users (admin, leaders, members)',
       'sampleLogChoirs': '5 diverse choirs with different characteristics',
@@ -1154,7 +1222,8 @@ class AppTranslations {
       'sampleLogAttendancePayments': 'Realistic attendance and payment records',
       'sampleDataGeneratedSuccess': 'Sample data generated successfully!',
       'sampleSuccessTitle': 'Success',
-      'sampleDataGeneratedSuccessMessage': 'Sample data has been generated successfully. You can now explore the choir features!',
+      'sampleDataGeneratedSuccessMessage':
+          'Sample data has been generated successfully. You can now explore the choir features!',
       'sampleErrorGenerating': 'Error generating sample data',
       'sampleErrorGeneratingStatus': 'Error generating sample data',
       'sampleFailedToGenerate': 'Failed to generate sample data',
@@ -1178,7 +1247,8 @@ class AppTranslations {
       'settingsSmsNotifications': 'SMS Notifications',
       'settingsReceiveSmsNotifications': 'Receive notifications via SMS',
       'settingsAttendanceReminders': 'Attendance Reminders',
-      'settingsAttendanceRemindersDesc': 'Get reminded about upcoming rehearsals',
+      'settingsAttendanceRemindersDesc':
+          'Get reminded about upcoming rehearsals',
       'settingsPaymentReminders': 'Payment Reminders',
       'settingsPaymentRemindersDesc': 'Get reminded about outstanding payments',
       'settingsAccountSecurity': 'Account & Security',
@@ -1210,17 +1280,21 @@ class AppTranslations {
       'settingsNewPassword': 'New Password',
       'settingsConfirmNewPassword': 'Confirm New Password',
       'settingsPasswordChanged': 'Password changed successfully',
-      'settingsTwoFactorComingSoon': 'Two-factor authentication setup coming soon!',
+      'settingsTwoFactorComingSoon':
+          'Two-factor authentication setup coming soon!',
       'settingsExportDataComingSoon': 'Data export feature coming soon!',
       'settingsHelpContactUs': 'For help and support, please contact us at:',
-      'settingsHelpFaqNote': 'You can also check our FAQ section in the app documentation.',
+      'settingsHelpFaqNote':
+          'You can also check our FAQ section in the app documentation.',
       'settingsContactSupport': 'Contact Support',
       'settingsOpeningSupportEmail': 'Opening support email...',
       'settingsPrivacyPolicyOpenBrowser': 'Privacy policy will open in browser',
       'settingsTermsOpenBrowser': 'Terms of service will open in browser',
-      'settingsAboutDescription': 'A comprehensive solution for managing choir operations including member management, attendance tracking, payment processing, and more.',
+      'settingsAboutDescription':
+          'A comprehensive solution for managing choir operations including member management, attendance tracking, payment processing, and more.',
       'settingsAboutBuiltWith': 'Built with Flutter and Supabase.',
-      'settingsAboutCopyright': '© 2024 Choir Management System. All rights reserved.',
+      'settingsAboutCopyright':
+          '© 2024 Choir Management System. All rights reserved.',
       'settingsLogoutConfirm': 'Are you sure you want to logout?',
       'settingsLoggedOutSuccess': 'Logged out successfully',
       'settingsLogoutFailed': 'Failed to logout',
@@ -1257,7 +1331,8 @@ class AppTranslations {
       'settingsBackupRestoreDesc': 'Backup or restore choir data',
       'settingsDangerZone': 'Danger Zone',
       'settingsDeleteChoir': 'Delete Choir',
-      'settingsDeleteChoirWarning': 'Permanently delete this choir and all its data. This action cannot be undone.',
+      'settingsDeleteChoirWarning':
+          'Permanently delete this choir and all its data. This action cannot be undone.',
       'settingsChoirSettingsUpdated': 'Choir settings updated successfully',
       'settingsUpdateSettingsFailed': 'Failed to update settings',
       'settingsEventReminders': 'Event Reminders',
@@ -1268,13 +1343,16 @@ class AppTranslations {
       'settingsMessageTemplates': 'Message Templates',
       'settingsAvailableTemplates': 'Available Templates:',
       'settingsTemplateEventReminder': 'Event Reminder',
-      'settingsTemplateEventReminderDesc': 'Template for upcoming event notifications',
+      'settingsTemplateEventReminderDesc':
+          'Template for upcoming event notifications',
       'settingsTemplatePaymentDue': 'Payment Due',
-      'settingsTemplatePaymentDueDesc': 'Template for payment reminder messages',
+      'settingsTemplatePaymentDueDesc':
+          'Template for payment reminder messages',
       'settingsTemplateWelcomeMessage': 'Welcome Message',
       'settingsTemplateWelcomeMessageDesc': 'Template for new member welcome',
       'settingsTemplateGeneralAnnouncement': 'General Announcement',
-      'settingsTemplateGeneralAnnouncementDesc': 'Template for choir announcements',
+      'settingsTemplateGeneralAnnouncementDesc':
+          'Template for choir announcements',
       'settingsTemplateEditorComingSoon': 'Template editor coming soon!',
       'settingsEditTemplates': 'Edit Templates',
       'settingsAttendanceSettings': 'Attendance Settings',
@@ -1306,22 +1384,27 @@ class AppTranslations {
       'settingsCreateBackup': 'Create Backup',
       'settingsCreateBackupDesc': 'Save all choir data to cloud storage',
       'settingsRestoreFromBackup': 'Restore from Backup',
-      'settingsRestoreFromBackupDesc': 'Restore choir data from previous backup',
-      'settingsBackupNote': 'Note: Backups include all member data, attendance records, and payment history.',
+      'settingsRestoreFromBackupDesc':
+          'Restore choir data from previous backup',
+      'settingsBackupNote':
+          'Note: Backups include all member data, attendance records, and payment history.',
       'settingsBackupCreateFailed': 'Failed to create backup',
       'settingsBackupCreated': 'Backup Created',
       'settingsBackupCreatedSuccess': 'Backup created successfully!',
       'settingsBackupId': 'Backup ID',
       'settingsBackupCreatedAt': 'Created',
-      'settingsBackupKeepIdSafe': 'Keep this backup ID safe for future restoration.',
+      'settingsBackupKeepIdSafe':
+          'Keep this backup ID safe for future restoration.',
       'settingsDeleteChoirConfirm': 'Are you sure you want to delete',
-      'settingsDeleteChoirWarningDetailed': 'This will permanently delete all choir data including members, attendance records, and payments. This action cannot be undone.',
+      'settingsDeleteChoirWarningDetailed':
+          'This will permanently delete all choir data including members, attendance records, and payments. This action cannot be undone.',
       'settingsFinalConfirmation': 'Final Confirmation',
       'settingsTypeToConfirmDeletion': 'Please type',
       'settingsToConfirmDeletionSuffix': 'to confirm deletion:',
       'settingsTypeChoirNameToConfirm': 'Type choir name to confirm',
       'settingsChoirDeletedSuccess': 'Choir deleted successfully',
-      'settingsChoirDeleteFailedRetry': 'Failed to delete choir. Please try again.',
+      'settingsChoirDeleteFailedRetry':
+          'Failed to delete choir. Please try again.',
       'settingsChoirDeleteFailed': 'Failed to delete choir',
 
       // Widgets / nav / dashboard remainder batch
@@ -1340,8 +1423,10 @@ class AppTranslations {
       'forgotPwdFailedToSend': 'Failed to send reset email',
       'forgotPwdEmailSentTitle': 'Email Sent!',
       'forgotPwdHeading': 'Forgot Password?',
-      'forgotPwdEmailSentMessage': 'Check your email for a link to reset your password.',
-      'forgotPwdInstructions': "Enter your email address and we'll send you a link to reset your password.",
+      'forgotPwdEmailSentMessage':
+          'Check your email for a link to reset your password.',
+      'forgotPwdInstructions':
+          "Enter your email address and we'll send you a link to reset your password.",
       'forgotPwdSendButton': 'Send Reset Email',
       'forgotPwdBackToLogin': 'Back to Login',
       'forgotPwdSendAgain': 'Send Again',
@@ -1354,7 +1439,8 @@ class AppTranslations {
       'dashUpcoming': 'Upcoming',
       'dashGrowth': 'Growth',
       'dashNoChoirsTitle': 'No Choirs',
-      'dashNoChoirsMessage': 'You need to create a choir first before adding members',
+      'dashNoChoirsMessage':
+          'You need to create a choir first before adding members',
       'dashSelectChoir': 'Select Choir',
       'dashSendMessage': 'Send Message',
       'dashSendMessageSubtitle': 'Send a message to choir members',
@@ -1442,7 +1528,8 @@ class AppTranslations {
       'checkCredentials': 'Tafadhali angalia taarifa zako na ujaribu tena',
       'profileScreenSoon': 'Skrini ya wasifu inakuja hivi karibuni!',
       'settingsScreenSoon': 'Skrini ya mipangilio inakuja hivi karibuni!',
-      'quickActionMenuSoon': 'Menyu ya vitendo vya haraka inakuja hivi karibuni!',
+      'quickActionMenuSoon':
+          'Menyu ya vitendo vya haraka inakuja hivi karibuni!',
       'language': 'Lugha',
       'selectLanguage': 'Chagua Lugha',
       'english': 'Kiingereza',
@@ -1515,13 +1602,16 @@ class AppTranslations {
       'choirActivitySummaryLabel': 'Muhtasari wa shughuli',
       'choirAddCustomDioceseTooltip': 'Ongeza Jimbo Maalum',
       'choirAddCustomParishTooltip': 'Ongeza Parokia Maalum',
-      'choirAddFirstMemberPrompt': 'Ongeza mwanachama wako wa kwanza ili kuanza',
+      'choirAddFirstMemberPrompt':
+          'Ongeza mwanachama wako wa kwanza ili kuanza',
       'choirAddMemberFailedMessage': 'Imeshindwa kuongeza mwanachama',
       'choirAddMemberTitle': 'Ongeza Mwanachama',
       'choirAddMemberTooltip': 'Ongeza Mwanachama',
       'choirAddPhotoLabel': 'Ongeza Picha',
-      'choirAdjustSearchFilters': 'Jaribu kubadilisha utafutaji au vichujio vyako',
-      'choirAdminNoteMessage': 'Utawekwa kama msimamizi wa kwaya. Unaweza kuongeza wanachama na kuteua viongozi baada ya kuunda kwaya.',
+      'choirAdjustSearchFilters':
+          'Jaribu kubadilisha utafutaji au vichujio vyako',
+      'choirAdminNoteMessage':
+          'Utawekwa kama msimamizi wa kwaya. Unaweza kuongeza wanachama na kuteua viongozi baada ya kuunda kwaya.',
       'choirAllAbsentLabel': 'Wote Hawapo',
       'choirAllActivitiesTitle': 'Shughuli Zote',
       'choirAllFilterLabel': 'Zote',
@@ -1540,7 +1630,8 @@ class AppTranslations {
       'choirClearParishTooltip': 'Futa Parokia',
       'choirClearSelectionLabel': 'Futa Uteuzi',
       'choirComingSoonTitle': 'Inakuja Hivi Karibuni',
-      'choirCommaSeparatedValuesLabel': 'Faili la thamani zilizotenganishwa kwa koma',
+      'choirCommaSeparatedValuesLabel':
+          'Faili la thamani zilizotenganishwa kwa koma',
       'choirComprehensiveAnalyticsLabel': 'Uchambuzi Kamili',
       'choirComprehensiveOverviewLabel': 'Muhtasari kamili wa kwaya',
       'choirCountryLabel': 'Nchi',
@@ -1551,7 +1642,8 @@ class AppTranslations {
       'choirCreateNewTooltip': 'Unda Kwaya Mpya',
       'choirCreatedLabel': 'Imeundwa',
       'choirCreatedSuccessMessage': 'Kwaya imeundwa kwa mafanikio!',
-      'choirCreatingWithoutPhotoMessage': 'Kuunda kwaya bila picha. Unaweza kuongeza baadaye.',
+      'choirCreatingWithoutPhotoMessage':
+          'Kuunda kwaya bila picha. Unaweza kuongeza baadaye.',
       'choirCsvSavedToPrefix': 'Faili la CSV limehifadhiwa kwenye:',
       'choirCustomDioceseArchdioceseLabel': 'Jimbo/Jimbo Kuu Maalum',
       'choirCustomDioceseNameLabel': 'Jina la Jimbo Maalum *',
@@ -1577,9 +1669,11 @@ class AppTranslations {
       'choirEnterMemberNameIdHint': 'Ingiza jina la mwanachama au kitambulisho',
       'choirEnterNameHint': 'Ingiza jina la kwaya',
       'choirEnterParishNameHint': 'Ingiza jina la parokia yako',
-      'choirErrorLoadingActivitiesPrefix': 'Hitilafu wakati wa kupakia shughuli:',
+      'choirErrorLoadingActivitiesPrefix':
+          'Hitilafu wakati wa kupakia shughuli:',
       'choirErrorPickingImagePrefix': 'Hitilafu wakati wa kuchagua picha:',
-      'choirErrorSavingAttendancePrefix': 'Hitilafu wakati wa kuhifadhi mahudhurio:',
+      'choirErrorSavingAttendancePrefix':
+          'Hitilafu wakati wa kuhifadhi mahudhurio:',
       'choirErrorTakingPhotoPrefix': 'Hitilafu wakati wa kupiga picha:',
       'choirEventTypeLabel': 'Aina ya Tukio',
       'choirEventsLabel': 'Matukio',
@@ -1598,7 +1692,8 @@ class AppTranslations {
       'choirExportPrefix': 'Hamisha',
       'choirExportSuccessTitle': 'Kuhamisha Kumefanikiwa',
       'choirFailedToGenerateReportPrefix': 'Imeshindwa kutengeneza ripoti:',
-      'choirFailedToPrepareExportPrefix': 'Imeshindwa kuandaa data kwa ajili ya kuhamisha:',
+      'choirFailedToPrepareExportPrefix':
+          'Imeshindwa kuandaa data kwa ajili ya kuhamisha:',
       'choirFailedToSaveCsvMessage': 'Imeshindwa kuhifadhi faili la CSV',
       'choirFailedToSaveExcelMessage': 'Imeshindwa kuhifadhi faili la Excel',
       'choirFailedToSavePdfMessage': 'Imeshindwa kuhifadhi faili la PDF',
@@ -1636,13 +1731,16 @@ class AppTranslations {
       'choirNameLabel': 'Jina la Kwaya',
       'choirNameRequiredError': 'Jina la kwaya linahitajika',
       'choirNoActivitiesFound': 'Hakuna shughuli zilizopatikana',
-      'choirNoAttendanceRecordsFound': 'Hakuna rekodi za mahudhurio zilizopatikana',
-      'choirNoDataForExportMessage': 'Hakuna data inayopatikana kwa ajili ya kuhamisha',
+      'choirNoAttendanceRecordsFound':
+          'Hakuna rekodi za mahudhurio zilizopatikana',
+      'choirNoDataForExportMessage':
+          'Hakuna data inayopatikana kwa ajili ya kuhamisha',
       'choirNoDataForReportMessage': 'Hakuna data inayopatikana kwa ripoti hii',
       'choirNoDataLabel': 'Hakuna data',
       'choirNoDataTitle': 'Hakuna Data',
       'choirNoMembersFound': 'Hakuna wanachama waliopatikana',
-      'choirNoMembersMatchingSearch': 'Hakuna wanachama waliolingana na utafutaji wako',
+      'choirNoMembersMatchingSearch':
+          'Hakuna wanachama waliolingana na utafutaji wako',
       'choirNoMembersYet': 'Bado hakuna wanachama',
       'choirNoSessionsYet': 'Bado hakuna vipindi vya mahudhurio',
       'choirNoneFound': 'Hakuna kwaya zilizopatikana',
@@ -1665,11 +1763,13 @@ class AppTranslations {
       'choirRegistrationNumberHint': 'mfano, CM001',
       'choirRegistrationNumberLabel': 'Namba ya Usajili',
       'choirRemoveImageLabel': 'Ondoa picha',
-      'choirRemoveMemberConfirm': 'Una uhakika unataka kumwondoa mwanachama huyu kutoka kwenye kwaya?',
+      'choirRemoveMemberConfirm':
+          'Una uhakika unataka kumwondoa mwanachama huyu kutoka kwenye kwaya?',
       'choirRemoveMemberFailedMessage': 'Imeshindwa kumwondoa mwanachama',
       'choirRemoveMemberTitle': 'Ondoa Mwanachama',
       'choirResetAllLabel': 'Weka Upya Wote',
-      'choirSaveAttendanceFailedMessage': 'Imeshindwa kuhifadhi mahudhurio. Tafadhali jaribu tena.',
+      'choirSaveAttendanceFailedMessage':
+          'Imeshindwa kuhifadhi mahudhurio. Tafadhali jaribu tena.',
       'choirSaveAttendanceLabel': 'Hifadhi Mahudhurio',
       'choirSavingLabel': 'Inahifadhi...',
       'choirScheduleLabel': 'Ratiba',
@@ -1679,7 +1779,8 @@ class AppTranslations {
       'choirSearchSelectCountryHint': 'Tafuta au chagua nchi',
       'choirSearchSelectParishHint': 'Tafuta au chagua parokia',
       'choirSelectAllVisibleLabel': 'Chagua Wote Wanaoonekana',
-      'choirSelectCountryDioceseFirstMessage': 'Tafadhali chagua nchi na jimbo kwanza',
+      'choirSelectCountryDioceseFirstMessage':
+          'Tafadhali chagua nchi na jimbo kwanza',
       'choirSelectCountryFirstHint': 'Tafadhali chagua nchi kwanza',
       'choirSelectDioceseOrCustomHint': 'Chagua jimbo au ingiza maalum',
       'choirSelectFromListTooltip': 'Chagua kutoka Orodha',
@@ -1688,7 +1789,8 @@ class AppTranslations {
       'choirSessionDetailsLabel': 'Maelezo ya Kipindi',
       'choirSessionSummaryLabel': 'Muhtasari wa Kipindi',
       'choirSessionsLabel': 'Vipindi',
-      'choirSmartDefaultsAppliedMessage': 'Mipangilio ya akili imetumika kulingana na historia ya mahudhurio',
+      'choirSmartDefaultsAppliedMessage':
+          'Mipangilio ya akili imetumika kulingana na historia ya mahudhurio',
       'choirSmartDefaultsLabel': 'Mipangilio ya Akili',
       'choirStatisticsLabel': 'Takwimu',
       'choirSuccessTitle': 'Mafanikio',
@@ -1728,11 +1830,13 @@ class AppTranslations {
       'memberJoinedLabel': 'Alijiunga',
       'memberChangeStatusTitle': 'Badilisha Hali ya Mwanachama',
       'memberSuccessTitle': 'Imefanikiwa',
-      'memberStatusUpdateSuccess': 'Hali ya mwanachama imesasishwa kwa mafanikio',
+      'memberStatusUpdateSuccess':
+          'Hali ya mwanachama imesasishwa kwa mafanikio',
       'memberStatusUpdateFailed': 'Imeshindwa kusasisha hali ya mwanachama',
       'memberRemoveTitle': 'Ondoa Mwanachama',
       'memberRemoveConfirmPrefix': 'Una uhakika unataka kumwondoa',
-      'memberRemoveConfirmSuffix': 'kutoka kwenye kwaya? Kitendo hiki hakiwezi kutenduliwa.',
+      'memberRemoveConfirmSuffix':
+          'kutoka kwenye kwaya? Kitendo hiki hakiwezi kutenduliwa.',
       'memberRemovedSuccess': 'Mwanachama ameondolewa kwa mafanikio',
       'memberRemoveFailed': 'Imeshindwa kumwondoa mwanachama',
       'memberSelectChoirFirst': 'Tafadhali chagua kwaya kwanza',
@@ -1750,13 +1854,16 @@ class AppTranslations {
       'memberExportFailed': 'Imeshindwa kuhamisha wanachama',
       'memberExportFailedWithError': 'Uhamishaji umeshindwa',
       'memberUnknownUser': 'Mtumiaji Asiyejulikana',
-      'memberSelectUserPrompt': 'Tafadhali chagua mtumiaji wa kuongeza kwenye kwaya',
-      'memberCheckFormErrors': 'Tafadhali kagua fomu na urekebishe makosa yoyote',
+      'memberSelectUserPrompt':
+          'Tafadhali chagua mtumiaji wa kuongeza kwenye kwaya',
+      'memberCheckFormErrors':
+          'Tafadhali kagua fomu na urekebishe makosa yoyote',
       'memberAddFailed': 'Imeshindwa kuongeza mwanachama',
       'memberAddingPrefix': 'Inaongeza',
       'memberAddingSuffix': 'kwenye kwaya...',
       'memberAddedSuccessSuffix': 'ameongezwa kwenye kwaya!',
-      'memberAddFailedRetry': 'Imeshindwa kuongeza mwanachama kwenye kwaya. Tafadhali jaribu tena.',
+      'memberAddFailedRetry':
+          'Imeshindwa kuongeza mwanachama kwenye kwaya. Tafadhali jaribu tena.',
       'memberRoleLabel': 'Nafasi ya Mwanachama',
       'memberRoleLeader': 'Kiongozi',
       'memberRoleCommittee': 'Kamati',
@@ -1767,18 +1874,25 @@ class AppTranslations {
       'memberRoleDescLeader': 'Majukumu ya uongozi na utawala',
       'memberRoleDescCommittee': 'Mwanakamati mwenye majukumu maalum',
       'memberRoleDescBoard': 'Mjumbe wa bodi mwenye majukumu ya uongozi',
-      'memberRoleDescChoir': 'Mwanachama wa kawaida wa kwaya anayeshiriki katika maonyesho',
-      'memberRoleDescPatron': 'Mdhamini anayesaidia kwaya kifedha au kwa njia nyingine',
-      'memberRoleDescTrainer': 'Mkufunzi anayehusika na ufundishaji na maendeleo',
+      'memberRoleDescChoir':
+          'Mwanachama wa kawaida wa kwaya anayeshiriki katika maonyesho',
+      'memberRoleDescPatron':
+          'Mdhamini anayesaidia kwaya kifedha au kwa njia nyingine',
+      'memberRoleDescTrainer':
+          'Mkufunzi anayehusika na ufundishaji na maendeleo',
       'memberLevelLabel': 'Kiwango cha Mwanachama',
       'memberLevelNational': 'Kitaifa',
       'memberLevelDiocese': 'Jimbo',
       'memberLevelParish': 'Parokia',
       'memberLevelChoir': 'Kwaya',
-      'memberLevelDescNational': 'Mamlaka ya kitaifa yenye usimamizi katika nchi nzima',
-      'memberLevelDescDiocese': 'Mamlaka ya kiwango cha jimbo yenye usimamizi ndani ya jimbo maalum',
-      'memberLevelDescParish': 'Mamlaka ya kiwango cha parokia yenye usimamizi ndani ya parokia maalum',
-      'memberLevelDescChoir': 'Mamlaka ya kiwango cha kwaya iliyowekewa mipaka kwa kwaya husika',
+      'memberLevelDescNational':
+          'Mamlaka ya kitaifa yenye usimamizi katika nchi nzima',
+      'memberLevelDescDiocese':
+          'Mamlaka ya kiwango cha jimbo yenye usimamizi ndani ya jimbo maalum',
+      'memberLevelDescParish':
+          'Mamlaka ya kiwango cha parokia yenye usimamizi ndani ya parokia maalum',
+      'memberLevelDescChoir':
+          'Mamlaka ya kiwango cha kwaya iliyowekewa mipaka kwa kwaya husika',
       'memberAddToChoirTitle': 'Ongeza Mwanachama kwenye',
       'memberSearchUserLabel': 'Tafuta Mtumiaji',
       'memberSearchByNameEmailHint': 'Tafuta kwa jina au barua pepe...',
@@ -1792,16 +1906,19 @@ class AppTranslations {
       'memberTrainerPositionLabel': 'Wadhifa wa Mkufunzi',
       'memberAddToChoirButton': 'Ongeza kwenye Kwaya',
       'memberSearchForUsers': 'Tafuta Watumiaji',
-      'memberStartTypingHint': 'Anza kuandika ili kupata watumiaji wa kuongeza kwenye kwaya',
+      'memberStartTypingHint':
+          'Anza kuandika ili kupata watumiaji wa kuongeza kwenye kwaya',
       'memberMinCharsSearch': 'Andika angalau herufi 2 ili kutafuta',
       'memberEditTitle': 'Hariri Mwanachama',
       'memberEditProfileHeader': 'Hariri Wasifu wa Mwanachama',
-      'memberEditProfileSubtitle': 'Sasisha taarifa na mipangilio ya mwanachama',
+      'memberEditProfileSubtitle':
+          'Sasisha taarifa na mipangilio ya mwanachama',
       'memberPersonalInfoSection': 'Taarifa Binafsi',
       'memberMembershipInfoSection': 'Taarifa za Uanachama',
       'memberRegistrationNumberFieldName': 'namba ya usajili',
       'memberStatusLabel': 'Hali ya Mwanachama',
-      'memberRoleStatusChangeNotice': 'Mabadiliko ya nafasi na hali yataathiri ufikiaji na ruhusa za mwanachama',
+      'memberRoleStatusChangeNotice':
+          'Mabadiliko ya nafasi na hali yataathiri ufikiaji na ruhusa za mwanachama',
       'memberSaveChangesButton': 'Hifadhi Mabadiliko',
       'memberRoleChoirMemberLabel': 'Mwanachama wa Kwaya',
       'memberRoleDescLeaderShort': 'Uongozi na usimamizi',
@@ -1814,8 +1931,10 @@ class AppTranslations {
       'memberLevelDescDioceseShort': 'Usimamizi wa kiwango cha jimbo',
       'memberLevelDescParishShort': 'Usimamizi wa kiwango cha parokia',
       'memberLevelDescChoirShort': 'Kiwango cha kwaya tu',
-      'memberOnlyLeadersCanEdit': 'Viongozi wa kwaya pekee ndio wanaweza kuhariri wasifu za wanachama',
-      'memberProfileUpdateSuccess': 'Wasifu wa mwanachama umesasishwa kwa mafanikio',
+      'memberOnlyLeadersCanEdit':
+          'Viongozi wa kwaya pekee ndio wanaweza kuhariri wasifu za wanachama',
+      'memberProfileUpdateSuccess':
+          'Wasifu wa mwanachama umesasishwa kwa mafanikio',
       'memberProfileUpdateFailed': 'Imeshindwa kusasisha wasifu wa mwanachama',
       'memberUpdateErrorPrefix': 'Hitilafu katika kusasisha mwanachama',
       'memberContactInfoSection': 'Taarifa za Mawasiliano',
@@ -1840,11 +1959,13 @@ class AppTranslations {
 
       // Attendance batch
       'attSelectChoir': 'Chagua Kwaya',
-      'attSelectChoirSubtitle': 'Chagua kwaya ili kuona rekodi za mahudhurio,\nkuchukua mahudhurio, na kusimamia vipindi',
+      'attSelectChoirSubtitle':
+          'Chagua kwaya ili kuona rekodi za mahudhurio,\nkuchukua mahudhurio, na kusimamia vipindi',
       'attSelectChoirLabel': 'Chagua Kwaya',
       'attChooseChoirHint': 'Chagua kwaya...',
       'attBrowseAllChoirs': 'Vinjari Kwaya Zote',
-      'attNoChoirsFound': 'Hakuna kwaya zilizopatikana. Huenda ukahitaji kujiunga au kuunda kwaya kwanza.',
+      'attNoChoirsFound':
+          'Hakuna kwaya zilizopatikana. Huenda ukahitaji kujiunga au kuunda kwaya kwanza.',
       'attLoadingChoirs': 'Inapakia kwaya...',
       'attTrackingTitle': 'Ufuatiliaji wa Mahudhurio',
       'attNoSessionsYetFor': 'Bado hakuna vipindi vya mahudhurio kwa',
@@ -1860,15 +1981,18 @@ class AppTranslations {
       'attExport': 'Hamisha',
       'attSearchSessionsHint': 'Tafuta vipindi...',
       'attNoSessionsTitle': 'Hakuna Vipindi vya Mahudhurio',
-      'attNoSessionsLeaderMsg': 'Anza kwa kuchukua mahudhurio ya kipindi chako cha kwanza',
-      'attNoSessionsMemberMsg': 'Vipindi vya mahudhurio vitaonekana hapa vikiwa tayari',
+      'attNoSessionsLeaderMsg':
+          'Anza kwa kuchukua mahudhurio ya kipindi chako cha kwanza',
+      'attNoSessionsMemberMsg':
+          'Vipindi vya mahudhurio vitaonekana hapa vikiwa tayari',
       'attTakeFirstAttendance': 'Chukua Mahudhurio ya Kwanza',
       'attNoMatchingSessions': 'Hakuna vipindi vinavyolingana vilivyopatikana',
       'attTryAdjustingSearch': 'Jaribu kurekebisha maneno yako ya utafutaji',
       'attSessionSuffix': 'kipindi',
       'attViewDetails': 'Ona Maelezo',
       'attDeleteSessionTitle': 'Futa Kipindi',
-      'attDeleteSessionConfirmPrefix': 'Je, una uhakika unataka kufuta kipindi cha mahudhurio cha',
+      'attDeleteSessionConfirmPrefix':
+          'Je, una uhakika unataka kufuta kipindi cha mahudhurio cha',
       'attSessionDeletedTitle': 'Kipindi Kimefutwa',
       'attSessionDeletedMsg': 'Kipindi cha mahudhurio kimefutwa',
       'attFailedDeleteSession': 'Imeshindwa kufuta kipindi',
@@ -1879,7 +2003,8 @@ class AppTranslations {
       'attExportData': 'Hamisha Data',
       'attErrorLoadingData': 'Hitilafu katika kupakia data ya mahudhurio',
       'attNoMembersFound': 'Hakuna wanachama wa kwaya waliopatikana',
-      'attAddMembersPrompt': 'Ongeza wanachama kwenye kwaya hii ili kufuatilia mahudhurio',
+      'attAddMembersPrompt':
+          'Ongeza wanachama kwenye kwaya hii ili kufuatilia mahudhurio',
       'attSearchMembersHint': 'Tafuta wanachama...',
       'attNoMembersFoundFiltered': 'Hakuna wanachama waliopatikana',
       'attPresent': 'Wapo',
@@ -1888,7 +2013,8 @@ class AppTranslations {
       'attTotal': 'Jumla',
       'attCheckedInPrefix': 'Aliingia saa:',
       'attMarkAll': 'Weka Wote',
-      'attConfirmMarkAllPrefix': 'Je, una uhakika unataka kuweka wanachama wote kama',
+      'attConfirmMarkAllPrefix':
+          'Je, una uhakika unataka kuweka wanachama wote kama',
       'attSuccessTitle': 'Imefanikiwa',
       'attRecordedAllMembers': 'Mahudhurio yamerekodiwa kwa wanachama wote',
       'attExportSessionTitle': 'Hamisha Mahudhurio ya Kipindi',
@@ -1921,10 +2047,12 @@ class AppTranslations {
       'attScheduleHeading': 'Ratiba',
       'attStartTimeLabel': 'Muda wa Kuanza',
       'attGracePeriodLabel': 'Muda wa Neema (dakika)',
-      'attGracePeriodHelper': 'Muda gani baada ya kuanza wanachama bado wanaweza kuwekwa kuwa wapo',
+      'attGracePeriodHelper':
+          'Muda gani baada ya kuanza wanachama bado wanaweza kuwekwa kuwa wapo',
       'attMinutesSuffix': 'dakika',
       'attCreateSessionButton': 'Unda Kipindi',
-      'attSessionCreatedSuccess': 'Kipindi cha mahudhurio kimeundwa kwa mafanikio',
+      'attSessionCreatedSuccess':
+          'Kipindi cha mahudhurio kimeundwa kwa mafanikio',
       'attFailedCreateSession': 'Imeshindwa kuunda kipindi',
       'attUnexpectedErrorPrefix': 'Hitilafu isiyotarajiwa imetokea',
       'attEventRehearsal': 'Mazoezi',
@@ -1933,8 +2061,10 @@ class AppTranslations {
       'attEventOther': 'Nyingine',
       'attDefaultSessionTitlePrefix': 'Kipindi cha Mahudhurio -',
       'attEnterSessionTitleError': 'Tafadhali ingiza kichwa cha kipindi',
-      'attNoChoirSelectedError': 'Hakuna kwaya iliyochaguliwa. Tafadhali chagua kwaya kwanza.',
-      'attFailedCreateAttendanceSession': 'Imeshindwa kuunda kipindi cha mahudhurio',
+      'attNoChoirSelectedError':
+          'Hakuna kwaya iliyochaguliwa. Tafadhali chagua kwaya kwanza.',
+      'attFailedCreateAttendanceSession':
+          'Imeshindwa kuunda kipindi cha mahudhurio',
       'attFailedSaveRecords': 'Imeshindwa kuhifadhi rekodi za mahudhurio',
       'attRecordedSuccessMsg': 'Mahudhurio yamerekodiwa kwa mafanikio!',
       'attRecordsSavedSuffix': 'rekodi zimehifadhiwa.',
@@ -1948,7 +2078,8 @@ class AppTranslations {
       'attIdPrefix': 'Nambari ya Usajili:',
       'attExportAttendanceTitle': 'Hamisha Mahudhurio',
       'attExportAttendanceDataHeading': 'Hamisha Data ya Mahudhurio',
-      'attExportHeaderSubtitle': 'Tengeneza ripoti za kina za mahudhurio kwa uchambuzi',
+      'attExportHeaderSubtitle':
+          'Tengeneza ripoti za kina za mahudhurio kwa uchambuzi',
       'attDateRangeHeading': 'Muda wa Tarehe',
       'attFromDateLabel': 'Kuanzia Tarehe',
       'attToDateLabel': 'Hadi Tarehe',
@@ -1957,16 +2088,22 @@ class AppTranslations {
       'attLast3Months': 'Miezi 3 Iliyopita',
       'attSelectDatePlaceholder': 'Chagua tarehe',
       'attExportFormatHeading': 'Muundo wa Kuhamisha',
-      'attPdfFormatDescription': 'Muundo wa PDF unafaa kwa kuona na kuchapisha ripoti',
-      'attExcelFormatDescription': 'Muundo wa Excel unaruhusu uchambuzi wa kina wa data na uchujaji',
+      'attPdfFormatDescription':
+          'Muundo wa PDF unafaa kwa kuona na kuchapisha ripoti',
+      'attExcelFormatDescription':
+          'Muundo wa Excel unaruhusu uchambuzi wa kina wa data na uchujaji',
       'attFilterOptionsHeading': 'Chaguo za Kuchuja',
       'attMemberFilterLabel': 'Kichujio cha Wanachama',
-      'attFilterAllDescription': 'Jumuisha wanachama wote katika ripoti ya mahudhurio',
-      'attFilterActiveDescription': 'Jumuisha wanachama walio hai tu katika ripoti',
-      'attFilterLowAttendanceDescription': 'Jumuisha wanachama wenye kiwango cha mahudhurio chini ya 75% tu',
+      'attFilterAllDescription':
+          'Jumuisha wanachama wote katika ripoti ya mahudhurio',
+      'attFilterActiveDescription':
+          'Jumuisha wanachama walio hai tu katika ripoti',
+      'attFilterLowAttendanceDescription':
+          'Jumuisha wanachama wenye kiwango cha mahudhurio chini ya 75% tu',
       'attExportPreviewHeading': 'Hakiki ya Kuhamisha',
       'attNoChoirSelectedTitle': 'Hakuna Kwaya Iliyochaguliwa',
-      'attSelectChoirExportPrompt': 'Tafadhali chagua kwaya ili kuhamisha data ya mahudhurio',
+      'attSelectChoirExportPrompt':
+          'Tafadhali chagua kwaya ili kuhamisha data ya mahudhurio',
       'attChoirLabel': 'Kwaya',
       'attFormatLabel': 'Muundo',
       'attFilterLabel': 'Kichujio',
@@ -1974,11 +2111,13 @@ class AppTranslations {
       'attReadyToExport': 'Tayari kuhamisha data ya mahudhurio',
       'attSelectDateRangeError': 'Tafadhali chagua muda wa tarehe',
       'attSelectChoirFirstError': 'Tafadhali chagua kwaya kwanza',
-      'attNoDataFoundPeriod': 'Hakuna data ya mahudhurio iliyopatikana kwa kipindi kilichochaguliwa',
+      'attNoDataFoundPeriod':
+          'Hakuna data ya mahudhurio iliyopatikana kwa kipindi kilichochaguliwa',
       'attExportedSuccessfully': 'Mahudhurio yamehamishwa kwa mafanikio',
       'attFailedExportData': 'Imeshindwa kuhamisha data ya mahudhurio',
       'attErrorExportingPrefix': 'Hitilafu katika kuhamisha mahudhurio',
-      'attDataExportedSuccessMsg': 'Data ya mahudhurio imehamishwa kwa mafanikio.',
+      'attDataExportedSuccessMsg':
+          'Data ya mahudhurio imehamishwa kwa mafanikio.',
       'attFileSavedToPrefix': 'Faili limehifadhiwa:',
 
       // Payments & Reports batch
@@ -1997,7 +2136,8 @@ class AppTranslations {
       'payFailedLoadMembers': 'Imeshindwa kupakia wanachama',
       'payFailedRecordPayment': 'Imeshindwa kurekodi malipo',
       'payDeletePayment': 'Futa malipo',
-      'payDeletePaymentConfirm': 'Futa malipo haya kabisa? Jumla zitahesabiwa upya. Hatua hii haiwezi kurudishwa.',
+      'payDeletePaymentConfirm':
+          'Futa malipo haya kabisa? Jumla zitahesabiwa upya. Hatua hii haiwezi kurudishwa.',
       'payPaymentDeleted': 'Malipo yamefutwa',
       'payFailedDeletePayment': 'Imeshindwa kufuta malipo. Huenda huna ruhusa.',
       'payIdPrefix': 'Kitambulisho',
@@ -2040,7 +2180,8 @@ class AppTranslations {
       'reportAllTimeLabel': 'Wakati Wote',
       'reportAttendanceOverviewTitle': 'Muhtasari wa Mahudhurio',
       'reportAttendanceRateLabel': 'Kiwango cha Mahudhurio',
-      'reportAttendanceReportDescription': 'Mahudhurio ya vikao na ushiriki wa wanachama',
+      'reportAttendanceReportDescription':
+          'Mahudhurio ya vikao na ushiriki wa wanachama',
       'reportAttendanceReportTitle': 'Ripoti ya Mahudhurio',
       'reportAttendanceScoreLabel': 'Mahudhurio',
       'reportAverageAttendanceLabel': 'Wastani wa Mahudhurio',
@@ -2057,13 +2198,15 @@ class AppTranslations {
       'reportExportAsPdf': 'Hamisha kama PDF',
       'reportExportFailed': 'Kuhamisha kumeshindwa',
       'reportExportOptionsTitle': 'Chaguo za Kuhamisha',
-      'reportExportableDescription': 'Ripoti hii ina data ambayo inaweza kuhamishwa katika miundo mbalimbali.',
+      'reportExportableDescription':
+          'Ripoti hii ina data ambayo inaweza kuhamishwa katika miundo mbalimbali.',
       'reportExportedSuccessfully': 'Ripoti imehamishwa kwa mafanikio',
       'reportFailedGenerate': 'Imeshindwa kutengeneza ripoti',
       'reportFailedToExport': 'Imeshindwa kuhamisha ripoti',
       'reportFairScoreLabel': 'Wastani',
       'reportFinancialOverviewTitle': 'Muhtasari wa Kifedha',
-      'reportFinancialReportDescription': 'Ukusanyaji wa malipo na ada zinazodaiwa',
+      'reportFinancialReportDescription':
+          'Ukusanyaji wa malipo na ada zinazodaiwa',
       'reportFinancialReportTitle': 'Ripoti ya Kifedha',
       'reportFinancialScoreLabel': 'Kifedha',
       'reportFromLabel': 'Kutoka',
@@ -2084,7 +2227,8 @@ class AppTranslations {
       'reportMembersListTitle': 'Orodha ya Wanachama',
       'reportMembershipFilterLabel': 'Kichujio cha Uanachama',
       'reportMembershipOverviewTitle': 'Muhtasari wa Uanachama',
-      'reportMembershipReportDescription': 'Takwimu za wanachama na uchambuzi wa ukuaji',
+      'reportMembershipReportDescription':
+          'Takwimu za wanachama na uchambuzi wa ukuaji',
       'reportMembershipReportTitle': 'Ripoti ya Uanachama',
       'reportMembershipScoreLabel': 'Uanachama',
       'reportMembershipSummaryTitle': 'Muhtasari wa Uanachama',
@@ -2126,7 +2270,8 @@ class AppTranslations {
 
       // Music batch
       'musicLibraryTitle': 'Maktaba ya Muziki',
-      'musicLibrarySubtitle': 'Simamia nyimbo za kwaya yako, maneno, alama za muziki, PDF na faili za MIDI.',
+      'musicLibrarySubtitle':
+          'Simamia nyimbo za kwaya yako, maneno, alama za muziki, PDF na faili za MIDI.',
       'musicSearchWeb': 'Tafuta Mtandaoni',
       'musicAddNewSong': 'Ongeza Wimbo Mpya',
       'musicTotalSongs': 'Jumla ya Nyimbo',
@@ -2172,10 +2317,12 @@ class AppTranslations {
       'musicSeason': 'Msimu',
       'musicVoicePart': 'Sauti / Sehemu',
       'musicSongInformation': 'Taarifa za Wimbo',
-      'musicNoLyricsAvailable': 'Hakuna maneno ya wimbo yaliyopatikana kwa wimbo huu.',
+      'musicNoLyricsAvailable':
+          'Hakuna maneno ya wimbo yaliyopatikana kwa wimbo huu.',
       'musicCopyLyrics': 'Nakili Maneno',
       'musicCopied': 'Imenakiliwa',
-      'musicLyricsCopiedToClipboard': 'Maneno ya wimbo yamenakiliwa kwenye ubao wa kunakili',
+      'musicLyricsCopiedToClipboard':
+          'Maneno ya wimbo yamenakiliwa kwenye ubao wa kunakili',
       'musicOpen': 'Fungua',
       'musicNoPdfUploaded': 'Hakuna PDF iliyopakiwa kwa wimbo huu.',
       'musicNoMidiFile': 'Hakuna faili la MIDI kwa wimbo huu.',
@@ -2206,9 +2353,11 @@ class AppTranslations {
       'musicDifficulty': 'Kiwango cha Ugumu',
       'musicLyricsAndMusicNotes': 'Maneno na Maelezo ya Muziki',
       'musicLyricsOptional': 'Maneno ya Wimbo (si lazima)',
-      'musicEnterSongLyricsHint': 'Ingiza maneno ya wimbo ikiwa yanapatikana...',
+      'musicEnterSongLyricsHint':
+          'Ingiza maneno ya wimbo ikiwa yanapatikana...',
       'musicMusicNotes': 'Maelezo ya Muziki',
-      'musicEnterChordProgressionsHint': 'Ingiza mfuatano wa chodi, funguo za muziki, na kadhalika...',
+      'musicEnterChordProgressionsHint':
+          'Ingiza mfuatano wa chodi, funguo za muziki, na kadhalika...',
       'musicTagsCommaSeparated': 'Lebo (tenganisha kwa mkato)',
       'musicTagsHintExample': 'mf. jadi, sifa, ibada',
       'musicMediaResources': 'Rasilimali za Vyombo vya Habari',
@@ -2221,8 +2370,10 @@ class AppTranslations {
       'musicSourceWebsiteHint': 'Tovuti ambapo muziki huu ulipatikana',
       'musicMakePublic': 'Fanya Iwe ya Umma',
       'musicOtherUsersCanView': 'Watumiaji wengine wataweza kuona muziki huu',
-      'musicPdfUploadFailed': 'Upakiaji wa PDF umeshindikana. Tafadhali jaribu tena.',
-      'musicMidiUploadFailed': 'Upakiaji wa MIDI umeshindikana. Tafadhali jaribu tena.',
+      'musicPdfUploadFailed':
+          'Upakiaji wa PDF umeshindikana. Tafadhali jaribu tena.',
+      'musicMidiUploadFailed':
+          'Upakiaji wa MIDI umeshindikana. Tafadhali jaribu tena.',
       'musicSuccess': 'Imefanikiwa',
       'musicUpdatedSuccessfully': 'Muziki umesasishwa kwa mafanikio',
       'musicAddedSuccessfully': 'Muziki umeongezwa kwa mafanikio',
@@ -2231,20 +2382,26 @@ class AppTranslations {
       'musicUnexpectedErrorPrefix': 'Hitilafu isiyotarajiwa imetokea: ',
       'musicSelectedPdfCouldNotBeRead': 'PDF uliyochagua haikuweza kusomwa.',
       'musicPdfSelectionFailed': 'Uchaguzi wa PDF umeshindikana',
-      'musicSelectedMidiCouldNotBeRead': 'Faili la MIDI ulilochagua halikuweza kusomwa.',
+      'musicSelectedMidiCouldNotBeRead':
+          'Faili la MIDI ulilochagua halikuweza kusomwa.',
       'musicMidiSelectionFailed': 'Uchaguzi wa MIDI umeshindikana',
       'musicEnterAtLeast2Chars': 'Tafadhali ingiza angalau herufi 2 kutafuta',
       'musicCouldNotOpenPdf': 'Imeshindwa kufungua PDF',
-      'musicTryAgainOrDownload': 'Tafadhali jaribu tena au tumia chaguo la Pakua.',
+      'musicTryAgainOrDownload':
+          'Tafadhali jaribu tena au tumia chaguo la Pakua.',
       'musicSaveSheetMusicPdf': 'Hifadhi PDF ya alama za muziki',
       'musicPdfDownloadedSuffix': 'PDF imepakuliwa',
       'musicSavedToLibrary': 'Imehifadhiwa kwenye maktaba',
-      'musicNowAvailableOfflineSuffix': 'sasa inapatikana nje ya mtandao kwenye programu hii',
+      'musicNowAvailableOfflineSuffix':
+          'sasa inapatikana nje ya mtandao kwenye programu hii',
       'musicCouldNotSave': 'Imeshindwa kuhifadhi',
-      'musicPdfCouldNotBeDownloadedSaved': 'PDF haikuweza kupakuliwa au kuhifadhiwa. Tafadhali jaribu tena baada ya muda mfupi.',
+      'musicPdfCouldNotBeDownloadedSaved':
+          'PDF haikuweza kupakuliwa au kuhifadhiwa. Tafadhali jaribu tena baada ya muda mfupi.',
       'musicSearchingSite': 'Inatafuta kwenye swahilimusicnotes.com…',
-      'musicSearchSitePrompt': 'Tafuta jina la wimbo kwenye swahilimusicnotes.com',
-      'musicSearchSiteSubMessage': 'Pata PDF za alama za muziki na faili za MIDI, kisha uzihifadhi moja kwa moja kwenye maktaba yako.',
+      'musicSearchSitePrompt':
+          'Tafuta jina la wimbo kwenye swahilimusicnotes.com',
+      'musicSearchSiteSubMessage':
+          'Pata PDF za alama za muziki na faili za MIDI, kisha uzihifadhi moja kwa moja kwenye maktaba yako.',
       'musicSearchSongTitleHint': 'Tafuta jina la wimbo…',
       'musicClear': 'Futa',
       'musicSongFoundSingular': 'wimbo umepatikana',
@@ -2265,7 +2422,8 @@ class AppTranslations {
       'msgSubject': 'Somo',
       'msgEnterSubjectHint': 'Ingiza somo la ujumbe...',
       'msgMessage': 'Ujumbe',
-      'msgSmsHint': 'Andika ujumbe wako wa SMS hapa (herufi 160 kiwango cha juu)...',
+      'msgSmsHint':
+          'Andika ujumbe wako wa SMS hapa (herufi 160 kiwango cha juu)...',
       'msgEmailHint': 'Andika barua pepe yako hapa...',
       'msgPushHint': 'Andika ujumbe wako wa arifa hapa...',
       'msgDefaultHint': 'Andika ujumbe wako hapa...',
@@ -2291,9 +2449,11 @@ class AppTranslations {
       'msgSentToPrefix': 'Ujumbe umetumwa kwa',
       'msgMembersSuffix': 'mwanachama/wanachama!',
       'msgTemplateReminder': 'Kikumbusho cha mazoezi: Kesho saa 12 jioni',
-      'msgTemplateSundayService': 'Ibada ya Jumapili saa 3 asubuhi. Tafadhali fika dakika 30 mapema.',
+      'msgTemplateSundayService':
+          'Ibada ya Jumapili saa 3 asubuhi. Tafadhali fika dakika 30 mapema.',
       'msgTemplateCongrats': 'Hongera kwa utendaji wako bora!',
-      'msgTemplateConfirmAttendance': 'Tafadhali thibitisha mahudhurio yako kwa tukio la wikendi hii.',
+      'msgTemplateConfirmAttendance':
+          'Tafadhali thibitisha mahudhurio yako kwa tukio la wikendi hii.',
       'msgTemplateVenueChange': 'Muhimu: Mabadiliko ya eneo kwa zoezi lijalo.',
       'msgRecipientAll': 'Wanachama Wote',
       'msgRecipientAllDesc': 'Tuma kwa wanachama wote wa kwaya',
@@ -2323,7 +2483,8 @@ class AppTranslations {
       'msgForwardSubtitle': 'Shiriki ujumbe huu na wengine',
       'msgComposeSubtitle': 'Shiriki taarifa na wanachama wa kwaya',
       'msgSendTo': 'Tuma Kwa',
-      'msgChooseSpecificMembers': 'Chagua wanachama mahususi watakaopokea ujumbe huu',
+      'msgChooseSpecificMembers':
+          'Chagua wanachama mahususi watakaopokea ujumbe huu',
       'msgSelectChoirFirst': 'Tafadhali chagua kwaya kwanza',
       'msgNoMembersInChoir': 'Hakuna wanachama waliopatikana katika kwaya hii',
       'msgSelectMembersLabel': 'Chagua Wanachama:',
@@ -2339,10 +2500,12 @@ class AppTranslations {
       'msgChoirLeadersSuffix': 'kiongozi/viongozi wa kwaya',
       'msgCommitteeMembersSuffix': 'mjumbe/wajumbe wa kamati',
       'msgActiveMembersSuffix': 'mwanachama/wanachama amilifu',
-      'msgSelectMembersToSend': 'Tafadhali chagua wanachama wa kutuma ujumbe kwao',
+      'msgSelectMembersToSend':
+          'Tafadhali chagua wanachama wa kutuma ujumbe kwao',
       'msgSelectedMembersSuffix': 'mwanachama/wanachama waliochaguliwa',
       'msgSendReply': 'Tuma Jibu',
-      'msgSelectAtLeastOneMember': 'Tafadhali chagua angalau mwanachama mmoja wa kutuma ujumbe kwake',
+      'msgSelectAtLeastOneMember':
+          'Tafadhali chagua angalau mwanachama mmoja wa kutuma ujumbe kwake',
       'msgLoginRequiredToSend': 'Lazima uingie ili kutuma ujumbe',
       'msgUpdatedSuccess': 'Ujumbe umesasishwa kikamilifu',
       'msgSentSuccess': 'Ujumbe umetumwa kikamilifu',
@@ -2397,21 +2560,27 @@ class AppTranslations {
       'msgLoginRequiredAction': 'Lazima uingie ili kufanya kitendo hiki',
       'msgMarkedAsReadTitle': 'Imewekwa Imesomwa',
       'msgMarkedAsReadBody': 'Ujumbe huu umewekwa kama umesomwa',
-      'msgMarkUnreadPlaceholder': 'Kitendo cha kuweka kama haijasomwa kitatekelezwa hapa',
+      'msgMarkUnreadPlaceholder':
+          'Kitendo cha kuweka kama haijasomwa kitatekelezwa hapa',
       'msgFailedUpdateStatusPrefix': 'Imeshindwa kusasisha hali ya ujumbe:',
       'msgMessageCopiedTitle': 'Ujumbe Umenakiliwa',
-      'msgMessageCopiedBody': 'Maudhui ya ujumbe yamenakiliwa kwenye ubao wa kunakili',
+      'msgMessageCopiedBody':
+          'Maudhui ya ujumbe yamenakiliwa kwenye ubao wa kunakili',
       'msgShareMessageTitle': 'Shiriki Ujumbe',
-      'msgShareFunctionalityPlaceholder': 'Kitendo cha kushiriki kitafunguka hapa',
+      'msgShareFunctionalityPlaceholder':
+          'Kitendo cha kushiriki kitafunguka hapa',
       'msgReportMessageTitle': 'Ripoti Ujumbe',
-      'msgReportConfirm': 'Je, una uhakika unataka kuripoti ujumbe huu kuwa si sahihi?',
+      'msgReportConfirm':
+          'Je, una uhakika unataka kuripoti ujumbe huu kuwa si sahihi?',
       'msgMessageReportedTitle': 'Ujumbe Umeripotiwa',
       'msgMessageReportedBody': 'Ujumbe huu umeripotiwa kwa wasimamizi',
       'msgDeleteMessageTitle': 'Futa Ujumbe',
-      'msgDeleteMessageConfirm': 'Je, una uhakika unataka kufuta ujumbe huu? Kitendo hiki hakiwezi kutenduliwa.',
+      'msgDeleteMessageConfirm':
+          'Je, una uhakika unataka kufuta ujumbe huu? Kitendo hiki hakiwezi kutenduliwa.',
       'msgSuccessTitle': 'Imefanikiwa',
       'msgMessageDeletedSuccess': 'Ujumbe umefutwa kikamilifu',
-      'msgDeleteFailedRetry': 'Imeshindwa kufuta ujumbe. Tafadhali jaribu tena.',
+      'msgDeleteFailedRetry':
+          'Imeshindwa kufuta ujumbe. Tafadhali jaribu tena.',
       'msgDeleteErrorPrefix': 'Hitilafu imetokea wakati wa kufuta ujumbe:',
       'msgConversationThread': 'Mazungumzo',
       'msgMessagesSuffix': 'ujumbe',
@@ -2427,26 +2596,32 @@ class AppTranslations {
       'profileSaving': 'Inahifadhi...',
       'profileSaveProfile': 'Hifadhi Wasifu',
       'profileDangerZone': 'Eneo la Hatari',
-      'profileDeleteAccountWarning': 'Ukifuta akaunti yako, huwezi kurudisha nyuma. Tafadhali hakikisha.',
+      'profileDeleteAccountWarning':
+          'Ukifuta akaunti yako, huwezi kurudisha nyuma. Tafadhali hakikisha.',
       'profileDeleteAccount': 'Futa Akaunti',
       'profileSelectedImage': 'Picha ya Wasifu Iliyochaguliwa',
       'profileChangeImage': 'Badilisha Picha',
       'profileImageTitle': 'Picha ya Wasifu',
       'profileImageLoadFailed': 'Imeshindikana kupakia picha',
       'profileNoImage': 'Hakuna Picha ya Wasifu',
-      'profileNoImagePrompt': 'Bado huna picha ya wasifu. Ungependa kuongeza moja?',
+      'profileNoImagePrompt':
+          'Bado huna picha ya wasifu. Ungependa kuongeza moja?',
       'profileAddImage': 'Ongeza Picha',
-      'profilePictureSelected': 'Picha ya wasifu imechaguliwa! Hifadhi ili kutumia mabadiliko.',
+      'profilePictureSelected':
+          'Picha ya wasifu imechaguliwa! Hifadhi ili kutumia mabadiliko.',
       'profileImageSelectError': 'Hitilafu katika kuchagua picha',
       'profileUploadFailed': 'Imeshindikana kupakia picha ya wasifu',
       'profileUpdatedSuccess': 'Wasifu umesasishwa kwa mafanikio',
       'profileUpdateFailed': 'Imeshindikana kusasisha wasifu',
-      'profileDeleteAccountConfirm': 'Una uhakika kabisa unataka kufuta akaunti yako? Kitendo hiki hakiwezi kutenduliwa na taarifa zako zote zitapotea kabisa.',
+      'profileDeleteAccountConfirm':
+          'Una uhakika kabisa unataka kufuta akaunti yako? Kitendo hiki hakiwezi kutenduliwa na taarifa zako zote zitapotea kabisa.',
       'profileTypeDeleteToConfirm': 'Tafadhali andika',
-      'profileToConfirmAccountDeletionSuffix': 'kuthibitisha ufutaji wa akaunti:',
+      'profileToConfirmAccountDeletionSuffix':
+          'kuthibitisha ufutaji wa akaunti:',
       'profileTypeDeleteLabel': 'Andika DELETE kuthibitisha',
       'profileAccountDeletedSuccess': 'Akaunti imefutwa kwa mafanikio',
-      'profileAccountDeleteFailedRetry': 'Imeshindikana kufuta akaunti. Tafadhali jaribu tena.',
+      'profileAccountDeleteFailedRetry':
+          'Imeshindikana kufuta akaunti. Tafadhali jaribu tena.',
       'profileAccountDeleteFailed': 'Imeshindikana kufuta akaunti',
 
       'qrInvalidFormat': 'Muundo wa msimbo wa QR si sahihi',
@@ -2462,16 +2637,19 @@ class AppTranslations {
       'qrScanForAttendance': 'Changanua kwa Mahudhurio',
       'qrScanQrCode': 'Changanua Msimbo wa QR',
       'qrProcessing': 'Inachakata Msimbo wa QR...',
-      'qrScanMemberCodesHint': 'Changanua misimbo ya QR ya wanachama kuweka mahudhurio',
+      'qrScanMemberCodesHint':
+          'Changanua misimbo ya QR ya wanachama kuweka mahudhurio',
       'qrPointCameraHint': 'Elekeza kamera kwenye msimbo wa QR',
-      'qrPointCameraAnyMemberHint': 'Elekeza kamera kwenye msimbo wowote wa QR wa mwanachama',
+      'qrPointCameraAnyMemberHint':
+          'Elekeza kamera kwenye msimbo wowote wa QR wa mwanachama',
 
       'rolesMemberRolesTitle': 'Majukumu ya Wanachama',
       'rolesDefinitionsTitle': 'Maelezo ya Majukumu',
       'rolesPermissionsLabel': 'Ruhusa',
       'rolesAssignMemberRoles': 'Gawa Majukumu ya Wanachama',
       'rolesNoMembersFound': 'Hakuna Wanachama Waliopatikana',
-      'rolesAddMembersHint': 'Ongeza wanachama kwenye kwaya ili kugawa majukumu',
+      'rolesAddMembersHint':
+          'Ongeza wanachama kwenye kwaya ili kugawa majukumu',
       'rolesUnknownMember': 'Mwanachama Asiyejulikana',
       'rolesOwnerBadge': 'MMILIKI',
       'rolesChangeMemberRole': 'Badilisha Jukumu la Mwanachama',
@@ -2483,16 +2661,19 @@ class AppTranslations {
       'rolesUpdateRoleError': 'Hitilafu katika kusasisha jukumu',
       'rolesLoadMembersFailed': 'Imeshindikana kupakia wanachama',
       'rolesLeaderTitle': 'Kiongozi wa Kwaya',
-      'rolesLeaderDescription': 'Ufikiaji kamili wa kusimamia kwaya, wanachama, na mipangilio',
+      'rolesLeaderDescription':
+          'Ufikiaji kamili wa kusimamia kwaya, wanachama, na mipangilio',
       'rolesPermManageMembers': 'Simamia Wanachama',
       'rolesPermEditSettings': 'Hariri Mipangilio',
       'rolesPermDeleteChoir': 'Futa Kwaya',
       'rolesPermManagePayments': 'Simamia Malipo',
       'rolesAssistantTitle': 'Kiongozi Msaidizi',
-      'rolesAssistantDescription': 'Saidia kusimamia shughuli za kwaya na wanachama',
+      'rolesAssistantDescription':
+          'Saidia kusimamia shughuli za kwaya na wanachama',
       'rolesPermSendMessages': 'Tuma Ujumbe',
       'rolesSecretaryTitle': 'Katibu',
-      'rolesSecretaryDescription': 'Shughulikia mawasiliano na uwekaji wa kumbukumbu',
+      'rolesSecretaryDescription':
+          'Shughulikia mawasiliano na uwekaji wa kumbukumbu',
       'rolesTreasurerTitle': 'Mweka Hazina',
       'rolesTreasurerDescription': 'Simamia malipo na kumbukumbu za kifedha',
       'rolesPermViewFinancialReports': 'Tazama Ripoti za Kifedha',
@@ -2505,42 +2686,57 @@ class AppTranslations {
 
       'sampleDataGeneratorTitle': 'Kizalishaji cha Data ya Mfano',
       'sampleGenerateSampleData': 'Zalisha Data ya Mfano',
-      'sampleGenerateSampleDataDesc': 'Hii itajaza hifadhidata yako na data halisi ya mfano kujaribu vipengele vyote vya usimamizi wa kwaya.',
+      'sampleGenerateSampleDataDesc':
+          'Hii itajaza hifadhidata yako na data halisi ya mfano kujaribu vipengele vyote vya usimamizi wa kwaya.',
       'sampleGenerateCompleteSampleData': 'Zalisha Data Kamili ya Mfano',
       'sampleGenerateQuickTestData': 'Zalisha Data ya Haraka ya Jaribio',
       'sampleWhatWillBeGenerated': 'Kitakachozalishwa:',
       'sampleFeatureUsersTitle': 'Watumiaji',
-      'sampleFeatureUsersDesc': 'Watumiaji 13 halisi (msimamizi, viongozi wa kwaya, wanachama)',
+      'sampleFeatureUsersDesc':
+          'Watumiaji 13 halisi (msimamizi, viongozi wa kwaya, wanachama)',
       'sampleFeatureChoirsTitle': 'Kwaya',
       'sampleFeatureChoirsDesc': 'Kwaya 5 tofauti zenye sifa mbalimbali',
       'sampleFeatureMembershipsTitle': 'Uanachama',
-      'sampleFeatureMembershipsDesc': 'Uanachama 30+ wa kwaya wenye data halisi',
+      'sampleFeatureMembershipsDesc':
+          'Uanachama 30+ wa kwaya wenye data halisi',
       'sampleFeatureStatisticsTitle': 'Takwimu',
-      'sampleFeatureStatisticsDesc': 'Viwango vya mahudhurio, kumbukumbu za malipo, na kumbukumbu za shughuli',
+      'sampleFeatureStatisticsDesc':
+          'Viwango vya mahudhurio, kumbukumbu za malipo, na kumbukumbu za shughuli',
       'sampleFeatureFeaturesTitle': 'Vipengele',
-      'sampleFeatureFeaturesDesc': 'Vipengele vyote vilivyosasishwa vitafanya kazi na data halisi',
+      'sampleFeatureFeaturesDesc':
+          'Vipengele vyote vilivyosasishwa vitafanya kazi na data halisi',
       'sampleGenerationLog': 'Kumbukumbu ya Uzalishaji:',
       'sampleGeneratingSampleData': 'Inazalisha data ya mfano...',
-      'sampleStartingGeneration': 'Inaanza uzalishaji kamili wa data ya mfano...',
-      'sampleGenerationCompleted': 'Uzalishaji wa data ya mfano umekamilika kwa mafanikio!',
+      'sampleStartingGeneration':
+          'Inaanza uzalishaji kamili wa data ya mfano...',
+      'sampleGenerationCompleted':
+          'Uzalishaji wa data ya mfano umekamilika kwa mafanikio!',
       'sampleGeneratedDataIncludes': 'Data iliyozalishwa inajumuisha:',
-      'sampleLogUsers': 'Watumiaji 13 wa mfano (msimamizi, viongozi, wanachama)',
+      'sampleLogUsers':
+          'Watumiaji 13 wa mfano (msimamizi, viongozi, wanachama)',
       'sampleLogChoirs': 'Kwaya 5 tofauti zenye sifa mbalimbali',
       'sampleLogMemberships': 'Uanachama 30+ wa kwaya wenye data halisi',
-      'sampleLogActivityFeed': 'Mtiririko wa shughuli na vitendo vya hivi karibuni',
-      'sampleLogAttendancePayments': 'Kumbukumbu halisi za mahudhurio na malipo',
+      'sampleLogActivityFeed':
+          'Mtiririko wa shughuli na vitendo vya hivi karibuni',
+      'sampleLogAttendancePayments':
+          'Kumbukumbu halisi za mahudhurio na malipo',
       'sampleDataGeneratedSuccess': 'Data ya mfano imezalishwa kwa mafanikio!',
       'sampleSuccessTitle': 'Mafanikio',
-      'sampleDataGeneratedSuccessMessage': 'Data ya mfano imezalishwa kwa mafanikio. Sasa unaweza kuchunguza vipengele vya kwaya!',
+      'sampleDataGeneratedSuccessMessage':
+          'Data ya mfano imezalishwa kwa mafanikio. Sasa unaweza kuchunguza vipengele vya kwaya!',
       'sampleErrorGenerating': 'Hitilafu katika kuzalisha data ya mfano',
       'sampleErrorGeneratingStatus': 'Hitilafu katika kuzalisha data ya mfano',
       'sampleFailedToGenerate': 'Imeshindikana kuzalisha data ya mfano',
       'sampleGeneratingQuickData': 'Inazalisha data ya haraka ya jaribio...',
-      'sampleQuickDataGenerated': 'Data ya haraka ya jaribio imezalishwa kwa mafanikio!',
-      'sampleQuickDataGeneratedStatus': 'Data ya haraka ya jaribio imezalishwa!',
-      'sampleQuickDataGeneratedMessage': 'Data ya haraka ya jaribio imezalishwa',
+      'sampleQuickDataGenerated':
+          'Data ya haraka ya jaribio imezalishwa kwa mafanikio!',
+      'sampleQuickDataGeneratedStatus':
+          'Data ya haraka ya jaribio imezalishwa!',
+      'sampleQuickDataGeneratedMessage':
+          'Data ya haraka ya jaribio imezalishwa',
       'sampleErrorGeneratingQuick': 'Hitilafu katika kuzalisha data ya haraka',
-      'sampleErrorGeneratingQuickStatus': 'Hitilafu katika kuzalisha data ya haraka',
+      'sampleErrorGeneratingQuickStatus':
+          'Hitilafu katika kuzalisha data ya haraka',
 
       'settingsDefaultUserName': 'Mtumiaji',
       'settingsNoEmail': 'Hakuna barua pepe',
@@ -2555,9 +2751,11 @@ class AppTranslations {
       'settingsSmsNotifications': 'Arifa za SMS',
       'settingsReceiveSmsNotifications': 'Pokea arifa kupitia SMS',
       'settingsAttendanceReminders': 'Vikumbusho vya Mahudhurio',
-      'settingsAttendanceRemindersDesc': 'Pata kikumbusho kuhusu mazoezi yanayokuja',
+      'settingsAttendanceRemindersDesc':
+          'Pata kikumbusho kuhusu mazoezi yanayokuja',
       'settingsPaymentReminders': 'Vikumbusho vya Malipo',
-      'settingsPaymentRemindersDesc': 'Pata kikumbusho kuhusu malipo yaliyobaki',
+      'settingsPaymentRemindersDesc':
+          'Pata kikumbusho kuhusu malipo yaliyobaki',
       'settingsAccountSecurity': 'Akaunti na Usalama',
       'settingsChangePassword': 'Badilisha Nenosiri',
       'settingsUpdatePasswordDesc': 'Sasisha nenosiri la akaunti yako',
@@ -2587,17 +2785,24 @@ class AppTranslations {
       'settingsNewPassword': 'Nenosiri Jipya',
       'settingsConfirmNewPassword': 'Thibitisha Nenosiri Jipya',
       'settingsPasswordChanged': 'Nenosiri limebadilishwa kwa mafanikio',
-      'settingsTwoFactorComingSoon': 'Mpangilio wa uthibitishaji wa hatua mbili unakuja hivi karibuni!',
-      'settingsExportDataComingSoon': 'Kipengele cha kuhamisha data kinakuja hivi karibuni!',
+      'settingsTwoFactorComingSoon':
+          'Mpangilio wa uthibitishaji wa hatua mbili unakuja hivi karibuni!',
+      'settingsExportDataComingSoon':
+          'Kipengele cha kuhamisha data kinakuja hivi karibuni!',
       'settingsHelpContactUs': 'Kwa msaada, tafadhali wasiliana nasi kupitia:',
-      'settingsHelpFaqNote': 'Unaweza pia kuangalia sehemu ya Maswali ya Mara kwa Mara kwenye nyaraka za programu.',
+      'settingsHelpFaqNote':
+          'Unaweza pia kuangalia sehemu ya Maswali ya Mara kwa Mara kwenye nyaraka za programu.',
       'settingsContactSupport': 'Wasiliana na Msaada',
       'settingsOpeningSupportEmail': 'Inafungua barua pepe ya msaada...',
-      'settingsPrivacyPolicyOpenBrowser': 'Sera ya faragha itafunguka kwenye kivinjari',
-      'settingsTermsOpenBrowser': 'Masharti ya huduma yatafunguka kwenye kivinjari',
-      'settingsAboutDescription': 'Suluhisho kamili la kusimamia shughuli za kwaya ikiwa ni pamoja na usimamizi wa wanachama, ufuatiliaji wa mahudhurio, uchakataji wa malipo, na zaidi.',
+      'settingsPrivacyPolicyOpenBrowser':
+          'Sera ya faragha itafunguka kwenye kivinjari',
+      'settingsTermsOpenBrowser':
+          'Masharti ya huduma yatafunguka kwenye kivinjari',
+      'settingsAboutDescription':
+          'Suluhisho kamili la kusimamia shughuli za kwaya ikiwa ni pamoja na usimamizi wa wanachama, ufuatiliaji wa mahudhurio, uchakataji wa malipo, na zaidi.',
       'settingsAboutBuiltWith': 'Imejengwa kwa Flutter na Supabase.',
-      'settingsAboutCopyright': '© 2024 Mfumo wa Usimamizi wa Kwaya. Haki zote zimehifadhiwa.',
+      'settingsAboutCopyright':
+          '© 2024 Mfumo wa Usimamizi wa Kwaya. Haki zote zimehifadhiwa.',
       'settingsLogoutConfirm': 'Una uhakika unataka kutoka?',
       'settingsLoggedOutSuccess': 'Umetoka kwa mafanikio',
       'settingsLogoutFailed': 'Imeshindikana kutoka',
@@ -2611,11 +2816,14 @@ class AppTranslations {
       'settingsPublicChoir': 'Kwaya ya Wazi',
       'settingsPublicChoirDesc': 'Fanya kwaya hii ionekane kwa kila mtu',
       'settingsAllowSelfRegistration': 'Ruhusu Usajili Binafsi',
-      'settingsAllowSelfRegistrationDesc': 'Ruhusu watumiaji kujiunga bila mwaliko',
+      'settingsAllowSelfRegistrationDesc':
+          'Ruhusu watumiaji kujiunga bila mwaliko',
       'settingsRequireLeaderApproval': 'Hitaji Idhini ya Kiongozi',
-      'settingsRequireLeaderApprovalDesc': 'Viongozi lazima waidhinishe wanachama wapya',
+      'settingsRequireLeaderApprovalDesc':
+          'Viongozi lazima waidhinishe wanachama wapya',
       'settingsAutomaticReminders': 'Vikumbusho vya Kiotomatiki',
-      'settingsAutomaticRemindersDesc': 'Tuma vikumbusho vya mahudhurio na malipo',
+      'settingsAutomaticRemindersDesc':
+          'Tuma vikumbusho vya mahudhurio na malipo',
       'settingsReminderSchedule': 'Ratiba ya Vikumbusho',
       'settingsReminderScheduleDesc': 'Weka muda wa kutuma vikumbusho',
       'settingsNotificationTemplates': 'Violezo vya Arifa',
@@ -2634,25 +2842,33 @@ class AppTranslations {
       'settingsBackupRestoreDesc': 'Hifadhi nakala au rejesha data ya kwaya',
       'settingsDangerZone': 'Eneo la Hatari',
       'settingsDeleteChoir': 'Futa Kwaya',
-      'settingsDeleteChoirWarning': 'Futa kabisa kwaya hii na data yake yote. Kitendo hiki hakiwezi kutenduliwa.',
-      'settingsChoirSettingsUpdated': 'Mipangilio ya kwaya imesasishwa kwa mafanikio',
+      'settingsDeleteChoirWarning':
+          'Futa kabisa kwaya hii na data yake yote. Kitendo hiki hakiwezi kutenduliwa.',
+      'settingsChoirSettingsUpdated':
+          'Mipangilio ya kwaya imesasishwa kwa mafanikio',
       'settingsUpdateSettingsFailed': 'Imeshindikana kusasisha mipangilio',
       'settingsEventReminders': 'Vikumbusho vya Matukio',
       'settingsEventRemindersDesc': 'Tuma masaa 24 kabla ya tukio',
-      'settingsPaymentRemindersDueDesc': 'Tuma siku 3 kabla ya tarehe ya malipo',
+      'settingsPaymentRemindersDueDesc':
+          'Tuma siku 3 kabla ya tarehe ya malipo',
       'settingsAttendanceRemindersPracticeDesc': 'Tuma saa 1 kabla ya mazoezi',
       'settingsReminderScheduleUpdated': 'Ratiba ya vikumbusho imesasishwa',
       'settingsMessageTemplates': 'Violezo vya Ujumbe',
       'settingsAvailableTemplates': 'Violezo Vilivyopo:',
       'settingsTemplateEventReminder': 'Kikumbusho cha Tukio',
-      'settingsTemplateEventReminderDesc': 'Kielezo cha arifa za matukio yajayo',
+      'settingsTemplateEventReminderDesc':
+          'Kielezo cha arifa za matukio yajayo',
       'settingsTemplatePaymentDue': 'Malipo Yanayohitajika',
-      'settingsTemplatePaymentDueDesc': 'Kielezo cha ujumbe wa vikumbusho vya malipo',
+      'settingsTemplatePaymentDueDesc':
+          'Kielezo cha ujumbe wa vikumbusho vya malipo',
       'settingsTemplateWelcomeMessage': 'Ujumbe wa Karibu',
-      'settingsTemplateWelcomeMessageDesc': 'Kielezo cha kumkaribisha mwanachama mpya',
+      'settingsTemplateWelcomeMessageDesc':
+          'Kielezo cha kumkaribisha mwanachama mpya',
       'settingsTemplateGeneralAnnouncement': 'Tangazo la Jumla',
-      'settingsTemplateGeneralAnnouncementDesc': 'Kielezo cha matangazo ya kwaya',
-      'settingsTemplateEditorComingSoon': 'Kihariri cha violezo kinakuja hivi karibuni!',
+      'settingsTemplateGeneralAnnouncementDesc':
+          'Kielezo cha matangazo ya kwaya',
+      'settingsTemplateEditorComingSoon':
+          'Kihariri cha violezo kinakuja hivi karibuni!',
       'settingsEditTemplates': 'Hariri Violezo',
       'settingsAttendanceSettings': 'Mipangilio ya Mahudhurio',
       'settingsGracePeriod': 'Muda wa Neema',
@@ -2661,7 +2877,8 @@ class AppTranslations {
       'settingsAutoRemindersDesc': 'Tuma vikumbusho vya mahudhurio saa 1 kabla',
       'settingsQrCodeCheckIn': 'Kuingia kwa Msimbo wa QR',
       'settingsQrCodeCheckInDesc': 'Ruhusu wanachama kuingia kwa msimbo wa QR',
-      'settingsAttendanceSettingsUpdated': 'Mipangilio ya mahudhurio imesasishwa',
+      'settingsAttendanceSettingsUpdated':
+          'Mipangilio ya mahudhurio imesasishwa',
       'settingsMonthlyFee': 'Ada ya Mwezi',
       'settingsPerMonth': 'kwa mwezi',
       'settingsRegistrationFee': 'Ada ya Usajili',
@@ -2669,7 +2886,8 @@ class AppTranslations {
       'settingsPaymentDueDate': 'Tarehe ya Malipo',
       'settingsPaymentDueDateDesc': 'Tarehe 5 ya kila mwezi',
       'settingsPaymentSettingsUpdated': 'Mipangilio ya malipo imesasishwa',
-      'settingsExportIncludes': 'Hamisha data yote ya kwaya ikiwa ni pamoja na:',
+      'settingsExportIncludes':
+          'Hamisha data yote ya kwaya ikiwa ni pamoja na:',
       'settingsExportMemberInfo': 'Taarifa za wanachama',
       'settingsExportAttendanceRecords': 'Kumbukumbu za mahudhurio',
       'settingsExportPaymentHistory': 'Historia ya malipo',
@@ -2677,28 +2895,35 @@ class AppTranslations {
       'settingsChooseExportFormat': 'Chagua muundo wa kuhamisha:',
       'settingsExportPdf': 'Hamisha PDF',
       'settingsExportExcel': 'Hamisha Excel',
-      'settingsChoirDataExported': 'Data ya kwaya imehamishwa kwa mafanikio kama',
+      'settingsChoirDataExported':
+          'Data ya kwaya imehamishwa kwa mafanikio kama',
       'settingsExportDataFailed': 'Imeshindikana kuhamisha data',
       'settingsBackupOptions': 'Chaguo za Kuhifadhi Nakala:',
       'settingsCreateBackup': 'Unda Nakala Rudufu',
-      'settingsCreateBackupDesc': 'Hifadhi data yote ya kwaya kwenye hifadhi ya wingu',
+      'settingsCreateBackupDesc':
+          'Hifadhi data yote ya kwaya kwenye hifadhi ya wingu',
       'settingsRestoreFromBackup': 'Rejesha kutoka Nakala Rudufu',
-      'settingsRestoreFromBackupDesc': 'Rejesha data ya kwaya kutoka nakala rudufu ya awali',
-      'settingsBackupNote': 'Kumbuka: Nakala rudufu zinajumuisha data zote za wanachama, kumbukumbu za mahudhurio, na historia ya malipo.',
+      'settingsRestoreFromBackupDesc':
+          'Rejesha data ya kwaya kutoka nakala rudufu ya awali',
+      'settingsBackupNote':
+          'Kumbuka: Nakala rudufu zinajumuisha data zote za wanachama, kumbukumbu za mahudhurio, na historia ya malipo.',
       'settingsBackupCreateFailed': 'Imeshindikana kuunda nakala rudufu',
       'settingsBackupCreated': 'Nakala Rudufu Imeundwa',
       'settingsBackupCreatedSuccess': 'Nakala rudufu imeundwa kwa mafanikio!',
       'settingsBackupId': 'Kitambulisho cha Nakala Rudufu',
       'settingsBackupCreatedAt': 'Imeundwa',
-      'settingsBackupKeepIdSafe': 'Hifadhi kitambulisho hiki cha nakala rudufu salama kwa ajili ya kurejesha baadaye.',
+      'settingsBackupKeepIdSafe':
+          'Hifadhi kitambulisho hiki cha nakala rudufu salama kwa ajili ya kurejesha baadaye.',
       'settingsDeleteChoirConfirm': 'Una uhakika unataka kufuta',
-      'settingsDeleteChoirWarningDetailed': 'Hii itafuta kabisa data zote za kwaya ikiwa ni pamoja na wanachama, kumbukumbu za mahudhurio, na malipo. Kitendo hiki hakiwezi kutenduliwa.',
+      'settingsDeleteChoirWarningDetailed':
+          'Hii itafuta kabisa data zote za kwaya ikiwa ni pamoja na wanachama, kumbukumbu za mahudhurio, na malipo. Kitendo hiki hakiwezi kutenduliwa.',
       'settingsFinalConfirmation': 'Uthibitisho wa Mwisho',
       'settingsTypeToConfirmDeletion': 'Tafadhali andika',
       'settingsToConfirmDeletionSuffix': 'kuthibitisha ufutaji:',
       'settingsTypeChoirNameToConfirm': 'Andika jina la kwaya kuthibitisha',
       'settingsChoirDeletedSuccess': 'Kwaya imefutwa kwa mafanikio',
-      'settingsChoirDeleteFailedRetry': 'Imeshindikana kufuta kwaya. Tafadhali jaribu tena.',
+      'settingsChoirDeleteFailedRetry':
+          'Imeshindikana kufuta kwaya. Tafadhali jaribu tena.',
       'settingsChoirDeleteFailed': 'Imeshindikana kufuta kwaya',
 
       // Widgets / nav / dashboard remainder batch
@@ -2717,8 +2942,10 @@ class AppTranslations {
       'forgotPwdFailedToSend': 'Imeshindwa kutuma barua pepe ya kuweka upya',
       'forgotPwdEmailSentTitle': 'Barua Pepe Imetumwa!',
       'forgotPwdHeading': 'Umesahau Nenosiri?',
-      'forgotPwdEmailSentMessage': 'Angalia barua pepe yako kwa kiungo cha kuweka upya nenosiri lako.',
-      'forgotPwdInstructions': 'Ingiza anwani yako ya barua pepe nasi tutakutumia kiungo cha kuweka upya nenosiri lako.',
+      'forgotPwdEmailSentMessage':
+          'Angalia barua pepe yako kwa kiungo cha kuweka upya nenosiri lako.',
+      'forgotPwdInstructions':
+          'Ingiza anwani yako ya barua pepe nasi tutakutumia kiungo cha kuweka upya nenosiri lako.',
       'forgotPwdSendButton': 'Tuma Barua Pepe ya Kuweka Upya',
       'forgotPwdBackToLogin': 'Rudi Kuingia',
       'forgotPwdSendAgain': 'Tuma Tena',
@@ -2731,7 +2958,8 @@ class AppTranslations {
       'dashUpcoming': 'Yanayokuja',
       'dashGrowth': 'Ukuaji',
       'dashNoChoirsTitle': 'Hakuna Kwaya',
-      'dashNoChoirsMessage': 'Unahitaji kuunda kwaya kwanza kabla ya kuongeza wanachama',
+      'dashNoChoirsMessage':
+          'Unahitaji kuunda kwaya kwanza kabla ya kuongeza wanachama',
       'dashSelectChoir': 'Chagua Kwaya',
       'dashSendMessage': 'Tuma Ujumbe',
       'dashSendMessageSubtitle': 'Tuma ujumbe kwa wanachama wa kwaya',
@@ -2761,14 +2989,17 @@ class AppTranslations {
   };
 
   static String translate(BuildContext context, String key) {
-    final languageController = Provider.of<LanguageController>(context, listen: false);
+    final languageController = Provider.of<LanguageController>(
+      context,
+      listen: false,
+    );
     final languageCode = languageController.currentLanguageCode;
-    
-    return _translations[languageCode]?[key] ?? 
-           _translations['en']?[key] ?? 
-           key;
+
+    return _translations[languageCode]?[key] ??
+        _translations['en']?[key] ??
+        key;
   }
-  
+
   static String t(BuildContext context, String key) {
     return translate(context, key);
   }

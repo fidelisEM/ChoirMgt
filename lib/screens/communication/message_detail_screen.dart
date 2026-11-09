@@ -10,11 +10,7 @@ import '../../widgets/custom_widgets.dart';
 import 'compose_message_screen.dart';
 
 class MessageDetailScreen extends StatefulWidget {
-
-  const MessageDetailScreen({
-    super.key,
-    required this.message,
-  });
+  const MessageDetailScreen({super.key, required this.message});
   final MessageModel message;
 
   @override
@@ -22,7 +18,6 @@ class MessageDetailScreen extends StatefulWidget {
 }
 
 class _MessageDetailScreenState extends State<MessageDetailScreen> {
-
   MessageModel get message => widget.message;
 
   @override
@@ -55,7 +50,11 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                   builder: (context, authController, child) {
                     final isRead = _isMessageRead(authController);
                     return ListTile(
-                      leading: Icon(isRead ? Icons.mark_email_unread : Icons.mark_email_read),
+                      leading: Icon(
+                        isRead
+                            ? Icons.mark_email_unread
+                            : Icons.mark_email_read,
+                      ),
                       title: Text(isRead ? 'Mark as Unread' : 'Mark as Read'),
                       contentPadding: EdgeInsets.zero,
                     );
@@ -82,7 +81,10 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 value: 'report',
                 child: ListTile(
                   leading: Icon(Icons.report, color: AppColors.warning),
-                  title: Text('Report', style: TextStyle(color: AppColors.warning)),
+                  title: Text(
+                    'Report',
+                    style: TextStyle(color: AppColors.warning),
+                  ),
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -99,9 +101,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -133,7 +133,9 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: _getMessageTypeColor(message.type).withValues(alpha: 0.1),
+                  color: _getMessageTypeColor(
+                    message.type,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -157,9 +159,14 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: _getMessageTypeColor(message.type).withValues(alpha: 0.1),
+                        color: _getMessageTypeColor(
+                          message.type,
+                        ).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -191,16 +198,16 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         _buildInfoRow('From', message.senderName, Icons.person),
         const SizedBox(height: 12),
         _buildInfoRow(
-          'To', 
-          message.recipients.isEmpty 
-              ? 'All choir members' 
+          'To',
+          message.recipients.isEmpty
+              ? 'All choir members'
               : '${message.recipients.length} selected members',
           Icons.group,
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
-          'Sent', 
-          _formatFullDateTime(message.createdAt), 
+          'Sent',
+          _formatFullDateTime(message.createdAt),
           Icons.schedule,
         ),
       ],
@@ -217,11 +224,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
             color: AppColors.gray200,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: AppColors.gray600,
-          ),
+          child: Icon(icon, size: 16, color: AppColors.gray600),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -239,10 +242,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
               const SizedBox(height: 2),
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.gray700,
-                ),
+                style: const TextStyle(fontSize: 14, color: AppColors.gray700),
               ),
             ],
           ),
@@ -258,11 +258,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         children: [
           const Row(
             children: [
-              Icon(
-                Icons.message,
-                color: AppColors.primary,
-                size: 20,
-              ),
+              Icon(Icons.message, color: AppColors.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'Message Content',
@@ -297,7 +293,6 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     );
   }
 
-
   Widget _buildMessageStats() {
     return GlassCard(
       child: Column(
@@ -305,11 +300,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         children: [
           const Row(
             children: [
-              Icon(
-                Icons.analytics,
-                color: AppColors.primary,
-                size: 20,
-              ),
+              Icon(Icons.analytics, color: AppColors.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'Message Statistics',
@@ -327,8 +318,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
               Expanded(
                 child: _buildStatItem(
                   'Sent To',
-                  message.recipients.isEmpty 
-                      ? 'All Members' 
+                  message.recipients.isEmpty
+                      ? 'All Members'
                       : '${message.recipients.length} Members',
                   Icons.people,
                   AppColors.info,
@@ -364,7 +355,9 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                     return _buildStatItem(
                       'Status',
                       isRead ? 'Read' : 'Unread',
-                      isRead ? Icons.check_circle : Icons.radio_button_unchecked,
+                      isRead
+                          ? Icons.check_circle
+                          : Icons.radio_button_unchecked,
                       isRead ? AppColors.success : AppColors.warning,
                     );
                   },
@@ -377,7 +370,12 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -434,10 +432,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 icon: const Icon(Icons.reply),
                 label: const Text(
                   'Reply',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -456,10 +451,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 icon: const Icon(Icons.forward),
                 label: const Text(
                   'Forward',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -475,14 +467,20 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                   return OutlinedButton.icon(
                     onPressed: _markAsReadUnread,
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: isRead ? AppColors.warning : AppColors.success,
-                      side: BorderSide(color: isRead ? AppColors.warning : AppColors.success),
+                      foregroundColor: isRead
+                          ? AppColors.warning
+                          : AppColors.success,
+                      side: BorderSide(
+                        color: isRead ? AppColors.warning : AppColors.success,
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    icon: Icon(isRead ? Icons.mark_email_unread : Icons.mark_email_read),
+                    icon: Icon(
+                      isRead ? Icons.mark_email_unread : Icons.mark_email_read,
+                    ),
                     label: Text(
                       isRead ? 'Mark Unread' : 'Mark Read',
                       style: const TextStyle(
@@ -509,10 +507,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 icon: const Icon(Icons.share),
                 label: const Text(
                   'Share',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -567,42 +562,63 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     }
   }
 
-
   String _formatFullDateTime(DateTime dateTime) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     final month = months[dateTime.month - 1];
     final day = dateTime.day;
     final year = dateTime.year;
-    final hour = dateTime.hour == 0 ? 12 : (dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour);
+    final hour = dateTime.hour == 0
+        ? 12
+        : (dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour);
     final minute = dateTime.minute.toString().padLeft(2, '0');
     final ampm = dateTime.hour >= 12 ? 'PM' : 'AM';
-    
+
     return '$month $day, $year at $hour:$minute $ampm';
   }
 
   void _replyToMessage() {
-    Get.to(() => ComposeMessageScreen(
-      replyTo: message,
-      subject: 'Re: ${message.subject}',
-    ));
+    Get.to(
+      () => ComposeMessageScreen(
+        replyTo: message,
+        subject: 'Re: ${message.subject}',
+      ),
+    );
   }
 
   void _forwardMessage() {
-    Get.to(() => ComposeMessageScreen(
-      forwardFrom: message,
-      subject: 'Fwd: ${message.subject}',
-    ));
+    Get.to(
+      () => ComposeMessageScreen(
+        forwardFrom: message,
+        subject: 'Fwd: ${message.subject}',
+      ),
+    );
   }
 
   void _markAsReadUnread() async {
     try {
-      final authController = Provider.of<AuthController>(context, listen: false);
-      final communicationController = Provider.of<CommunicationController>(context, listen: false);
-      
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+      final communicationController = Provider.of<CommunicationController>(
+        context,
+        listen: false,
+      );
+
       if (authController.currentUser == null) {
         Get.snackbar(
           'Error',
@@ -612,10 +628,10 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         );
         return;
       }
-      
+
       final currentUserId = authController.currentUser!.id;
       final isCurrentlyRead = _isMessageRead(authController);
-      
+
       if (!isCurrentlyRead) {
         // Mark as read
         await communicationController.markAsRead(message.id, currentUserId);
@@ -649,9 +665,9 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
 
   bool _isMessageRead(AuthController? authController) {
     final currentUserId = authController?.currentUser?.id;
-    
+
     if (currentUserId == null) return false;
-    
+
     return message.readBy.contains(currentUserId);
   }
 
@@ -670,7 +686,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     // In a real app, you'd use the share plugin
     Get.snackbar(
       'Share Message',
-       'Share functionality would open here',
+      'Share functionality would open here',
       backgroundColor: AppColors.info,
       colorText: Colors.white,
       duration: const Duration(seconds: 2),
@@ -681,12 +697,11 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     Get.dialog(
       AlertDialog(
         title: const Text('Report Message'),
-        content: const Text('Are you sure you want to report this message as inappropriate?'),
+        content: const Text(
+          'Are you sure you want to report this message as inappropriate?',
+        ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -735,12 +750,11 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     Get.dialog(
       AlertDialog(
         title: const Text('Delete Message'),
-        content: const Text('Are you sure you want to delete this message? This action cannot be undone.'),
+        content: const Text(
+          'Are you sure you want to delete this message? This action cannot be undone.',
+        ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () => _deleteMessage(),
             style: ElevatedButton.styleFrom(
@@ -757,20 +771,21 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
   void _deleteMessage() async {
     try {
       Get.back(); // Close confirmation dialog
-      
+
       // Show loading
       Get.dialog(
-        const Center(
-          child: CircularProgressIndicator(),
-        ),
+        const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-      
-      final communicationController = Provider.of<CommunicationController>(context, listen: false);
+
+      final communicationController = Provider.of<CommunicationController>(
+        context,
+        listen: false,
+      );
       final success = await communicationController.deleteMessage(message.id);
-      
+
       Get.back(); // Close loading dialog
-      
+
       if (success) {
         Get.back(); // Go back to messages list
         Get.snackbar(
@@ -816,11 +831,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.forum,
-                color: AppColors.primary,
-                size: 20,
-              ),
+              const Icon(Icons.forum, color: AppColors.primary, size: 20),
               const SizedBox(width: 8),
               const Text(
                 'Conversation Thread',
@@ -856,7 +867,10 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 children: conversationMessages
                     .asMap()
                     .entries
-                    .map((entry) => _buildThreadMessage(entry.value, entry.key == 0))
+                    .map(
+                      (entry) =>
+                          _buildThreadMessage(entry.value, entry.key == 0),
+                    )
                     .toList(),
               ),
             ),
@@ -868,18 +882,15 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
 
   Widget _buildThreadMessage(MessageModel threadMessage, bool isOriginal) {
     return Container(
-      margin: EdgeInsets.only(
-        bottom: 12,
-        left: isOriginal ? 0 : 16,
-      ),
+      margin: EdgeInsets.only(bottom: 12, left: isOriginal ? 0 : 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isOriginal 
-            ? AppColors.primary.withValues(alpha: 0.1) 
+        color: isOriginal
+            ? AppColors.primary.withValues(alpha: 0.1)
             : AppColors.gray100,
         borderRadius: BorderRadius.circular(8),
-        border: isOriginal 
-            ? Border.all(color: AppColors.primary.withValues(alpha: 0.3)) 
+        border: isOriginal
+            ? Border.all(color: AppColors.primary.withValues(alpha: 0.3))
             : null,
       ),
       child: Column(
@@ -912,10 +923,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
               ),
               Text(
                 _formatThreadDateTime(threadMessage.createdAt),
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: AppColors.gray500,
-                ),
+                style: const TextStyle(fontSize: 11, color: AppColors.gray500),
               ),
             ],
           ),
@@ -932,8 +940,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
           ],
           const SizedBox(height: 8),
           Text(
-            threadMessage.content.length > 150 
-                ? '${threadMessage.content.substring(0, 150)}...' 
+            threadMessage.content.length > 150
+                ? '${threadMessage.content.substring(0, 150)}...'
                 : threadMessage.content,
             style: const TextStyle(
               fontSize: 13,
@@ -949,15 +957,15 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                 TextButton(
                   onPressed: () => _viewThreadMessage(threadMessage),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     minimumSize: Size.zero,
                   ),
                   child: const Text(
                     'View Full Message',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -971,7 +979,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
   String _formatThreadDateTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inMinutes < 1) {
       return 'Just now';
     } else if (difference.inHours < 1) {
@@ -981,7 +989,20 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     } else if (difference.inDays < 7) {
       return '${difference.inDays}d ago';
     } else {
-      final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      final months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
       return '${months[dateTime.month - 1]} ${dateTime.day}';
     }
   }
@@ -994,7 +1015,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         senderId: 'user2',
         senderName: 'John Doe',
         subject: 'Re: ${message.subject}',
-        content: 'Thank you for this message! I completely agree with the points you made about our choir direction.',
+        content:
+            'Thank you for this message! I completely agree with the points you made about our choir direction.',
         type: 'discussion',
         createdAt: message.createdAt.add(const Duration(hours: 2)),
         recipients: [],
@@ -1006,7 +1028,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         senderId: 'user3',
         senderName: 'Sarah Wilson',
         subject: 'Re: ${message.subject}',
-        content: 'This is great news! I\'m excited to see how this will improve our choir community and help us grow together as a musical family.',
+        content:
+            'This is great news! I\'m excited to see how this will improve our choir community and help us grow together as a musical family.',
         type: 'discussion',
         createdAt: message.createdAt.add(const Duration(hours: 5)),
         recipients: [],
@@ -1018,5 +1041,4 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
   void _viewThreadMessage(MessageModel threadMessage) {
     Get.to(() => MessageDetailScreen(message: threadMessage));
   }
-
 }

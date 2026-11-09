@@ -1,25 +1,10 @@
-
-
 enum MemberStatus { active, inactive, suspended }
 
-enum MemberRole { 
-  leader, 
-  committee, 
-  board, 
-  choir, 
-  patron, 
-  trainer 
-}
+enum MemberRole { leader, committee, board, choir, patron, trainer }
 
-enum MemberLevel {
-  national,
-  diocese,
-  parish,
-  choir
-}
+enum MemberLevel { national, diocese, parish, choir }
 
 class ChoirMemberModel {
-
   ChoirMemberModel({
     required this.id,
     required this.userId,
@@ -44,8 +29,13 @@ class ChoirMemberModel {
       id: json['id'] ?? '',
       userId: json['user_id'] ?? json['userId'] ?? '',
       choirId: json['choir_id'] ?? json['choirId'] ?? '',
-      registrationNumber: json['registration_number'] ?? json['registrationNumber'] ?? '',
-      joinDate: DateTime.parse(json['join_date'] ?? json['joinDate'] ?? DateTime.now().toIso8601String()),
+      registrationNumber:
+          json['registration_number'] ?? json['registrationNumber'] ?? '',
+      joinDate: DateTime.parse(
+        json['join_date'] ??
+            json['joinDate'] ??
+            DateTime.now().toIso8601String(),
+      ),
       status: MemberStatus.values.firstWhere(
         (status) => status.toString().split('.').last == json['status'],
         orElse: () => MemberStatus.active,
@@ -58,13 +48,18 @@ class ChoirMemberModel {
         (level) => level.toString().split('.').last == json['level'],
         orElse: () => MemberLevel.choir,
       ),
-      lastAttendance: (json['last_attendance'] ?? json['lastAttendance']) != null
+      lastAttendance:
+          (json['last_attendance'] ?? json['lastAttendance']) != null
           ? DateTime.parse(json['last_attendance'] ?? json['lastAttendance'])
           : null,
-      totalAttendances: json['total_attendances'] ?? json['totalAttendances'] ?? 0,
+      totalAttendances:
+          json['total_attendances'] ?? json['totalAttendances'] ?? 0,
       totalAbsences: json['total_absences'] ?? json['totalAbsences'] ?? 0,
-      totalLateArrivals: json['total_late_arrivals'] ?? json['totalLateArrivals'] ?? 0,
-      outstandingFees: (json['outstanding_fees'] ?? json['outstandingFees'] ?? 0.0).toDouble(),
+      totalLateArrivals:
+          json['total_late_arrivals'] ?? json['totalLateArrivals'] ?? 0,
+      outstandingFees:
+          (json['outstanding_fees'] ?? json['outstandingFees'] ?? 0.0)
+              .toDouble(),
       totalPaid: (json['total_paid'] ?? json['totalPaid'] ?? 0.0).toDouble(),
       qrCode: json['qr_code'] ?? json['qrCode'],
       metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
@@ -151,12 +146,12 @@ class ChoirMemberModel {
   bool get isLeader => role == MemberRole.leader;
   bool get isCommittee => role == MemberRole.committee;
   bool get isBoard => role == MemberRole.board;
-  
+
   double get attendanceRate {
     final total = totalAttendances + totalAbsences;
     return total > 0 ? totalAttendances / total : 0.0;
   }
-  
+
   String get levelDisplayName {
     switch (level) {
       case MemberLevel.national:

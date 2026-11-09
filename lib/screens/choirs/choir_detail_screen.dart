@@ -248,7 +248,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         foregroundColor: MusicLibraryColors.textPrimary,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        title: Text(widget.choir.name, style: mlText(size: 17, weight: FontWeight.w700)),
+        title: Text(
+          widget.choir.name,
+          style: mlText(size: 17, weight: FontWeight.w700),
+        ),
         actions: [
           Consumer<AuthController>(
             builder: (context, authController, child) {
@@ -303,7 +306,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(gradient: MusicLibraryColors.backgroundGradient),
+        decoration: const BoxDecoration(
+          gradient: MusicLibraryColors.backgroundGradient,
+        ),
         child: TabBarView(
           controller: _tabController,
           children: [
@@ -359,114 +364,142 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         border: Border.all(color: MusicLibraryColors.border),
       ),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: MusicLibraryColors.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: widget.choir.imageUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            widget.choir.imageUrl!,
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(
-                                Icons.music_note,
-                                color: MusicLibraryColors.primary,
-                                size: 28,
-                              );
-                            },
-                          ),
-                        )
-                      : const Icon(
-                          Icons.music_note,
-                          color: MusicLibraryColors.primary,
-                          size: 28,
-                        ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: MusicLibraryColors.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.choir.name,
-                        style: mlText(size: 18, weight: FontWeight.w700),
+                child: widget.choir.imageUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          widget.choir.imageUrl!,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.music_note,
+                              color: MusicLibraryColors.primary,
+                              size: 28,
+                            );
+                          },
+                        ),
+                      )
+                    : const Icon(
+                        Icons.music_note,
+                        color: MusicLibraryColors.primary,
+                        size: 28,
                       ),
-                      if (widget.choir.description.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.choir.description,
-                          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.choir.name,
+                      style: mlText(size: 18, weight: FontWeight.w700),
+                    ),
+                    if (widget.choir.description.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.choir.description,
+                        style: mlText(
+                          size: 13,
+                          color: MusicLibraryColors.textSecondary,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Divider(color: MusicLibraryColors.border),
-            const SizedBox(height: 16),
-            _buildInfoRow(context.tr('choirCreatedLabel'), _formatDate(widget.choir.createdAt)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          const Divider(color: MusicLibraryColors.border),
+          const SizedBox(height: 16),
+          _buildInfoRow(
+            context.tr('choirCreatedLabel'),
+            _formatDate(widget.choir.createdAt),
+          ),
+          const SizedBox(height: 8),
+          _buildInfoRow(
+            context.tr('status'),
+            widget.choir.isActive
+                ? context.tr('active')
+                : context.tr('inactive'),
+          ),
+          const SizedBox(height: 8),
+          _buildInfoRow(
+            context.tr('members'),
+            widget.choir.memberCount.toString(),
+          ),
+          if (widget.choir.location != null) ...[
             const SizedBox(height: 8),
             _buildInfoRow(
-              context.tr('status'),
-              widget.choir.isActive ? context.tr('active') : context.tr('inactive'),
+              context.tr('choirLocationLabel'),
+              widget.choir.location!,
+            ),
+          ],
+          if (widget.choir.schedule != null) ...[
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              context.tr('choirScheduleLabel'),
+              widget.choir.schedule!,
+            ),
+          ],
+          // Location section
+          if (_getCurrentChoir().country != null &&
+                  _getCurrentChoir().country!.isNotEmpty ||
+              _getCurrentChoir().diocese != null &&
+                  _getCurrentChoir().diocese!.isNotEmpty ||
+              _getCurrentChoir().parish != null &&
+                  _getCurrentChoir().parish!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            const Divider(color: MusicLibraryColors.border),
+            const SizedBox(height: 16),
+            Text(
+              context.tr('choirLocationLabel'),
+              style: mlText(size: 15, weight: FontWeight.w700),
+            ),
+            const SizedBox(height: 12),
+          ],
+          if (_getCurrentChoir().country != null &&
+              _getCurrentChoir().country!.isNotEmpty) ...[
+            _buildLocationRow(
+              context.tr('choirCountryLabel'),
+              _getCurrentChoir().country!,
+              _getCountryFlag(_getCurrentChoir().country!),
             ),
             const SizedBox(height: 8),
-            _buildInfoRow(context.tr('members'), widget.choir.memberCount.toString()),
-            if (widget.choir.location != null) ...[
-              const SizedBox(height: 8),
-              _buildInfoRow(context.tr('choirLocationLabel'), widget.choir.location!),
-            ],
-            if (widget.choir.schedule != null) ...[
-              const SizedBox(height: 8),
-              _buildInfoRow(context.tr('choirScheduleLabel'), widget.choir.schedule!),
-            ],
-            // Location section
-            if (_getCurrentChoir().country != null &&
-                    _getCurrentChoir().country!.isNotEmpty ||
-                _getCurrentChoir().diocese != null &&
-                    _getCurrentChoir().diocese!.isNotEmpty ||
-                _getCurrentChoir().parish != null &&
-                    _getCurrentChoir().parish!.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              const Divider(color: MusicLibraryColors.border),
-              const SizedBox(height: 16),
-              Text(context.tr('choirLocationLabel'), style: mlText(size: 15, weight: FontWeight.w700)),
-              const SizedBox(height: 12),
-            ],
-            if (_getCurrentChoir().country != null &&
-                _getCurrentChoir().country!.isNotEmpty) ...[
-              _buildLocationRow(
-                context.tr('choirCountryLabel'),
-                _getCurrentChoir().country!,
-                _getCountryFlag(_getCurrentChoir().country!),
-              ),
-              const SizedBox(height: 8),
-            ],
-            if (_getCurrentChoir().diocese != null &&
-                _getCurrentChoir().diocese!.isNotEmpty) ...[
-              _buildLocationRow(context.tr('choirDioceseLabel'), _getCurrentChoir().diocese!, '⛪'),
-              const SizedBox(height: 8),
-            ],
-            if (_getCurrentChoir().parish != null &&
-                _getCurrentChoir().parish!.isNotEmpty) ...[
-              _buildLocationRow(context.tr('choirParishLabel'), _getCurrentChoir().parish!, '🏛️'),
-              const SizedBox(height: 8),
-            ],
           ],
-        ),
+          if (_getCurrentChoir().diocese != null &&
+              _getCurrentChoir().diocese!.isNotEmpty) ...[
+            _buildLocationRow(
+              context.tr('choirDioceseLabel'),
+              _getCurrentChoir().diocese!,
+              '⛪',
+            ),
+            const SizedBox(height: 8),
+          ],
+          if (_getCurrentChoir().parish != null &&
+              _getCurrentChoir().parish!.isNotEmpty) ...[
+            _buildLocationRow(
+              context.tr('choirParishLabel'),
+              _getCurrentChoir().parish!,
+              '🏛️',
+            ),
+            const SizedBox(height: 8),
+          ],
+        ],
+      ),
     );
   }
 
@@ -485,7 +518,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('choirStatisticsLabel'), style: mlText(size: 15, weight: FontWeight.w700)),
+          Text(
+            context.tr('choirStatisticsLabel'),
+            style: mlText(size: 15, weight: FontWeight.w700),
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -554,8 +590,14 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         children: [
           Icon(icon, color: color, size: 22),
           const SizedBox(height: 8),
-          Text(value, style: mlText(size: 18, weight: FontWeight.w700, color: color)),
-          Text(title, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+          Text(
+            value,
+            style: mlText(size: 18, weight: FontWeight.w700, color: color),
+          ),
+          Text(
+            title,
+            style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+          ),
         ],
       ),
     );
@@ -574,7 +616,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         children: [
           Row(
             children: [
-              Text(context.tr('recentActivity'), style: mlText(size: 15, weight: FontWeight.w700)),
+              Text(
+                context.tr('recentActivity'),
+                style: mlText(size: 15, weight: FontWeight.w700),
+              ),
               const Spacer(),
               TextButton(
                 onPressed: () {
@@ -590,7 +635,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               padding: const EdgeInsets.all(16),
               child: Text(
                 context.tr('noRecentActivity'),
-                style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                style: mlText(
+                  size: 13,
+                  color: MusicLibraryColors.textSecondary,
+                ),
               ),
             )
           else
@@ -632,11 +680,20 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: mlText(size: 14, weight: FontWeight.w600)),
-                Text(subtitle, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+                Text(
+                  subtitle,
+                  style: mlText(
+                    size: 12,
+                    color: MusicLibraryColors.textSecondary,
+                  ),
+                ),
               ],
             ),
           ),
-          Text(time, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+          Text(
+            time,
+            style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+          ),
         ],
       ),
     );
@@ -699,7 +756,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                   const SizedBox(height: 4),
                   Text(
                     _getMembersStatusSummary(allMembers),
-                    style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                    style: mlText(
+                      size: 13,
+                      color: MusicLibraryColors.textSecondary,
+                    ),
                   ),
                 ],
               ],
@@ -736,8 +796,12 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
 
     final List<String> parts = [];
     if (active > 0) parts.add('$active ${context.tr('active').toLowerCase()}');
-    if (inactive > 0) parts.add('$inactive ${context.tr('inactive').toLowerCase()}');
-    if (suspended > 0) parts.add('$suspended ${context.tr('choirSuspendedLabel').toLowerCase()}');
+    if (inactive > 0)
+      parts.add('$inactive ${context.tr('inactive').toLowerCase()}');
+    if (suspended > 0)
+      parts.add(
+        '$suspended ${context.tr('choirSuspendedLabel').toLowerCase()}',
+      );
 
     return parts.join(' • ');
   }
@@ -760,7 +824,11 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.search, size: 18, color: MusicLibraryColors.textSecondary),
+                    const Icon(
+                      Icons.search,
+                      size: 18,
+                      color: MusicLibraryColors.textSecondary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
@@ -768,7 +836,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                         style: mlText(size: 14),
                         decoration: InputDecoration(
                           hintText: context.tr('choirSearchMembersHint'),
-                          hintStyle: mlText(size: 14, color: MusicLibraryColors.textSecondary),
+                          hintStyle: mlText(
+                            size: 14,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
                           border: InputBorder.none,
                           isDense: true,
                         ),
@@ -830,7 +901,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         style: mlText(
           size: 12,
           weight: FontWeight.w600,
-          color: isSelected ? MusicLibraryColors.primary : MusicLibraryColors.textSecondary,
+          color: isSelected
+              ? MusicLibraryColors.primary
+              : MusicLibraryColors.textSecondary,
         ),
       ),
       selected: isSelected,
@@ -839,7 +912,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       selectedColor: MusicLibraryColors.primary.withValues(alpha: 0.08),
       checkmarkColor: MusicLibraryColors.primary,
       side: BorderSide(
-        color: isSelected ? MusicLibraryColors.primary : MusicLibraryColors.border,
+        color: isSelected
+            ? MusicLibraryColors.primary
+            : MusicLibraryColors.border,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     );
@@ -899,9 +974,16 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.people_outline, size: 56, color: MusicLibraryColors.textSecondary),
+          const Icon(
+            Icons.people_outline,
+            size: 56,
+            color: MusicLibraryColors.textSecondary,
+          ),
           const SizedBox(height: 16),
-          Text(context.tr('choirNoMembersYet'), style: mlText(size: 16, weight: FontWeight.w700)),
+          Text(
+            context.tr('choirNoMembersYet'),
+            style: mlText(size: 16, weight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           Text(
             context.tr('choirAddFirstMemberPrompt'),
@@ -917,9 +999,16 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.search_off, size: 56, color: MusicLibraryColors.textSecondary),
+          const Icon(
+            Icons.search_off,
+            size: 56,
+            color: MusicLibraryColors.textSecondary,
+          ),
           const SizedBox(height: 16),
-          Text(context.tr('choirNoMembersFound'), style: mlText(size: 16, weight: FontWeight.w700)),
+          Text(
+            context.tr('choirNoMembersFound'),
+            style: mlText(size: 16, weight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           Text(
             context.tr('choirAdjustSearchFilters'),
@@ -927,7 +1016,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
           ),
           const SizedBox(height: 16),
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: MusicLibraryColors.primary),
+            style: TextButton.styleFrom(
+              foregroundColor: MusicLibraryColors.primary,
+            ),
             onPressed: () {
               setState(() {
                 _searchController.clear();
@@ -966,132 +1057,141 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => _handleMemberAction(member, 'view'),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: _getStatusColor(member.status),
-                    radius: 24,
-                    child: Text(
-                      _getInitials(memberName),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => _handleMemberAction(member, 'view'),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: _getStatusColor(member.status),
+                      radius: 24,
+                      child: Text(
+                        _getInitials(memberName),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(memberName, style: mlText(size: 15, weight: FontWeight.w700)),
-                        if (user?.email != null) ...[
-                          const SizedBox(height: 2),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            user!.email,
-                            style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                            memberName,
+                            style: mlText(size: 15, weight: FontWeight.w700),
+                          ),
+                          if (user?.email != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              user!.email,
+                              style: mlText(
+                                size: 12,
+                                color: MusicLibraryColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              _buildStatusChip(member.status),
+                              const SizedBox(width: 8),
+                              _buildRoleChip(member.role),
+                            ],
                           ),
                         ],
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            _buildStatusChip(member.status),
-                            const SizedBox(width: 8),
-                            _buildRoleChip(member.role),
-                          ],
+                      ),
+                    ),
+                    PopupMenuButton<String>(
+                      onSelected: (value) => _handleMemberAction(member, value),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'view',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.visibility, size: 16),
+                              const SizedBox(width: 8),
+                              Text(context.tr('choirViewDetailsAction')),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'message',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.message, size: 16),
+                              const SizedBox(width: 8),
+                              Text(context.tr('choirSendMessageAction')),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.edit, size: 16),
+                              const SizedBox(width: 8),
+                              Text(context.tr('edit')),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'remove',
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.remove_circle,
+                                size: 16,
+                                color: Colors.red,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                context.tr('remove'),
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  PopupMenuButton<String>(
-                    onSelected: (value) => _handleMemberAction(member, value),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'view',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.visibility, size: 16),
-                            const SizedBox(width: 8),
-                            Text(context.tr('choirViewDetailsAction')),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'message',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.message, size: 16),
-                            const SizedBox(width: 8),
-                            Text(context.tr('choirSendMessageAction')),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.edit, size: 16),
-                            const SizedBox(width: 8),
-                            Text(context.tr('edit')),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'remove',
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.remove_circle,
-                              size: 16,
-                              color: Colors.red,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(context.tr('remove'), style: const TextStyle(color: Colors.red)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              const Divider(height: 1, color: MusicLibraryColors.border),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _buildInfoItem(
-                    icon: Icons.badge_outlined,
-                    label: context.tr('choirRegNumberLabel'),
-                    value: member.registrationNumber,
-                  ),
-                  const SizedBox(width: 24),
-                  _buildInfoItem(
-                    icon: Icons.calendar_today,
-                    label: context.tr('choirJoinedLabel'),
-                    value: _formatDate(member.joinDate),
-                  ),
-                  if (member.outstandingFees > 0) ...[
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const Divider(height: 1, color: MusicLibraryColors.border),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    _buildInfoItem(
+                      icon: Icons.badge_outlined,
+                      label: context.tr('choirRegNumberLabel'),
+                      value: member.registrationNumber,
+                    ),
                     const SizedBox(width: 24),
                     _buildInfoItem(
-                      icon: Icons.warning,
-                      label: context.tr('choirFeesLabel'),
-                      value: '\$${member.outstandingFees.toStringAsFixed(2)}',
-                      color: MusicLibraryColors.warning,
+                      icon: Icons.calendar_today,
+                      label: context.tr('choirJoinedLabel'),
+                      value: _formatDate(member.joinDate),
                     ),
+                    if (member.outstandingFees > 0) ...[
+                      const SizedBox(width: 24),
+                      _buildInfoItem(
+                        icon: Icons.warning,
+                        label: context.tr('choirFeesLabel'),
+                        value: '\$${member.outstandingFees.toStringAsFixed(2)}',
+                        color: MusicLibraryColors.warning,
+                      ),
+                    ],
                   ],
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
@@ -1161,8 +1261,22 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: mlText(size: 10, weight: FontWeight.w500, color: itemColor)),
-            Text(value, style: mlText(size: 12, weight: FontWeight.w600, color: itemColor)),
+            Text(
+              label,
+              style: mlText(
+                size: 10,
+                weight: FontWeight.w500,
+                color: itemColor,
+              ),
+            ),
+            Text(
+              value,
+              style: mlText(
+                size: 12,
+                weight: FontWeight.w600,
+                color: itemColor,
+              ),
+            ),
           ],
         ),
       ],
@@ -1212,10 +1326,14 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: MusicLibraryColors.success.withValues(alpha: 0.06),
+                        color: MusicLibraryColors.success.withValues(
+                          alpha: 0.06,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: MusicLibraryColors.success.withValues(alpha: 0.2),
+                          color: MusicLibraryColors.success.withValues(
+                            alpha: 0.2,
+                          ),
                         ),
                       ),
                       child: Column(
@@ -1241,7 +1359,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                           ),
                           Text(
                             context.tr('attendance'),
-                            style: mlText(size: 10, color: MusicLibraryColors.textSecondary),
+                            style: mlText(
+                              size: 10,
+                              color: MusicLibraryColors.textSecondary,
+                            ),
                             textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -1255,10 +1376,14 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: MusicLibraryColors.primary.withValues(alpha: 0.06),
+                        color: MusicLibraryColors.primary.withValues(
+                          alpha: 0.06,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: MusicLibraryColors.primary.withValues(alpha: 0.2),
+                          color: MusicLibraryColors.primary.withValues(
+                            alpha: 0.2,
+                          ),
                         ),
                       ),
                       child: Column(
@@ -1282,7 +1407,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                           ),
                           Text(
                             context.tr('choirSessionsLabel'),
-                            style: mlText(size: 10, color: MusicLibraryColors.textSecondary),
+                            style: mlText(
+                              size: 10,
+                              color: MusicLibraryColors.textSecondary,
+                            ),
                             textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -1341,7 +1469,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                           ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: MusicLibraryColors.textPrimary,
-                            side: const BorderSide(color: MusicLibraryColors.border),
+                            side: const BorderSide(
+                              color: MusicLibraryColors.border,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -1397,7 +1527,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                           ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: MusicLibraryColors.textPrimary,
-                            side: const BorderSide(color: MusicLibraryColors.border),
+                            side: const BorderSide(
+                              color: MusicLibraryColors.border,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -1419,11 +1551,19 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(context.tr('choirRecentSessionsLabel'), style: mlText(size: 16, weight: FontWeight.w700)),
+                  Text(
+                    context.tr('choirRecentSessionsLabel'),
+                    style: mlText(size: 16, weight: FontWeight.w700),
+                  ),
                   TextButton(
-                    style: TextButton.styleFrom(foregroundColor: MusicLibraryColors.primary),
+                    style: TextButton.styleFrom(
+                      foregroundColor: MusicLibraryColors.primary,
+                    ),
                     onPressed: () => _viewAttendanceHistory(),
-                    child: Text(context.tr('choirViewAllAction'), style: const TextStyle(fontSize: 12)),
+                    child: Text(
+                      context.tr('choirViewAllAction'),
+                      style: const TextStyle(fontSize: 12),
+                    ),
                   ),
                 ],
               ),
@@ -1465,9 +1605,16 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.event_busy, size: 48, color: MusicLibraryColors.textSecondary),
+          const Icon(
+            Icons.event_busy,
+            size: 48,
+            color: MusicLibraryColors.textSecondary,
+          ),
           const SizedBox(height: 16),
-          Text(context.tr('choirNoSessionsYet'), style: mlText(size: 15, weight: FontWeight.w600)),
+          Text(
+            context.tr('choirNoSessionsYet'),
+            style: mlText(size: 15, weight: FontWeight.w600),
+          ),
           const SizedBox(height: 8),
           Text(
             context.tr('choirTakeAttendancePrompt'),
@@ -1544,7 +1691,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
           // The subtitle has two lines when there are records; a two-line
           // tile is a hair too short for that.
           isThreeLine: totalCount > 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           leading: Container(
             width: 40,
             height: 40,
@@ -1570,12 +1719,18 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
             children: [
               Text(
                 '${session.date.day}/${session.date.month}/${session.date.year}',
-                style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                style: mlText(
+                  size: 12,
+                  color: MusicLibraryColors.textSecondary,
+                ),
               ),
               if (totalCount > 0)
                 Text(
                   '$presentCount ${context.tr('choirPresentLabel').toLowerCase()}, $lateCount ${context.tr('choirLateLabel').toLowerCase()} ${context.tr('choirOfLabel')} $totalCount',
-                  style: mlText(size: 10, color: MusicLibraryColors.textSecondary),
+                  style: mlText(
+                    size: 10,
+                    color: MusicLibraryColors.textSecondary,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -1646,27 +1801,43 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
             children: [
               Row(
                 children: [
-                  Icon(_getEventTypeIcon(session.eventType), size: 22, color: MusicLibraryColors.primary),
+                  Icon(
+                    _getEventTypeIcon(session.eventType),
+                    size: 22,
+                    color: MusicLibraryColors.primary,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(session.title, style: mlText(size: 17, weight: FontWeight.w700)),
+                    child: Text(
+                      session.title,
+                      style: mlText(size: 17, weight: FontWeight.w700),
+                    ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: MusicLibraryColors.textSecondary),
+                    icon: const Icon(
+                      Icons.close,
+                      color: MusicLibraryColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               Text(
                 '${context.tr('choirDateLabelPrefix')} ${session.date.day}/${session.date.month}/${session.date.year}',
-                style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                style: mlText(
+                  size: 13,
+                  color: MusicLibraryColors.textSecondary,
+                ),
               ),
               if (session.description?.isNotEmpty == true) ...[
                 const SizedBox(height: 8),
                 Text(
                   '${context.tr('choirDescriptionLabelPrefix')} ${session.description}',
-                  style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                  style: mlText(
+                    size: 13,
+                    color: MusicLibraryColors.textSecondary,
+                  ),
                 ),
               ],
               const SizedBox(height: 16),
@@ -1680,8 +1851,16 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSessionStat('${attendanceData['present']}', context.tr('choirPresentLabel'), MusicLibraryColors.success),
-                    _buildSessionStat('${attendanceData['late']}', context.tr('choirLateLabel'), MusicLibraryColors.warning),
+                    _buildSessionStat(
+                      '${attendanceData['present']}',
+                      context.tr('choirPresentLabel'),
+                      MusicLibraryColors.success,
+                    ),
+                    _buildSessionStat(
+                      '${attendanceData['late']}',
+                      context.tr('choirLateLabel'),
+                      MusicLibraryColors.warning,
+                    ),
                     _buildSessionStat(
                       '${attendanceData['total'] - attendanceData['present'] - attendanceData['late']}',
                       context.tr('choirAbsentLabel'),
@@ -1696,14 +1875,20 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                 ),
               ),
               const SizedBox(height: 16),
-              Text(context.tr('choirAttendanceRecordsLabel'), style: mlText(size: 14, weight: FontWeight.w700)),
+              Text(
+                context.tr('choirAttendanceRecordsLabel'),
+                style: mlText(size: 14, weight: FontWeight.w700),
+              ),
               const SizedBox(height: 8),
               Expanded(
                 child: attendanceRecords.isEmpty
                     ? Center(
                         child: Text(
                           context.tr('choirNoAttendanceRecordsFound'),
-                          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                          style: mlText(
+                            size: 13,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -1716,23 +1901,34 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                             decoration: BoxDecoration(
                               color: MusicLibraryColors.card,
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: MusicLibraryColors.border),
+                              border: Border.all(
+                                color: MusicLibraryColors.border,
+                              ),
                             ),
                             child: ListTile(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               leading: CircleAvatar(
-                                backgroundColor: _getAttendanceColor(record.status),
+                                backgroundColor: _getAttendanceColor(
+                                  record.status,
+                                ),
                                 radius: 16,
                                 child: Text(
                                   _getStatusText(record.status)[0],
-                                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                               title: Text(
-                                memberInfo['name'] ?? context.tr('choirUnknownMember'),
-                                style: mlText(size: 14, weight: FontWeight.w600),
+                                memberInfo['name'] ??
+                                    context.tr('choirUnknownMember'),
+                                style: mlText(
+                                  size: 14,
+                                  weight: FontWeight.w600,
+                                ),
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1740,12 +1936,19 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                                 children: [
                                   Text(
                                     '${context.tr('choirIdLabelPrefix')} ${memberInfo['registrationId']}',
-                                    style: mlText(size: 12, weight: FontWeight.w500, color: MusicLibraryColors.textSecondary),
+                                    style: mlText(
+                                      size: 12,
+                                      weight: FontWeight.w500,
+                                      color: MusicLibraryColors.textSecondary,
+                                    ),
                                   ),
                                   if (record.notes?.isNotEmpty == true)
                                     Text(
                                       record.notes!,
-                                      style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                                      style: mlText(
+                                        size: 12,
+                                        color: MusicLibraryColors.textSecondary,
+                                      ),
                                     ),
                                 ],
                               ),
@@ -1778,7 +1981,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MusicLibraryColors.primary,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(context.tr('close')),
@@ -1794,8 +1999,14 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
   Widget _buildSessionStat(String value, String label, Color color) {
     return Column(
       children: [
-        Text(value, style: mlText(size: 20, weight: FontWeight.w700, color: color)),
-        Text(label, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+        Text(
+          value,
+          style: mlText(size: 20, weight: FontWeight.w700, color: color),
+        ),
+        Text(
+          label,
+          style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+        ),
       ],
     );
   }
@@ -1825,7 +2036,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('choirQuickReportsLabel'), style: mlText(size: 15, weight: FontWeight.w700)),
+          Text(
+            context.tr('choirQuickReportsLabel'),
+            style: mlText(size: 15, weight: FontWeight.w700),
+          ),
           const SizedBox(height: 16),
           GridView(
             shrinkWrap: true,
@@ -1885,7 +2099,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('choirDetailedReportsLabel'), style: mlText(size: 15, weight: FontWeight.w700)),
+          Text(
+            context.tr('choirDetailedReportsLabel'),
+            style: mlText(size: 15, weight: FontWeight.w700),
+          ),
           const SizedBox(height: 16),
           _buildDetailedReportTile(
             icon: Icons.analytics,
@@ -1924,7 +2141,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
         contentPadding: EdgeInsets.zero,
         leading: Icon(icon, color: MusicLibraryColors.primary),
         title: Text(title, style: mlText(size: 14, weight: FontWeight.w600)),
-        subtitle: Text(subtitle, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+        subtitle: Text(
+          subtitle,
+          style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+        ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
           size: 14,
@@ -1968,7 +2188,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               ),
               Text(
                 subtitle,
-                style: mlText(size: 11, color: MusicLibraryColors.textSecondary),
+                style: mlText(
+                  size: 11,
+                  color: MusicLibraryColors.textSecondary,
+                ),
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -2148,7 +2371,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       child: ListTile(
         leading: Icon(icon, color: color),
         title: Text(title, style: mlText(size: 14, weight: FontWeight.w600)),
-        subtitle: Text(subtitle, style: mlText(size: 12, color: MusicLibraryColors.textSecondary)),
+        subtitle: Text(
+          subtitle,
+          style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+        ),
         onTap: onTap,
       ),
     );
@@ -2406,7 +2632,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: mlText(size: 13, color: MusicLibraryColors.textSecondary)),
+        Text(
+          label,
+          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+        ),
         Text(value, style: mlText(size: 13, weight: FontWeight.w600)),
       ],
     );
@@ -2417,7 +2646,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       children: [
         Text(icon, style: const TextStyle(fontSize: 16)),
         const SizedBox(width: 8),
-        Text(label, style: mlText(size: 13, color: MusicLibraryColors.textSecondary)),
+        Text(
+          label,
+          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -2566,7 +2798,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       builder: (context) => AlertDialog(
         backgroundColor: MusicLibraryColors.card,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        title: Text(context.tr('choirAddMemberTitle'), style: mlText(size: 17, weight: FontWeight.w700)),
+        title: Text(
+          context.tr('choirAddMemberTitle'),
+          style: mlText(size: 17, weight: FontWeight.w700),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -2576,8 +2811,13 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               decoration: InputDecoration(
                 labelText: context.tr('choirMemberNameIdLabel'),
                 hintText: context.tr('choirEnterMemberNameIdHint'),
-                prefixIcon: const Icon(Icons.person, color: MusicLibraryColors.textSecondary),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                prefixIcon: const Icon(
+                  Icons.person,
+                  color: MusicLibraryColors.textSecondary,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -2587,15 +2827,22 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               decoration: InputDecoration(
                 labelText: context.tr('choirRegistrationNumberLabel'),
                 hintText: context.tr('choirRegistrationNumberHint'),
-                prefixIcon: const Icon(Icons.numbers, color: MusicLibraryColors.textSecondary),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                prefixIcon: const Icon(
+                  Icons.numbers,
+                  color: MusicLibraryColors.textSecondary,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
         ),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: MusicLibraryColors.textSecondary),
+            style: TextButton.styleFrom(
+              foregroundColor: MusicLibraryColors.textSecondary,
+            ),
             onPressed: () {
               userIdController.dispose();
               regNumberController.dispose();
@@ -2607,7 +2854,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
             style: ElevatedButton.styleFrom(
               backgroundColor: MusicLibraryColors.primary,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             onPressed: () {
               if (userIdController.text.isNotEmpty &&
@@ -2647,7 +2896,8 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
     } else {
       Get.snackbar(
         context.tr('error'),
-        choirController.errorMessage ?? context.tr('choirAddMemberFailedMessage'),
+        choirController.errorMessage ??
+            context.tr('choirAddMemberFailedMessage'),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -2675,7 +2925,8 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
     } else {
       Get.snackbar(
         context.tr('error'),
-        choirController.errorMessage ?? context.tr('choirRemoveMemberFailedMessage'),
+        choirController.errorMessage ??
+            context.tr('choirRemoveMemberFailedMessage'),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -2687,9 +2938,7 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.tr('choirRemoveMemberTitle')),
-        content: Text(
-          context.tr('choirRemoveMemberConfirm'),
-        ),
+        content: Text(context.tr('choirRemoveMemberConfirm')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -2701,7 +2950,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               _removeMember(member);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(context.tr('remove'), style: const TextStyle(color: Colors.white)),
+            child: Text(
+              context.tr('remove'),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -2870,7 +3122,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: MusicLibraryColors.card,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.7,
@@ -2880,11 +3134,17 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
               children: [
                 Row(
                   children: [
-                    Text(context.tr('choirAllActivitiesTitle'), style: mlText(size: 18, weight: FontWeight.w700)),
+                    Text(
+                      context.tr('choirAllActivitiesTitle'),
+                      style: mlText(size: 18, weight: FontWeight.w700),
+                    ),
                     const Spacer(),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, color: MusicLibraryColors.textSecondary),
+                      icon: const Icon(
+                        Icons.close,
+                        color: MusicLibraryColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -2898,7 +3158,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
-                          child: CircularProgressIndicator(color: MusicLibraryColors.primary),
+                          child: CircularProgressIndicator(
+                            color: MusicLibraryColors.primary,
+                          ),
                         );
                       }
 
@@ -2906,7 +3168,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                         return Center(
                           child: Text(
                             '${context.tr('choirErrorLoadingActivitiesPrefix')} ${snapshot.error}',
-                            style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                            style: mlText(
+                              size: 13,
+                              color: MusicLibraryColors.textSecondary,
+                            ),
                           ),
                         );
                       }
@@ -2926,7 +3191,10 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                               const SizedBox(height: 16),
                               Text(
                                 context.tr('choirNoActivitiesFound'),
-                                style: mlText(size: 15, color: MusicLibraryColors.textSecondary),
+                                style: mlText(
+                                  size: 15,
+                                  color: MusicLibraryColors.textSecondary,
+                                ),
                               ),
                             ],
                           ),
@@ -2942,7 +3210,9 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                             decoration: BoxDecoration(
                               color: MusicLibraryColors.card,
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: MusicLibraryColors.border),
+                              border: Border.all(
+                                color: MusicLibraryColors.border,
+                              ),
                             ),
                             child: Material(
                               color: Colors.transparent,
@@ -2954,7 +3224,8 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: MusicLibraryColors.primary.withValues(alpha: 0.08),
+                                    color: MusicLibraryColors.primary
+                                        .withValues(alpha: 0.08),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
@@ -2965,19 +3236,28 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
                                 ),
                                 title: Text(
                                   activity.title,
-                                  style: mlText(size: 14, weight: FontWeight.w600),
+                                  style: mlText(
+                                    size: 14,
+                                    weight: FontWeight.w600,
+                                  ),
                                 ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       activity.description,
-                                      style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                                      style: mlText(
+                                        size: 12,
+                                        color: MusicLibraryColors.textSecondary,
+                                      ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       activity.timeAgo,
-                                      style: mlText(size: 11, color: MusicLibraryColors.textSecondary),
+                                      style: mlText(
+                                        size: 11,
+                                        color: MusicLibraryColors.textSecondary,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -3260,7 +3540,9 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                                 child: DropdownButtonFormField<String>(
                                   initialValue: _selectedEvent,
                                   decoration: InputDecoration(
-                                    labelText: context.tr('choirEventTypeLabel'),
+                                    labelText: context.tr(
+                                      'choirEventTypeLabel',
+                                    ),
                                     prefixIcon: const Icon(
                                       Icons.event,
                                       color: AppColors.primary,
@@ -3400,8 +3682,12 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                                   color: AppColors.primary,
                                 ),
                                 tooltip: _isSelectionMode
-                                    ? context.tr('choirExitSelectionModeTooltip')
-                                    : context.tr('choirEnableSelectionModeTooltip'),
+                                    ? context.tr(
+                                        'choirExitSelectionModeTooltip',
+                                      )
+                                    : context.tr(
+                                        'choirEnableSelectionModeTooltip',
+                                      ),
                               ),
                             ],
                           ),
@@ -3750,7 +4036,9 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                                           ),
                                           const SizedBox(height: 16),
                                           Text(
-                                            context.tr('choirNoMembersMatchingSearch'),
+                                            context.tr(
+                                              'choirNoMembersMatchingSearch',
+                                            ),
                                             style: const TextStyle(
                                               color: Colors.grey,
                                             ),
@@ -3910,20 +4198,26 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                                                             .spaceEvenly,
                                                     children: [
                                                       _buildEnhancedStatusButton(
-                                                        context.tr('choirPresentLabel'),
+                                                        context.tr(
+                                                          'choirPresentLabel',
+                                                        ),
                                                         Icons.check_circle,
                                                         AttendanceStatus
                                                             .present,
                                                         member.id,
                                                       ),
                                                       _buildEnhancedStatusButton(
-                                                        context.tr('choirLateLabel'),
+                                                        context.tr(
+                                                          'choirLateLabel',
+                                                        ),
                                                         Icons.access_time,
                                                         AttendanceStatus.late,
                                                         member.id,
                                                       ),
                                                       _buildEnhancedStatusButton(
-                                                        context.tr('choirAbsentLabel'),
+                                                        context.tr(
+                                                          'choirAbsentLabel',
+                                                        ),
                                                         Icons.cancel,
                                                         AttendanceStatus.absent,
                                                         member.id,
@@ -3933,8 +4227,9 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                                                   const SizedBox(height: 12),
                                                   TextField(
                                                     decoration: InputDecoration(
-                                                      labelText:
-                                                          context.tr('choirNotesOptionalLabel'),
+                                                      labelText: context.tr(
+                                                        'choirNotesOptionalLabel',
+                                                      ),
                                                       border: OutlineInputBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
@@ -4076,7 +4371,11 @@ class _AttendanceDialogState extends State<AttendanceDialog>
                               ),
                             )
                           : const Icon(Icons.save),
-                      label: Text(_isLoading ? context.tr('choirSavingLabel') : context.tr('choirSaveAttendanceLabel')),
+                      label: Text(
+                        _isLoading
+                            ? context.tr('choirSavingLabel')
+                            : context.tr('choirSaveAttendanceLabel'),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,

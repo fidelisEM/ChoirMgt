@@ -26,9 +26,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -62,11 +60,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
               gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.storage,
-              size: 48,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.storage, size: 48, color: Colors.white),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -80,10 +74,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
           const SizedBox(height: 8),
           const Text(
             'Initialize storage buckets for image uploads',
-            style: TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: AppColors.gray600, fontSize: 16),
           ),
         ],
       ),
@@ -152,10 +143,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
                   SizedBox(width: 8),
                   Text(
                     'Click "Initialize Storage" to check and setup buckets',
-                    style: TextStyle(
-                      color: AppColors.gray600,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: AppColors.gray600, fontSize: 14),
                   ),
                 ],
               ),
@@ -201,10 +189,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
                 : const Icon(Icons.play_arrow),
             label: Text(
               _isLoading ? 'Initializing...' : 'Initialize Storage',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(height: 12),
@@ -219,10 +204,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
             icon: const Icon(Icons.refresh),
             label: const Text(
               'Check Status',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -324,10 +306,7 @@ class _StorageSetupScreenState extends State<StorageSetupScreen> {
                   '4. Name: choir-images\n'
                   '5. Make it public: YES\n'
                   '6. Allowed MIME types: image/jpeg, image/png, image/webp',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: AppColors.primary, fontSize: 14),
                 ),
               ],
             ),
@@ -386,10 +365,10 @@ USING (bucket_id = 'choir-images');''',
 
     try {
       _addLog('Starting storage initialization...');
-      
+
       final storageService = StorageService();
       final success = await storageService.initializeStorage();
-      
+
       if (success) {
         _addLog('✅ Storage initialization completed successfully');
         setState(() {
@@ -401,7 +380,9 @@ USING (bucket_id = 'choir-images');''',
         setState(() {
           _setupStatus = 'Failed: Please check logs and try manual setup';
         });
-        Helpers.showErrorSnackbar('Storage initialization failed. Check logs for details.');
+        Helpers.showErrorSnackbar(
+          'Storage initialization failed. Check logs for details.',
+        );
       }
     } catch (e) {
       _addLog('❌ Error during initialization: $e');
@@ -424,16 +405,16 @@ USING (bucket_id = 'choir-images');''',
 
     try {
       _addLog('Checking storage status...');
-      
+
       final storageService = StorageService();
       final status = storageService.getStorageStatus();
       final isReady = storageService.isStorageReady;
-      
+
       _addLog('Storage ready: $isReady');
       _addLog('Last check: ${status['timestamp']}');
-      
+
       setState(() {
-        _setupStatus = isReady 
+        _setupStatus = isReady
             ? 'Success: Storage is properly configured'
             : 'Pending: Storage needs initialization';
       });

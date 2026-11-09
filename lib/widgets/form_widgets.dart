@@ -4,7 +4,6 @@ import '../services/validation_service.dart';
 
 // Validated text form field
 class ValidatedTextFormField extends StatefulWidget {
-
   const ValidatedTextFormField({
     super.key,
     required this.label,
@@ -52,7 +51,8 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
     _controller.addListener(_onTextChanged);
   }
 
@@ -67,7 +67,7 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
   void _onTextChanged() {
     final value = _controller.text;
     widget.onChanged?.call(value);
-    
+
     if (widget.validator != null) {
       setState(() {
         _validationResult = widget.validator!(value);
@@ -99,7 +99,7 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
           ),
         ),
         const SizedBox(height: 8),
-        
+
         // Text field
         TextFormField(
           controller: _controller,
@@ -113,9 +113,7 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
             hintText: widget.hint,
             prefixIcon: widget.prefixIcon,
             suffixIcon: widget.suffixIcon,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -134,7 +132,10 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
             ),
             filled: true,
             fillColor: widget.enabled ? Colors.grey[50] : Colors.grey[100],
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
           validator: (value) {
             if (widget.validator != null) {
@@ -145,16 +146,13 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
           },
           onSaved: (value) => widget.onSaved?.call(value ?? ''),
         ),
-        
+
         // Validation message
         if (_validationResult != null && !_validationResult!.isValid) ...[
           const SizedBox(height: 4),
           Text(
             _validationResult!.error!,
-            style: TextStyle(
-              color: Colors.red[600],
-              fontSize: 12,
-            ),
+            style: TextStyle(color: Colors.red[600], fontSize: 12),
           ),
         ],
       ],
@@ -164,7 +162,6 @@ class _ValidatedTextFormFieldState extends State<ValidatedTextFormField> {
 
 // Email input field
 class EmailFormField extends StatelessWidget {
-
   const EmailFormField({
     super.key,
     this.label = 'Email Address',
@@ -200,7 +197,6 @@ class EmailFormField extends StatelessWidget {
 
 // Phone number input field
 class PhoneFormField extends StatelessWidget {
-
   const PhoneFormField({
     super.key,
     this.label = 'Phone Number',
@@ -239,7 +235,6 @@ class PhoneFormField extends StatelessWidget {
 
 // Name input field
 class NameFormField extends StatelessWidget {
-
   const NameFormField({
     super.key,
     this.label = 'Full Name',
@@ -265,7 +260,8 @@ class NameFormField extends StatelessWidget {
       onChanged: onChanged,
       onSaved: onSaved,
       keyboardType: TextInputType.name,
-      validator: (value) => ValidationService().validateName(value, fieldName: label),
+      validator: (value) =>
+          ValidationService().validateName(value, fieldName: label),
       prefixIcon: const Icon(Icons.person_outline),
       required: required,
       controller: controller,
@@ -278,7 +274,6 @@ class NameFormField extends StatelessWidget {
 
 // Password input field
 class PasswordFormField extends StatefulWidget {
-
   const PasswordFormField({
     super.key,
     this.label = 'Password',
@@ -325,7 +320,6 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
 
 // Amount/Money input field
 class AmountFormField extends StatelessWidget {
-
   const AmountFormField({
     super.key,
     this.label = 'Amount',
@@ -353,7 +347,8 @@ class AmountFormField extends StatelessWidget {
       onChanged: onChanged,
       onSaved: onSaved,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      validator: (value) => ValidationService().validateAmount(value, fieldName: label),
+      validator: (value) =>
+          ValidationService().validateAmount(value, fieldName: label),
       prefixIcon: Container(
         width: 48,
         alignment: Alignment.center,
@@ -383,7 +378,6 @@ class AmountFormField extends StatelessWidget {
 
 // Registration number field
 class RegistrationNumberFormField extends StatelessWidget {
-
   const RegistrationNumberFormField({
     super.key,
     this.label = 'Registration Number',
@@ -408,7 +402,8 @@ class RegistrationNumberFormField extends StatelessWidget {
       initialValue: initialValue,
       onChanged: onChanged,
       onSaved: onSaved,
-      validator: (value) => ValidationService().validateRegistrationNumber(value),
+      validator: (value) =>
+          ValidationService().validateRegistrationNumber(value),
       prefixIcon: const Icon(Icons.confirmation_number_outlined),
       required: required,
       controller: controller,
@@ -421,7 +416,6 @@ class RegistrationNumberFormField extends StatelessWidget {
 
 // Form section header
 class FormSection extends StatelessWidget {
-
   const FormSection({
     super.key,
     required this.title,
@@ -448,9 +442,9 @@ class FormSection extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle!,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.grey[600],
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
           ),
         ],
         const SizedBox(height: 16),
@@ -462,12 +456,7 @@ class FormSection extends StatelessWidget {
 
 // Form container with proper spacing
 class FormContainer extends StatelessWidget {
-
-  const FormContainer({
-    super.key,
-    required this.child,
-    this.padding,
-  });
+  const FormContainer({super.key, required this.child, this.padding});
   final Widget child;
   final EdgeInsetsGeometry? padding;
 

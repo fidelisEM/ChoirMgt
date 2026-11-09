@@ -48,16 +48,27 @@ class _MessagesListScreenState extends State<MessagesListScreen>
   }
 
   void _loadMessages() {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    final communicationController = Provider.of<CommunicationController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+    final communicationController = Provider.of<CommunicationController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir != null) {
-      communicationController.loadMessages(choirId: choirController.selectedChoir!.id);
+      communicationController.loadMessages(
+        choirId: choirController.selectedChoir!.id,
+      );
     }
   }
 
   void _filterMessages() {
-    final communicationController = Provider.of<CommunicationController>(context, listen: false);
+    final communicationController = Provider.of<CommunicationController>(
+      context,
+      listen: false,
+    );
     List<MessageModel> filtered = communicationController.messages;
 
     // Filter by search query
@@ -70,14 +81,22 @@ class _MessagesListScreenState extends State<MessagesListScreen>
       case 0: // All
         break;
       case 1: // Unread
-        filtered = filtered.where((message) => !_isMessageRead(message)).toList();
+        filtered = filtered
+            .where((message) => !_isMessageRead(message))
+            .toList();
         break;
       case 2: // Announcements
-        filtered = filtered.where((message) =>
-            message.type == 'announcement' || message.type == 'urgent').toList();
+        filtered = filtered
+            .where(
+              (message) =>
+                  message.type == 'announcement' || message.type == 'urgent',
+            )
+            .toList();
         break;
       case 3: // Discussions
-        filtered = filtered.where((message) => message.type == 'discussion').toList();
+        filtered = filtered
+            .where((message) => message.type == 'discussion')
+            .toList();
         break;
     }
 
@@ -121,14 +140,20 @@ class _MessagesListScreenState extends State<MessagesListScreen>
                   const Text('All'),
                   const SizedBox(width: 4),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${_getTabCount(0)}',
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -141,14 +166,20 @@ class _MessagesListScreenState extends State<MessagesListScreen>
                   const Text('Unread'),
                   const SizedBox(width: 4),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${_getTabCount(1)}',
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -160,9 +191,7 @@ class _MessagesListScreenState extends State<MessagesListScreen>
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: Consumer2<CommunicationController, ChoirController>(
           builder: (context, communicationController, choirController, child) {
             return _buildBody(communicationController, choirController);
@@ -177,7 +206,10 @@ class _MessagesListScreenState extends State<MessagesListScreen>
     );
   }
 
-  Widget _buildBody(CommunicationController communicationController, ChoirController choirController) {
+  Widget _buildBody(
+    CommunicationController communicationController,
+    ChoirController choirController,
+  ) {
     if (choirController.selectedChoir == null) {
       return const Center(
         child: Text(
@@ -237,7 +269,9 @@ class _MessagesListScreenState extends State<MessagesListScreen>
     );
   }
 
-  void _updateFilteredMessages(CommunicationController communicationController) {
+  void _updateFilteredMessages(
+    CommunicationController communicationController,
+  ) {
     List<MessageModel> filtered = communicationController.messages;
 
     // Filter by search query
@@ -250,13 +284,19 @@ class _MessagesListScreenState extends State<MessagesListScreen>
       case 0: // All
         break;
       case 1: // Unread
-        filtered = filtered.where((message) => !_isMessageRead(message)).toList();
+        filtered = filtered
+            .where((message) => !_isMessageRead(message))
+            .toList();
         break;
       case 2: // Announcements
-        filtered = filtered.where((message) => message.type == 'announcement').toList();
+        filtered = filtered
+            .where((message) => message.type == 'announcement')
+            .toList();
         break;
       case 3: // Discussions
-        filtered = filtered.where((message) => message.type == 'discussion').toList();
+        filtered = filtered
+            .where((message) => message.type == 'discussion')
+            .toList();
         break;
     }
 
@@ -298,22 +338,26 @@ class _MessagesListScreenState extends State<MessagesListScreen>
               _searchQuery.isNotEmpty
                   ? 'Try adjusting your search terms'
                   : 'Start a conversation with your choir members',
-              style: const TextStyle(
-                color: AppColors.gray500,
-                fontSize: 16,
-              ),
+              style: const TextStyle(color: AppColors.gray500, fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: _searchQuery.isNotEmpty ? _clearSearch : _composeMessage,
+              onPressed: _searchQuery.isNotEmpty
+                  ? _clearSearch
+                  : _composeMessage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
               icon: Icon(_searchQuery.isNotEmpty ? Icons.clear : Icons.add),
-              label: Text(_searchQuery.isNotEmpty ? 'Clear Search' : 'Compose Message'),
+              label: Text(
+                _searchQuery.isNotEmpty ? 'Clear Search' : 'Compose Message',
+              ),
             ),
           ],
         ),
@@ -332,7 +376,9 @@ class _MessagesListScreenState extends State<MessagesListScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: _getMessageTypeColor(message.type).withValues(alpha: 0.1),
+                  color: _getMessageTypeColor(
+                    message.type,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -350,7 +396,9 @@ class _MessagesListScreenState extends State<MessagesListScreen>
                       message.subject,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: _isMessageRead(message) ? FontWeight.w500 : FontWeight.bold,
+                        fontWeight: _isMessageRead(message)
+                            ? FontWeight.w500
+                            : FontWeight.bold,
                         color: AppColors.gray800,
                       ),
                       maxLines: 1,
@@ -410,7 +458,9 @@ class _MessagesListScreenState extends State<MessagesListScreen>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getMessageTypeColor(message.type).withValues(alpha: 0.1),
+                  color: _getMessageTypeColor(
+                    message.type,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -427,10 +477,7 @@ class _MessagesListScreenState extends State<MessagesListScreen>
                 message.recipients.isEmpty
                     ? 'All members'
                     : '${message.recipients.length} recipients',
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: AppColors.gray400,
-                ),
+                style: const TextStyle(fontSize: 10, color: AppColors.gray400),
               ),
             ],
           ),
@@ -440,16 +487,21 @@ class _MessagesListScreenState extends State<MessagesListScreen>
   }
 
   int _getTabCount(int tabIndex) {
-    final communicationController = Provider.of<CommunicationController>(context, listen: false);
+    final communicationController = Provider.of<CommunicationController>(
+      context,
+      listen: false,
+    );
     final messages = communicationController.messages;
-    
+
     switch (tabIndex) {
       case 0: // All
         return messages.length;
       case 1: // Unread
         return messages.where((m) => !_isMessageRead(m)).length;
       case 2: // Announcements
-        return messages.where((m) => m.type == 'announcement' || m.type == 'urgent').length;
+        return messages
+            .where((m) => m.type == 'announcement' || m.type == 'urgent')
+            .length;
       case 3: // Discussions
         return messages.where((m) => m.type == 'discussion').length;
       default:
@@ -460,9 +512,9 @@ class _MessagesListScreenState extends State<MessagesListScreen>
   bool _isMessageRead(MessageModel message) {
     final authController = Provider.of<AuthController>(context, listen: false);
     final currentUserId = authController.currentUser?.id;
-    
+
     if (currentUserId == null) return false;
-    
+
     return message.readBy.contains(currentUserId);
   }
 
@@ -514,7 +566,7 @@ class _MessagesListScreenState extends State<MessagesListScreen>
   String _formatMessageTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inDays > 7) {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     } else if (difference.inDays > 0) {

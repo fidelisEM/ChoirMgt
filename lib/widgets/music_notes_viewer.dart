@@ -6,7 +6,6 @@ import '../models/music_model.dart';
 import '../theme/app_colors.dart';
 
 class MusicNotesViewer extends StatefulWidget {
-
   const MusicNotesViewer({
     super.key,
     required this.music,
@@ -47,10 +46,7 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
               icon: const Icon(Icons.text_increase),
               onPressed: _increaseFontSize,
             ),
-            IconButton(
-              icon: const Icon(Icons.copy),
-              onPressed: _copyNotes,
-            ),
+            IconButton(icon: const Icon(Icons.copy), onPressed: _copyNotes),
             IconButton(
               icon: const Icon(Icons.download),
               onPressed: _downloadNotes,
@@ -127,10 +123,7 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
                 ),
                 Text(
                   'by ${widget.music.artist}',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
             ),
@@ -150,7 +143,7 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
 
   Widget _buildNotesDisplay() {
     final notesData = _parseNotesData(widget.music.musicNotes);
-    
+
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -162,23 +155,23 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
             // Song Information
             _buildSongInfo(),
             const SizedBox(height: 24),
-            
+
             // Key Signature and Time Info
             if (notesData.key.isNotEmpty || notesData.tempo.isNotEmpty)
               _buildKeyInfo(notesData),
-            
+
             // Chord Progressions
             if (notesData.sections.isNotEmpty) ...[
               const SizedBox(height: 24),
               _buildChordProgressions(notesData),
             ],
-            
+
             // Additional Notes
             if (notesData.additionalNotes.isNotEmpty) ...[
               const SizedBox(height: 24),
               _buildAdditionalNotes(notesData.additionalNotes),
             ],
-            
+
             // Sheet Music Link
             if (widget.music.hasSheetMusic) ...[
               const SizedBox(height: 24),
@@ -247,10 +240,7 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: _fontSize,
-                color: AppColors.gray800,
-              ),
+              style: TextStyle(fontSize: _fontSize, color: AppColors.gray800),
             ),
           ),
         ],
@@ -284,14 +274,10 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
             Row(
               children: [
                 if (notesData.key.isNotEmpty)
-                  Expanded(
-                    child: _buildKeySignature(notesData.key),
-                  ),
+                  Expanded(child: _buildKeySignature(notesData.key)),
                 if (notesData.tempo.isNotEmpty) ...[
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildTempoInfo(notesData.tempo),
-                  ),
+                  Expanded(child: _buildTempoInfo(notesData.tempo)),
                 ],
               ],
             ),
@@ -424,8 +410,9 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
               ],
             ),
             const SizedBox(height: 16),
-            ...notesData.sections.map((section) => 
-              _buildChordSection(section.name, section.chords)),
+            ...notesData.sections.map(
+              (section) => _buildChordSection(section.name, section.chords),
+            ),
           ],
         ),
       ),
@@ -466,10 +453,12 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
 
   Widget _buildChordBadge(String chord) {
     // Handle chord modifiers and extensions
-    final isMinor = chord.toLowerCase().contains('m') && !chord.toLowerCase().contains('maj');
+    final isMinor =
+        chord.toLowerCase().contains('m') &&
+        !chord.toLowerCase().contains('maj');
     final isSeventeenth = chord.contains('7');
     final isMajorSeventh = chord.toLowerCase().contains('maj7');
-    
+
     Color bgColor = AppColors.info;
     if (isMinor) bgColor = AppColors.warning;
     if (isSeventeenth) bgColor = AppColors.secondary;
@@ -569,7 +558,9 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
               decoration: BoxDecoration(
                 color: AppColors.warning.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.3),
+                ),
               ),
               child: Column(
                 children: [
@@ -637,11 +628,15 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
         inAdditionalNotes = false;
       } else if (trimmed.contains('-') && !inAdditionalNotes) {
         // Chord progression line
-        final chords = trimmed.split('-').map((c) => c.trim()).where((c) => c.isNotEmpty).toList();
+        final chords = trimmed
+            .split('-')
+            .map((c) => c.trim())
+            .where((c) => c.isNotEmpty)
+            .toList();
         currentChords.addAll(chords);
       } else {
         // Additional notes
-        if (trimmed.toLowerCase().contains('arrangement') || 
+        if (trimmed.toLowerCase().contains('arrangement') ||
             trimmed.toLowerCase().contains('features') ||
             trimmed.toLowerCase().contains('note') ||
             trimmed.toLowerCase().contains('recommended')) {
@@ -680,10 +675,7 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
   }
 
   void _openFullScreen() {
-    Get.to(() => MusicNotesViewer(
-      music: widget.music,
-      showFullScreen: true,
-    ));
+    Get.to(() => MusicNotesViewer(music: widget.music, showFullScreen: true));
   }
 
   void _copyNotes() {
@@ -747,7 +739,6 @@ class _MusicNotesViewerState extends State<MusicNotesViewer> {
 }
 
 class NotesData {
-
   NotesData({
     required this.key,
     required this.tempo,
@@ -763,7 +754,6 @@ class NotesData {
 }
 
 class ChordSection {
-
   ChordSection(this.name, this.chords);
   final String name;
   final List<String> chords;

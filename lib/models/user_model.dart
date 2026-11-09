@@ -1,7 +1,6 @@
 enum UserRole { superAdmin, admin, choirLeader, choirMember }
 
 class UserModel {
-
   UserModel({
     required this.id,
     required this.email,
@@ -25,7 +24,11 @@ class UserModel {
         (role) => role.toString().split('.').last == json['role'],
         orElse: () => UserRole.choirMember,
       ),
-      createdAt: DateTime.parse(json['created_at'] ?? json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ??
+            json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
       lastLogin: (json['last_login'] ?? json['lastLogin']) != null
           ? DateTime.parse(json['last_login'] ?? json['lastLogin'])
           : null,

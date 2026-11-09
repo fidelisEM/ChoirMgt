@@ -73,7 +73,9 @@ class MusicService {
       final response = await _supabase
           .from('music')
           .select()
-          .or('title.ilike.%$query%,artist.ilike.%$query%,lyrics.ilike.%$query%')
+          .or(
+            'title.ilike.%$query%,artist.ilike.%$query%,lyrics.ilike.%$query%',
+          )
           .eq('is_public', true)
           .order('created_at', ascending: false);
 
@@ -165,11 +167,11 @@ class MusicService {
   Future<List<MusicModel>> fetchSwahiliMusicFromWeb() async {
     try {
       Logger.info('Fetching Swahili music from web sources...');
-      
+
       // Use the dedicated web fetcher service
       final webFetcher = WebMusicFetcher();
       final webMusic = await webFetcher.fetchSwahiliMusicFromWeb();
-      
+
       // Add to database if not already present
       for (final music in webMusic) {
         final existing = await getMusicById(music.id);
@@ -177,8 +179,10 @@ class MusicService {
           await addMusic(music);
         }
       }
-      
-      Logger.info('Successfully fetched and stored ${webMusic.length} songs from web sources');
+
+      Logger.info(
+        'Successfully fetched and stored ${webMusic.length} songs from web sources',
+      );
       return webMusic;
     } catch (e) {
       Logger.error('Error fetching Swahili music from web: $e');
@@ -227,7 +231,9 @@ class MusicService {
 
   List<MusicModel> _filterSampleMusicByLanguage(String language) {
     return MusicModelSample.getAllSampleMusic()
-        .where((music) => music.language.toLowerCase() == language.toLowerCase())
+        .where(
+          (music) => music.language.toLowerCase() == language.toLowerCase(),
+        )
         .toList();
   }
 
@@ -235,8 +241,8 @@ class MusicService {
     final lowerQuery = query.toLowerCase();
     return MusicModelSample.getAllSampleMusic().where((music) {
       return music.title.toLowerCase().contains(lowerQuery) ||
-             music.artist.toLowerCase().contains(lowerQuery) ||
-             music.lyrics.toLowerCase().contains(lowerQuery);
+          music.artist.toLowerCase().contains(lowerQuery) ||
+          music.lyrics.toLowerCase().contains(lowerQuery);
     }).toList();
   }
 

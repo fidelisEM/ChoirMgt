@@ -25,7 +25,11 @@ class FakePaymentService implements PaymentService {
     String currency = 'TZS',
   }) async {
     if (!createSucceeds) return null;
-    payments.add({'id': 'p${payments.length + 1}', 'amount': amount, 'status': 'completed'});
+    payments.add({
+      'id': 'p${payments.length + 1}',
+      'amount': amount,
+      'status': 'completed',
+    });
     return PaymentModel(
       id: 'p${payments.length}',
       choirId: choirId,
@@ -57,19 +61,18 @@ class FakePaymentService implements PaymentService {
     required String choirId,
     DateTime? fromDate,
     DateTime? toDate,
-  }) async =>
-      {'total_payments': payments.length};
+  }) async => {'total_payments': payments.length};
 
   @override
-  Future<List<Map<String, dynamic>>> getOutstandingFees(String choirId) async => [];
+  Future<List<Map<String, dynamic>>> getOutstandingFees(String choirId) async =>
+      [];
 
   @override
   Future<bool> updatePaymentStatus({
     required String paymentId,
     required PaymentStatus status,
     String? notes,
-  }) async =>
-      statusUpdateSucceeds;
+  }) async => statusUpdateSucceeds;
 
   @override
   Future<bool> deletePayment(String paymentId) async {
@@ -92,14 +95,14 @@ void main() {
   });
 
   Future<bool> create() => controller.createPayment(
-        choirId: 'c1',
-        memberId: 'm1',
-        userId: 'u1',
-        amount: 100,
-        type: PaymentType.monthly,
-        method: PaymentMethod.cash,
-        description: 'dues',
-      );
+    choirId: 'c1',
+    memberId: 'm1',
+    userId: 'u1',
+    amount: 100,
+    type: PaymentType.monthly,
+    method: PaymentMethod.cash,
+    description: 'dues',
+  );
 
   test('createPayment reloads the list on success', () async {
     expect(await create(), isTrue);
@@ -167,15 +170,18 @@ void main() {
     expect(controller.paymentStats['total_payments'], 1);
   });
 
-  test('deletePayment keeps the list and reports an error on failure', () async {
-    await create();
-    service.deleteSucceeds = false;
+  test(
+    'deletePayment keeps the list and reports an error on failure',
+    () async {
+      await create();
+      service.deleteSucceeds = false;
 
-    final ok = await controller.deletePayment(paymentId: 'p1', choirId: 'c1');
+      final ok = await controller.deletePayment(paymentId: 'p1', choirId: 'c1');
 
-    expect(ok, isFalse);
-    expect(controller.payments, hasLength(1));
-    expect(controller.errorMessage, isNotNull);
-    expect(controller.isLoading, isFalse);
-  });
+      expect(ok, isFalse);
+      expect(controller.payments, hasLength(1));
+      expect(controller.errorMessage, isNotNull);
+      expect(controller.isLoading, isFalse);
+    },
+  );
 }

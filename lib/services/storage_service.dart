@@ -19,7 +19,9 @@ class StorageService {
       // Check if we're authenticated
       final currentUser = _supabase.auth.currentUser;
       if (currentUser == null) {
-        Logger.warning('StorageService: No authenticated user for storage initialization');
+        Logger.warning(
+          'StorageService: No authenticated user for storage initialization',
+        );
         return false;
       }
 
@@ -32,12 +34,12 @@ class StorageService {
         {
           'name': 'choir-images',
           'public': true,
-          'allowedMimeTypes': ['image/jpeg', 'image/png', 'image/webp']
+          'allowedMimeTypes': ['image/jpeg', 'image/png', 'image/webp'],
         },
         {
           'name': 'avatars',
           'public': true,
-          'allowedMimeTypes': ['image/jpeg', 'image/png', 'image/webp']
+          'allowedMimeTypes': ['image/jpeg', 'image/png', 'image/webp'],
         },
       ];
 
@@ -48,17 +50,23 @@ class StorageService {
         final success = await _ensureBucketExists(bucketConfig);
 
         if (!success) {
-          Logger.warning('StorageService: Failed to ensure bucket exists: $bucketName');
+          Logger.warning(
+            'StorageService: Failed to ensure bucket exists: $bucketName',
+          );
           allBucketsReady = false;
         }
       }
 
       if (allBucketsReady) {
         _storageInitialized = true;
-        Logger.info('StorageService: Storage initialization completed successfully');
+        Logger.info(
+          'StorageService: Storage initialization completed successfully',
+        );
         return true;
       } else {
-        Logger.warning('StorageService: Storage initialization completed with some failures');
+        Logger.warning(
+          'StorageService: Storage initialization completed with some failures',
+        );
         return false;
       }
     } catch (e) {
@@ -86,10 +94,15 @@ class StorageService {
       // Attempt 1: Try creating with current user permissions
       try {
         await _createBucketWithOptions(bucketConfig);
-        Logger.info('StorageService: Successfully created bucket "$bucketName"');
+        Logger.info(
+          'StorageService: Successfully created bucket "$bucketName"',
+        );
         return true;
       } catch (createError) {
-        Logger.error('StorageService: Failed to create bucket "$bucketName"', createError);
+        Logger.error(
+          'StorageService: Failed to create bucket "$bucketName"',
+          createError,
+        );
 
         // Attempt 2: Try with service role if available
         return await _createBucketWithServiceRole(bucketConfig);
@@ -108,16 +121,15 @@ class StorageService {
 
     await _supabase.storage.createBucket(
       bucketName,
-      BucketOptions(
-        public: isPublic,
-        allowedMimeTypes: allowedMimeTypes,
-      ),
+      BucketOptions(public: isPublic, allowedMimeTypes: allowedMimeTypes),
     );
   }
 
   /// Alternative approach: Create bucket using service role
   Future<bool> _createBucketWithServiceRole(Map<String, dynamic> config) async {
-    Logger.debug('StorageService: Attempting bucket creation with service role...');
+    Logger.debug(
+      'StorageService: Attempting bucket creation with service role...',
+    );
 
     try {
       // This approach uses the service role key if available in environment
@@ -137,7 +149,9 @@ class StorageService {
     // Use direct HTTP API call for bucket creation
     // This is a fallback approach - in practice you might need to implement
     // a server-side endpoint or use a service account
-    throw Exception('Direct API bucket creation not implemented - requires service role');
+    throw Exception(
+      'Direct API bucket creation not implemented - requires service role',
+    );
   }
 
   /// Get current user role from the database

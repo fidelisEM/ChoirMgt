@@ -7,7 +7,6 @@ import '../../utils/helpers.dart';
 import '../../widgets/custom_widgets.dart';
 
 class ReportDetailScreen extends StatefulWidget {
-
   const ReportDetailScreen({
     super.key,
     required this.reportType,
@@ -69,9 +68,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -105,11 +102,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   gradient: AppColors.primaryGradient,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  _getReportIcon(),
-                  color: Colors.white,
-                  size: 32,
-                ),
+                child: Icon(_getReportIcon(), color: Colors.white, size: 32),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -181,18 +174,16 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
 
     summary.forEach((key, value) {
       if (value != null) {
-        items.add(_buildSummaryItem(
-          label: _formatSummaryKey(key),
-          value: _formatSummaryValue(key, value),
-        ));
+        items.add(
+          _buildSummaryItem(
+            label: _formatSummaryKey(key),
+            value: _formatSummaryValue(key, value),
+          ),
+        );
       }
     });
 
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      children: items,
-    );
+    return Wrap(spacing: 16, runSpacing: 16, children: items);
   }
 
   Widget _buildSummaryItem({required String label, required String value}) {
@@ -247,20 +238,21 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   Widget _buildMembershipContent() {
     final members = widget.reportData['members'] as List? ?? [];
     final summary = widget.reportData['summary'] as Map<String, dynamic>? ?? {};
-    final growthData = widget.reportData['growth_data'] as Map<String, dynamic>? ?? {};
-    
+    final growthData =
+        widget.reportData['growth_data'] as Map<String, dynamic>? ?? {};
+
     return Column(
       children: [
         // Summary Statistics
         _buildMembershipSummary(summary),
         const SizedBox(height: 20),
-        
+
         // Growth Chart Data
         if (growthData.isNotEmpty) ...[
           _buildGrowthData(growthData),
           const SizedBox(height: 20),
         ],
-        
+
         // Members List
         _buildMembersList(members),
       ],
@@ -300,7 +292,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 color: AppColors.success,
               ),
               _buildStatCard(
-                label: 'Inactive Members', 
+                label: 'Inactive Members',
                 value: '${summary['inactive_members'] ?? 0}',
                 color: AppColors.warning,
               ),
@@ -311,12 +303,18 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               ),
               _buildStatCard(
                 label: 'Total Outstanding',
-                value: CurrencyUtils.formatAmount(summary['total_outstanding'] ?? 0.0, 'TZS'),
+                value: CurrencyUtils.formatAmount(
+                  summary['total_outstanding'] ?? 0.0,
+                  'TZS',
+                ),
                 color: AppColors.error,
               ),
               _buildStatCard(
                 label: 'Total Paid',
-                value: CurrencyUtils.formatAmount(summary['total_paid'] ?? 0.0, 'TZS'),
+                value: CurrencyUtils.formatAmount(
+                  summary['total_paid'] ?? 0.0,
+                  'TZS',
+                ),
                 color: AppColors.success,
               ),
             ],
@@ -336,7 +334,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       decoration: BoxDecoration(
         color: (color ?? AppColors.primary).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: (color ?? AppColors.primary).withValues(alpha: 0.3)),
+        border: Border.all(
+          color: (color ?? AppColors.primary).withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,10 +353,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.gray600,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.gray600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -368,7 +365,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   Widget _buildGrowthData(Map<String, dynamic> growthData) {
     final sortedEntries = growthData.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
-    
+
     return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,9 +380,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           ),
           const SizedBox(height: 16),
           Column(
-            children: sortedEntries.map((entry) => 
-              _buildGrowthItem(entry.key, entry.value)
-            ).toList(),
+            children: sortedEntries
+                .map((entry) => _buildGrowthItem(entry.key, entry.value))
+                .toList(),
           ),
         ],
       ),
@@ -449,7 +446,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           ),
           const SizedBox(height: 16),
           Column(
-            children: members.map((member) => _buildMemberItem(member)).toList(),
+            children: members
+                .map((member) => _buildMemberItem(member))
+                .toList(),
           ),
         ],
       ),
@@ -477,7 +476,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
             backgroundColor: _getStatusColor(status),
             child: Text(
               name.isNotEmpty ? name[0].toUpperCase() : 'U',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -532,22 +534,23 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   }
 
   Widget _buildAttendanceContent() {
-    final memberAttendance = widget.reportData['member_attendance'] as Map<String, dynamic>? ?? {};
+    final memberAttendance =
+        widget.reportData['member_attendance'] as Map<String, dynamic>? ?? {};
     final summary = widget.reportData['summary'] as Map<String, dynamic>? ?? {};
     final sessions = widget.reportData['sessions'] as List? ?? [];
-    
+
     return Column(
       children: [
         // Attendance Summary
         _buildAttendanceSummary(summary),
         const SizedBox(height: 20),
-        
+
         // Sessions List
         if (sessions.isNotEmpty) ...[
           _buildSessionsList(sessions),
           const SizedBox(height: 20),
         ],
-        
+
         // Member Attendance
         _buildMemberAttendance(memberAttendance),
       ],
@@ -555,8 +558,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   }
 
   Widget _buildAttendanceSummary(Map<String, dynamic> summary) {
-    final eventTypeBreakdown = summary['event_type_breakdown'] as Map<String, dynamic>? ?? {};
-    
+    final eventTypeBreakdown =
+        summary['event_type_breakdown'] as Map<String, dynamic>? ?? {};
+
     return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -585,7 +589,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               ),
               _buildStatCard(
                 label: 'Average Attendance',
-                value: '${(summary['avg_attendance_rate'] ?? 0.0).toStringAsFixed(1)}%',
+                value:
+                    '${(summary['avg_attendance_rate'] ?? 0.0).toStringAsFixed(1)}%',
                 color: AppColors.success,
               ),
             ],
@@ -601,8 +606,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            ...eventTypeBreakdown.entries.map((entry) => 
-              _buildEventTypeItem(entry.key, entry.value)
+            ...eventTypeBreakdown.entries.map(
+              (entry) => _buildEventTypeItem(entry.key, entry.value),
             ),
           ],
         ],
@@ -663,7 +668,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           ),
           const SizedBox(height: 16),
           Column(
-            children: sessions.take(10).map((session) => _buildSessionItem(session)).toList(),
+            children: sessions
+                .take(10)
+                .map((session) => _buildSessionItem(session))
+                .toList(),
           ),
         ],
       ),
@@ -674,7 +682,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     final date = session['date'] ?? '';
     final title = session['title'] ?? 'No title';
     final eventType = session['event_type'] ?? 'other';
-    
+
     Color eventColor;
     switch (eventType) {
       case 'rehearsal':
@@ -689,7 +697,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       default:
         eventColor = AppColors.gray600;
     }
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
@@ -756,7 +764,11 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
 
     // Sort members by attendance rate
     final sortedMembers = memberAttendance.entries.toList()
-      ..sort((a, b) => (b.value['attendance_rate'] ?? 0.0).compareTo(a.value['attendance_rate'] ?? 0.0));
+      ..sort(
+        (a, b) => (b.value['attendance_rate'] ?? 0.0).compareTo(
+          a.value['attendance_rate'] ?? 0.0,
+        ),
+      );
 
     return GlassCard(
       child: Column(
@@ -772,7 +784,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           ),
           const SizedBox(height: 16),
           Column(
-            children: sortedMembers.map((entry) => _buildAttendanceItem(entry.value)).toList(),
+            children: sortedMembers
+                .map((entry) => _buildAttendanceItem(entry.value))
+                .toList(),
           ),
         ],
       ),
@@ -841,7 +855,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
 
   Widget _buildFinancialContent() {
     final payments = widget.reportData['payments'] as List? ?? [];
-    
+
     if (payments.isEmpty) {
       return _buildEmptyState('No payment data found');
     }
@@ -895,11 +909,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.payment,
-            color: AppColors.success,
-            size: 20,
-          ),
+          const Icon(Icons.payment, color: AppColors.success, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -950,25 +960,40 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         // Executive Summary Dashboard
         _buildExecutiveSummary(),
         const SizedBox(height: 24),
-        
+
         // Key Performance Indicators
         _buildKPISection(),
         const SizedBox(height: 24),
-        
+
         // Detailed Sections
         if (widget.reportData['membership'] != null) ...[
-          _buildEnhancedOverviewSection('Membership Overview', widget.reportData['membership'], Icons.people, AppColors.primary),
+          _buildEnhancedOverviewSection(
+            'Membership Overview',
+            widget.reportData['membership'],
+            Icons.people,
+            AppColors.primary,
+          ),
           const SizedBox(height: 16),
         ],
         if (widget.reportData['attendance'] != null) ...[
-          _buildEnhancedOverviewSection('Attendance Overview', widget.reportData['attendance'], Icons.check_circle, AppColors.success),
+          _buildEnhancedOverviewSection(
+            'Attendance Overview',
+            widget.reportData['attendance'],
+            Icons.check_circle,
+            AppColors.success,
+          ),
           const SizedBox(height: 16),
         ],
         if (widget.reportData['financial'] != null) ...[
-          _buildEnhancedOverviewSection('Financial Overview', widget.reportData['financial'], Icons.attach_money, AppColors.warning),
+          _buildEnhancedOverviewSection(
+            'Financial Overview',
+            widget.reportData['financial'],
+            Icons.attach_money,
+            AppColors.warning,
+          ),
           const SizedBox(height: 16),
         ],
-        
+
         // Health Score Summary
         _buildChoirHealthScore(),
       ],
@@ -976,10 +1001,14 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   }
 
   Widget _buildExecutiveSummary() {
-    final membershipData = widget.reportData['membership'] as Map<String, dynamic>? ?? {};
-    final attendanceData = widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
-    final financialData = widget.reportData['financial'] as Map<String, dynamic>? ?? {};
-    final choirInfo = widget.reportData['choir_info'] as Map<String, dynamic>? ?? {};
+    final membershipData =
+        widget.reportData['membership'] as Map<String, dynamic>? ?? {};
+    final attendanceData =
+        widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
+    final financialData =
+        widget.reportData['financial'] as Map<String, dynamic>? ?? {};
+    final choirInfo =
+        widget.reportData['choir_info'] as Map<String, dynamic>? ?? {};
 
     return GlassCard(
       child: Column(
@@ -1014,10 +1043,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ),
                     const Text(
                       'Executive Summary Dashboard',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.gray600,
-                      ),
+                      style: TextStyle(fontSize: 14, color: AppColors.gray600),
                     ),
                   ],
                 ),
@@ -1048,7 +1074,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               Expanded(
                 child: _buildSummaryMetric(
                   'Total Revenue',
-                  CurrencyUtils.formatAmount(financialData['total_payments'] ?? 0.0, 'TZS'),
+                  CurrencyUtils.formatAmount(
+                    financialData['total_payments'] ?? 0.0,
+                    'TZS',
+                  ),
                   AppColors.warning,
                   Icons.attach_money,
                 ),
@@ -1061,19 +1090,26 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   }
 
   Widget _buildKPISection() {
-    final membershipData = widget.reportData['membership'] as Map<String, dynamic>? ?? {};
-    final attendanceData = widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
-    final financialData = widget.reportData['financial'] as Map<String, dynamic>? ?? {};
+    final membershipData =
+        widget.reportData['membership'] as Map<String, dynamic>? ?? {};
+    final attendanceData =
+        widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
+    final financialData =
+        widget.reportData['financial'] as Map<String, dynamic>? ?? {};
 
     // Calculate health metrics
     final totalMembers = membershipData['total_members'] ?? 0;
     final activeMembers = membershipData['active_members'] ?? 0;
-    final memberEngagement = totalMembers > 0 ? (activeMembers / totalMembers * 100) : 0.0;
-    
+    final memberEngagement = totalMembers > 0
+        ? (activeMembers / totalMembers * 100)
+        : 0.0;
+
     final avgAttendance = attendanceData['avg_attendance_rate'] ?? 0.0;
     final totalOutstanding = financialData['total_outstanding'] ?? 0.0;
     final totalPaid = financialData['total_payments'] ?? 0.0;
-    final paymentRate = (totalPaid + totalOutstanding) > 0 ? (totalPaid / (totalPaid + totalOutstanding) * 100) : 0.0;
+    final paymentRate = (totalPaid + totalOutstanding) > 0
+        ? (totalPaid / (totalPaid + totalOutstanding) * 100)
+        : 0.0;
 
     return GlassCard(
       child: Column(
@@ -1099,25 +1135,41 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               _buildKPICard(
                 'Member Engagement',
                 '${memberEngagement.toStringAsFixed(1)}%',
-                memberEngagement >= 80 ? AppColors.success : memberEngagement >= 60 ? AppColors.warning : AppColors.error,
+                memberEngagement >= 80
+                    ? AppColors.success
+                    : memberEngagement >= 60
+                    ? AppColors.warning
+                    : AppColors.error,
                 Icons.people_outline,
               ),
               _buildKPICard(
                 'Attendance Rate',
                 '${avgAttendance.toStringAsFixed(1)}%',
-                avgAttendance >= 80 ? AppColors.success : avgAttendance >= 60 ? AppColors.warning : AppColors.error,
+                avgAttendance >= 80
+                    ? AppColors.success
+                    : avgAttendance >= 60
+                    ? AppColors.warning
+                    : AppColors.error,
                 Icons.check_circle_outline,
               ),
               _buildKPICard(
                 'Payment Rate',
                 '${paymentRate.toStringAsFixed(1)}%',
-                paymentRate >= 80 ? AppColors.success : paymentRate >= 60 ? AppColors.warning : AppColors.error,
+                paymentRate >= 80
+                    ? AppColors.success
+                    : paymentRate >= 60
+                    ? AppColors.warning
+                    : AppColors.error,
                 Icons.payment,
               ),
               _buildKPICard(
                 'Outstanding Amount',
                 CurrencyUtils.formatAmount(totalOutstanding, 'TZS'),
-                totalOutstanding < 1000 ? AppColors.success : totalOutstanding < 5000 ? AppColors.warning : AppColors.error,
+                totalOutstanding < 1000
+                    ? AppColors.success
+                    : totalOutstanding < 5000
+                    ? AppColors.warning
+                    : AppColors.error,
                 Icons.money_off,
               ),
             ],
@@ -1127,7 +1179,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 
-  Widget _buildSummaryMetric(String label, String value, Color color, IconData icon) {
+  Widget _buildSummaryMetric(
+    String label,
+    String value,
+    Color color,
+    IconData icon,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1152,10 +1209,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.gray600,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.gray600),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -1172,10 +1226,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            color.withValues(alpha: 0.1),
-            color.withValues(alpha: 0.05),
-          ],
+          colors: [color.withValues(alpha: 0.1), color.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.3)),
@@ -1217,10 +1268,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.gray600,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.gray600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -1229,7 +1277,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 
-  Widget _buildEnhancedOverviewSection(String title, Map<String, dynamic> data, IconData icon, Color color) {
+  Widget _buildEnhancedOverviewSection(
+    String title,
+    Map<String, dynamic> data,
+    IconData icon,
+    Color color,
+  ) {
     return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1263,26 +1316,34 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   }
 
   Widget _buildChoirHealthScore() {
-    final membershipData = widget.reportData['membership'] as Map<String, dynamic>? ?? {};
-    final attendanceData = widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
-    final financialData = widget.reportData['financial'] as Map<String, dynamic>? ?? {};
+    final membershipData =
+        widget.reportData['membership'] as Map<String, dynamic>? ?? {};
+    final attendanceData =
+        widget.reportData['attendance'] as Map<String, dynamic>? ?? {};
+    final financialData =
+        widget.reportData['financial'] as Map<String, dynamic>? ?? {};
 
     // Calculate overall health score (0-100)
     final totalMembers = membershipData['total_members'] ?? 0;
     final activeMembers = membershipData['active_members'] ?? 0;
-    final memberScore = totalMembers > 0 ? (activeMembers / totalMembers * 30) : 0.0;
-    
-    final avgAttendance = attendanceData['avg_attendance_rate'] ?? 0.0;
-    final attendanceScore = avgAttendance * 0.4; // 40% weight
-    
-    final totalPaid = financialData['total_payments'] ?? 0.0;
-    final totalOutstanding = financialData['total_outstanding'] ?? 0.0;
-    final financialScore = (totalPaid + totalOutstanding) > 0 
-        ? (totalPaid / (totalPaid + totalOutstanding) * 30) 
+    final memberScore = totalMembers > 0
+        ? (activeMembers / totalMembers * 30)
         : 0.0;
 
-    final overallScore = (memberScore + attendanceScore + financialScore).clamp(0.0, 100.0);
-    
+    final avgAttendance = attendanceData['avg_attendance_rate'] ?? 0.0;
+    final attendanceScore = avgAttendance * 0.4; // 40% weight
+
+    final totalPaid = financialData['total_payments'] ?? 0.0;
+    final totalOutstanding = financialData['total_outstanding'] ?? 0.0;
+    final financialScore = (totalPaid + totalOutstanding) > 0
+        ? (totalPaid / (totalPaid + totalOutstanding) * 30)
+        : 0.0;
+
+    final overallScore = (memberScore + attendanceScore + financialScore).clamp(
+      0.0,
+      100.0,
+    );
+
     Color scoreColor;
     String scoreLabel;
     if (overallScore >= 85) {
@@ -1376,22 +1437,20 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: percentage >= 80 ? AppColors.success : percentage >= 60 ? AppColors.warning : AppColors.error,
+            color: percentage >= 80
+                ? AppColors.success
+                : percentage >= 60
+                ? AppColors.warning
+                : AppColors.error,
           ),
         ),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.gray600,
-          ),
+          style: const TextStyle(fontSize: 12, color: AppColors.gray600),
         ),
         Text(
           '($weight%)',
-          style: const TextStyle(
-            fontSize: 10,
-            color: AppColors.gray500,
-          ),
+          style: const TextStyle(fontSize: 10, color: AppColors.gray500),
         ),
       ],
     );
@@ -1403,16 +1462,11 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     return 'LOW';
   }
 
-
   Widget _buildDefaultContent() {
     return const GlassCard(
       child: Column(
         children: [
-          Icon(
-            Icons.insert_chart,
-            size: 64,
-            color: AppColors.gray400,
-          ),
+          Icon(Icons.insert_chart, size: 64, color: AppColors.gray400),
           SizedBox(height: 16),
           Text(
             'Report Generated Successfully',
@@ -1425,10 +1479,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           SizedBox(height: 8),
           Text(
             'This report contains data that can be exported to various formats.',
-            style: TextStyle(
-              color: AppColors.gray600,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppColors.gray600, fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ],
@@ -1440,18 +1491,11 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     return GlassCard(
       child: Column(
         children: [
-          const Icon(
-            Icons.inbox_outlined,
-            size: 64,
-            color: AppColors.gray400,
-          ),
+          const Icon(Icons.inbox_outlined, size: 64, color: AppColors.gray400),
           const SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.gray600,
-            ),
+            style: const TextStyle(fontSize: 16, color: AppColors.gray600),
           ),
         ],
       ),
@@ -1486,7 +1530,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       } else {
         Helpers.showErrorSnackbar('Failed to export report');
       }
-
     } catch (e) {
       Helpers.showErrorSnackbar('Export failed: $e');
     } finally {
@@ -1535,7 +1578,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   Future<String?> _exportToCSV() async {
     try {
       final exportService = ExportService();
-      return await exportService.exportReportToCSV(widget.reportData, widget.reportType.toLowerCase());
+      return await exportService.exportReportToCSV(
+        widget.reportData,
+        widget.reportType.toLowerCase(),
+      );
     } catch (e) {
       return null;
     }
@@ -1567,21 +1613,27 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     } else if (periodFrom != null) {
       return 'From ${Helpers.formatDate(DateTime.parse(periodFrom))}';
     }
-    
+
     return 'All time';
   }
 
   String _formatSummaryKey(String key) {
-    return key.split('_').map((word) {
-      return word[0].toUpperCase() + word.substring(1);
-    }).join(' ');
+    return key
+        .split('_')
+        .map((word) {
+          return word[0].toUpperCase() + word.substring(1);
+        })
+        .join(' ');
   }
 
   String _formatSummaryValue(String key, dynamic value) {
     if (value is double) {
       if (key.contains('rate') || key.contains('percentage')) {
         return '${value.toStringAsFixed(1)}%';
-      } else if (key.contains('amount') || key.contains('fee') || key.contains('paid') || key.contains('outstanding')) {
+      } else if (key.contains('amount') ||
+          key.contains('fee') ||
+          key.contains('paid') ||
+          key.contains('outstanding')) {
         return CurrencyUtils.formatAmount(value, 'TZS');
       } else {
         return value.toStringAsFixed(1);

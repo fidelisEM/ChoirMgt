@@ -21,7 +21,8 @@ class AttendanceScreen extends StatefulWidget {
   State<AttendanceScreen> createState() => _AttendanceScreenState();
 }
 
-class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBindingObserver {
+class _AttendanceScreenState extends State<AttendanceScreen>
+    with WidgetsBindingObserver {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -35,7 +36,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
 
   Future<void> _initializeControllers() async {
     Logger.debug('AttendanceScreen - initState called');
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     final authController = Provider.of<AuthController>(context, listen: false);
 
     // Initialize choir controller to restore persisted selection
@@ -48,7 +52,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
 
     // If a choir is selected (either restored or already selected), load attendance data
     if (choirController.selectedChoir != null) {
-      Logger.debug('AttendanceScreen - Found selected choir: ${choirController.selectedChoir!.name}');
+      Logger.debug(
+        'AttendanceScreen - Found selected choir: ${choirController.selectedChoir!.name}',
+      );
       _loadAttendanceData();
     } else {
       Logger.debug('AttendanceScreen - No choir selected');
@@ -74,17 +80,27 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
   }
 
   void _loadAttendanceData() async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
 
     if (choirController.selectedChoir != null) {
-      Logger.debug('AttendanceScreen - Loading attendance data for choir: ${choirController.selectedChoir!.name}');
+      Logger.debug(
+        'AttendanceScreen - Loading attendance data for choir: ${choirController.selectedChoir!.name}',
+      );
       await attendanceController.loadAttendanceSessions(
         choirId: choirController.selectedChoir!.id,
       );
       Logger.debug('AttendanceScreen - Attendance data loading completed');
     } else {
-      Logger.debug('AttendanceScreen - No choir selected, skipping attendance data load');
+      Logger.debug(
+        'AttendanceScreen - No choir selected, skipping attendance data load',
+      );
     }
   }
 
@@ -93,7 +109,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
     return Scaffold(
       backgroundColor: MusicLibraryColors.background,
       body: Container(
-        decoration: const BoxDecoration(gradient: MusicLibraryColors.backgroundGradient),
+        decoration: const BoxDecoration(
+          gradient: MusicLibraryColors.backgroundGradient,
+        ),
         child: Consumer3<AttendanceController, ChoirController, AuthController>(
           builder: (context, attendanceController, choirController, authController, child) {
             // Show choir selection if no choir is selected
@@ -107,7 +125,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: MusicLibraryColors.primary.withValues(alpha: 0.08),
+                          color: MusicLibraryColors.primary.withValues(
+                            alpha: 0.08,
+                          ),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: const Icon(
@@ -117,12 +137,18 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Text(context.tr('attSelectChoir'), style: mlText(size: 22, weight: FontWeight.w700)),
+                      Text(
+                        context.tr('attSelectChoir'),
+                        style: mlText(size: 22, weight: FontWeight.w700),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         context.tr('attSelectChoirSubtitle'),
                         textAlign: TextAlign.center,
-                        style: mlText(size: 14, color: MusicLibraryColors.textSecondary),
+                        style: mlText(
+                          size: 14,
+                          color: MusicLibraryColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(height: 32),
 
@@ -135,19 +161,32 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                             style: mlText(size: 14),
                             decoration: InputDecoration(
                               labelText: context.tr('attSelectChoirLabel'),
-                              labelStyle: mlText(size: 13, color: MusicLibraryColors.textSecondary),
-                              prefixIcon: const Icon(Icons.group, color: MusicLibraryColors.textSecondary),
+                              labelStyle: mlText(
+                                size: 13,
+                                color: MusicLibraryColors.textSecondary,
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.group,
+                                color: MusicLibraryColors.textSecondary,
+                              ),
                               filled: true,
                               fillColor: MusicLibraryColors.card,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(color: MusicLibraryColors.border),
+                                borderSide: const BorderSide(
+                                  color: MusicLibraryColors.border,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(color: MusicLibraryColors.border),
+                                borderSide: const BorderSide(
+                                  color: MusicLibraryColors.border,
+                                ),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                             ),
                             hint: Text(context.tr('attChooseChoirHint')),
                             isExpanded: true,
@@ -160,14 +199,21 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                                   children: [
                                     Text(
                                       choir.name,
-                                      style: mlText(size: 14, weight: FontWeight.w600),
+                                      style: mlText(
+                                        size: 14,
+                                        weight: FontWeight.w600,
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
                                     if (choir.description.isNotEmpty)
                                       Text(
                                         choir.description,
-                                        style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                                        style: mlText(
+                                          size: 12,
+                                          color:
+                                              MusicLibraryColors.textSecondary,
+                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -184,7 +230,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Text(context.tr('or'), style: mlText(size: 13, color: MusicLibraryColors.textSecondary)),
+                        Text(
+                          context.tr('or'),
+                          style: mlText(
+                            size: 13,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
+                        ),
                         const SizedBox(height: 16),
                       ],
 
@@ -197,30 +249,44 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                         label: Text(context.tr('attBrowseAllChoirs')),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: MusicLibraryColors.primary,
-                          side: const BorderSide(color: MusicLibraryColors.border),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          side: const BorderSide(
+                            color: MusicLibraryColors.border,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
 
-                      if (choirController.choirs.isEmpty && !choirController.isLoading) ...[
+                      if (choirController.choirs.isEmpty &&
+                          !choirController.isLoading) ...[
                         const SizedBox(height: 16),
                         Text(
                           context.tr('attNoChoirsFound'),
                           textAlign: TextAlign.center,
-                          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                          style: mlText(
+                            size: 13,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
                         ),
                       ],
 
                       if (choirController.isLoading) ...[
                         const SizedBox(height: 16),
-                        const CircularProgressIndicator(color: MusicLibraryColors.primary),
+                        const CircularProgressIndicator(
+                          color: MusicLibraryColors.primary,
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           context.tr('attLoadingChoirs'),
-                          style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                          style: mlText(
+                            size: 13,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
                         ),
                       ],
                     ],
@@ -233,10 +299,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
               children: [
                 // Header
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 20,
+                  ),
                   decoration: const BoxDecoration(
                     color: MusicLibraryColors.card,
-                    border: Border(bottom: BorderSide(color: MusicLibraryColors.border)),
+                    border: Border(
+                      bottom: BorderSide(color: MusicLibraryColors.border),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,12 +318,21 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(context.tr('attTrackingTitle'), style: mlText(size: 20, weight: FontWeight.w700)),
+                                Text(
+                                  context.tr('attTrackingTitle'),
+                                  style: mlText(
+                                    size: 20,
+                                    weight: FontWeight.w700,
+                                  ),
+                                ),
                                 Text(
                                   attendanceController.sessions.isEmpty
-                                    ? '${context.tr('attNoSessionsYetFor')} ${choirController.selectedChoir!.name}. ${context.tr('attStartFirstAttendance')}'
-                                    : '${context.tr('attTrackManageFor')} ${choirController.selectedChoir!.name}',
-                                  style: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                                      ? '${context.tr('attNoSessionsYetFor')} ${choirController.selectedChoir!.name}. ${context.tr('attStartFirstAttendance')}'
+                                      : '${context.tr('attTrackManageFor')} ${choirController.selectedChoir!.name}',
+                                  style: mlText(
+                                    size: 13,
+                                    color: MusicLibraryColors.textSecondary,
+                                  ),
                                 ),
                               ],
                             ),
@@ -270,7 +350,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                                 icon: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: MusicLibraryColors.success.withValues(alpha: 0.08),
+                                    color: MusicLibraryColors.success
+                                        .withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -286,7 +367,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                                 icon: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: MusicLibraryColors.primary.withValues(alpha: 0.08),
+                                    color: MusicLibraryColors.primary
+                                        .withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -300,15 +382,23 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                                   PopupMenuItem<String>(
                                     enabled: false,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           context.tr('attCurrentChoirLabel'),
-                                          style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                                          style: mlText(
+                                            size: 12,
+                                            color: MusicLibraryColors
+                                                .textSecondary,
+                                          ),
                                         ),
                                         Text(
                                           choirController.selectedChoir!.name,
-                                          style: mlText(size: 14, weight: FontWeight.w700),
+                                          style: mlText(
+                                            size: 14,
+                                            weight: FontWeight.w700,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -362,27 +452,45 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                           Expanded(
                             child: _buildStatCard(
                               context.tr('attOverallRate'),
-                              attendanceController.attendanceRecords.isEmpty ? context.tr('attNoData') : '${attendanceController.getOverallAttendanceRate().toStringAsFixed(1)}%',
+                              attendanceController.attendanceRecords.isEmpty
+                                  ? context.tr('attNoData')
+                                  : '${attendanceController.getOverallAttendanceRate().toStringAsFixed(1)}%',
                               Icons.trending_up,
-                              attendanceController.attendanceRecords.isEmpty ? MusicLibraryColors.textSecondary : MusicLibraryColors.success,
+                              attendanceController.attendanceRecords.isEmpty
+                                  ? MusicLibraryColors.textSecondary
+                                  : MusicLibraryColors.success,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: _buildStatCard(
                               context.tr('thisMonth'),
-                              _getThisMonthRate(attendanceController) == 0.0 && attendanceController.attendanceRecords.isEmpty ? context.tr('attNoData') : '${_getThisMonthRate(attendanceController).toStringAsFixed(1)}%',
+                              _getThisMonthRate(attendanceController) == 0.0 &&
+                                      attendanceController
+                                          .attendanceRecords
+                                          .isEmpty
+                                  ? context.tr('attNoData')
+                                  : '${_getThisMonthRate(attendanceController).toStringAsFixed(1)}%',
                               Icons.today,
-                              _getThisMonthRate(attendanceController) == 0.0 && attendanceController.attendanceRecords.isEmpty ? MusicLibraryColors.textSecondary : MusicLibraryColors.primary,
+                              _getThisMonthRate(attendanceController) == 0.0 &&
+                                      attendanceController
+                                          .attendanceRecords
+                                          .isEmpty
+                                  ? MusicLibraryColors.textSecondary
+                                  : MusicLibraryColors.primary,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: _buildStatCard(
                               context.tr('attSessionsLabel'),
-                              attendanceController.sessions.isEmpty ? '0' : '${attendanceController.sessions.length}',
+                              attendanceController.sessions.isEmpty
+                                  ? '0'
+                                  : '${attendanceController.sessions.length}',
                               Icons.event,
-                              attendanceController.sessions.isEmpty ? MusicLibraryColors.textSecondary : MusicLibraryColors.warning,
+                              attendanceController.sessions.isEmpty
+                                  ? MusicLibraryColors.textSecondary
+                                  : MusicLibraryColors.warning,
                             ),
                           ),
                         ],
@@ -394,7 +502,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                 // Action Buttons
                 if (authController.isChoirLeader) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
@@ -409,14 +520,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                               backgroundColor: MusicLibraryColors.primary,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () => Get.to(() => const AttendanceExportScreen()),
+                            onPressed: () =>
+                                Get.to(() => const AttendanceExportScreen()),
                             icon: const Icon(Icons.file_download, size: 18),
                             label: Text(
                               context.tr('attExport'),
@@ -424,9 +538,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                             ),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: MusicLibraryColors.textPrimary,
-                              side: const BorderSide(color: MusicLibraryColors.border),
+                              side: const BorderSide(
+                                color: MusicLibraryColors.border,
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
@@ -449,7 +567,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.search, size: 18, color: MusicLibraryColors.textSecondary),
+                          const Icon(
+                            Icons.search,
+                            size: 18,
+                            color: MusicLibraryColors.textSecondary,
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
@@ -457,7 +579,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                               style: mlText(size: 14),
                               decoration: InputDecoration(
                                 hintText: context.tr('attSearchSessionsHint'),
-                                hintStyle: mlText(size: 14, color: MusicLibraryColors.textSecondary),
+                                hintStyle: mlText(
+                                  size: 14,
+                                  color: MusicLibraryColors.textSecondary,
+                                ),
                                 border: InputBorder.none,
                                 isDense: true,
                               ),
@@ -474,10 +599,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                 // Attendance Sessions List
                 Expanded(
                   child: attendanceController.isLoading
-                      ? const Center(child: CircularProgressIndicator(color: MusicLibraryColors.primary))
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: MusicLibraryColors.primary,
+                          ),
+                        )
                       : attendanceController.sessions.isEmpty
-                          ? _buildEmptyState(authController.isChoirLeader)
-                          : _buildFilteredSessionsList(attendanceController),
+                      ? _buildEmptyState(authController.isChoirLeader)
+                      : _buildFilteredSessionsList(attendanceController),
                 ),
               ],
             );
@@ -487,7 +616,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -530,7 +664,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
             color: MusicLibraryColors.textSecondary,
           ),
           const SizedBox(height: 16),
-          Text(context.tr('attNoSessionsTitle'), style: mlText(size: 16, weight: FontWeight.w600)),
+          Text(
+            context.tr('attNoSessionsTitle'),
+            style: mlText(size: 16, weight: FontWeight.w600),
+          ),
           const SizedBox(height: 8),
           Text(
             isLeader
@@ -551,8 +688,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
               style: ElevatedButton.styleFrom(
                 backgroundColor: MusicLibraryColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -567,8 +709,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
 
       final query = _searchController.text.toLowerCase();
       return session.title.toLowerCase().contains(query) ||
-             session.eventType.toString().split('.').last.toLowerCase().contains(query) ||
-             _formatDate(session.date).contains(query);
+          session.eventType
+              .toString()
+              .split('.')
+              .last
+              .toLowerCase()
+              .contains(query) ||
+          _formatDate(session.date).contains(query);
     }).toList();
 
     if (filteredSessions.isEmpty && _searchController.text.isNotEmpty) {
@@ -582,7 +729,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
               color: MusicLibraryColors.textSecondary,
             ),
             const SizedBox(height: 16),
-            Text(context.tr('attNoMatchingSessions'), style: mlText(size: 16, weight: FontWeight.w600)),
+            Text(
+              context.tr('attNoMatchingSessions'),
+              style: mlText(size: 16, weight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             Text(
               context.tr('attTryAdjustingSearch'),
@@ -608,12 +758,16 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
           child: Material(
             color: Colors.transparent,
             child: ListTile(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               leading: Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: _getSessionStatusColor(session.isActive).withValues(alpha: 0.08),
+                  color: _getSessionStatusColor(
+                    session.isActive,
+                  ).withValues(alpha: 0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -622,39 +776,70 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
                   size: 20,
                 ),
               ),
-              title: Text(session.title, style: mlText(size: 14, weight: FontWeight.w600)),
+              title: Text(
+                session.title,
+                style: mlText(size: 14, weight: FontWeight.w600),
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '${_formatDate(session.date)} at ${_formatTime(session.startTime)}',
-                    style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                    style: mlText(
+                      size: 12,
+                      color: MusicLibraryColors.textSecondary,
+                    ),
                   ),
                   Text(
                     '${session.eventType.name} ${context.tr('attSessionSuffix')}',
-                    style: mlText(size: 12, color: MusicLibraryColors.textSecondary),
+                    style: mlText(
+                      size: 12,
+                      color: MusicLibraryColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
               trailing: session.isActive
                   ? Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: MusicLibraryColors.success.withValues(alpha: 0.08),
+                        color: MusicLibraryColors.success.withValues(
+                          alpha: 0.08,
+                        ),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         context.tr('active').toUpperCase(),
-                        style: mlText(size: 10, weight: FontWeight.bold, color: MusicLibraryColors.success),
+                        style: mlText(
+                          size: 10,
+                          weight: FontWeight.bold,
+                          color: MusicLibraryColors.success,
+                        ),
                       ),
                     )
                   : PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert, color: MusicLibraryColors.textSecondary),
-                      onSelected: (value) => _handleSessionAction(session, value),
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: MusicLibraryColors.textSecondary,
+                      ),
+                      onSelected: (value) =>
+                          _handleSessionAction(session, value),
                       itemBuilder: (context) => [
-                        PopupMenuItem(value: 'view', child: Text(context.tr('attViewDetails'))),
-                        PopupMenuItem(value: 'edit', child: Text(context.tr('edit'))),
-                        PopupMenuItem(value: 'delete', child: Text(context.tr('delete'))),
+                        PopupMenuItem(
+                          value: 'view',
+                          child: Text(context.tr('attViewDetails')),
+                        ),
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text(context.tr('edit')),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text(context.tr('delete')),
+                        ),
                       ],
                     ),
               isThreeLine: true,
@@ -692,9 +877,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
         _viewSessionDetails(session);
         break;
       case 'edit':
-        Get.to(() => TakeAttendanceScreen(
-          existingSession: session,
-        ));
+        Get.to(() => TakeAttendanceScreen(existingSession: session));
         break;
       case 'delete':
         _showDeleteConfirmation(session);
@@ -707,14 +890,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
       AlertDialog(
         backgroundColor: MusicLibraryColors.card,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        title: Text(context.tr('attDeleteSessionTitle'), style: mlText(size: 17, weight: FontWeight.w700)),
+        title: Text(
+          context.tr('attDeleteSessionTitle'),
+          style: mlText(size: 17, weight: FontWeight.w700),
+        ),
         content: Text(
           '${context.tr('attDeleteSessionConfirmPrefix')} ${session.title}?',
           style: mlText(size: 14),
         ),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: MusicLibraryColors.textSecondary),
+            style: TextButton.styleFrom(
+              foregroundColor: MusicLibraryColors.textSecondary,
+            ),
             onPressed: () => Get.back(),
             child: Text(context.tr('cancel')),
           ),
@@ -725,9 +913,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: MusicLibraryColors.danger,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: Text(context.tr('delete'), style: const TextStyle(color: Colors.white)),
+            child: Text(
+              context.tr('delete'),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -735,14 +928,20 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
   }
 
   void _deleteSession(session) async {
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
 
     if (choirController.selectedChoir == null) return;
 
     final success = await attendanceController.deleteAttendanceSession(
       session.id,
-      choirController.selectedChoir!.id
+      choirController.selectedChoir!.id,
     );
 
     if (!mounted) return;
@@ -775,9 +974,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> with WidgetsBinding
 
     if (thisMonthRecords.isEmpty) return 0.0;
 
-    final presentCount = thisMonthRecords.where(
-      (record) => record.status == AttendanceStatus.present || record.status == AttendanceStatus.late
-    ).length;
+    final presentCount = thisMonthRecords
+        .where(
+          (record) =>
+              record.status == AttendanceStatus.present ||
+              record.status == AttendanceStatus.late,
+        )
+        .length;
 
     return (presentCount / thisMonthRecords.length) * 100;
   }

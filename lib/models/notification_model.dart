@@ -1,24 +1,18 @@
-enum NotificationType { 
-  announcement, 
-  event, 
-  payment, 
-  attendance, 
+enum NotificationType {
+  announcement,
+  event,
+  payment,
+  attendance,
   system,
   attendanceReminder,
   paymentReminder,
   welcome,
-  paymentConfirmation
+  paymentConfirmation,
 }
 
-enum NotificationPriority { 
-  low, 
-  medium, 
-  high, 
-  urgent 
-}
+enum NotificationPriority { low, medium, high, urgent }
 
 class NotificationModel {
-
   NotificationModel({
     required this.id,
     required this.title,
@@ -49,9 +43,13 @@ class NotificationModel {
       recipientId: json['recipientId'],
       choirId: json['choirId'],
       isRead: json['isRead'] ?? false,
-      createdAt: DateTime.parse(json['created_at'] ?? json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ??
+            json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
       readAt: (json['read_at'] ?? json['readAt']) != null
-          ? DateTime.parse(json['read_at'] ?? json['readAt']) 
+          ? DateTime.parse(json['read_at'] ?? json['readAt'])
           : null,
       data: Map<String, dynamic>.from(json['data'] ?? {}),
     );

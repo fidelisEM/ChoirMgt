@@ -24,7 +24,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _feeDefinitions = await _feeService.getChoirFeeDefinitions(choirId);
       _setLoading(false);
     } catch (e) {
@@ -122,7 +122,7 @@ class FeeController extends ChangeNotifier {
       _clearError();
 
       final success = await _feeService.deleteFeeDefinition(feeId);
-      
+
       if (success) {
         _feeDefinitions.removeWhere((fee) => fee.id == feeId);
         _memberFees.removeWhere((fee) => fee.feeDefinitionId == feeId);
@@ -145,7 +145,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _memberFees = await _feeService.getMemberFees(memberId);
       _setLoading(false);
     } catch (e) {
@@ -158,7 +158,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _memberFees = await _feeService.getChoirFees(choirId);
       _statistics = await _feeService.getChoirFeeStatistics(choirId);
       _setLoading(false);
@@ -172,7 +172,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _memberFees = await _feeService.getOverdueFees(choirId);
       _setLoading(false);
     } catch (e) {
@@ -212,7 +212,9 @@ class FeeController extends ChangeNotifier {
       if (feeIndex != -1) {
         final updatedFee = _memberFees[feeIndex].copyWith(
           amountPaid: _memberFees[feeIndex].amountPaid + amount,
-          paidAt: _memberFees[feeIndex].isPaid ? (paidAt ?? DateTime.now()) : null,
+          paidAt: _memberFees[feeIndex].isPaid
+              ? (paidAt ?? DateTime.now())
+              : null,
         );
         _memberFees[feeIndex] = updatedFee;
       }
@@ -230,7 +232,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _feeService.getMemberPayments(memberId);
       _setLoading(false);
     } catch (e) {
@@ -243,7 +245,7 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _feeService.getChoirPayments(choirId);
       _setLoading(false);
     } catch (e) {
@@ -257,9 +259,9 @@ class FeeController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       await _feeService.generateRecurringFees(choirId);
-      
+
       // Reload fees and statistics
       await loadChoirFees(choirId);
       _setLoading(false);
@@ -285,33 +287,51 @@ class FeeController extends ChangeNotifier {
   }
 
   List<MemberFeeModel> getFeesByType(String feeDefinitionId) {
-    return _memberFees.where((fee) => fee.feeDefinitionId == feeDefinitionId).toList();
+    return _memberFees
+        .where((fee) => fee.feeDefinitionId == feeDefinitionId)
+        .toList();
   }
 
   double getTotalOutstanding(String? memberId) {
     final relevantFees = memberId != null
         ? _memberFees.where((fee) => fee.memberId == memberId)
         : _memberFees;
-    
-    return relevantFees.fold<double>(0, (sum, fee) => sum + fee.outstandingAmount);
+
+    return relevantFees.fold<double>(
+      0,
+      (sum, fee) => sum + fee.outstandingAmount,
+    );
   }
 
-  double getTotalPaid(String? memberId, {DateTime? fromDate, DateTime? toDate}) {
+  double getTotalPaid(
+    String? memberId, {
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) {
     var relevantPayments = memberId != null
         ? _payments.where((payment) => payment.memberId == memberId)
         : _payments;
 
     if (fromDate != null) {
-      relevantPayments = relevantPayments.where((payment) => 
-          payment.paidAt.isAfter(fromDate) || payment.paidAt.isAtSameMomentAs(fromDate));
+      relevantPayments = relevantPayments.where(
+        (payment) =>
+            payment.paidAt.isAfter(fromDate) ||
+            payment.paidAt.isAtSameMomentAs(fromDate),
+      );
     }
 
     if (toDate != null) {
-      relevantPayments = relevantPayments.where((payment) => 
-          payment.paidAt.isBefore(toDate) || payment.paidAt.isAtSameMomentAs(toDate));
+      relevantPayments = relevantPayments.where(
+        (payment) =>
+            payment.paidAt.isBefore(toDate) ||
+            payment.paidAt.isAtSameMomentAs(toDate),
+      );
     }
 
-    return relevantPayments.fold<double>(0, (sum, payment) => sum + payment.amount);
+    return relevantPayments.fold<double>(
+      0,
+      (sum, payment) => sum + payment.amount,
+    );
   }
 
   FeeDefinitionModel? getFeeDefinitionById(String feeDefinitionId) {

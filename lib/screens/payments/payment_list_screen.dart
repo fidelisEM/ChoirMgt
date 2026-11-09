@@ -28,9 +28,15 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   }
 
   Future<void> _loadPayments() async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    final paymentController = Provider.of<PaymentController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+    final paymentController = Provider.of<PaymentController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir != null) {
       await paymentController.loadChoirPayments(
         choirId: choirController.selectedChoir!.id,
@@ -44,7 +50,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
       body: Consumer3<AuthController, ChoirController, PaymentController>(
         builder: (context, authController, choirController, paymentController, child) {
           final selectedChoir = choirController.selectedChoir;
-          
+
           if (selectedChoir == null) {
             return const Center(
               child: Column(
@@ -85,15 +91,14 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                                 children: [
                                   Text(
                                     'Payment Management',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     'Manage payments for ${selectedChoir.name}',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                    ),
+                                    style: TextStyle(color: Colors.grey[600]),
                                   ),
                                 ],
                               ),
@@ -107,7 +112,11 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                             Expanded(
                               child: _buildStatCard(
                                 'Total Collected',
-                                CurrencyUtils.formatKSH(paymentController.paymentStats['completed_amount'] ?? 0),
+                                CurrencyUtils.formatKSH(
+                                  paymentController
+                                          .paymentStats['completed_amount'] ??
+                                      0,
+                                ),
                                 Icons.payments,
                                 Colors.green,
                               ),
@@ -116,7 +125,9 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                             Expanded(
                               child: _buildStatCard(
                                 'Outstanding',
-                                CurrencyUtils.formatKSH(paymentController.getTotalOutstandingFees()),
+                                CurrencyUtils.formatKSH(
+                                  paymentController.getTotalOutstandingFees(),
+                                ),
                                 Icons.pending,
                                 Colors.orange,
                               ),
@@ -125,7 +136,11 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                             Expanded(
                               child: _buildStatCard(
                                 'This Month',
-                                CurrencyUtils.formatKSH(_getThisMonthPayments(paymentController.payments)),
+                                CurrencyUtils.formatKSH(
+                                  _getThisMonthPayments(
+                                    paymentController.payments,
+                                  ),
+                                ),
                                 Icons.today,
                                 Colors.blue,
                               ),
@@ -150,12 +165,20 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                           icon: const Icon(Icons.add, size: 20),
                           label: const Text(
                             'Record Payment',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
                             minimumSize: const Size(double.infinity, 56),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -171,10 +194,16 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                           icon: const Icon(Icons.list, size: 20),
                           label: const Text(
                             'View Outstanding Fees',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
                             minimumSize: const Size(double.infinity, 56),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -193,9 +222,8 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                     Expanded(
                       child: Text(
                         'Recent Payments',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -203,7 +231,8 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                 const SizedBox(height: 8),
 
                 // Search field for payments
-                if (paymentController.payments.isNotEmpty && !paymentController.isLoading) ...[
+                if (paymentController.payments.isNotEmpty &&
+                    !paymentController.isLoading) ...[
                   TextField(
                     controller: _searchController,
                     decoration: const InputDecoration(
@@ -223,9 +252,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                   const Card(
                     child: Padding(
                       padding: EdgeInsets.all(32),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      child: Center(child: CircularProgressIndicator()),
                     ),
                   )
                 else if (paymentController.payments.isEmpty)
@@ -250,21 +277,22 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            authController.isChoirLeader 
+                            authController.isChoirLeader
                                 ? 'Start by recording your first payment'
                                 : 'Payment history will appear here',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                            ),
+                            style: TextStyle(color: Colors.grey[600]),
                             textAlign: TextAlign.center,
                           ),
                           if (authController.isChoirLeader) ...[
                             const SizedBox(height: 16),
                             Container(
                               width: double.infinity,
-                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: ElevatedButton.icon(
-                                onPressed: () => _recordPayment(selectedChoir.id),
+                                onPressed: () =>
+                                    _recordPayment(selectedChoir.id),
                                 icon: const Icon(Icons.add, size: 20),
                                 label: const Text(
                                   'Record First Payment',
@@ -275,9 +303,14 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                                   ),
                                 ),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 28),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 18,
+                                    horizontal: 28,
+                                  ),
                                   minimumSize: const Size(double.infinity, 60),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
@@ -294,13 +327,16 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                 else
                   _buildFilteredPaymentsList(paymentController),
 
-                if (paymentController.payments.isNotEmpty && paymentController.payments.length > 10)
+                if (paymentController.payments.isNotEmpty &&
+                    paymentController.payments.length > 10)
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Center(
                       child: TextButton(
                         onPressed: _viewAllPayments,
-                        child: Text('View All Payments (${paymentController.payments.length})'),
+                        child: Text(
+                          'View All Payments (${paymentController.payments.length})',
+                        ),
                       ),
                     ),
                   ),
@@ -312,7 +348,12 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -333,10 +374,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
           ),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ],
@@ -345,12 +383,17 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   }
 
   void _recordPayment([String? choirId]) {
-    Get.to(() => AddPaymentScreen(choirId: choirId))?.then((_) => _loadPayments());
+    Get.to(
+      () => AddPaymentScreen(choirId: choirId),
+    )?.then((_) => _loadPayments());
   }
 
   void _viewOutstandingFees() {
-    final paymentController = Provider.of<PaymentController>(context, listen: false);
-    
+    final paymentController = Provider.of<PaymentController>(
+      context,
+      listen: false,
+    );
+
     if (paymentController.outstandingFees.isEmpty) {
       Get.snackbar(
         'Outstanding Fees',
@@ -361,7 +404,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
       );
       return;
     }
-    
+
     Get.bottomSheet(
       Container(
         height: MediaQuery.of(context).size.height * 0.7,
@@ -388,10 +431,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                   const SizedBox(width: 12),
                   const Text(
                     'Outstanding Fees',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                   Text(
@@ -415,7 +455,9 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
-                        child: Text(userData['full_name']?.substring(0, 1) ?? 'U'),
+                        child: Text(
+                          userData['full_name']?.substring(0, 1) ?? 'U',
+                        ),
                       ),
                       title: Text(userData['full_name'] ?? 'Unknown'),
                       subtitle: Text('Reg: ${fee['registration_number']}'),
@@ -454,18 +496,18 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   Widget _buildFilteredPaymentsList(PaymentController paymentController) {
     final filteredPayments = paymentController.payments.where((payment) {
       if (_searchController.text.isEmpty) return true;
-      
+
       final memberData = payment['choir_members'] ?? {};
       final userData = memberData['users'] ?? {};
       final memberName = userData['full_name']?.toString().toLowerCase() ?? '';
       final type = payment['type']?.toString().toLowerCase() ?? '';
       final status = payment['status']?.toString().toLowerCase() ?? '';
-      
+
       final query = _searchController.text.toLowerCase();
       return memberName.contains(query) ||
-             type.contains(query) ||
-             status.contains(query) ||
-             _getPaymentTypeLabel(type).toLowerCase().contains(query);
+          type.contains(query) ||
+          status.contains(query) ||
+          _getPaymentTypeLabel(type).toLowerCase().contains(query);
     }).toList();
 
     if (filteredPayments.isEmpty && _searchController.text.isNotEmpty) {
@@ -474,11 +516,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              Icon(
-                Icons.search_off,
-                size: 48,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
               const SizedBox(height: 16),
               const Text(
                 'No matching payments found',
@@ -491,9 +529,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
               const SizedBox(height: 8),
               Text(
                 'Try adjusting your search terms',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -503,7 +539,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
     }
 
     final paymentsToShow = filteredPayments.take(10).toList();
-    
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -521,8 +557,9 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
     final amount = payment['amount']?.toDouble() ?? 0.0;
     final status = payment['status'] ?? 'unknown';
     final type = payment['type'] ?? 'unknown';
-    final paymentDate = DateTime.tryParse(payment['payment_date'] ?? '') ?? DateTime.now();
-    
+    final paymentDate =
+        DateTime.tryParse(payment['payment_date'] ?? '') ?? DateTime.now();
+
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
@@ -629,13 +666,18 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
   double _getThisMonthPayments(List<Map<String, dynamic>> payments) {
     final now = DateTime.now();
     final thisMonth = DateTime(now.year, now.month);
-    
-    return payments.where((payment) {
-      final paymentDate = DateTime.tryParse(payment['payment_date'] ?? '');
-      return paymentDate != null && 
-             paymentDate.isAfter(thisMonth) &&
-             payment['status'] == 'completed';
-    }).fold(0.0, (sum, payment) => sum + (payment['amount']?.toDouble() ?? 0.0));
+
+    return payments
+        .where((payment) {
+          final paymentDate = DateTime.tryParse(payment['payment_date'] ?? '');
+          return paymentDate != null &&
+              paymentDate.isAfter(thisMonth) &&
+              payment['status'] == 'completed';
+        })
+        .fold(
+          0.0,
+          (sum, payment) => sum + (payment['amount']?.toDouble() ?? 0.0),
+        );
   }
 
   @override

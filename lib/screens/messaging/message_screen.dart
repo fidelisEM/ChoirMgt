@@ -6,12 +6,7 @@ import '../../models/models.dart';
 import '../../theme/app_colors.dart';
 
 class MessageScreen extends StatefulWidget {
-
-  const MessageScreen({
-    super.key,
-    this.member,
-    required this.choir,
-  });
+  const MessageScreen({super.key, this.member, required this.choir});
   final ChoirMemberModel? member;
   final ChoirModel choir;
 
@@ -24,14 +19,14 @@ class _MessageScreenState extends State<MessageScreen> {
   final TextEditingController _subjectController = TextEditingController();
   final FocusNode _messageFocusNode = FocusNode();
   final FocusNode _subjectFocusNode = FocusNode();
-  
+
   List<ChoirMemberModel> _selectedMembers = [];
   String _messageType = 'sms';
   bool _isUrgent = false;
   bool _scheduleMessage = false;
   DateTime? _scheduledDate;
   TimeOfDay? _scheduledTime;
-  
+
   final List<String> _predefinedMessages = [
     'Practice session reminder: Tomorrow at 6 PM',
     'Sunday service at 9 AM. Please arrive 30 minutes early.',
@@ -62,8 +57,8 @@ class _MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.member != null 
-              ? 'Message ${_getMemberName(widget.member!)}' 
+          widget.member != null
+              ? 'Message ${_getMemberName(widget.member!)}'
               : 'Send Message',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
@@ -87,10 +82,7 @@ class _MessageScreenState extends State<MessageScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.primary,
-                  AppColors.primary.withAlpha(200),
-                ],
+                colors: [AppColors.primary, AppColors.primary.withAlpha(200)],
               ),
             ),
             child: Column(
@@ -103,11 +95,19 @@ class _MessageScreenState extends State<MessageScreen> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: _buildMessageTypeCard('Email', Icons.email, 'email'),
+                      child: _buildMessageTypeCard(
+                        'Email',
+                        Icons.email,
+                        'email',
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: _buildMessageTypeCard('Push', Icons.notifications, 'push'),
+                      child: _buildMessageTypeCard(
+                        'Push',
+                        Icons.notifications,
+                        'push',
+                      ),
                     ),
                   ],
                 ),
@@ -121,10 +121,14 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.people, color: Colors.white.withAlpha(200), size: 20),
+                      Icon(
+                        Icons.people,
+                        color: Colors.white.withAlpha(200),
+                        size: 20,
+                      ),
                       const SizedBox(width: 8),
                       Text(
-                        widget.member != null 
+                        widget.member != null
                             ? '1 recipient selected'
                             : '${_selectedMembers.length} recipients selected',
                         style: TextStyle(
@@ -150,7 +154,7 @@ class _MessageScreenState extends State<MessageScreen> {
               ],
             ),
           ),
-          
+
           // Message Content
           Expanded(
             child: SingleChildScrollView(
@@ -168,13 +172,15 @@ class _MessageScreenState extends State<MessageScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: _predefinedMessages.length,
                         itemBuilder: (context, index) {
-                          return _buildQuickMessageCard(_predefinedMessages[index]);
+                          return _buildQuickMessageCard(
+                            _predefinedMessages[index],
+                          );
                         },
                       ),
                     ),
                     const SizedBox(height: 24),
                   ],
-                  
+
                   // Subject (for email)
                   if (_messageType == 'email') ...[
                     _buildSectionHeader('Subject', Icons.subject),
@@ -187,14 +193,17 @@ class _MessageScreenState extends State<MessageScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        prefixIcon: const Icon(Icons.title, color: AppColors.primary),
+                        prefixIcon: const Icon(
+                          Icons.title,
+                          color: AppColors.primary,
+                        ),
                         filled: true,
                         fillColor: Colors.grey[50],
                       ),
                     ),
                     const SizedBox(height: 24),
                   ],
-                  
+
                   // Message Content
                   _buildSectionHeader('Message', Icons.message),
                   const SizedBox(height: 12),
@@ -213,7 +222,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[50],
-                      counterText: _messageType == 'sms' 
+                      counterText: _messageType == 'sms'
                           ? '${_messageController.text.length}/160'
                           : null,
                     ),
@@ -223,13 +232,13 @@ class _MessageScreenState extends State<MessageScreen> {
                       }
                     },
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Message Options
                   _buildSectionHeader('Options', Icons.tune),
                   const SizedBox(height: 12),
-                  
+
                   // Priority Toggle
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -247,16 +256,17 @@ class _MessageScreenState extends State<MessageScreen> {
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                           value: _isUrgent,
-                          onChanged: (value) => setState(() => _isUrgent = value),
+                          onChanged: (value) =>
+                              setState(() => _isUrgent = value),
                           activeThumbColor: AppColors.primary,
                           secondary: Icon(
                             Icons.priority_high,
                             color: _isUrgent ? AppColors.primary : Colors.grey,
                           ),
                         ),
-                        
+
                         const Divider(),
-                        
+
                         // Schedule Message
                         SwitchListTile(
                           title: const Text('Schedule Message'),
@@ -276,13 +286,15 @@ class _MessageScreenState extends State<MessageScreen> {
                           activeThumbColor: AppColors.primary,
                           secondary: Icon(
                             Icons.schedule,
-                            color: _scheduleMessage ? AppColors.primary : Colors.grey,
+                            color: _scheduleMessage
+                                ? AppColors.primary
+                                : Colors.grey,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 97), // Space for FAB
                 ],
               ),
@@ -290,7 +302,7 @@ class _MessageScreenState extends State<MessageScreen> {
           ),
         ],
       ),
-      
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _sendMessage,
         backgroundColor: AppColors.primary,
@@ -300,7 +312,10 @@ class _MessageScreenState extends State<MessageScreen> {
         ),
         label: Text(
           _scheduleMessage ? 'Schedule' : 'Send Now',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -313,12 +328,12 @@ class _MessageScreenState extends State<MessageScreen> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? Colors.white.withAlpha(60)
               : Colors.white.withAlpha(20),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected 
+            color: isSelected
                 ? Colors.white.withAlpha(120)
                 : Colors.white.withAlpha(40),
             width: isSelected ? 2 : 1,
@@ -326,11 +341,7 @@ class _MessageScreenState extends State<MessageScreen> {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: isSelected ? 24 : 20,
-            ),
+            Icon(icon, color: Colors.white, size: isSelected ? 24 : 20),
             const SizedBox(height: 8),
             Text(
               title,
@@ -402,10 +413,7 @@ class _MessageScreenState extends State<MessageScreen> {
               const Spacer(),
               Text(
                 'Tap to use',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.grey[600]),
               ),
             ],
           ),
@@ -464,13 +472,13 @@ class _MessageScreenState extends State<MessageScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 30)),
     );
-    
+
     if (date != null) {
       final time = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
       );
-      
+
       if (time != null) {
         setState(() {
           _scheduledDate = date;
@@ -511,7 +519,9 @@ class _MessageScreenState extends State<MessageScreen> {
           children: [
             const CircularProgressIndicator(color: AppColors.primary),
             const SizedBox(height: 16),
-            Text(_scheduleMessage ? 'Scheduling message...' : 'Sending message...'),
+            Text(
+              _scheduleMessage ? 'Scheduling message...' : 'Sending message...',
+            ),
           ],
         ),
       ),
@@ -521,11 +531,11 @@ class _MessageScreenState extends State<MessageScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pop(); // Close loading dialog
       Navigator.of(context).pop(); // Close message screen
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            _scheduleMessage 
+            _scheduleMessage
                 ? 'Message scheduled successfully!'
                 : 'Message sent to ${_selectedMembers.length} member(s)!',
           ),
@@ -538,7 +548,6 @@ class _MessageScreenState extends State<MessageScreen> {
 
 // Recipient Selection Sheet
 class RecipientSelectionSheet extends StatefulWidget {
-
   const RecipientSelectionSheet({
     super.key,
     required this.choir,
@@ -550,7 +559,8 @@ class RecipientSelectionSheet extends StatefulWidget {
   final Function(List<ChoirMemberModel>) onSelectionChanged;
 
   @override
-  State<RecipientSelectionSheet> createState() => _RecipientSelectionSheetState();
+  State<RecipientSelectionSheet> createState() =>
+      _RecipientSelectionSheetState();
 }
 
 class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
@@ -588,9 +598,9 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Search
           TextField(
             onChanged: (value) => setState(() => _searchQuery = value),
@@ -602,9 +612,9 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Quick Actions
           Row(
             children: [
@@ -620,19 +630,23 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
               ),
             ],
           ),
-          
+
           // Members List
           Expanded(
             child: Consumer<ChoirController>(
               builder: (context, controller, child) {
-                final filteredMembers = _getFilteredMembers(controller.choirMembers);
-                
+                final filteredMembers = _getFilteredMembers(
+                  controller.choirMembers,
+                );
+
                 return ListView.builder(
                   itemCount: filteredMembers.length,
                   itemBuilder: (context, index) {
                     final member = filteredMembers[index];
-                    final isSelected = _tempSelectedMembers.any((m) => m.id == member.id);
-                    
+                    final isSelected = _tempSelectedMembers.any(
+                      (m) => m.id == member.id,
+                    );
+
                     return CheckboxListTile(
                       value: isSelected,
                       onChanged: (selected) {
@@ -640,7 +654,9 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
                           if (selected == true) {
                             _tempSelectedMembers.add(member);
                           } else {
-                            _tempSelectedMembers.removeWhere((m) => m.id == member.id);
+                            _tempSelectedMembers.removeWhere(
+                              (m) => m.id == member.id,
+                            );
                           }
                         });
                       },
@@ -653,7 +669,7 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
               },
             ),
           ),
-          
+
           // Action Buttons
           Padding(
             padding: const EdgeInsets.only(top: 16),
@@ -689,14 +705,19 @@ class _RecipientSelectionSheetState extends State<RecipientSelectionSheet> {
 
   List<ChoirMemberModel> _getFilteredMembers(List<ChoirMemberModel> members) {
     if (_searchQuery.isEmpty) return members;
-    
+
     return members.where((member) {
-      return member.registrationNumber.toLowerCase().contains(_searchQuery.toLowerCase());
+      return member.registrationNumber.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
     }).toList();
   }
 
   void _selectAll() {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     setState(() {
       _tempSelectedMembers = List.from(choirController.choirMembers);
     });

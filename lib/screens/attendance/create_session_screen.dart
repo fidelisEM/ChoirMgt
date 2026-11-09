@@ -10,11 +10,7 @@ import '../../models/models.dart';
 import '../../utils/app_translations.dart';
 
 class CreateSessionScreen extends StatefulWidget {
-
-  const CreateSessionScreen({
-    super.key,
-    required this.choirId,
-  });
+  const CreateSessionScreen({super.key, required this.choirId});
   final String choirId;
 
   @override
@@ -52,9 +48,8 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         children: [
                           Text(
                             context.tr('attSessionDetailsHeading'),
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 16),
 
@@ -97,11 +92,13 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                             }).toList(),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderTextField(
                             name: 'description',
                             decoration: InputDecoration(
-                              labelText: context.tr('attDescriptionOptionalLabel'),
+                              labelText: context.tr(
+                                'attDescriptionOptionalLabel',
+                              ),
                               hintText: context.tr('attDescriptionHint'),
                               prefixIcon: const Icon(Icons.description),
                             ),
@@ -111,9 +108,9 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -122,9 +119,8 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         children: [
                           Text(
                             context.tr('attScheduleHeading'),
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 16),
 
@@ -162,15 +158,17 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                             max: 60,
                             initialValue: 15,
                             divisions: 11,
-                            valueWidget: (value) => Text('$value ${context.tr('attMinutesSuffix')}'),
+                            valueWidget: (value) => Text(
+                              '$value ${context.tr('attMinutesSuffix')}',
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -186,7 +184,9 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             )
                           : Text(
@@ -212,21 +212,32 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
 
     final formData = _formKey.currentState!.value;
     final authController = Provider.of<AuthController>(context, listen: false);
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
 
     setState(() {
       _isLoading = true;
     });
-    final trAttFailedCreateSession = context.tr('attFailedCreateSession'); // resolved before awaits
-    final trAttSessionCreatedSuccess = context.tr('attSessionCreatedSuccess'); // resolved before awaits
-    final trAttSuccessTitle = context.tr('attSuccessTitle'); // resolved before awaits
-    final trAttUnexpectedErrorPrefix = context.tr('attUnexpectedErrorPrefix'); // resolved before awaits
+    final trAttFailedCreateSession = context.tr(
+      'attFailedCreateSession',
+    ); // resolved before awaits
+    final trAttSessionCreatedSuccess = context.tr(
+      'attSessionCreatedSuccess',
+    ); // resolved before awaits
+    final trAttSuccessTitle = context.tr(
+      'attSuccessTitle',
+    ); // resolved before awaits
+    final trAttUnexpectedErrorPrefix = context.tr(
+      'attUnexpectedErrorPrefix',
+    ); // resolved before awaits
     final trError = context.tr('error'); // resolved before awaits
 
     try {
       final date = formData['date'] as DateTime;
       final startTime = formData['startTime'] as DateTime;
-      
+
       // Combine date and time
       final sessionDateTime = DateTime(
         date.year,

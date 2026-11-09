@@ -8,11 +8,7 @@ import '../payments/add_payment_screen.dart';
 import 'edit_member_screen.dart';
 
 class MemberDetailScreen extends StatelessWidget {
-
-  const MemberDetailScreen({
-    super.key,
-    required this.member,
-  });
+  const MemberDetailScreen({super.key, required this.member});
   final Map<String, dynamic> member;
 
   @override
@@ -23,7 +19,8 @@ class MemberDetailScreen extends StatelessWidget {
     final phone = userData?['phone_number'] ?? '';
     final regNumber = member['registration_number'] ?? '';
     final status = member['status'] ?? 'active';
-    final joinDate = DateTime.tryParse(member['join_date'] ?? '') ?? DateTime.now();
+    final joinDate =
+        DateTime.tryParse(member['join_date'] ?? '') ?? DateTime.now();
     final outstandingFees = member['outstanding_fees'] ?? 0.0;
     final totalPaid = member['total_paid'] ?? 0.0;
     final totalAttendances = member['total_attendances'] ?? 0;
@@ -39,7 +36,9 @@ class MemberDetailScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () async {
-              final result = await Get.to(() => EditMemberScreen(member: member));
+              final result = await Get.to(
+                () => EditMemberScreen(member: member),
+              );
               if (result == true) {
                 // Refresh the current screen or reload member data
                 Get.snackbar('Success', 'Member profile updated successfully');
@@ -78,9 +77,8 @@ class MemberDetailScreen extends StatelessWidget {
                         children: [
                           Text(
                             name,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -92,7 +90,10 @@ class MemberDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: _getStatusColor(status).withAlpha(30),
                               borderRadius: BorderRadius.circular(12),
@@ -134,9 +135,18 @@ class MemberDetailScreen extends StatelessWidget {
               title: 'Financial Information',
               icon: Icons.payment,
               children: [
-                _buildInfoRow('Outstanding Fees', '\$${outstandingFees.toStringAsFixed(2)}'),
-                _buildInfoRow('Total Paid', '\$${totalPaid.toStringAsFixed(2)}'),
-                _buildInfoRow('Balance', '\$${(totalPaid - outstandingFees).toStringAsFixed(2)}'),
+                _buildInfoRow(
+                  'Outstanding Fees',
+                  '\$${outstandingFees.toStringAsFixed(2)}',
+                ),
+                _buildInfoRow(
+                  'Total Paid',
+                  '\$${totalPaid.toStringAsFixed(2)}',
+                ),
+                _buildInfoRow(
+                  'Balance',
+                  '\$${(totalPaid - outstandingFees).toStringAsFixed(2)}',
+                ),
               ],
             ),
 
@@ -172,9 +182,8 @@ class MemberDetailScreen extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           'Quick Actions',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -187,24 +196,29 @@ class MemberDetailScreen extends StatelessWidget {
                           label: 'Record Payment',
                           icon: Icons.payment,
                           color: Colors.green,
-                          onTap: () => Get.to(() => AddPaymentScreen(
-                            choirId: member['choir_id'],
-                            memberId: member['id'],
-                          )),
+                          onTap: () => Get.to(
+                            () => AddPaymentScreen(
+                              choirId: member['choir_id'],
+                              memberId: member['id'],
+                            ),
+                          ),
                         ),
                         _buildActionButton(
                           label: 'Export Attendance',
                           icon: Icons.file_download,
                           color: Colors.blue,
-                          onTap: () => Get.to(() => const AttendanceExportScreen()),
+                          onTap: () =>
+                              Get.to(() => const AttendanceExportScreen()),
                         ),
                         _buildActionButton(
                           label: 'Send Message',
                           icon: Icons.message,
                           color: Colors.purple,
-                          onTap: () => Get.to(() => ComposeMessageScreen(
-                            subject: 'Message to $name',
-                          )),
+                          onTap: () => Get.to(
+                            () => ComposeMessageScreen(
+                              subject: 'Message to $name',
+                            ),
+                          ),
                         ),
                         _buildActionButton(
                           label: 'View History',
@@ -216,7 +230,12 @@ class MemberDetailScreen extends StatelessWidget {
                           label: 'Show QR Code',
                           icon: Icons.qr_code,
                           color: Colors.indigo,
-                          onTap: () => _showQRCode(context, name, regNumber, member['choir_id'] ?? ''),
+                          onTap: () => _showQRCode(
+                            context,
+                            name,
+                            regNumber,
+                            member['choir_id'] ?? '',
+                          ),
                         ),
                       ],
                     ),
@@ -284,10 +303,7 @@ class MemberDetailScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -315,10 +331,7 @@ class MemberDetailScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: color, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -326,7 +339,12 @@ class MemberDetailScreen extends StatelessWidget {
     );
   }
 
-  void _showQRCode(BuildContext context, String fullName, String regNumber, String choirId) {
+  void _showQRCode(
+    BuildContext context,
+    String fullName,
+    String regNumber,
+    String choirId,
+  ) {
     Get.dialog(
       AlertDialog(
         title: const Text('Member QR Code'),
@@ -340,10 +358,7 @@ class MemberDetailScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
         ],
       ),
     );
@@ -374,7 +389,7 @@ class MemberDetailScreen extends StatelessWidget {
   void _showMemberHistory(BuildContext context, Map<String, dynamic> member) {
     final userData = member['users'];
     final name = userData?['full_name'] ?? 'Unknown User';
-    
+
     Get.bottomSheet(
       Container(
         height: MediaQuery.of(context).size.height * 0.8,
@@ -394,7 +409,7 @@ class MemberDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            
+
             // Header
             Padding(
               padding: const EdgeInsets.all(20),
@@ -413,7 +428,7 @@ class MemberDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // History tabs
             Expanded(
               child: DefaultTabController(
@@ -481,7 +496,9 @@ class MemberDetailScreen extends StatelessWidget {
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: _getAttendanceStatusColor(record['status']!).withValues(alpha: 0.1),
+                color: _getAttendanceStatusColor(
+                  record['status']!,
+                ).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -502,9 +519,24 @@ class MemberDetailScreen extends StatelessWidget {
   Widget _buildPaymentHistory(Map<String, dynamic> member) {
     // Mock payment data
     final paymentHistory = [
-      {'date': '2024-01-28', 'amount': '\$50.00', 'type': 'Monthly Dues', 'status': 'Completed'},
-      {'date': '2024-01-15', 'amount': '\$25.00', 'type': 'Event Fee', 'status': 'Completed'},
-      {'date': '2024-01-01', 'amount': '\$50.00', 'type': 'Monthly Dues', 'status': 'Completed'},
+      {
+        'date': '2024-01-28',
+        'amount': '\$50.00',
+        'type': 'Monthly Dues',
+        'status': 'Completed',
+      },
+      {
+        'date': '2024-01-15',
+        'amount': '\$25.00',
+        'type': 'Event Fee',
+        'status': 'Completed',
+      },
+      {
+        'date': '2024-01-01',
+        'amount': '\$50.00',
+        'type': 'Monthly Dues',
+        'status': 'Completed',
+      },
     ];
 
     return ListView.builder(
@@ -535,10 +567,7 @@ class MemberDetailScreen extends StatelessWidget {
                 ),
                 Text(
                   payment['status']!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.green,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.green),
                 ),
               ],
             ),
@@ -551,9 +580,21 @@ class MemberDetailScreen extends StatelessWidget {
   Widget _buildActivityHistory(Map<String, dynamic> member) {
     // Mock activity data
     final activityHistory = [
-      {'date': '2024-01-28', 'activity': 'Joined choir', 'description': 'Welcome to the choir!'},
-      {'date': '2024-01-25', 'activity': 'Status updated', 'description': 'Changed to Active'},
-      {'date': '2024-01-20', 'activity': 'Profile updated', 'description': 'Contact information updated'},
+      {
+        'date': '2024-01-28',
+        'activity': 'Joined choir',
+        'description': 'Welcome to the choir!',
+      },
+      {
+        'date': '2024-01-25',
+        'activity': 'Status updated',
+        'description': 'Changed to Active',
+      },
+      {
+        'date': '2024-01-20',
+        'activity': 'Profile updated',
+        'description': 'Contact information updated',
+      },
     ];
 
     return ListView.builder(

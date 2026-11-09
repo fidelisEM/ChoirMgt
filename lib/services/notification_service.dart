@@ -64,17 +64,21 @@ class NotificationService {
     Map<String, dynamic>? data,
   }) async {
     try {
-      final notifications = recipientIds.map((userId) => {
-        'title': title,
-        'body': body,
-        'type': type.toString().split('.').last,
-        'priority': priority.toString().split('.').last,
-        'recipientId': userId,
-        'choirId': choirId,
-        'data': data ?? {},
-        'isRead': false,
-        'created_at': DateTime.now().toIso8601String(),
-      }).toList();
+      final notifications = recipientIds
+          .map(
+            (userId) => {
+              'title': title,
+              'body': body,
+              'type': type.toString().split('.').last,
+              'priority': priority.toString().split('.').last,
+              'recipientId': userId,
+              'choirId': choirId,
+              'data': data ?? {},
+              'isRead': false,
+              'created_at': DateTime.now().toIso8601String(),
+            },
+          )
+          .toList();
 
       final response = await _supabase
           .from('notifications')
@@ -124,7 +128,10 @@ class NotificationService {
     try {
       await _supabase
           .from('notifications')
-          .update({'is_read': true, 'read_at': DateTime.now().toIso8601String()})
+          .update({
+            'is_read': true,
+            'read_at': DateTime.now().toIso8601String(),
+          })
           .eq('id', notificationId);
 
       return true;
@@ -138,7 +145,10 @@ class NotificationService {
     try {
       await _supabase
           .from('notifications')
-          .update({'is_read': true, 'read_at': DateTime.now().toIso8601String()})
+          .update({
+            'is_read': true,
+            'read_at': DateTime.now().toIso8601String(),
+          })
           .inFilter('id', notificationIds);
 
       return true;
@@ -152,7 +162,10 @@ class NotificationService {
     try {
       await _supabase
           .from('notifications')
-          .update({'is_read': true, 'read_at': DateTime.now().toIso8601String()})
+          .update({
+            'is_read': true,
+            'read_at': DateTime.now().toIso8601String(),
+          })
           .eq('target_user_id', userId)
           .eq('is_read', false);
 
@@ -165,10 +178,7 @@ class NotificationService {
   // Delete notification
   Future<bool> deleteNotification(String notificationId) async {
     try {
-      await _supabase
-          .from('notifications')
-          .delete()
-          .eq('id', notificationId);
+      await _supabase.from('notifications').delete().eq('id', notificationId);
 
       return true;
     } catch (e) {
@@ -208,9 +218,10 @@ class NotificationService {
 
       final sessionDate = DateTime.parse(session['date']);
       final startTime = DateTime.parse(session['start_time']);
-      
+
       const title = 'Attendance Reminder';
-      final message = 'Don\'t forget about ${session['title']} on ${sessionDate.day}/${sessionDate.month} at ${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}';
+      final message =
+          'Don\'t forget about ${session['title']} on ${sessionDate.day}/${sessionDate.month} at ${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}';
 
       await createBulkNotifications(
         title: title,
@@ -234,7 +245,8 @@ class NotificationService {
   }) async {
     try {
       const title = 'Payment Reminder';
-      final message = 'You have an outstanding payment of KSH ${amount.toStringAsFixed(2)}. Please make your payment as soon as possible.';
+      final message =
+          'You have an outstanding payment of KSH ${amount.toStringAsFixed(2)}. Please make your payment as soon as possible.';
 
       await createBulkNotifications(
         title: title,
@@ -282,7 +294,8 @@ class NotificationService {
   }) async {
     try {
       final title = 'Welcome to $choirName!';
-      const message = 'Welcome to our choir! We\'re excited to have you as a member. Please check the app regularly for updates and announcements.';
+      const message =
+          'Welcome to our choir! We\'re excited to have you as a member. Please check the app regularly for updates and announcements.';
 
       await createNotification(
         title: title,
@@ -308,7 +321,8 @@ class NotificationService {
   }) async {
     try {
       const title = 'Payment Confirmed';
-      final message = 'Your payment of KSH ${amount.toStringAsFixed(2)} via $paymentMethod has been confirmed. Thank you!';
+      final message =
+          'Your payment of KSH ${amount.toStringAsFixed(2)} via $paymentMethod has been confirmed. Thank you!';
 
       await createNotification(
         title: title,
@@ -328,7 +342,7 @@ class NotificationService {
   Future<void> cleanupOldNotifications() async {
     try {
       final ninetyDaysAgo = DateTime.now().subtract(const Duration(days: 90));
-      
+
       await _supabase
           .from('notifications')
           .delete()

@@ -25,9 +25,9 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
 
     try {
       _addLog('🚀 Starting comprehensive sample data generation...');
-      
+
       await _sampleDataService.generateAllSampleData();
-      
+
       _addLog('✅ Sample data generation completed successfully!');
       _addLog('📊 Generated data includes:');
       _addLog('   • 13 sample users (admin, leaders, members)');
@@ -35,7 +35,7 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
       _addLog('   • 30+ choir memberships with realistic data');
       _addLog('   • Activity feed with recent actions');
       _addLog('   • Realistic attendance and payment records');
-      
+
       setState(() {
         _status = 'Sample data generated successfully!';
         _isLoading = false;
@@ -49,7 +49,6 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
         colorText: Colors.white,
         duration: const Duration(seconds: 4),
       );
-
     } catch (e) {
       _addLog('❌ Error generating sample data: $e');
       setState(() {
@@ -77,11 +76,11 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
 
     try {
       _addLog('🚀 Generating quick test data...');
-      
+
       await _sampleDataService.generateQuickTestData();
-      
+
       _addLog('✅ Quick test data generated successfully!');
-      
+
       setState(() {
         _status = 'Quick test data generated!';
         _isLoading = false;
@@ -94,7 +93,6 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
         backgroundColor: AppColors.success,
         colorText: Colors.white,
       );
-
     } catch (e) {
       _addLog('❌ Error generating quick data: $e');
       setState(() {
@@ -106,7 +104,9 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
 
   void _addLog(String message) {
     setState(() {
-      _logs.add('${DateTime.now().toLocal().toString().substring(11, 19)} - $message');
+      _logs.add(
+        '${DateTime.now().toLocal().toString().substring(11, 19)} - $message',
+      );
     });
   }
 
@@ -119,9 +119,7 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -147,17 +145,19 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Full Sample Data Button
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
                             onPressed: _isLoading ? null : _generateSampleData,
-                            icon: _isLoading 
+                            icon: _isLoading
                                 ? const SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   )
                                 : const Icon(Icons.data_usage),
                             label: const Text('Generate Complete Sample Data'),
@@ -169,9 +169,9 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 12),
-                        
+
                         // Quick Test Data Button
                         SizedBox(
                           width: double.infinity,
@@ -185,21 +185,21 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Status
                         if (_status.isNotEmpty)
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: _status.contains('Error') 
+                              color: _status.contains('Error')
                                   ? AppColors.error.withValues(alpha: 0.1)
                                   : AppColors.success.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: _status.contains('Error') 
+                                color: _status.contains('Error')
                                     ? AppColors.error
                                     : AppColors.success,
                               ),
@@ -207,7 +207,7 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                             child: Text(
                               _status,
                               style: TextStyle(
-                                color: _status.contains('Error') 
+                                color: _status.contains('Error')
                                     ? AppColors.error
                                     : AppColors.success,
                                 fontWeight: FontWeight.bold,
@@ -218,9 +218,9 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Sample Data Information
                 Card(
                   child: Padding(
@@ -236,18 +236,33 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _buildFeatureItem('👥 Users', '13 realistic users (admin, choir leaders, members)'),
-                        _buildFeatureItem('🎵 Choirs', '5 diverse choirs with different characteristics'),
-                        _buildFeatureItem('👤 Memberships', '30+ choir memberships with realistic data'),
-                        _buildFeatureItem('📊 Statistics', 'Attendance rates, payment records, and activity logs'),
-                        _buildFeatureItem('🎯 Features', 'All updated features will work with real data'),
+                        _buildFeatureItem(
+                          '👥 Users',
+                          '13 realistic users (admin, choir leaders, members)',
+                        ),
+                        _buildFeatureItem(
+                          '🎵 Choirs',
+                          '5 diverse choirs with different characteristics',
+                        ),
+                        _buildFeatureItem(
+                          '👤 Memberships',
+                          '30+ choir memberships with realistic data',
+                        ),
+                        _buildFeatureItem(
+                          '📊 Statistics',
+                          'Attendance rates, payment records, and activity logs',
+                        ),
+                        _buildFeatureItem(
+                          '🎯 Features',
+                          'All updated features will work with real data',
+                        ),
                       ],
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Logs Section
                 if (_logs.isNotEmpty)
                   Expanded(
@@ -307,17 +322,11 @@ class _SampleDataScreenState extends State<SampleDataScreen> {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              description,
-              style: const TextStyle(fontSize: 14),
-            ),
+            child: Text(description, style: const TextStyle(fontSize: 14)),
           ),
         ],
       ),

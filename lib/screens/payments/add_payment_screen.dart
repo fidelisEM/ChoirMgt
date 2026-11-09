@@ -16,11 +16,7 @@ import '../../utils/validators.dart';
 import '../../widgets/custom_widgets.dart';
 
 class AddPaymentScreen extends StatefulWidget {
-  const AddPaymentScreen({
-    super.key,
-    this.choirId,
-    this.memberId,
-  });
+  const AddPaymentScreen({super.key, this.choirId, this.memberId});
 
   final String? choirId;
   final String? memberId;
@@ -66,8 +62,11 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
 
   Future<void> _loadChoirs() async {
     try {
-      final choirController = Provider.of<ChoirController>(context, listen: false);
-      
+      final choirController = Provider.of<ChoirController>(
+        context,
+        listen: false,
+      );
+
       await choirController.loadChoirs();
       if (mounted) {
         setState(() {
@@ -92,8 +91,11 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
 
   Future<void> _loadMembers(String choirId) async {
     try {
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+
       await memberController.loadChoirMembers(choirId);
       if (mounted) {
         setState(() {
@@ -125,9 +127,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -178,11 +178,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
               gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.payment,
-              size: 48,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.payment, size: 48, color: Colors.white),
           ),
           const SizedBox(height: 16),
           Text(
@@ -196,10 +192,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
           const SizedBox(height: 8),
           Text(
             context.tr('payEnterDetailsBelow'),
-            style: const TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 16),
           ),
         ],
       ),
@@ -278,7 +271,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
               final userData = member['users'] ?? {};
               return DropdownMenuItem<String>(
                 value: member['id'],
-                child: Text('${userData['full_name']} (${member['registration_number']})'),
+                child: Text(
+                  '${userData['full_name']} (${member['registration_number']})',
+                ),
               );
             }).toList(),
             onChanged: (value) {
@@ -356,10 +351,12 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
             ],
             decoration: InputDecoration(
               labelText: context.tr('amount'),
-              prefixText: '${CurrencyUtils.getCurrencySymbol(_selectedCurrency)} ',
+              prefixText:
+                  '${CurrencyUtils.getCurrencySymbol(_selectedCurrency)} ',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.money),
-              helperText: '${context.tr('payAmountInPrefix')} ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
+              helperText:
+                  '${context.tr('payAmountInPrefix')} ${CurrencyUtils.getCurrencyName(_selectedCurrency)}',
             ),
             validator: (value) => Validators.amount(value),
           ),
@@ -639,13 +636,13 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                 ),
               )
             : Text(
-              context.tr('recordPayment'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
+                context.tr('recordPayment'),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
               ),
-            ),
       ),
     );
   }
@@ -686,22 +683,32 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
     }
 
     try {
-      final paymentController = Provider.of<PaymentController>(context, listen: false);
-      final authController = Provider.of<AuthController>(context, listen: false);
-      
+      final paymentController = Provider.of<PaymentController>(
+        context,
+        listen: false,
+      );
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+
       // Get the current authenticated user's ID
       final currentUser = authController.currentUser;
       if (currentUser == null) {
         Helpers.showErrorSnackbar(authRequiredMessage);
         return;
       }
-      
+
       // Get selected member name
       String memberName = 'Selected Member';
       try {
-        final selectedMember = _members.firstWhere((member) => member['id'] == _selectedMemberId);
+        final selectedMember = _members.firstWhere(
+          (member) => member['id'] == _selectedMemberId,
+        );
         final userData = selectedMember['users'] ?? {};
-        memberName = userData['full_name'] ?? 'Member ${_selectedMemberId!.substring(0, 8)}';
+        memberName =
+            userData['full_name'] ??
+            'Member ${_selectedMemberId!.substring(0, 8)}';
       } catch (e) {
         memberName = 'Member ${_selectedMemberId!.substring(0, 8)}';
       }
@@ -709,8 +716,13 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       // Attribute the payment to the member's account, not the recorder's.
       String paymentUserId = currentUser.id;
       try {
-        final selectedMember = _members.firstWhere((m) => m['id'] == _selectedMemberId);
-        paymentUserId = selectedMember['user_id'] ?? selectedMember['users']?['id'] ?? currentUser.id;
+        final selectedMember = _members.firstWhere(
+          (m) => m['id'] == _selectedMemberId,
+        );
+        paymentUserId =
+            selectedMember['user_id'] ??
+            selectedMember['users']?['id'] ??
+            currentUser.id;
       } catch (_) {}
 
       final success = await paymentController.createPayment(
@@ -721,7 +733,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
         type: _selectedType,
         method: _selectedMethod,
         description: _descriptionController.text,
-        reference: _referenceController.text.isNotEmpty ? _referenceController.text : null,
+        reference: _referenceController.text.isNotEmpty
+            ? _referenceController.text
+            : null,
         receivedBy: 'Current User', // This should be current user's name
         currency: _selectedCurrency,
         memberName: memberName,

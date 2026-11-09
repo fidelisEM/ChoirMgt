@@ -42,26 +42,28 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Obx(() => DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Filter by Country',
-                    prefixIcon: Icon(Icons.public),
-                  ),
-                  initialValue: controller.selectedCountry.value,
-                  items: [
-                    const DropdownMenuItem<String>(
-                      value: null,
-                      child: Text('All Countries'),
+                child: Obx(
+                  () => DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Filter by Country',
+                      prefixIcon: Icon(Icons.public),
                     ),
-                    ...controller.countries.map((country) => 
-                      DropdownMenuItem<String>(
-                        value: country,
-                        child: Text(country),
+                    initialValue: controller.selectedCountry.value,
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('All Countries'),
                       ),
-                    ),
-                  ],
-                  onChanged: (value) => controller.selectCountry(value),
-                )),
+                      ...controller.countries.map(
+                        (country) => DropdownMenuItem<String>(
+                          value: country,
+                          child: Text(country),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) => controller.selectCountry(value),
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               ElevatedButton.icon(
@@ -79,9 +81,7 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
             }
 
             if (controller.archdioceses.isEmpty) {
-              return const Center(
-                child: Text('No archdioceses found'),
-              );
+              return const Center(child: Text('No archdioceses found'));
             }
 
             return ListView.builder(
@@ -89,16 +89,22 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final archdiocese = controller.archdioceses[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   child: ListTile(
                     title: Text(archdiocese.name),
-                    subtitle: Text('${archdiocese.country} - ${archdiocese.code}'),
+                    subtitle: Text(
+                      '${archdiocese.country} - ${archdiocese.code}',
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          onPressed: () => _showArchdioceseDialog(controller, archdiocese),
+                          onPressed: () =>
+                              _showArchdioceseDialog(controller, archdiocese),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
@@ -121,7 +127,10 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildParishTab(ArchdioceseController archdioceseController, ParishController parishController) {
+  Widget _buildParishTab(
+    ArchdioceseController archdioceseController,
+    ParishController parishController,
+  ) {
     return Column(
       children: [
         Padding(
@@ -129,30 +138,34 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Obx(() => DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Filter by Archdiocese',
-                    prefixIcon: Icon(Icons.location_city),
-                  ),
-                  initialValue: parishController.selectedArchdioceseId.value,
-                  items: [
-                    const DropdownMenuItem<String>(
-                      value: null,
-                      child: Text('All Archdioceses'),
+                child: Obx(
+                  () => DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Filter by Archdiocese',
+                      prefixIcon: Icon(Icons.location_city),
                     ),
-                    ...archdioceseController.archdioceses.map((archdiocese) => 
-                      DropdownMenuItem<String>(
-                        value: archdiocese.id,
-                        child: Text(archdiocese.name),
+                    initialValue: parishController.selectedArchdioceseId.value,
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('All Archdioceses'),
                       ),
-                    ),
-                  ],
-                  onChanged: (value) => parishController.selectArchdiocese(value),
-                )),
+                      ...archdioceseController.archdioceses.map(
+                        (archdiocese) => DropdownMenuItem<String>(
+                          value: archdiocese.id,
+                          child: Text(archdiocese.name),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) =>
+                        parishController.selectArchdiocese(value),
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               ElevatedButton.icon(
-                onPressed: () => _showParishDialog(archdioceseController, parishController),
+                onPressed: () =>
+                    _showParishDialog(archdioceseController, parishController),
                 icon: const Icon(Icons.add),
                 label: const Text('Add Parish'),
               ),
@@ -166,9 +179,7 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
             }
 
             if (parishController.parishes.isEmpty) {
-              return const Center(
-                child: Text('No parishes found'),
-              );
+              return const Center(child: Text('No parishes found'));
             }
 
             return ListView.builder(
@@ -176,10 +187,15 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final parish = parishController.parishes[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   child: ListTile(
                     title: Text(parish.name),
-                    subtitle: Text('${parish.archdioceseName} - ${parish.code}'),
+                    subtitle: Text(
+                      '${parish.archdioceseName} - ${parish.code}',
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -212,16 +228,27 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
     );
   }
 
-  void _showArchdioceseDialog(ArchdioceseController controller, [ArchdioceseModel? archdiocese]) {
+  void _showArchdioceseDialog(
+    ArchdioceseController controller, [
+    ArchdioceseModel? archdiocese,
+  ]) {
     final nameController = TextEditingController(text: archdiocese?.name ?? '');
     final codeController = TextEditingController(text: archdiocese?.code ?? '');
-    final countryController = TextEditingController(text: archdiocese?.country ?? '');
-    final descriptionController = TextEditingController(text: archdiocese?.description ?? '');
-    final bishopController = TextEditingController(text: archdiocese?.bishop ?? '');
+    final countryController = TextEditingController(
+      text: archdiocese?.country ?? '',
+    );
+    final descriptionController = TextEditingController(
+      text: archdiocese?.description ?? '',
+    );
+    final bishopController = TextEditingController(
+      text: archdiocese?.bishop ?? '',
+    );
 
     Get.dialog(
       AlertDialog(
-        title: Text(archdiocese == null ? 'Add Archdiocese' : 'Edit Archdiocese'),
+        title: Text(
+          archdiocese == null ? 'Add Archdiocese' : 'Edit Archdiocese',
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -250,13 +277,10 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
-              if (nameController.text.trim().isEmpty || 
+              if (nameController.text.trim().isEmpty ||
                   codeController.text.trim().isEmpty ||
                   countryController.text.trim().isEmpty) {
                 Get.snackbar('Error', 'Please fill in all required fields');
@@ -264,15 +288,17 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
               }
 
               final newArchdiocese = ArchdioceseModel(
-                id: archdiocese?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+                id:
+                    archdiocese?.id ??
+                    DateTime.now().millisecondsSinceEpoch.toString(),
                 name: nameController.text.trim(),
                 code: codeController.text.trim(),
                 country: countryController.text.trim(),
-                description: descriptionController.text.trim().isEmpty 
-                    ? null 
+                description: descriptionController.text.trim().isEmpty
+                    ? null
                     : descriptionController.text.trim(),
-                bishop: bishopController.text.trim().isEmpty 
-                    ? null 
+                bishop: bishopController.text.trim().isEmpty
+                    ? null
                     : bishopController.text.trim(),
                 createdAt: archdiocese?.createdAt ?? DateTime.now(),
               );
@@ -299,11 +325,15 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
   }) {
     final nameController = TextEditingController(text: parish?.name ?? '');
     final codeController = TextEditingController(text: parish?.code ?? '');
-    final addressController = TextEditingController(text: parish?.address ?? '');
-    final phoneController = TextEditingController(text: parish?.phoneNumber ?? '');
+    final addressController = TextEditingController(
+      text: parish?.address ?? '',
+    );
+    final phoneController = TextEditingController(
+      text: parish?.phoneNumber ?? '',
+    );
     final emailController = TextEditingController(text: parish?.email ?? '');
     final pastorController = TextEditingController(text: parish?.pastor ?? '');
-    
+
     String? selectedArchdioceseId = parish?.archdioceseId;
 
     Get.dialog(
@@ -324,12 +354,14 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Archdiocese'),
                 initialValue: selectedArchdioceseId,
-                items: archdioceseController.archdioceses.map((archdiocese) => 
-                  DropdownMenuItem<String>(
-                    value: archdiocese.id,
-                    child: Text(archdiocese.name),
-                  ),
-                ).toList(),
+                items: archdioceseController.archdioceses
+                    .map(
+                      (archdiocese) => DropdownMenuItem<String>(
+                        value: archdiocese.id,
+                        child: Text(archdiocese.name),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) => selectedArchdioceseId = value,
               ),
               TextField(
@@ -352,13 +384,10 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
-              if (nameController.text.trim().isEmpty || 
+              if (nameController.text.trim().isEmpty ||
                   codeController.text.trim().isEmpty ||
                   selectedArchdioceseId == null) {
                 Get.snackbar('Error', 'Please fill in all required fields');
@@ -369,22 +398,24 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
                   .firstWhere((a) => a.id == selectedArchdioceseId);
 
               final newParish = ParishModel(
-                id: parish?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+                id:
+                    parish?.id ??
+                    DateTime.now().millisecondsSinceEpoch.toString(),
                 name: nameController.text.trim(),
                 code: codeController.text.trim(),
                 archdioceseId: selectedArchdioceseId!,
                 archdioceseName: selectedArchdiocese.name,
-                address: addressController.text.trim().isEmpty 
-                    ? null 
+                address: addressController.text.trim().isEmpty
+                    ? null
                     : addressController.text.trim(),
-                phoneNumber: phoneController.text.trim().isEmpty 
-                    ? null 
+                phoneNumber: phoneController.text.trim().isEmpty
+                    ? null
                     : phoneController.text.trim(),
-                email: emailController.text.trim().isEmpty 
-                    ? null 
+                email: emailController.text.trim().isEmpty
+                    ? null
                     : emailController.text.trim(),
-                pastor: pastorController.text.trim().isEmpty 
-                    ? null 
+                pastor: pastorController.text.trim().isEmpty
+                    ? null
                     : pastorController.text.trim(),
                 createdAt: parish?.createdAt ?? DateTime.now(),
               );
@@ -415,10 +446,7 @@ class ArchdioceseParishManagementScreen extends StatelessWidget {
         title: Text(title),
         content: Text(message),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               onConfirm();

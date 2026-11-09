@@ -38,9 +38,15 @@ class _MembersListScreenState extends State<MembersListScreen> {
   Future<void> _loadChoirs() async {
     setState(() => _isLoadingChoirs = true);
     try {
-      final choirController = Provider.of<ChoirController>(context, listen: false);
-      final authController = Provider.of<AuthController>(context, listen: false);
-      
+      final choirController = Provider.of<ChoirController>(
+        context,
+        listen: false,
+      );
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+
       if (authController.currentUser != null) {
         if (authController.currentUser!.isAdmin) {
           await choirController.loadChoirs(adminView: true);
@@ -50,7 +56,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
             adminView: false,
           );
         }
-        
+
         // If there's already a selected choir, keep it selected
         if (choirController.selectedChoir != null) {
           _selectedChoirId = choirController.selectedChoir!.id;
@@ -74,9 +80,15 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _loadMembers() {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir != null) {
       _selectedChoirId = choirController.selectedChoir!.id;
       memberController.loadChoirMembers(_selectedChoirId!).then((_) {
@@ -89,9 +101,12 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _filterMembers(String query) {
-    final memberController = Provider.of<MemberController>(context, listen: false);
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
     final allMembers = memberController.membersWithUserInfo;
-    
+
     if (query.isEmpty) {
       setState(() {
         _filteredMembers = List.from(allMembers);
@@ -101,14 +116,15 @@ class _MembersListScreenState extends State<MembersListScreen> {
         _filteredMembers = allMembers.where((member) {
           final userData = member['users'];
           if (userData == null) return false;
-          
+
           final name = userData['full_name']?.toString().toLowerCase() ?? '';
           final email = userData['email']?.toString().toLowerCase() ?? '';
-          final regNumber = member['registration_number']?.toString().toLowerCase() ?? '';
-          
+          final regNumber =
+              member['registration_number']?.toString().toLowerCase() ?? '';
+
           return name.contains(query.toLowerCase()) ||
-                 email.contains(query.toLowerCase()) ||
-                 regNumber.contains(query.toLowerCase());
+              email.contains(query.toLowerCase()) ||
+              regNumber.contains(query.toLowerCase());
         }).toList();
       });
     }
@@ -163,7 +179,10 @@ class _MembersListScreenState extends State<MembersListScreen> {
         labelText: context.tr('memberSelectChoir'),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.music_note),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
       ),
       items: choirController.choirs.map((choir) {
         return DropdownMenuItem<String>(
@@ -173,7 +192,9 @@ class _MembersListScreenState extends State<MembersListScreen> {
       }).toList(),
       onChanged: (value) {
         if (value != null) {
-          final selectedChoir = choirController.choirs.firstWhere((c) => c.id == value);
+          final selectedChoir = choirController.choirs.firstWhere(
+            (c) => c.id == value,
+          );
           choirController.selectChoir(selectedChoir);
           setState(() {
             _selectedChoirId = value;
@@ -196,10 +217,11 @@ class _MembersListScreenState extends State<MembersListScreen> {
         actions: [
           Consumer2<AuthController, ChoirController>(
             builder: (context, authController, choirController, child) {
-              if (choirController.selectedChoir == null || !authController.isChoirLeader) {
+              if (choirController.selectedChoir == null ||
+                  !authController.isChoirLeader) {
                 return const SizedBox.shrink();
               }
-              
+
               return PopupMenuButton<String>(
                 icon: const Icon(Icons.more_vert),
                 onSelected: (value) {
@@ -255,155 +277,167 @@ class _MembersListScreenState extends State<MembersListScreen> {
         ),
       ),
       body: Consumer3<MemberController, AuthController, ChoirController>(
-        builder: (context, memberController, authController, choirController, child) {
-          if (choirController.selectedChoir == null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        builder:
+            (
+              context,
+              memberController,
+              authController,
+              choirController,
+              child,
+            ) {
+              if (choirController.selectedChoir == null) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.people_outline,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        context.tr('memberSelectChoirPrompt'),
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.tr('memberChooseChoirHint'),
+                        style: TextStyle(color: Colors.grey[500], fontSize: 14),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (memberController.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (memberController.errorMessage != null) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red[300],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        context.tr('memberErrorLoadingMembers'),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        memberController.errorMessage!,
+                        style: TextStyle(color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          memberController.clearError();
+                          _loadMembers();
+                        },
+                        child: Text(context.tr('retry')),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // Use filtered members if search is active, otherwise all members
+              final members = _searchController.text.isNotEmpty
+                  ? _filteredMembers
+                  : memberController.membersWithUserInfo;
+
+              if (members.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.people_outline,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        _searchController.text.isEmpty
+                            ? context.tr('memberNoMembersFound')
+                            : context.tr('memberNoMatchingMembers'),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _searchController.text.isEmpty
+                            ? context.tr('memberAddFirstPrompt')
+                            : context.tr('memberAdjustSearchPrompt'),
+                        style: TextStyle(color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (_searchController.text.isEmpty) ...[
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: () => _showAddMemberDialog(),
+                          icon: const Icon(Icons.person_add),
+                          label: Text(context.tr('addMember')),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              }
+
+              return Column(
                 children: [
-                  Icon(
-                    Icons.people_outline,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    context.tr('memberSelectChoirPrompt'),
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    context.tr('memberChooseChoirHint'),
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (memberController.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (memberController.errorMessage != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    context.tr('memberErrorLoadingMembers'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    memberController.errorMessage!,
-                    style: TextStyle(color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      memberController.clearError();
-                      _loadMembers();
-                    },
-                    child: Text(context.tr('retry')),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Use filtered members if search is active, otherwise all members
-          final members = _searchController.text.isNotEmpty 
-              ? _filteredMembers 
-              : memberController.membersWithUserInfo;
-
-          if (members.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.people_outline,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    _searchController.text.isEmpty
-                        ? context.tr('memberNoMembersFound')
-                        : context.tr('memberNoMatchingMembers'),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _searchController.text.isEmpty
-                        ? context.tr('memberAddFirstPrompt')
-                        : context.tr('memberAdjustSearchPrompt'),
-                    style: TextStyle(color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                  if (_searchController.text.isEmpty) ...[
-                    const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      onPressed: () => _showAddMemberDialog(),
-                      icon: const Icon(Icons.person_add),
-                      label: Text(context.tr('addMember')),
-                    ),
-                  ],
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              // Statistics bar
-              Container(
-                padding: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.surface,
-                child: _buildStatisticsBar(context, memberController.memberStatistics),
-              ),
-              
-              // Members list
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async => _loadMembers(),
-                  child: ListView.builder(
+                  // Statistics bar
+                  Container(
                     padding: const EdgeInsets.all(16),
-                    itemCount: members.length,
-                    itemBuilder: (context, index) {
-                      final member = members[index];
-                      return _buildMemberCard(context, member, authController);
-                    },
+                    color: Theme.of(context).colorScheme.surface,
+                    child: _buildStatisticsBar(
+                      context,
+                      memberController.memberStatistics,
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
-        },
+
+                  // Members list
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async => _loadMembers(),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: members.length,
+                        itemBuilder: (context, index) {
+                          final member = members[index];
+                          return _buildMemberCard(
+                            context,
+                            member,
+                            authController,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
       ),
       floatingActionButton: Consumer2<AuthController, ChoirController>(
         builder: (context, authController, choirController, child) {
-          if (choirController.selectedChoir == null || !authController.isChoirLeader) {
+          if (choirController.selectedChoir == null ||
+              !authController.isChoirLeader) {
             return const SizedBox.shrink();
           }
-          
+
           return FloatingActionButton(
             onPressed: _showAddMemberDialog,
             tooltip: context.tr('addMember'),
@@ -417,10 +451,34 @@ class _MembersListScreenState extends State<MembersListScreen> {
   Widget _buildStatisticsBar(BuildContext context, Map<String, dynamic> stats) {
     return Row(
       children: [
-        Expanded(child: _buildStatItem(context.tr('memberTotal'), stats['total_members']?.toString() ?? '0', Colors.blue)),
-        Expanded(child: _buildStatItem(context.tr('active'), stats['active_members']?.toString() ?? '0', Colors.green)),
-        Expanded(child: _buildStatItem(context.tr('inactive'), stats['inactive_members']?.toString() ?? '0', Colors.orange)),
-        Expanded(child: _buildStatItem(context.tr('memberSuspended'), stats['suspended_members']?.toString() ?? '0', Colors.red)),
+        Expanded(
+          child: _buildStatItem(
+            context.tr('memberTotal'),
+            stats['total_members']?.toString() ?? '0',
+            Colors.blue,
+          ),
+        ),
+        Expanded(
+          child: _buildStatItem(
+            context.tr('active'),
+            stats['active_members']?.toString() ?? '0',
+            Colors.green,
+          ),
+        ),
+        Expanded(
+          child: _buildStatItem(
+            context.tr('inactive'),
+            stats['inactive_members']?.toString() ?? '0',
+            Colors.orange,
+          ),
+        ),
+        Expanded(
+          child: _buildStatItem(
+            context.tr('memberSuspended'),
+            stats['suspended_members']?.toString() ?? '0',
+            Colors.red,
+          ),
+        ),
       ],
     );
   }
@@ -440,22 +498,24 @@ class _MembersListScreenState extends State<MembersListScreen> {
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
         ),
       ],
     );
   }
 
-  Widget _buildMemberCard(BuildContext context, Map<String, dynamic> member, AuthController authController) {
+  Widget _buildMemberCard(
+    BuildContext context,
+    Map<String, dynamic> member,
+    AuthController authController,
+  ) {
     final userData = member['users'];
     final name = userData?['full_name'] ?? context.tr('memberUnknownUser');
     final email = userData?['email'] ?? '';
     final regNumber = member['registration_number'] ?? '';
     final status = member['status'] ?? 'active';
-    final joinDate = DateTime.tryParse(member['join_date'] ?? '') ?? DateTime.now();
+    final joinDate =
+        DateTime.tryParse(member['join_date'] ?? '') ?? DateTime.now();
     final outstandingFees = member['outstanding_fees'] ?? 0.0;
 
     return Card(
@@ -512,7 +572,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
                   ),
                   if (authController.isChoirLeader)
                     PopupMenuButton<String>(
-                      onSelected: (value) => _handleMemberAction(context, member, value),
+                      onSelected: (value) =>
+                          _handleMemberAction(context, member, value),
                       itemBuilder: (context) => [
                         PopupMenuItem(
                           value: 'edit',
@@ -538,9 +599,16 @@ class _MembersListScreenState extends State<MembersListScreen> {
                           value: 'remove',
                           child: Row(
                             children: [
-                              const Icon(Icons.remove_circle, size: 16, color: Colors.red),
+                              const Icon(
+                                Icons.remove_circle,
+                                size: 16,
+                                color: Colors.red,
+                              ),
                               const SizedBox(width: 8),
-                              Text(context.tr('remove'), style: const TextStyle(color: Colors.red)),
+                              Text(
+                                context.tr('remove'),
+                                style: const TextStyle(color: Colors.red),
+                              ),
                             ],
                           ),
                         ),
@@ -577,10 +645,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
               const SizedBox(height: 8),
               Text(
                 '${context.tr('memberJoinedLabel')}: ${_formatDate(joinDate)}',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
             ],
           ),
@@ -640,14 +705,19 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _showAddMemberDialog() {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir == null) return;
-    
-    Get.to(() => AddMemberScreen(
-      choirId: choirController.selectedChoir!.id,
-      choirName: choirController.selectedChoir!.name,
-    ))?.then((result) {
+
+    Get.to(
+      () => AddMemberScreen(
+        choirId: choirController.selectedChoir!.id,
+        choirName: choirController.selectedChoir!.name,
+      ),
+    )?.then((result) {
       if (result == true) {
         _loadMembers();
       }
@@ -658,7 +728,11 @@ class _MembersListScreenState extends State<MembersListScreen> {
     Get.to(() => MemberDetailScreen(member: member));
   }
 
-  void _handleMemberAction(BuildContext context, Map<String, dynamic> member, String action) {
+  void _handleMemberAction(
+    BuildContext context,
+    Map<String, dynamic> member,
+    String action,
+  ) {
     switch (action) {
       case 'edit':
         Get.to(() => EditMemberScreen(member: member));
@@ -717,12 +791,21 @@ class _MembersListScreenState extends State<MembersListScreen> {
     );
   }
 
-  void _updateMemberStatus(Map<String, dynamic> member, MemberStatus status) async {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+  void _updateMemberStatus(
+    Map<String, dynamic> member,
+    MemberStatus status,
+  ) async {
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir == null) return;
-    
+
     final success = await memberController.updateMemberStatus(
       memberId: member['id'],
       status: status,
@@ -769,7 +852,10 @@ class _MembersListScreenState extends State<MembersListScreen> {
               _removeMember(member);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(context.tr('remove'), style: const TextStyle(color: Colors.white)),
+            child: Text(
+              context.tr('remove'),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -777,11 +863,17 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _removeMember(Map<String, dynamic> member) async {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir == null) return;
-    
+
     final success = await memberController.removeMemberFromChoir(
       member['id'],
       choirController.selectedChoir!.id,
@@ -806,8 +898,14 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _showExportOptions() {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
 
     if (choirController.selectedChoir == null) {
       Helpers.showErrorSnackbar(context.tr('memberSelectChoirFirst'));
@@ -833,10 +931,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
           children: [
             Text(
               context.tr('memberExportListTitle'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -878,9 +973,12 @@ class _MembersListScreenState extends State<MembersListScreen> {
   }
 
   void _exportMembers(String format, List<Map<String, dynamic>> members) async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     final exportService = ExportService();
-    
+
     // Show loading dialog
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
@@ -889,24 +987,38 @@ class _MembersListScreenState extends State<MembersListScreen> {
 
     try {
       // Transform member data for export
-      final totalOutstanding = members.fold(0.0, (sum, m) => sum + (m['outstanding_fees'] ?? 0.0));
-      final totalPaid = members.fold(0.0, (sum, m) => sum + (m['total_paid'] ?? 0.0));
+      final totalOutstanding = members.fold(
+        0.0,
+        (sum, m) => sum + (m['outstanding_fees'] ?? 0.0),
+      );
+      final totalPaid = members.fold(
+        0.0,
+        (sum, m) => sum + (m['total_paid'] ?? 0.0),
+      );
       final totalAmount = totalPaid + totalOutstanding;
-      final collectionRate = totalAmount > 0 ? (totalPaid / totalAmount) * 100 : 0.0;
-      
+      final collectionRate = totalAmount > 0
+          ? (totalPaid / totalAmount) * 100
+          : 0.0;
+
       final reportData = {
         'members': members,
         'summary': {
           'total_members': members.length,
-          'active_members': members.where((m) => m['status'] == 'active').length,
-          'inactive_members': members.where((m) => m['status'] == 'inactive').length,
-          'suspended_members': members.where((m) => m['status'] == 'suspended').length,
+          'active_members': members
+              .where((m) => m['status'] == 'active')
+              .length,
+          'inactive_members': members
+              .where((m) => m['status'] == 'inactive')
+              .length,
+          'suspended_members': members
+              .where((m) => m['status'] == 'suspended')
+              .length,
           'total_outstanding': totalOutstanding,
           'total_paid': totalPaid,
           'collection_rate': collectionRate,
           'choir_name': choirController.selectedChoir?.name ?? '',
           'exported_at': DateTime.now().toString(),
-        }
+        },
       };
 
       String? result;
@@ -918,7 +1030,10 @@ class _MembersListScreenState extends State<MembersListScreen> {
           result = await exportService.exportMembershipToExcel(reportData);
           break;
         case 'csv':
-          result = await exportService.exportReportToCSV(reportData, 'membership');
+          result = await exportService.exportReportToCSV(
+            reportData,
+            'membership',
+          );
           break;
       }
 
@@ -939,7 +1054,9 @@ class _MembersListScreenState extends State<MembersListScreen> {
         Get.back();
       }
       if (!mounted) return;
-      Helpers.showErrorSnackbar('${context.tr('memberExportFailedWithError')}: $e');
+      Helpers.showErrorSnackbar(
+        '${context.tr('memberExportFailedWithError')}: $e',
+      );
     }
   }
 

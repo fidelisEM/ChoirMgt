@@ -39,8 +39,10 @@ class AuthService {
         return null;
       }
 
-      Logger.debug('getCurrentUserProfile: Fetching profile for user email: $email');
-      
+      Logger.debug(
+        'getCurrentUserProfile: Fetching profile for user email: $email',
+      );
+
       final response = await _supabase
           .from('users')
           .select()
@@ -50,7 +52,9 @@ class AuthService {
       Logger.debug('getCurrentUserProfile: Database response: $response');
 
       if (response == null) {
-        Logger.info('getCurrentUserProfile: No profile found, creating default');
+        Logger.info(
+          'getCurrentUserProfile: No profile found, creating default',
+        );
         // Create user profile if it doesn't exist
         final userModel = UserModel(
           id: user.id,
@@ -64,9 +68,7 @@ class AuthService {
         );
 
         try {
-          await _supabase
-              .from('users')
-              .upsert(userModel.toJson());
+          await _supabase.from('users').upsert(userModel.toJson());
           _cachedRole = userModel.role;
           return userModel;
         } catch (e) {
@@ -77,12 +79,11 @@ class AuthService {
         }
       }
 
-      final userModel = UserModel.fromJson({
-        'id': response['id'],
-        ...response,
-      });
+      final userModel = UserModel.fromJson({'id': response['id'], ...response});
 
-      Logger.debug('getCurrentUserProfile: Parsed user model - Name: ${userModel.fullName}, Role: ${userModel.role}');
+      Logger.debug(
+        'getCurrentUserProfile: Parsed user model - Name: ${userModel.fullName}, Role: ${userModel.role}',
+      );
       _cachedRole = userModel.role;
       return userModel;
     } catch (e) {
@@ -149,11 +150,11 @@ class AuthService {
         try {
           final userData = userModel.toJson();
           Logger.debug('Registering user data: $userData');
-          await _supabase
-              .from('users')
-              .upsert(userData);
+          await _supabase.from('users').upsert(userData);
         } catch (e) {
-          Logger.warning('Failed to create user profile during registration: $e');
+          Logger.warning(
+            'Failed to create user profile during registration: $e',
+          );
           // Continue anyway, profile can be created later
         }
 
@@ -181,7 +182,7 @@ class AuthService {
         OAuthProvider.google,
         redirectTo: 'com.example.choirmanagement://login-callback',
       );
-      
+
       if (response) {
         await _updateLastLogin(_supabase.auth.currentUser!.id);
         return await getCurrentUserProfile();
@@ -200,7 +201,7 @@ class AuthService {
         OAuthProvider.apple,
         redirectTo: 'com.example.choirmanagement://login-callback',
       );
-      
+
       if (response) {
         await _updateLastLogin(_supabase.auth.currentUser!.id);
         return await getCurrentUserProfile();
@@ -232,7 +233,7 @@ class AuthService {
       if (user == null) throw Exception('No user logged in');
 
       final updates = <String, dynamic>{};
-      
+
       if (displayName != null) {
         updates['full_name'] = displayName;
       }
@@ -250,9 +251,7 @@ class AuthService {
         updates['email'] = email;
         // Update auth user email
         try {
-          await _supabase.auth.updateUser(
-            UserAttributes(email: email),
-          );
+          await _supabase.auth.updateUser(UserAttributes(email: email));
         } catch (e) {
           throw 'Failed to update email in auth system: $e';
         }
@@ -263,17 +262,19 @@ class AuthService {
         if (userEmail == null) {
           throw Exception('User has no email address');
         }
-        
-        Logger.debug('updateProfile: Updating profile for user email: $userEmail');
+
+        Logger.debug(
+          'updateProfile: Updating profile for user email: $userEmail',
+        );
         Logger.debug('updateProfile: Update data: $updates');
-        
+
         // Update by email to match how getCurrentUserProfile works
         final result = await _supabase
             .from('users')
             .update(updates)
             .eq('email', userEmail)
             .select();
-        
+
         Logger.debug('updateProfile: Update result: $result');
       }
     } catch (e) {
@@ -297,7 +298,7 @@ class AuthService {
       }
 
       final updates = <String, dynamic>{};
-      
+
       if (displayName != null) {
         updates['full_name'] = displayName;
       }
@@ -311,16 +312,18 @@ class AuthService {
       }
 
       if (updates.isNotEmpty) {
-        Logger.debug('updateUserProfileByUserId: Updating profile for user ID: $userId');
+        Logger.debug(
+          'updateUserProfileByUserId: Updating profile for user ID: $userId',
+        );
         Logger.debug('updateUserProfileByUserId: Update data: $updates');
-        
+
         // Update by user ID
         final result = await _supabase
             .from('users')
             .update(updates)
             .eq('id', userId)
             .select();
-        
+
         Logger.debug('updateUserProfileByUserId: Update result: $result');
       }
     } catch (e) {
@@ -329,7 +332,11 @@ class AuthService {
     }
   }
 
-  Future<String?> uploadRegistrationImage(Uint8List imageBytes, String fileName, String userId) async {
+  Future<String?> uploadRegistrationImage(
+    Uint8List imageBytes,
+    String fileName,
+    String userId,
+  ) async {
     try {
       Logger.info('Starting registration image upload for user: $userId');
       Logger.debug('File name: $fileName');
@@ -345,27 +352,33 @@ class AuthService {
         Logger.debug('Attempting direct upload to avatars bucket...');
         await _supabase.storage
             .from('avatars')
-            .uploadBinary(filePath, imageBytes, fileOptions: const FileOptions(
-              cacheControl: '3600',
-              upsert: true,
-            ));
-        
+            .uploadBinary(
+              filePath,
+              imageBytes,
+              fileOptions: const FileOptions(
+                cacheControl: '3600',
+                upsert: true,
+              ),
+            );
+
         final publicUrl = _supabase.storage
             .from('avatars')
             .getPublicUrl(filePath);
-        
+
         Logger.info('Direct upload successful. Public URL: $publicUrl');
         return publicUrl;
       } catch (uploadError) {
         Logger.warning('Direct upload failed: $uploadError');
-        
+
         // Check if bucket exists and attempt to create if needed
         final bucketReady = await _ensureAvatarsBucket();
         if (!bucketReady) {
           Logger.error('Failed to ensure avatars bucket exists');
-          throw Exception('Avatar upload failed: Unable to access storage bucket');
+          throw Exception(
+            'Avatar upload failed: Unable to access storage bucket',
+          );
         }
-        
+
         // Retry upload after bucket verification/creation
         Logger.info('Retrying upload after bucket verification...');
       }
@@ -374,11 +387,11 @@ class AuthService {
       Logger.debug('Uploading file to storage...');
       await _supabase.storage
           .from('avatars')
-          .uploadBinary(filePath, imageBytes,
-              fileOptions: const FileOptions(
-                cacheControl: '3600',
-                upsert: true,
-              ));
+          .uploadBinary(
+            filePath,
+            imageBytes,
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: true),
+          );
 
       // Get the public URL
       final publicUrl = _supabase.storage
@@ -397,7 +410,10 @@ class AuthService {
     }
   }
 
-  Future<String?> uploadProfileImage(Uint8List imageBytes, String fileName) async {
+  Future<String?> uploadProfileImage(
+    Uint8List imageBytes,
+    String fileName,
+  ) async {
     try {
       final user = currentUser;
       if (user == null) {
@@ -419,27 +435,33 @@ class AuthService {
         Logger.debug('Attempting direct upload to avatars bucket...');
         await _supabase.storage
             .from('avatars')
-            .uploadBinary(filePath, imageBytes, fileOptions: const FileOptions(
-              cacheControl: '3600',
-              upsert: true,
-            ));
-        
+            .uploadBinary(
+              filePath,
+              imageBytes,
+              fileOptions: const FileOptions(
+                cacheControl: '3600',
+                upsert: true,
+              ),
+            );
+
         final publicUrl = _supabase.storage
             .from('avatars')
             .getPublicUrl(filePath);
-        
+
         Logger.info('Direct upload successful. Public URL: $publicUrl');
         return publicUrl;
       } catch (uploadError) {
         Logger.warning('Direct upload failed: $uploadError');
-        
+
         // Check if bucket exists and attempt to create if needed
         final bucketReady = await _ensureAvatarsBucket();
         if (!bucketReady) {
           Logger.error('Failed to ensure avatars bucket exists');
-          throw Exception('Avatar upload failed: Unable to access storage bucket');
+          throw Exception(
+            'Avatar upload failed: Unable to access storage bucket',
+          );
         }
-        
+
         // Retry upload after bucket verification/creation
         Logger.info('Retrying upload after bucket verification...');
       }
@@ -448,11 +470,11 @@ class AuthService {
       Logger.debug('Uploading file to storage...');
       await _supabase.storage
           .from('avatars')
-          .uploadBinary(filePath, imageBytes,
-              fileOptions: const FileOptions(
-                cacheControl: '3600',
-                upsert: true,
-              ));
+          .uploadBinary(
+            filePath,
+            imageBytes,
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: true),
+          );
 
       // Get the public URL
       final publicUrl = _supabase.storage
@@ -471,7 +493,10 @@ class AuthService {
     }
   }
 
-  Future<void> updateUserProfileImage(String userId, String profileImageUrl) async {
+  Future<void> updateUserProfileImage(
+    String userId,
+    String profileImageUrl,
+  ) async {
     try {
       Logger.debug('Updating user profile image for user: $userId');
       Logger.debug('Image URL: $profileImageUrl');
@@ -488,7 +513,9 @@ class AuthService {
         // No row matched - the profile was never created (e.g. the
         // registration insert failed silently). Create it now so the
         // photo isn't lost, instead of updating a row that doesn't exist.
-        Logger.warning('No profile row found for $userId, creating one with the photo attached');
+        Logger.warning(
+          'No profile row found for $userId, creating one with the photo attached',
+        );
         final authUser = _supabase.auth.currentUser;
         if (authUser != null && authUser.id == userId) {
           final userModel = UserModel(
@@ -509,7 +536,9 @@ class AuthService {
     } catch (e) {
       Logger.error('Failed to update user profile image: $e');
       if (e is PostgrestException) {
-        Logger.error('Postgrest details - message: ${e.message}, code: ${e.code}');
+        Logger.error(
+          'Postgrest details - message: ${e.message}, code: ${e.code}',
+        );
       }
       rethrow;
     }
@@ -527,7 +556,7 @@ class AuthService {
           return userProfile.isAdmin;
         case UserRole.choirLeader:
           return userProfile.isAdmin ||
-                 userProfile.role == UserRole.choirLeader;
+              userProfile.role == UserRole.choirLeader;
         case UserRole.choirMember:
           return true;
       }
@@ -541,9 +570,7 @@ class AuthService {
     try {
       await _supabase
           .from('users')
-          .update({
-        'last_login': DateTime.now().toIso8601String(),
-      })
+          .update({'last_login': DateTime.now().toIso8601String()})
           .eq('id', userId);
     } catch (e) {
       Logger.error('Error updating last login: $e');
@@ -566,10 +593,9 @@ class AuthService {
 
       // Then delete the auth user (this will automatically sign them out)
       await _supabase.auth.admin.deleteUser(user.id);
-      
+
       // Sign out the user locally
       await signOut();
-      
     } catch (e) {
       Logger.error('Error deleting account: $e');
       rethrow;
@@ -580,7 +606,7 @@ class AuthService {
   Future<bool> _ensureAvatarsBucket() async {
     try {
       Logger.debug('Checking if avatars bucket exists...');
-      
+
       // Strategy 1: Try to access the bucket directly
       try {
         await _supabase.storage.from('avatars').list();
@@ -588,14 +614,18 @@ class AuthService {
         return true;
       } catch (accessError) {
         Logger.warning('Direct bucket access failed: $accessError');
-        
+
         // Strategy 2: Check if bucket exists in list
         try {
           final buckets = await _supabase.storage.listBuckets();
-          final bucketExists = buckets.any((bucket) => bucket.name == 'avatars');
-          
+          final bucketExists = buckets.any(
+            (bucket) => bucket.name == 'avatars',
+          );
+
           if (bucketExists) {
-            Logger.warning('avatars bucket found in list but may have access issues');
+            Logger.warning(
+              'avatars bucket found in list but may have access issues',
+            );
             return true;
           }
         } catch (listError) {
@@ -611,20 +641,29 @@ class AuthService {
           'avatars',
           const BucketOptions(
             public: true,
-            allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+            allowedMimeTypes: [
+              'image/jpeg',
+              'image/png',
+              'image/gif',
+              'image/webp',
+            ],
           ),
         );
         Logger.info('Successfully created avatars bucket');
         return true;
       } catch (createError) {
         Logger.error('Failed to create avatars bucket: $createError');
-        Logger.error('MANUAL ACTION REQUIRED: Please ask a system administrator to create the storage bucket');
+        Logger.error(
+          'MANUAL ACTION REQUIRED: Please ask a system administrator to create the storage bucket',
+        );
         Logger.info('Storage bucket setup steps:');
         Logger.info('1. Go to Supabase Dashboard > Storage > Buckets');
         Logger.info('2. Click "New bucket"');
         Logger.info('3. Name: avatars');
         Logger.info('4. Make it public: YES');
-        Logger.info('5. Allow file types: image/jpeg, image/png, image/gif, image/webp');
+        Logger.info(
+          '5. Allow file types: image/jpeg, image/png, image/gif, image/webp',
+        );
         return false;
       }
     } catch (e) {

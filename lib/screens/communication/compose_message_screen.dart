@@ -14,7 +14,6 @@ import '../../utils/validators.dart';
 import '../../widgets/custom_widgets.dart';
 
 class ComposeMessageScreen extends StatefulWidget {
-
   const ComposeMessageScreen({
     super.key,
     this.editMessage,
@@ -124,13 +123,17 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
       _selectedType = widget.editMessage!.type;
     } else if (widget.replyTo != null) {
       // Replying to message
-      _subjectController.text = widget.subject ?? 'Re: ${widget.replyTo!.subject}';
-      _contentController.text = '\n\n--- Original Message ---\nFrom: ${widget.replyTo!.senderName}\nSubject: ${widget.replyTo!.subject}\nSent: ${_formatDateTime(widget.replyTo!.createdAt)}\n\n${widget.replyTo!.content}';
+      _subjectController.text =
+          widget.subject ?? 'Re: ${widget.replyTo!.subject}';
+      _contentController.text =
+          '\n\n--- Original Message ---\nFrom: ${widget.replyTo!.senderName}\nSubject: ${widget.replyTo!.subject}\nSent: ${_formatDateTime(widget.replyTo!.createdAt)}\n\n${widget.replyTo!.content}';
       _selectedType = 'discussion';
     } else if (widget.forwardFrom != null) {
       // Forwarding message
-      _subjectController.text = widget.subject ?? 'Fwd: ${widget.forwardFrom!.subject}';
-      _contentController.text = '\n\n--- Forwarded Message ---\nFrom: ${widget.forwardFrom!.senderName}\nSubject: ${widget.forwardFrom!.subject}\nSent: ${_formatDateTime(widget.forwardFrom!.createdAt)}\nType: ${widget.forwardFrom!.type.toUpperCase()}\n\n${widget.forwardFrom!.content}';
+      _subjectController.text =
+          widget.subject ?? 'Fwd: ${widget.forwardFrom!.subject}';
+      _contentController.text =
+          '\n\n--- Forwarded Message ---\nFrom: ${widget.forwardFrom!.senderName}\nSubject: ${widget.forwardFrom!.subject}\nSent: ${_formatDateTime(widget.forwardFrom!.createdAt)}\nType: ${widget.forwardFrom!.type.toUpperCase()}\n\n${widget.forwardFrom!.content}';
       _selectedType = widget.forwardFrom!.type;
       // When forwarding, suggest sending to all members by default
       _selectedRecipientGroup = 'all';
@@ -142,17 +145,29 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
 
   String _formatDateTime(DateTime dateTime) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     final month = months[dateTime.month - 1];
     final day = dateTime.day;
     final year = dateTime.year;
-    final hour = dateTime.hour == 0 ? 12 : (dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour);
+    final hour = dateTime.hour == 0
+        ? 12
+        : (dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour);
     final minute = dateTime.minute.toString().padLeft(2, '0');
     final ampm = dateTime.hour >= 12 ? 'PM' : 'AM';
-    
+
     return '$month $day, $year at $hour:$minute $ampm';
   }
 
@@ -169,25 +184,22 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           isEditing
               ? context.tr('msgEditMessage')
               : isReplying
-                  ? context.tr('msgReplyToMessage')
-                  : isForwarding
-                      ? context.tr('msgForwardMessage')
-                      : context.tr('msgComposeMessage')
+              ? context.tr('msgReplyToMessage')
+              : isForwarding
+              ? context.tr('msgForwardMessage')
+              : context.tr('msgComposeMessage'),
         ),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -237,10 +249,10 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
             isEditing
                 ? context.tr('msgEditMessage')
                 : isReplying
-                    ? context.tr('msgReplyToMessage')
-                    : isForwarding
-                        ? context.tr('msgForwardMessage')
-                        : context.tr('msgComposeNewMessage'),
+                ? context.tr('msgReplyToMessage')
+                : isForwarding
+                ? context.tr('msgForwardMessage')
+                : context.tr('msgComposeNewMessage'),
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -252,14 +264,11 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
             isEditing
                 ? context.tr('msgEditSubtitle')
                 : isReplying
-                    ? context.tr('msgReplySubtitle')
-                    : isForwarding
-                        ? context.tr('msgForwardSubtitle')
-                        : context.tr('msgComposeSubtitle'),
-            style: const TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+                ? context.tr('msgReplySubtitle')
+                : isForwarding
+                ? context.tr('msgForwardSubtitle')
+                : context.tr('msgComposeSubtitle'),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -304,7 +313,8 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
                   setState(() {
                     _selectedRecipientGroup = group['value'] as String;
                     if (_selectedRecipientGroup != 'custom') {
-                      _selectedMembers.clear(); // Clear custom selection when changing groups
+                      _selectedMembers
+                          .clear(); // Clear custom selection when changing groups
                     }
                   });
                 },
@@ -350,11 +360,17 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
               decoration: BoxDecoration(
                 color: AppColors.info.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppColors.info.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline, color: AppColors.info, size: 16),
+                  const Icon(
+                    Icons.info_outline,
+                    color: AppColors.info,
+                    size: 16,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -392,7 +408,8 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
         }
 
         // Load members if not loaded yet
-        if (memberController.membersWithUserInfo.isEmpty && !memberController.isLoading) {
+        if (memberController.membersWithUserInfo.isEmpty &&
+            !memberController.isLoading) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             memberController.loadChoirMembers(selectedChoir.id);
           });
@@ -408,7 +425,7 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
         }
 
         final members = memberController.membersWithUserInfo;
-        
+
         if (members.isEmpty) {
           return Container(
             padding: const EdgeInsets.all(16),
@@ -439,12 +456,16 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
                       if (_selectedMembers.length == members.length) {
                         _selectedMembers.clear();
                       } else {
-                        _selectedMembers = members.map((m) => m['users']['id'] as String).toList();
+                        _selectedMembers = members
+                            .map((m) => m['users']['id'] as String)
+                            .toList();
                       }
                     });
                   },
                   child: Text(
-                    _selectedMembers.length == members.length ? context.tr('msgClearAll') : context.tr('msgSelectAll'),
+                    _selectedMembers.length == members.length
+                        ? context.tr('msgClearAll')
+                        : context.tr('msgSelectAll'),
                     style: const TextStyle(fontSize: 12),
                   ),
                 ),
@@ -460,7 +481,7 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
                     final memberData = member;
                     final userId = userData['id'] as String;
                     final isSelected = _selectedMembers.contains(userId);
-                    
+
                     return CheckboxListTile(
                       value: isSelected,
                       onChanged: (value) {
@@ -480,7 +501,8 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            (memberData['role'] as String? ?? 'Member').toUpperCase(),
+                            (memberData['role'] as String? ?? 'Member')
+                                .toUpperCase(),
                             style: TextStyle(
                               fontSize: 11,
                               color: Colors.grey[600],
@@ -663,10 +685,7 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
               Expanded(
                 child: Text(
                   _getRecipientInfoText(),
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
               ),
             ],
@@ -676,7 +695,11 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
     );
   }
 
-  Widget _buildActionButtons(bool isEditing, bool isReplying, bool isForwarding) {
+  Widget _buildActionButtons(
+    bool isEditing,
+    bool isReplying,
+    bool isForwarding,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -690,10 +713,7 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
             ),
             child: Text(
               context.tr('cancel'),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -727,10 +747,10 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
                         isEditing
                             ? context.tr('update')
                             : isReplying
-                                ? context.tr('msgSendReply')
-                                : isForwarding
-                                    ? context.tr('msgForwardMessage')
-                                    : context.tr('msgSendMessage'),
+                            ? context.tr('msgSendReply')
+                            : isForwarding
+                            ? context.tr('msgForwardMessage')
+                            : context.tr('msgSendMessage'),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -746,45 +766,52 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
 
   Color _getSelectedTypeColor() {
     return _messageTypes.firstWhere(
-      (type) => type['value'] == _selectedType,
-      orElse: () => _messageTypes[0],
-    )['color'] as Color;
+          (type) => type['value'] == _selectedType,
+          orElse: () => _messageTypes[0],
+        )['color']
+        as Color;
   }
 
   IconData _getSelectedTypeIcon() {
     return _messageTypes.firstWhere(
-      (type) => type['value'] == _selectedType,
-      orElse: () => _messageTypes[0],
-    )['icon'] as IconData;
+          (type) => type['value'] == _selectedType,
+          orElse: () => _messageTypes[0],
+        )['icon']
+        as IconData;
   }
 
   String _getSelectedTypeDescription() {
     return _messageTypes.firstWhere(
-      (type) => type['value'] == _selectedType,
-      orElse: () => _messageTypes[0],
-    )['description'] as String;
+          (type) => type['value'] == _selectedType,
+          orElse: () => _messageTypes[0],
+        )['description']
+        as String;
   }
 
   Color _getSelectedRecipientColor() {
     return _recipientGroups.firstWhere(
-      (group) => group['value'] == _selectedRecipientGroup,
-      orElse: () => _recipientGroups[0],
-    )['color'] as Color;
+          (group) => group['value'] == _selectedRecipientGroup,
+          orElse: () => _recipientGroups[0],
+        )['color']
+        as Color;
   }
 
   IconData _getSelectedRecipientIcon() {
     return _recipientGroups.firstWhere(
-      (group) => group['value'] == _selectedRecipientGroup,
-      orElse: () => _recipientGroups[0],
-    )['icon'] as IconData;
+          (group) => group['value'] == _selectedRecipientGroup,
+          orElse: () => _recipientGroups[0],
+        )['icon']
+        as IconData;
   }
 
   String _getSelectedRecipientDescription() {
-    final description = _recipientGroups.firstWhere(
-      (group) => group['value'] == _selectedRecipientGroup,
-      orElse: () => _recipientGroups[0],
-    )['description'] as String;
-    
+    final description =
+        _recipientGroups.firstWhere(
+              (group) => group['value'] == _selectedRecipientGroup,
+              orElse: () => _recipientGroups[0],
+            )['description']
+            as String;
+
     if (_selectedRecipientGroup == 'custom' && _selectedMembers.isNotEmpty) {
       return '$description (${_selectedMembers.length} selected)';
     }
@@ -792,9 +819,12 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
   }
 
   List<String>? _getRecipientsForGroup() {
-    final memberController = Provider.of<MemberController>(context, listen: false);
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
     final members = memberController.membersWithUserInfo;
-    
+
     switch (_selectedRecipientGroup) {
       case 'all':
         return null; // null means all members
@@ -803,9 +833,9 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
         return members
             .where((member) {
               final role = member['role'] as String? ?? '';
-              return role.toLowerCase().contains('leader') || 
-                     role.toLowerCase().contains('admin') ||
-                     role.toLowerCase().contains('chair');
+              return role.toLowerCase().contains('leader') ||
+                  role.toLowerCase().contains('admin') ||
+                  role.toLowerCase().contains('chair');
             })
             .map((member) => member['users']['id'] as String)
             .toList();
@@ -814,8 +844,8 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
         return members
             .where((member) {
               final role = member['role'] as String? ?? '';
-              return role.toLowerCase().contains('committee') || 
-                     role.toLowerCase().contains('officer');
+              return role.toLowerCase().contains('committee') ||
+                  role.toLowerCase().contains('officer');
             })
             .map((member) => member['users']['id'] as String)
             .toList();
@@ -836,9 +866,12 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
   }
 
   String _getRecipientInfoText() {
-    final memberController = Provider.of<MemberController>(context, listen: false);
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
     final totalMembers = memberController.membersWithUserInfo.length;
-    
+
     switch (_selectedRecipientGroup) {
       case 'all':
         return totalMembers > 0
@@ -875,7 +908,10 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
       return;
     }
 
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     final authController = Provider.of<AuthController>(context, listen: false);
 
     if (choirController.selectedChoir == null) {
@@ -892,12 +928,19 @@ class _ComposeMessageScreenState extends State<ComposeMessageScreen> {
       _isLoading = true;
     });
 
-    final successMessage = isEditing ? context.tr('msgUpdatedSuccess') : context.tr('msgSentSuccess');
-    final failureMessage = isEditing ? context.tr('msgUpdateFailed') : context.tr('msgSendFailed');
+    final successMessage = isEditing
+        ? context.tr('msgUpdatedSuccess')
+        : context.tr('msgSentSuccess');
+    final failureMessage = isEditing
+        ? context.tr('msgUpdateFailed')
+        : context.tr('msgSendFailed');
     final errorPrefix = context.tr('error');
 
     try {
-      final communicationController = Provider.of<CommunicationController>(context, listen: false);
+      final communicationController = Provider.of<CommunicationController>(
+        context,
+        listen: false,
+      );
       bool success = false;
 
       if (isEditing && widget.editMessage != null) {

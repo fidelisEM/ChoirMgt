@@ -1,8 +1,8 @@
 enum FeeType { weekly, monthly, quarterly, annual, oneTime, event }
+
 enum FeeStatus { pending, paid, overdue, partial }
 
 class FeeDefinitionModel {
-
   FeeDefinitionModel({
     required this.id,
     required this.choirId,
@@ -29,7 +29,11 @@ class FeeDefinitionModel {
         (type) => type.toString().split('.').last == json['type'],
         orElse: () => FeeType.monthly,
       ),
-      createdAt: DateTime.parse(json['created_at'] ?? json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ??
+            json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
       startDate: (json['start_date'] ?? json['startDate']) != null
           ? DateTime.parse(json['start_date'] ?? json['startDate'])
           : null,
@@ -104,7 +108,7 @@ class FeeDefinitionModel {
   // Calculate next due date for recurring fees
   DateTime? getNextDueDate({DateTime? fromDate}) {
     final baseDate = fromDate ?? DateTime.now();
-    
+
     if (!isActive || type == FeeType.oneTime) {
       return null;
     }
@@ -134,7 +138,6 @@ class FeeDefinitionModel {
 }
 
 class MemberFeeModel {
-
   MemberFeeModel({
     required this.id,
     required this.memberId,
@@ -155,16 +158,23 @@ class MemberFeeModel {
     return MemberFeeModel(
       id: json['id'] ?? '',
       memberId: json['member_id'] ?? json['memberId'] ?? '',
-      feeDefinitionId: json['fee_definition_id'] ?? json['feeDefinitionId'] ?? '',
+      feeDefinitionId:
+          json['fee_definition_id'] ?? json['feeDefinitionId'] ?? '',
       choirId: json['choir_id'] ?? json['choirId'] ?? '',
       amountDue: (json['amount_due'] ?? json['amountDue'] ?? 0.0).toDouble(),
       amountPaid: (json['amount_paid'] ?? json['amountPaid'] ?? 0.0).toDouble(),
-      dueDate: DateTime.parse(json['due_date'] ?? json['dueDate'] ?? DateTime.now().toIso8601String()),
+      dueDate: DateTime.parse(
+        json['due_date'] ?? json['dueDate'] ?? DateTime.now().toIso8601String(),
+      ),
       status: FeeStatus.values.firstWhere(
         (status) => status.toString().split('.').last == json['status'],
         orElse: () => FeeStatus.pending,
       ),
-      createdAt: DateTime.parse(json['created_at'] ?? json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ??
+            json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
       paidAt: (json['paid_at'] ?? json['paidAt']) != null
           ? DateTime.parse(json['paid_at'] ?? json['paidAt'])
           : null,
@@ -242,17 +252,17 @@ class MemberFeeModel {
   bool get isPaid => amountPaid >= amountDue;
   bool get isPartial => amountPaid > 0 && amountPaid < amountDue;
   bool get isOverdue => DateTime.now().isAfter(dueDate) && !isPaid;
-  
+
   int get daysOverdue {
     if (!isOverdue) return 0;
     return DateTime.now().difference(dueDate).inDays;
   }
 
-  double get paymentProgress => amountDue > 0 ? (amountPaid / amountDue).clamp(0.0, 1.0) : 0.0;
+  double get paymentProgress =>
+      amountDue > 0 ? (amountPaid / amountDue).clamp(0.0, 1.0) : 0.0;
 }
 
 class FeePaymentModel {
-
   FeePaymentModel({
     required this.id,
     required this.memberFeeId,
@@ -274,7 +284,9 @@ class FeePaymentModel {
       memberId: json['member_id'] ?? json['memberId'] ?? '',
       choirId: json['choir_id'] ?? json['choirId'] ?? '',
       amount: (json['amount'] ?? 0.0).toDouble(),
-      paidAt: DateTime.parse(json['paid_at'] ?? json['paidAt'] ?? DateTime.now().toIso8601String()),
+      paidAt: DateTime.parse(
+        json['paid_at'] ?? json['paidAt'] ?? DateTime.now().toIso8601String(),
+      ),
       paymentMethod: json['payment_method'] ?? json['paymentMethod'] ?? '',
       reference: json['reference'],
       notes: json['notes'],

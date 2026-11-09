@@ -5,7 +5,8 @@ import '../models/communication_model.dart';
 class CommunicationService {
   factory CommunicationService() => _instance;
   CommunicationService._internal();
-  static final CommunicationService _instance = CommunicationService._internal();
+  static final CommunicationService _instance =
+      CommunicationService._internal();
 
   final SupabaseClient _supabase = Supabase.instance.client;
 
@@ -19,7 +20,7 @@ class CommunicationService {
   }) async {
     try {
       debugPrint('CommunicationService: Fetching messages for choir $choirId');
-      
+
       // Build the query in one chain
       var queryBuilder = _supabase
           .from('messages')
@@ -38,7 +39,7 @@ class CommunicationService {
       if (limit != null) {
         query = query.limit(limit);
       }
-      
+
       if (offset != null && offset > 0) {
         query = query.range(offset, offset + (limit ?? 50) - 1);
       }
@@ -47,16 +48,16 @@ class CommunicationService {
       debugPrint('CommunicationService: Fetched ${response.length} messages');
 
       final List<MessageModel> messages = [];
-      
+
       for (final messageData in response) {
         final message = MessageModel.fromJson(messageData);
-        
+
         // Fetch replies if requested
         List<MessageReplyModel> replies = [];
         if (includeReplies) {
           replies = await getMessageReplies(message.id);
         }
-        
+
         messages.add(message.copyWith(replies: replies));
       }
 
@@ -204,7 +205,10 @@ class CommunicationService {
             'updated_at': DateTime.now().toIso8601String(),
           })
           .eq('id', messageId)
-          .eq('sender_id', _supabase.auth.currentUser?.id ?? ''); // Security: only update own messages
+          .eq(
+            'sender_id',
+            _supabase.auth.currentUser?.id ?? '',
+          ); // Security: only update own messages
 
       debugPrint('CommunicationService: Message updated successfully');
       return true;
@@ -224,7 +228,10 @@ class CommunicationService {
           .from('messages')
           .update({'is_active': false})
           .eq('id', messageId)
-          .eq('sender_id', _supabase.auth.currentUser?.id ?? ''); // Security: only delete own messages
+          .eq(
+            'sender_id',
+            _supabase.auth.currentUser?.id ?? '',
+          ); // Security: only delete own messages
 
       debugPrint('CommunicationService: Message deleted successfully');
       return true;
@@ -238,13 +245,15 @@ class CommunicationService {
   /// Mark message as read
   Future<bool> markMessageAsRead(String messageId, String userId) async {
     try {
-      debugPrint('CommunicationService: Marking message $messageId as read for user $userId');
+      debugPrint(
+        'CommunicationService: Marking message $messageId as read for user $userId',
+      );
 
       // Use the database function for atomic operation
-      await _supabase.rpc('mark_message_as_read', params: {
-        'message_uuid': messageId,
-        'user_uuid': userId,
-      });
+      await _supabase.rpc(
+        'mark_message_as_read',
+        params: {'message_uuid': messageId, 'user_uuid': userId},
+      );
 
       debugPrint('CommunicationService: Message marked as read');
       return true;
@@ -258,12 +267,14 @@ class CommunicationService {
   /// Mark reply as read
   Future<bool> markReplyAsRead(String replyId, String userId) async {
     try {
-      debugPrint('CommunicationService: Marking reply $replyId as read for user $userId');
+      debugPrint(
+        'CommunicationService: Marking reply $replyId as read for user $userId',
+      );
 
-      await _supabase.rpc('mark_reply_as_read', params: {
-        'reply_uuid': replyId,
-        'user_uuid': userId,
-      });
+      await _supabase.rpc(
+        'mark_reply_as_read',
+        params: {'reply_uuid': replyId, 'user_uuid': userId},
+      );
 
       debugPrint('CommunicationService: Reply marked as read');
       return true;
@@ -277,10 +288,10 @@ class CommunicationService {
   /// Get unread message count for a user in a choir
   Future<int> getUnreadMessageCount(String choirId, String userId) async {
     try {
-      final response = await _supabase.rpc('get_unread_message_count', params: {
-        'choir_uuid': choirId,
-        'user_uuid': userId,
-      });
+      final response = await _supabase.rpc(
+        'get_unread_message_count',
+        params: {'choir_uuid': choirId, 'user_uuid': userId},
+      );
 
       return response as int? ?? 0;
     } catch (e, stackTrace) {
@@ -305,13 +316,15 @@ class CommunicationService {
       }
 
       final searchTerm = '%${query.trim().toLowerCase()}%';
-      
+
       var queryBuilder = _supabase
           .from('messages')
           .select('*')
           .eq('choir_id', choirId)
           .eq('is_active', true)
-          .or('subject.ilike.$searchTerm,content.ilike.$searchTerm,sender_name.ilike.$searchTerm');
+          .or(
+            'subject.ilike.$searchTerm,content.ilike.$searchTerm,sender_name.ilike.$searchTerm',
+          );
 
       if (messageType != null) {
         queryBuilder = queryBuilder.eq('type', messageType);
@@ -324,7 +337,7 @@ class CommunicationService {
       }
 
       final response = await dbQuery;
-      
+
       final List<MessageModel> messages = [];
       for (final messageData in response) {
         final message = MessageModel.fromJson(messageData);
@@ -332,7 +345,9 @@ class CommunicationService {
         messages.add(message.copyWith(replies: replies));
       }
 
-      debugPrint('CommunicationService: Found ${messages.length} search results');
+      debugPrint(
+        'CommunicationService: Found ${messages.length} search results',
+      );
       return messages;
     } catch (e, stackTrace) {
       debugPrint('CommunicationService: Error searching messages: $e');
@@ -366,7 +381,7 @@ class CommunicationService {
 
       final message = MessageModel.fromJson(response);
       final replies = await getMessageReplies(messageId);
-      
+
       return message.copyWith(replies: replies);
     } catch (e, stackTrace) {
       debugPrint('CommunicationService: Error getting message by ID: $e');

@@ -13,7 +13,7 @@ class MusicController extends ChangeNotifier {
   List<MusicModel> _filteredMusic = [];
   List<MusicModel> _featuredMusic = [];
   List<MusicModel> _popularMusic = [];
-  
+
   bool _isLoading = false;
   bool _isSearching = false;
   bool _isSyncing = false;
@@ -36,10 +36,10 @@ class MusicController extends ChangeNotifier {
   String? get selectedLanguage => _selectedLanguage;
   String? get errorMessage => _errorMessage;
   SyncStats? get syncStats => _syncStats;
-  
+
   bool get hasMusic => _allMusic.isNotEmpty;
   bool get hasFilteredMusic => _filteredMusic.isNotEmpty;
-  
+
   // Available categories and languages
   List<MusicCategory> get availableCategories => MusicCategory.values;
   List<String> get availableLanguages => _getAvailableLanguages();
@@ -218,27 +218,29 @@ class MusicController extends ChangeNotifier {
       Logger.info('Fetched ${webMusic.length} music tracks from web');
     });
   }
-  
+
   // Sync music from SwahiliMusicNotes.com
   Future<SyncResult> syncFromSwahiliMusicNotes({bool forceSync = false}) async {
     _isSyncing = true;
     _errorMessage = null;
     notifyListeners();
-    
+
     try {
       final result = await MusicSyncService.syncMusicFromSwahiliNotes(
         forceSync: forceSync,
       );
-      
+
       if (result.success) {
         // Refresh the music list after successful sync
         await loadPublicMusic();
-        Logger.info('Music sync completed: ${result.newSongs} new, ${result.updatedSongs} updated');
+        Logger.info(
+          'Music sync completed: ${result.newSongs} new, ${result.updatedSongs} updated',
+        );
       }
-      
+
       // Update sync stats
       _syncStats = await MusicSyncService.getSyncStats();
-      
+
       return result;
     } catch (e) {
       _errorMessage = 'Sync failed: $e';
@@ -254,7 +256,7 @@ class MusicController extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   // Get sync statistics
   Future<void> loadSyncStats() async {
     try {
@@ -264,7 +266,7 @@ class MusicController extends ChangeNotifier {
       Logger.error('Error loading sync stats: $e');
     }
   }
-  
+
   // Enable/disable automatic sync
   Future<void> setSyncEnabled(bool enabled) async {
     try {
@@ -277,12 +279,12 @@ class MusicController extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   // Force sync now
   Future<SyncResult> forceSyncNow() async {
     return await syncFromSwahiliMusicNotes(forceSync: true);
   }
-  
+
   // Clone entire SwahiliMusicNotes.com website
   Future<CloneResult> cloneWebsite({
     bool includeImages = true,
@@ -292,7 +294,7 @@ class MusicController extends ChangeNotifier {
     _isSyncing = true;
     _errorMessage = null;
     notifyListeners();
-    
+
     try {
       final result = await WebsiteClonerService.cloneWebsite(
         includeImages: includeImages,
@@ -302,13 +304,15 @@ class MusicController extends ChangeNotifier {
           Logger.info('Clone progress: $message');
         },
       );
-      
+
       if (result.success) {
         // Refresh the music list after successful clone
         await loadPublicMusic();
-        Logger.info('Website clone completed: ${result.songsCloned} songs, ${result.pdfsDownloaded} PDFs');
+        Logger.info(
+          'Website clone completed: ${result.songsCloned} songs, ${result.pdfsDownloaded} PDFs',
+        );
       }
-      
+
       return result;
     } catch (e) {
       _errorMessage = 'Website clone failed: $e';
@@ -407,9 +411,12 @@ class MusicController extends ChangeNotifier {
 
   // Statistics
   int get totalMusicCount => _allMusic.length;
-  int get swahiliMusicCount => _allMusic.where((m) => m.category == MusicCategory.swahili).length;
-  int get englishMusicCount => _allMusic.where((m) => m.category == MusicCategory.english).length;
-  int get hymnCount => _allMusic.where((m) => m.category == MusicCategory.hymn).length;
+  int get swahiliMusicCount =>
+      _allMusic.where((m) => m.category == MusicCategory.swahili).length;
+  int get englishMusicCount =>
+      _allMusic.where((m) => m.category == MusicCategory.english).length;
+  int get hymnCount =>
+      _allMusic.where((m) => m.category == MusicCategory.hymn).length;
 
   @override
   void dispose() {

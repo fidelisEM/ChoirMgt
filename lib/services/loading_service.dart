@@ -47,11 +47,11 @@ class LoadingService {
     String? successMessage,
   }) async {
     showLoadingDialog(context, message: loadingMessage);
-    
+
     try {
       final result = await operation();
       hideLoadingDialog(context);
-      
+
       if (successMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -61,7 +61,7 @@ class LoadingService {
           ),
         );
       }
-      
+
       return result;
     } catch (e) {
       hideLoadingDialog(context);
@@ -71,7 +71,6 @@ class LoadingService {
 }
 
 class LoadingDialog extends StatelessWidget {
-
   const LoadingDialog({super.key, this.message});
   final String? message;
 
@@ -106,7 +105,6 @@ class LoadingDialog extends StatelessWidget {
 
 // Widget for inline loading states
 class LoadingButton extends StatelessWidget {
-
   const LoadingButton({
     super.key,
     required this.onPressed,
@@ -146,7 +144,6 @@ class LoadingButton extends StatelessWidget {
 
 // Widget for loading overlay
 class LoadingOverlay extends StatelessWidget {
-
   const LoadingOverlay({
     super.key,
     required this.child,
@@ -196,7 +193,6 @@ class LoadingOverlay extends StatelessWidget {
 
 // Widget for empty states
 class EmptyState extends StatelessWidget {
-
   const EmptyState({
     super.key,
     required this.title,
@@ -220,27 +216,23 @@ class EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null) ...[
-              Icon(
-                icon,
-                size: 64,
-                color: Colors.grey[400],
-              ),
+              Icon(icon, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 16),
             ],
             Text(
               title,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.grey[600],
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[
               const SizedBox(height: 8),
               Text(
                 subtitle!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[500],
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
                 textAlign: TextAlign.center,
               ),
             ],

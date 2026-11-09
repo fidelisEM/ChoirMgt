@@ -8,7 +8,7 @@ class PaymentService {
   static final PaymentService _instance = PaymentService._internal();
 
   final SupabaseClient _supabase = Supabase.instance.client;
-  
+
   String _enumName(Object value) => value.toString().split('.').last;
 
   // Create payment record
@@ -61,7 +61,9 @@ class PaymentService {
     PaymentType? type,
   }) async {
     try {
-      var query = _supabase.from('payments').select('''
+      var query = _supabase
+          .from('payments')
+          .select('''
             *,
             choir_members!payments_member_id_fkey (
               registration_number,
@@ -71,7 +73,8 @@ class PaymentService {
                 email
               )
             )
-          ''').eq('choir_id', choirId);
+          ''')
+          .eq('choir_id', choirId);
 
       if (fromDate != null) {
         query = query.gte('payment_date', fromDate.toIso8601String());
@@ -158,10 +161,7 @@ class PaymentService {
         updates['notes'] = notes;
       }
 
-      await _supabase
-          .from('payments')
-          .update(updates)
-          .eq('id', paymentId);
+      await _supabase.from('payments').update(updates).eq('id', paymentId);
 
       return true;
     } catch (e) {

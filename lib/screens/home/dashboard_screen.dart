@@ -37,12 +37,13 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> with TickerProviderStateMixin {
+class _DashboardScreenState extends State<DashboardScreen>
+    with TickerProviderStateMixin {
   int _selectedIndex = 0;
   late AnimationController _dashboardController;
   late Animation<double> _fadeIn;
   late Animation<Offset> _slideIn;
-  
+
   // Dashboard data
   int _totalMembers = 0;
   int _activeChoirs = 0;
@@ -50,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   String _totalCollections = '\$0';
   List<ActivityModel> _recentActivities = [];
   bool _isDashboardLoading = true;
-  
+
   // Additional statistics
   int _messageCount = 12;
   int _upcomingEventsCount = 3;
@@ -70,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   void initState() {
     super.initState();
     _setupAnimations();
-    
+
     // Defer loading until after build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadDashboardData();
@@ -87,9 +88,13 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       CurvedAnimation(parent: _dashboardController, curve: Curves.easeInOut),
     );
 
-    _slideIn = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
-      CurvedAnimation(parent: _dashboardController, curve: Curves.easeOutCubic),
-    );
+    _slideIn = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _dashboardController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _dashboardController.forward();
   }
@@ -100,9 +105,12 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         _isDashboardLoading = true;
       });
 
-      final authController = Provider.of<AuthController>(context, listen: false);
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
       final user = authController.currentUser;
-      
+
       if (user == null) return;
 
       // Load data from different controllers with error handling
@@ -110,12 +118,21 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       MemberController? memberController;
       AttendanceController? attendanceController;
       PaymentController? paymentController;
-      
+
       try {
         choirController = Provider.of<ChoirController>(context, listen: false);
-        memberController = Provider.of<MemberController>(context, listen: false);
-        attendanceController = Provider.of<AttendanceController>(context, listen: false);
-        paymentController = Provider.of<PaymentController>(context, listen: false);
+        memberController = Provider.of<MemberController>(
+          context,
+          listen: false,
+        );
+        attendanceController = Provider.of<AttendanceController>(
+          context,
+          listen: false,
+        );
+        paymentController = Provider.of<PaymentController>(
+          context,
+          listen: false,
+        );
       } catch (e) {
         Logger.error('Error accessing controllers', e);
         setState(() {
@@ -126,7 +143,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 
       // Load choirs safely
       try {
-        await choirController.loadChoirs(userId: user.id, adminView: user.isAdmin);
+        await choirController.loadChoirs(
+          userId: user.id,
+          adminView: user.isAdmin,
+        );
       } catch (e) {
         Logger.error('Error loading choirs', e);
       }
@@ -139,14 +159,17 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         double totalCollections = 0;
 
         final choirs = choirController.choirs;
-        
+
         if (choirs.isNotEmpty) {
           for (final choir in choirs) {
             try {
               // Load members for each choir
               await memberController.loadChoirMembers(choir.id);
-              final choirMemberCount = memberController.membersWithUserInfo.length;
-              Logger.debug('Dashboard: Choir "${choir.name}" has $choirMemberCount members');
+              final choirMemberCount =
+                  memberController.membersWithUserInfo.length;
+              Logger.debug(
+                'Dashboard: Choir "${choir.name}" has $choirMemberCount members',
+              );
               totalMembers += choirMemberCount;
 
               // Load attendance stats with fallback
@@ -154,13 +177,18 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 await attendanceController.loadChoirAttendance(choir.id);
                 final attendanceStats = attendanceController.attendanceStats;
                 if (attendanceStats.containsKey('attendancePercentage')) {
-                  totalAttendance += (attendanceStats['attendancePercentage'] as num).toDouble();
+                  totalAttendance +=
+                      (attendanceStats['attendancePercentage'] as num)
+                          .toDouble();
                 } else {
                   // Fallback: assume 75% attendance if no data
                   totalAttendance += 75.0;
                 }
               } catch (e) {
-                Logger.error('Error loading attendance for choir ${choir.id}', e);
+                Logger.error(
+                  'Error loading attendance for choir ${choir.id}',
+                  e,
+                );
                 totalAttendance += 75.0; // Default value
               }
 
@@ -168,10 +196,15 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               try {
                 await paymentController.loadChoirPayments(choirId: choir.id);
                 final paymentStats = paymentController.paymentStats;
-                Logger.debug('Dashboard: Payment stats for choir "${choir.name}": $paymentStats');
+                Logger.debug(
+                  'Dashboard: Payment stats for choir "${choir.name}": $paymentStats',
+                );
                 if (paymentStats.containsKey('totalAmount')) {
-                  final choirTotal = (paymentStats['totalAmount'] as num).toDouble();
-                  Logger.debug('Dashboard: Adding \$${choirTotal.toStringAsFixed(2)} from choir "${choir.name}"');
+                  final choirTotal = (paymentStats['totalAmount'] as num)
+                      .toDouble();
+                  Logger.debug(
+                    'Dashboard: Adding \$${choirTotal.toStringAsFixed(2)} from choir "${choir.name}"',
+                  );
                   totalCollections += choirTotal;
                 }
                 // No fallback - if no payments, show $0
@@ -189,7 +222,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           }
         }
 
-        Logger.debug('Dashboard: Final totals - Members: $totalMembers, Collections: \$${totalCollections.toStringAsFixed(2)}');
+        Logger.debug(
+          'Dashboard: Final totals - Members: $totalMembers, Collections: \$${totalCollections.toStringAsFixed(2)}',
+        );
         setState(() {
           _totalMembers = totalMembers;
           _activeChoirs = choirController?.choirs.length ?? 0;
@@ -205,23 +240,27 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       } else {
         // Member view: show personal stats
         double memberContributions = 0.0;
-        
+
         // Try to load member's personal payment history
         try {
           if (choirController.choirs.isNotEmpty) {
-            await paymentController.loadChoirPayments(choirId: choirController.choirs.first.id);
+            await paymentController.loadChoirPayments(
+              choirId: choirController.choirs.first.id,
+            );
             final paymentStats = paymentController.paymentStats;
             if (paymentStats.containsKey('totalAmount')) {
-              memberContributions = (paymentStats['totalAmount'] as num).toDouble();
+              memberContributions = (paymentStats['totalAmount'] as num)
+                  .toDouble();
             }
           }
         } catch (e) {
           Logger.error('Error loading member payments', e);
         }
-        
+
         setState(() {
           _totalMembers = 1; // Just the user
-          _activeChoirs = choirController?.choirs.length ?? 0; // Choirs user belongs to
+          _activeChoirs =
+              choirController?.choirs.length ?? 0; // Choirs user belongs to
           _attendancePercentage = 85.0; // User's personal attendance
           _totalCollections = '\$${memberContributions.toStringAsFixed(0)}';
         });
@@ -268,7 +307,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     return Consumer<AuthController>(
       builder: (context, authController, child) {
         final user = authController.currentUser;
-        
+
         if (user == null) {
           return const LoginScreen();
         }
@@ -284,9 +323,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             decoration: const BoxDecoration(
               gradient: AppColors.backgroundGradient,
             ),
-            child: SafeArea(
-              child: _buildBody(user),
-            ),
+            child: SafeArea(child: _buildBody(user)),
           ),
           bottomNavigationBar: _buildBottomNav(user),
           floatingActionButton: _selectedIndex == 0 ? _buildFAB() : null,
@@ -383,8 +420,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                               errorBuilder: (context, error, stackTrace) {
                                 return Center(
                                   child: Text(
-                                    user.fullName.isNotEmpty 
-                                        ? user.fullName[0].toUpperCase() 
+                                    user.fullName.isNotEmpty
+                                        ? user.fullName[0].toUpperCase()
                                         : 'U',
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -398,8 +435,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                           )
                         : Center(
                             child: Text(
-                              user.fullName.isNotEmpty 
-                                  ? user.fullName[0].toUpperCase() 
+                              user.fullName.isNotEmpty
+                                  ? user.fullName[0].toUpperCase()
                                   : 'U',
                               style: const TextStyle(
                                 color: Colors.white,
@@ -562,8 +599,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                       errorBuilder: (context, error, stackTrace) {
                         return Center(
                           child: Text(
-                            user.fullName.isNotEmpty 
-                                ? user.fullName[0].toUpperCase() 
+                            user.fullName.isNotEmpty
+                                ? user.fullName[0].toUpperCase()
                                 : 'U',
                             style: const TextStyle(
                               color: Colors.white,
@@ -577,8 +614,8 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                   )
                 : Center(
                     child: Text(
-                      user.fullName.isNotEmpty 
-                          ? user.fullName[0].toUpperCase() 
+                      user.fullName.isNotEmpty
+                          ? user.fullName[0].toUpperCase()
                           : 'U',
                       style: const TextStyle(
                         color: Colors.white,
@@ -611,7 +648,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -688,7 +728,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 value: _totalMembers.toString(),
                 icon: Icons.people_rounded,
                 iconColor: AppColors.primary,
-                subtitle: _totalMembers > 0 ? context.tr('active') : context.tr('noMembers'),
+                subtitle: _totalMembers > 0
+                    ? context.tr('active')
+                    : context.tr('noMembers'),
                 onTap: () => setState(() => _selectedIndex = 2),
               ),
             ),
@@ -699,7 +741,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 value: _activeChoirs.toString(),
                 icon: Icons.music_note_rounded,
                 iconColor: AppColors.secondary,
-                subtitle: _activeChoirs > 0 ? context.tr('managing') : context.tr('noChoirs'),
+                subtitle: _activeChoirs > 0
+                    ? context.tr('managing')
+                    : context.tr('noChoirs'),
                 onTap: () => setState(() => _selectedIndex = 1),
               ),
             ),
@@ -713,8 +757,11 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 title: context.tr('thisWeek'),
                 value: '${_attendancePercentage.toStringAsFixed(0)}%',
                 icon: Icons.check_circle_rounded,
-                iconColor: _attendancePercentage >= 75 ? AppColors.success : 
-                           _attendancePercentage >= 50 ? AppColors.warning : AppColors.error,
+                iconColor: _attendancePercentage >= 75
+                    ? AppColors.success
+                    : _attendancePercentage >= 50
+                    ? AppColors.warning
+                    : AppColors.error,
                 subtitle: context.tr('attendancePercentage'),
                 onTap: () => setState(() => _selectedIndex = 4),
               ),
@@ -834,41 +881,46 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
                     ),
                   ),
                 )
               : _recentActivities.isEmpty
-                  ? Column(
-                      children: [
-                        const Icon(
-                          Icons.timeline_rounded,
-                          size: 48,
-                          color: AppColors.gray400,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          context.tr('noRecentActivity'),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.gray600,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          context.tr('activityWillAppear'),
-                          style: const TextStyle(
-                            color: AppColors.gray500,
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: _recentActivities.take(5).map((activity) => _buildActivityItem(activity)).toList(),
+              ? Column(
+                  children: [
+                    const Icon(
+                      Icons.timeline_rounded,
+                      size: 48,
+                      color: AppColors.gray400,
                     ),
+                    const SizedBox(height: 16),
+                    Text(
+                      context.tr('noRecentActivity'),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.gray600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      context.tr('activityWillAppear'),
+                      style: const TextStyle(
+                        color: AppColors.gray500,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              : Column(
+                  children: _recentActivities
+                      .take(5)
+                      .map((activity) => _buildActivityItem(activity))
+                      .toList(),
+                ),
         ),
       ],
     );
@@ -877,7 +929,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   Widget _buildActivityItem(ActivityModel activity) {
     IconData icon;
     Color iconColor;
-    
+
     switch (activity.type) {
       case ActivityType.memberJoined:
         icon = Icons.person_add_rounded;
@@ -915,11 +967,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               color: iconColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              size: 16,
-              color: iconColor,
-            ),
+            child: Icon(icon, size: 16, color: iconColor),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -951,10 +999,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           ),
           Text(
             _formatActivityTime(activity.timestamp),
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.gray400,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.gray400),
           ),
         ],
       ),
@@ -964,7 +1009,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   String _formatActivityTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inDays > 0) {
       return '${difference.inDays}${context.tr('dashDaysAgoSuffix')}';
     } else if (difference.inHours > 0) {
@@ -1010,17 +1055,14 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           items: _getNavItems(context).asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
-            
+
             if (!_canAccessTab(user.role, index)) {
               return BottomNavigationBarItem(
-                icon: const Icon(
-                  Icons.lock_rounded,
-                  color: AppColors.gray300,
-                ),
+                icon: const Icon(Icons.lock_rounded, color: AppColors.gray300),
                 label: context.tr('restricted'),
               );
             }
-            
+
             return BottomNavigationBarItem(
               icon: Container(
                 padding: const EdgeInsets.all(8),
@@ -1057,19 +1099,17 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         onPressed: () => _showQuickActionModal(),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-          size: 28,
-        ),
+        child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
       ),
     );
   }
 
   List<Widget> _getQuickActions(UserRole role) {
     final List<QuickAction> actions = [];
-    
-    if (role == UserRole.superAdmin || role == UserRole.admin || role == UserRole.choirLeader) {
+
+    if (role == UserRole.superAdmin ||
+        role == UserRole.admin ||
+        role == UserRole.choirLeader) {
       actions.addAll([
         QuickAction(
           icon: Icons.person_add_rounded,
@@ -1156,11 +1196,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                 ),
               ],
             ),
-            child: Icon(
-              action.icon,
-              size: 24,
-              color: Colors.white,
-            ),
+            child: Icon(action.icon, size: 24, color: Colors.white),
           ),
           const SizedBox(height: 12),
           Text(
@@ -1178,7 +1214,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
   }
 
   bool _canAccessTab(UserRole role, int tabIndex) {
-    final isAdminOrLeader = role == UserRole.superAdmin || role == UserRole.admin || role == UserRole.choirLeader;
+    final isAdminOrLeader =
+        role == UserRole.superAdmin ||
+        role == UserRole.admin ||
+        role == UserRole.choirLeader;
     switch (tabIndex) {
       case 0: // Dashboard
         return true;
@@ -1201,14 +1240,22 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 
   String _getPageTitle(BuildContext context) {
     switch (_selectedIndex) {
-      case 0: return context.tr('dashboard');
-      case 1: return context.tr('choirs');
-      case 2: return context.tr('members');
-      case 3: return context.tr('dashMusic');
-      case 4: return context.tr('attendance');
-      case 5: return context.tr('payments');
-      case 6: return context.tr('reports');
-      default: return context.tr('appName');
+      case 0:
+        return context.tr('dashboard');
+      case 1:
+        return context.tr('choirs');
+      case 2:
+        return context.tr('members');
+      case 3:
+        return context.tr('dashMusic');
+      case 4:
+        return context.tr('attendance');
+      case 5:
+        return context.tr('payments');
+      case 6:
+        return context.tr('reports');
+      default:
+        return context.tr('appName');
     }
   }
 
@@ -1235,7 +1282,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         child: Column(
           children: [
             ListTile(
-              leading: const Icon(Icons.person_rounded, color: AppColors.primary),
+              leading: const Icon(
+                Icons.person_rounded,
+                color: AppColors.primary,
+              ),
               title: Text(context.tr('profile')),
               onTap: () {
                 Navigator.pop(context);
@@ -1243,7 +1293,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings_rounded, color: AppColors.gray600),
+              leading: const Icon(
+                Icons.settings_rounded,
+                color: AppColors.gray600,
+              ),
               title: Text(context.tr('settings')),
               onTap: () {
                 Navigator.pop(context);
@@ -1253,7 +1306,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             const Divider(),
             ListTile(
               leading: const Icon(Icons.logout_rounded, color: AppColors.error),
-              title: Text(context.tr('logout'), style: const TextStyle(color: AppColors.error)),
+              title: Text(
+                context.tr('logout'),
+                style: const TextStyle(color: AppColors.error),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _logout();
@@ -1276,9 +1332,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           builder: (context, authController, child) {
             final user = authController.currentUser;
             if (user == null) return const SizedBox();
-            
+
             final quickActionWidgets = _getQuickActions(user.role);
-            
+
             return GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -1313,9 +1369,12 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 
   void _showAddMemberOptions() async {
     // First get available choirs
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     final choirs = choirController.choirs;
-    
+
     if (choirs.isEmpty) {
       Get.snackbar(
         context.tr('dashNoChoirsTitle'),
@@ -1329,10 +1388,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     if (choirs.length == 1) {
       // If only one choir, go directly to add member
       final choir = choirs.first;
-      Get.to(() => AddMemberScreen(
-        choirId: choir.id,
-        choirName: choir.name,
-      ));
+      Get.to(() => AddMemberScreen(choirId: choir.id, choirName: choir.name));
     } else {
       // Show choir selection dialog
       showDialog(
@@ -1341,18 +1397,26 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
           title: Text(context.tr('dashSelectChoir')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: choirs.map((choir) => ListTile(
-              title: Text(choir.name),
-              subtitle: Text('${choir.memberCount} ${context.tr('members')}'),
-              leading: const Icon(Icons.music_note),
-              onTap: () {
-                Navigator.pop(context);
-                Get.to(() => AddMemberScreen(
-                  choirId: choir.id,
-                  choirName: choir.name,
-                ));
-              },
-            )).toList(),
+            children: choirs
+                .map(
+                  (choir) => ListTile(
+                    title: Text(choir.name),
+                    subtitle: Text(
+                      '${choir.memberCount} ${context.tr('members')}',
+                    ),
+                    leading: const Icon(Icons.music_note),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.to(
+                        () => AddMemberScreen(
+                          choirId: choir.id,
+                          choirName: choir.name,
+                        ),
+                      );
+                    },
+                  ),
+                )
+                .toList(),
           ),
         ),
       );
@@ -1367,15 +1431,15 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       return 75;
     }
   }
-  
+
   int _getMessageCount() {
     return _messageCount;
   }
-  
+
   int _getUpcomingEventsCount() {
     return _upcomingEventsCount;
   }
-  
+
   int _getGrowthRate() {
     return _growthRate;
   }
@@ -1388,7 +1452,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       return 12;
     }
   }
-  
+
   int _calculateUpcomingEvents() {
     // In a real app, this would come from an events service
     try {
@@ -1397,7 +1461,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       return 3;
     }
   }
-  
+
   int _calculateGrowthRate() {
     // In a real app, this would be calculated from historical data
     try {
@@ -1446,9 +1510,11 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               subtitle: Text(context.tr('dashSendAnnouncementSubtitle')),
               onTap: () {
                 Navigator.pop(context);
-                Get.to(() => ComposeMessageScreen(
-                  subject: context.tr('dashImportantAnnouncementSubject'),
-                ));
+                Get.to(
+                  () => ComposeMessageScreen(
+                    subject: context.tr('dashImportantAnnouncementSubject'),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -1464,9 +1530,11 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               subtitle: Text(context.tr('dashSendReminderSubtitle')),
               onTap: () {
                 Navigator.pop(context);
-                Get.to(() => ComposeMessageScreen(
-                  subject: context.tr('dashReminderUpcomingEventSubject'),
-                ));
+                Get.to(
+                  () => ComposeMessageScreen(
+                    subject: context.tr('dashReminderUpcomingEventSubject'),
+                  ),
+                );
               },
             ),
             if (user.isAdmin || user.role == UserRole.choirLeader) ...[
@@ -1527,7 +1595,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                Get.snackbar(context.tr('dashFeatureComingSoon'), context.tr('dashCalendarComingSoon'));
+                Get.snackbar(
+                  context.tr('dashFeatureComingSoon'),
+                  context.tr('dashCalendarComingSoon'),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -1596,14 +1667,12 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 }
 
 class NavItem {
-
   NavItem({required this.icon, required this.label});
   final IconData icon;
   final String label;
 }
 
 class QuickAction {
-
   QuickAction({
     required this.icon,
     required this.title,

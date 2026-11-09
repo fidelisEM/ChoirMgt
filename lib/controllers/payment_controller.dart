@@ -4,7 +4,7 @@ import '../services/payment_service.dart';
 
 class PaymentController extends ChangeNotifier {
   PaymentController({PaymentService? paymentService})
-      : _paymentService = paymentService ?? PaymentService();
+    : _paymentService = paymentService ?? PaymentService();
 
   final PaymentService _paymentService;
 
@@ -31,7 +31,7 @@ class PaymentController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _paymentService.getChoirPayments(
         choirId: choirId,
         fromDate: fromDate,
@@ -49,7 +49,7 @@ class PaymentController extends ChangeNotifier {
 
       // Load outstanding fees
       _outstandingFees = await _paymentService.getOutstandingFees(choirId);
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load choir payments: $e');
@@ -66,13 +66,13 @@ class PaymentController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _paymentService.getMemberPayments(
         memberId: memberId,
         fromDate: fromDate,
         toDate: toDate,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load member payments: $e');
@@ -229,7 +229,7 @@ class PaymentController extends ChangeNotifier {
         _paymentStats = await _paymentService.getPaymentStatistics(
           choirId: choirId,
         );
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -268,7 +268,7 @@ class PaymentController extends ChangeNotifier {
             _outstandingFees.removeAt(index);
           }
         }
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -294,21 +294,26 @@ class PaymentController extends ChangeNotifier {
 
   // Calculate total outstanding fees
   double getTotalOutstandingFees() {
-    return _outstandingFees.fold(0.0, (sum, fee) => sum + (fee['outstanding_fees'] ?? 0.0));
+    return _outstandingFees.fold(
+      0.0,
+      (sum, fee) => sum + (fee['outstanding_fees'] ?? 0.0),
+    );
   }
 
   // Get payments by status
   List<Map<String, dynamic>> getPaymentsByStatus(PaymentStatus status) {
-    return _payments.where((payment) => 
-      payment['status'] == status.toString().split('.').last
-    ).toList();
+    return _payments
+        .where(
+          (payment) => payment['status'] == status.toString().split('.').last,
+        )
+        .toList();
   }
 
   // Get payments by type
   List<Map<String, dynamic>> getPaymentsByType(PaymentType type) {
-    return _payments.where((payment) => 
-      payment['type'] == type.toString().split('.').last
-    ).toList();
+    return _payments
+        .where((payment) => payment['type'] == type.toString().split('.').last)
+        .toList();
   }
 
   // Clear data

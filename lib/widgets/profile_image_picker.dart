@@ -18,7 +18,8 @@ class ProfileImagePicker extends StatefulWidget {
 
   final File? initialImage;
   final String? initialImageUrl;
-  final Function(dynamic) onImageSelected; // Changed to dynamic to support both File and Uint8List
+  final Function(dynamic)
+  onImageSelected; // Changed to dynamic to support both File and Uint8List
   final double size;
   final String? label;
   final bool isRequired;
@@ -64,13 +65,17 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
               _buildImageSourceOption(
                 icon: Icons.photo_library_rounded,
                 title: kIsWeb ? 'Choose File' : 'Gallery',
-                subtitle: kIsWeb ? 'Select image from device' : 'Choose from gallery',
+                subtitle: kIsWeb
+                    ? 'Select image from device'
+                    : 'Choose from gallery',
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.gallery);
                 },
               ),
-              if (_selectedImage != null || _webImageBytes != null || widget.initialImageUrl != null) ...[
+              if (_selectedImage != null ||
+                  _webImageBytes != null ||
+                  widget.initialImageUrl != null) ...[
                 const SizedBox(height: 12),
                 _buildImageSourceOption(
                   icon: Icons.delete_rounded,
@@ -104,7 +109,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isDestructive 
+              color: isDestructive
                   ? AppColors.error.withValues(alpha: 0.1)
                   : AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
@@ -132,7 +137,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
                   subtitle,
                   style: TextStyle(
                     fontSize: 14,
-                    color: isDestructive 
+                    color: isDestructive
                         ? AppColors.error.withValues(alpha: 0.7)
                         : AppColors.gray500,
                   ),
@@ -163,10 +168,10 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
         if (kIsWeb) {
           // For web, work with bytes
           final Uint8List imageBytes = await image.readAsBytes();
-          
+
           // Validate file size (max 5MB)
           const int maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-          
+
           if (imageBytes.length > maxSizeInBytes) {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -183,17 +188,17 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
             _webImageBytes = imageBytes;
             _selectedImage = null; // Clear file reference for web
           });
-          
+
           // Pass bytes for web
           widget.onImageSelected(imageBytes);
         } else {
           // For mobile, work with File
           final File imageFile = File(image.path);
-          
+
           // Validate file size (max 5MB)
           final int fileSizeInBytes = await imageFile.length();
           const int maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-          
+
           if (fileSizeInBytes > maxSizeInBytes) {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -210,7 +215,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
             _selectedImage = imageFile;
             _webImageBytes = null; // Clear bytes for mobile
           });
-          
+
           // Pass file for mobile
           widget.onImageSelected(imageFile);
         }
@@ -279,7 +284,8 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
         image: FileImage(_selectedImage!),
         fit: BoxFit.cover,
       );
-    } else if (widget.initialImageUrl != null && widget.initialImageUrl!.isNotEmpty) {
+    } else if (widget.initialImageUrl != null &&
+        widget.initialImageUrl!.isNotEmpty) {
       return DecorationImage(
         image: NetworkImage(widget.initialImageUrl!),
         fit: BoxFit.cover,
@@ -348,13 +354,12 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
         ),
         const SizedBox(height: 8),
         Text(
-          _selectedImage != null || _webImageBytes != null || widget.initialImageUrl != null
+          _selectedImage != null ||
+                  _webImageBytes != null ||
+                  widget.initialImageUrl != null
               ? 'Tap to change photo'
               : 'Tap to add photo',
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.gray500,
-          ),
+          style: const TextStyle(fontSize: 12, color: AppColors.gray500),
         ),
       ],
     );

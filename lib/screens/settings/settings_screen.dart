@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Consumer2<AuthController, LanguageController>(
         builder: (context, authController, languageController, child) {
           final user = authController.currentUser;
-          
+
           return ListView(
             children: [
               // Profile Section
@@ -49,12 +49,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ListTile(
                       leading: CircleAvatar(
                         backgroundColor: AppColors.primary,
-                        backgroundImage: (user?.profileImageUrl != null && user?.profileImageUrl?.isNotEmpty == true)
+                        backgroundImage:
+                            (user?.profileImageUrl != null &&
+                                user?.profileImageUrl?.isNotEmpty == true)
                             ? NetworkImage(user!.profileImageUrl!)
                             : null,
-                        child: (user?.profileImageUrl == null || user?.profileImageUrl?.isEmpty != false)
+                        child:
+                            (user?.profileImageUrl == null ||
+                                user?.profileImageUrl?.isEmpty != false)
                             ? Text(
-                                user?.fullName.substring(0, 1).toUpperCase() ?? 'U',
+                                user?.fullName.substring(0, 1).toUpperCase() ??
+                                    'U',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -86,7 +91,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const Divider(height: 1),
                     ListTile(
                       title: const Text('Language'),
-                      subtitle: Text(_getLanguageName(languageController.currentLanguageCode)),
+                      subtitle: Text(
+                        _getLanguageName(
+                          languageController.currentLanguageCode,
+                        ),
+                      ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => _showLanguageSelection(languageController),
                     ),
@@ -114,40 +123,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: const Text('Email Notifications'),
                       subtitle: const Text('Receive notifications via email'),
                       value: _emailNotifications,
-                      onChanged: _notificationsEnabled ? (value) {
-                        setState(() => _emailNotifications = value);
-                        _updateNotificationSettings();
-                      } : null,
+                      onChanged: _notificationsEnabled
+                          ? (value) {
+                              setState(() => _emailNotifications = value);
+                              _updateNotificationSettings();
+                            }
+                          : null,
                     ),
                     const Divider(height: 1),
                     SwitchListTile(
                       title: const Text('SMS Notifications'),
                       subtitle: const Text('Receive notifications via SMS'),
                       value: _smsNotifications,
-                      onChanged: _notificationsEnabled ? (value) {
-                        setState(() => _smsNotifications = value);
-                        _updateNotificationSettings();
-                      } : null,
+                      onChanged: _notificationsEnabled
+                          ? (value) {
+                              setState(() => _smsNotifications = value);
+                              _updateNotificationSettings();
+                            }
+                          : null,
                     ),
                     const Divider(height: 1),
                     SwitchListTile(
                       title: const Text('Attendance Reminders'),
-                      subtitle: const Text('Get reminded about upcoming rehearsals'),
+                      subtitle: const Text(
+                        'Get reminded about upcoming rehearsals',
+                      ),
                       value: _attendanceReminders,
-                      onChanged: _notificationsEnabled ? (value) {
-                        setState(() => _attendanceReminders = value);
-                        _updateNotificationSettings();
-                      } : null,
+                      onChanged: _notificationsEnabled
+                          ? (value) {
+                              setState(() => _attendanceReminders = value);
+                              _updateNotificationSettings();
+                            }
+                          : null,
                     ),
                     const Divider(height: 1),
                     SwitchListTile(
                       title: const Text('Payment Reminders'),
-                      subtitle: const Text('Get reminded about outstanding payments'),
+                      subtitle: const Text(
+                        'Get reminded about outstanding payments',
+                      ),
                       value: _paymentReminders,
-                      onChanged: _notificationsEnabled ? (value) {
-                        setState(() => _paymentReminders = value);
-                        _updateNotificationSettings();
-                      } : null,
+                      onChanged: _notificationsEnabled
+                          ? (value) {
+                              setState(() => _paymentReminders = value);
+                              _updateNotificationSettings();
+                            }
+                          : null,
                     ),
                   ],
                 ),
@@ -170,7 +191,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ListTile(
                       leading: const Icon(Icons.security),
                       title: const Text('Two-Factor Authentication'),
-                      subtitle: const Text('Add extra security to your account'),
+                      subtitle: const Text(
+                        'Add extra security to your account',
+                      ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => _setup2FA(),
                     ),
@@ -307,7 +330,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   if (value != null) {
                     languageController.changeLanguage(value);
                     Get.back();
-                    Helpers.showSuccessSnackbar('Language changed to Kiswahili');
+                    Helpers.showSuccessSnackbar(
+                      'Language changed to Kiswahili',
+                    );
                   }
                 },
               ),
@@ -315,10 +340,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
         ],
       ),
     );
@@ -358,7 +380,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               subtitle: const Text('Follow system setting'),
               value: ThemeMode.system,
-              groupValue: ThemeMode.system, // This will be updated with proper implementation
+              groupValue: ThemeMode
+                  .system, // This will be updated with proper implementation
               onChanged: (value) {
                 if (value != null) {
                   // Update theme here
@@ -377,7 +400,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               subtitle: const Text('Light theme'),
               value: ThemeMode.light,
-              groupValue: ThemeMode.system, // This will be updated with proper implementation
+              groupValue: ThemeMode
+                  .system, // This will be updated with proper implementation
               onChanged: (value) {
                 if (value != null) {
                   // Update theme here
@@ -396,7 +420,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               subtitle: const Text('Dark theme'),
               value: ThemeMode.dark,
-              groupValue: ThemeMode.system, // This will be updated with proper implementation
+              groupValue: ThemeMode
+                  .system, // This will be updated with proper implementation
               onChanged: (value) {
                 if (value != null) {
                   // Update theme here
@@ -408,10 +433,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
         ],
       ),
     );
@@ -424,27 +446,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTextField(
-              label: 'Current Password',
-              obscureText: true,
-            ),
+            CustomTextField(label: 'Current Password', obscureText: true),
             SizedBox(height: 16),
-            CustomTextField(
-              label: 'New Password',
-              obscureText: true,
-            ),
+            CustomTextField(label: 'New Password', obscureText: true),
             SizedBox(height: 16),
-            CustomTextField(
-              label: 'Confirm New Password',
-              obscureText: true,
-            ),
+            CustomTextField(label: 'Confirm New Password', obscureText: true),
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -476,10 +486,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'You can also check our FAQ section in the app documentation.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -512,10 +519,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           '© 2024 Choir Management System. All rights reserved.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
         ],
       ),
     );
@@ -527,10 +531,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () async {
               Get.back();

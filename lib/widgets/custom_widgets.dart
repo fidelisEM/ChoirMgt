@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class GlassCard extends StatelessWidget {
-
   const GlassCard({
     super.key,
     required this.child,
@@ -34,15 +33,16 @@ class GlassCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            isDark ? AppColors.glassLight : AppColors.white.withValues(alpha: 0.9),
-            isDark ? AppColors.glassDark : AppColors.white.withValues(alpha: 0.7),
+            isDark
+                ? AppColors.glassLight
+                : AppColors.white.withValues(alpha: 0.9),
+            isDark
+                ? AppColors.glassDark
+                : AppColors.white.withValues(alpha: 0.7),
           ],
         ),
         borderRadius: borderRadius ?? BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.glassBorder,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.glassBorder, width: 1),
         boxShadow: [
           BoxShadow(
             color: AppColors.shadowLight,
@@ -68,7 +68,6 @@ class GlassCard extends StatelessWidget {
 }
 
 class GradientButton extends StatelessWidget {
-
   const GradientButton({
     super.key,
     required this.text,
@@ -102,13 +101,15 @@ class GradientButton extends StatelessWidget {
         gradient: onPressed != null ? gradient : null,
         color: onPressed == null ? AppColors.gray300 : null,
         borderRadius: borderRadius ?? BorderRadius.circular(12),
-        boxShadow: onPressed != null ? [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ] : null,
+        boxShadow: onPressed != null
+            ? [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : null,
       ),
       child: Material(
         color: Colors.transparent,
@@ -116,7 +117,9 @@ class GradientButton extends StatelessWidget {
           onTap: isLoading ? null : onPressed,
           borderRadius: borderRadius ?? BorderRadius.circular(12),
           child: Padding(
-            padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding:
+                padding ??
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -131,10 +134,7 @@ class GradientButton extends StatelessWidget {
                     ),
                   )
                 else ...[
-                  if (icon != null) ...[
-                    icon!,
-                    const SizedBox(width: 8),
-                  ],
+                  if (icon != null) ...[icon!, const SizedBox(width: 8)],
                   Flexible(
                     child: Text(
                       text,
@@ -157,7 +157,6 @@ class GradientButton extends StatelessWidget {
 }
 
 class CustomTextField extends StatefulWidget {
-
   const CustomTextField({
     super.key,
     this.label,
@@ -257,11 +256,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     },
                   )
                 : widget.suffixIcon,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              color: AppColors.gray400,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
             ),
+            hintStyle: const TextStyle(fontSize: 14, color: AppColors.gray400),
           ),
         ),
       ],
@@ -270,7 +269,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 }
 
 class AnimatedStatCard extends StatelessWidget {
-
   const AnimatedStatCard({
     super.key,
     required this.title,
@@ -307,11 +305,7 @@ class AnimatedStatCard extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 20,
-                ),
+                child: Icon(icon, color: iconColor, size: 20),
               ),
               const Spacer(),
               if (subtitle != null)
@@ -349,7 +343,6 @@ class AnimatedStatCard extends StatelessWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   const CustomAppBar({
     super.key,
     required this.title,
@@ -379,28 +372,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   // Get the appropriate text/icon color based on background
   Color _getContrastColor(BuildContext context) {
     if (iconColor != null) return iconColor!;
-    
-    final effectiveBackgroundColor = backgroundColor ?? 
-        Theme.of(context).appBarTheme.backgroundColor ?? 
+
+    final effectiveBackgroundColor =
+        backgroundColor ??
+        Theme.of(context).appBarTheme.backgroundColor ??
         Colors.transparent;
-    
+
     // If transparent background, use theme default
     if (effectiveBackgroundColor == Colors.transparent) {
-      return Theme.of(context).brightness == Brightness.dark 
-          ? AppColors.gray300 
+      return Theme.of(context).brightness == Brightness.dark
+          ? AppColors.gray300
           : AppColors.gray600;
     }
-    
+
     // For colored backgrounds, use contrasting color
-    return _isDarkColor(effectiveBackgroundColor) 
-        ? Colors.white 
+    return _isDarkColor(effectiveBackgroundColor)
+        ? Colors.white
         : AppColors.gray800;
   }
 
   @override
   Widget build(BuildContext context) {
     final contrastColor = _getContrastColor(context);
-    
+
     return AppBar(
       title: Text(
         title,
@@ -414,7 +408,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
-      leading: leading ??
+      leading:
+          leading ??
           (showBackButton && Navigator.canPop(context)
               ? IconButton(
                   icon: Icon(Icons.arrow_back_ios, color: contrastColor),
@@ -433,21 +428,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   static Color getContrastColor(BuildContext context, Color backgroundColor) {
     // Calculate luminance - values below 0.5 are considered dark
     final bool isDark = backgroundColor.computeLuminance() < 0.5;
-    
+
     // If transparent background, use theme default
     if (backgroundColor == Colors.transparent) {
-      return Theme.of(context).brightness == Brightness.dark 
-          ? AppColors.gray300 
+      return Theme.of(context).brightness == Brightness.dark
+          ? AppColors.gray300
           : AppColors.gray600;
     }
-    
+
     // For colored backgrounds, use contrasting color
     return isDark ? Colors.white : AppColors.gray800;
   }
 }
 
 class LoadingOverlay extends StatelessWidget {
-
   const LoadingOverlay({
     super.key,
     required this.isLoading,
@@ -473,7 +467,9 @@ class LoadingOverlay extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
                     ),
                     if (loadingText != null) ...[
                       const SizedBox(height: 16),
@@ -496,7 +492,6 @@ class LoadingOverlay extends StatelessWidget {
 }
 
 class CustomBottomSheet extends StatelessWidget {
-
   const CustomBottomSheet({
     super.key,
     required this.title,
@@ -553,9 +548,7 @@ class CustomBottomSheet extends StatelessWidget {
                 child,
                 if (actions != null) ...[
                   const SizedBox(height: 20),
-                  Row(
-                    children: actions!,
-                  ),
+                  Row(children: actions!),
                 ],
               ],
             ),

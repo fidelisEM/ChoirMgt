@@ -13,7 +13,6 @@ import '../../widgets/custom_widgets.dart';
 import 'member_roles_screen.dart';
 
 class ChoirSettingsScreen extends StatefulWidget {
-
   const ChoirSettingsScreen({super.key, required this.choir});
   final ChoirModel choir;
 
@@ -27,7 +26,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
   final _contactController = TextEditingController();
-  
+
   bool _isPublic = true;
   bool _allowSelfRegistration = false;
   bool _requireApproval = true;
@@ -140,7 +139,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   const Divider(height: 1),
                   SwitchListTile(
                     title: Text(context.tr('settingsAllowSelfRegistration')),
-                    subtitle: Text(context.tr('settingsAllowSelfRegistrationDesc')),
+                    subtitle: Text(
+                      context.tr('settingsAllowSelfRegistrationDesc'),
+                    ),
                     value: _allowSelfRegistration,
                     onChanged: (value) {
                       setState(() => _allowSelfRegistration = value);
@@ -149,11 +150,15 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   const Divider(height: 1),
                   SwitchListTile(
                     title: Text(context.tr('settingsRequireLeaderApproval')),
-                    subtitle: Text(context.tr('settingsRequireLeaderApprovalDesc')),
+                    subtitle: Text(
+                      context.tr('settingsRequireLeaderApprovalDesc'),
+                    ),
                     value: _requireApproval,
-                    onChanged: _allowSelfRegistration ? (value) {
-                      setState(() => _requireApproval = value);
-                    } : null,
+                    onChanged: _allowSelfRegistration
+                        ? (value) {
+                            setState(() => _requireApproval = value);
+                          }
+                        : null,
                   ),
                 ],
               ),
@@ -166,7 +171,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                 children: [
                   SwitchListTile(
                     title: Text(context.tr('settingsAutomaticReminders')),
-                    subtitle: Text(context.tr('settingsAutomaticRemindersDesc')),
+                    subtitle: Text(
+                      context.tr('settingsAutomaticRemindersDesc'),
+                    ),
                     value: _autoReminders,
                     onChanged: (value) {
                       setState(() => _autoReminders = value);
@@ -182,7 +189,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   const Divider(height: 1),
                   ListTile(
                     title: Text(context.tr('settingsNotificationTemplates')),
-                    subtitle: Text(context.tr('settingsNotificationTemplatesDesc')),
+                    subtitle: Text(
+                      context.tr('settingsNotificationTemplatesDesc'),
+                    ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configureTemplates(),
                   ),
@@ -205,7 +214,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                   const Divider(height: 1),
                   ListTile(
                     title: Text(context.tr('settingsAttendanceTracking')),
-                    subtitle: Text(context.tr('settingsAttendanceTrackingDesc')),
+                    subtitle: Text(
+                      context.tr('settingsAttendanceTrackingDesc'),
+                    ),
                     leading: const Icon(Icons.check_circle),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _configureAttendance(),
@@ -244,7 +255,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                 if (authController.currentUser?.id != widget.choir.leaderId) {
                   return const SizedBox.shrink();
                 }
-                
+
                 return Column(
                   children: [
                     _buildSectionHeader(context.tr('settingsDangerZone')),
@@ -264,9 +275,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              context.tr('settingsDeleteChoirWarning'),
-                            ),
+                            Text(context.tr('settingsDeleteChoirWarning')),
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _deleteChoir,
@@ -314,7 +323,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
     try {
       // Update choir settings via ChoirService directly
       final choirService = ChoirService();
-      
+
       // Create updated choir object
       final updatedChoir = ChoirModel(
         id: widget.choir.id,
@@ -325,7 +334,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
         createdAt: widget.choir.createdAt,
         isActive: widget.choir.isActive,
       );
-      
+
       final success = await choirService.updateChoir(updatedChoir);
       if (!mounted) return;
 
@@ -336,10 +345,11 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
       } else {
         throw Exception('Failed to update choir settings');
       }
-
     } catch (e) {
       if (!mounted) return;
-      Helpers.showErrorSnackbar('${context.tr('settingsUpdateSettingsFailed')}: $e');
+      Helpers.showErrorSnackbar(
+        '${context.tr('settingsUpdateSettingsFailed')}: $e',
+      );
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -369,7 +379,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ListTile(
               leading: const Icon(Icons.check_circle),
               title: Text(context.tr('settingsAttendanceReminders')),
-              subtitle: Text(context.tr('settingsAttendanceRemindersPracticeDesc')),
+              subtitle: Text(
+                context.tr('settingsAttendanceRemindersPracticeDesc'),
+              ),
               trailing: const Switch(value: false, onChanged: null),
             ),
           ],
@@ -382,7 +394,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar(context.tr('settingsReminderScheduleUpdated'));
+              Helpers.showSuccessSnackbar(
+                context.tr('settingsReminderScheduleUpdated'),
+              );
             },
             child: Text(context.tr('save')),
           ),
@@ -419,7 +433,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
             ListTile(
               leading: const Icon(Icons.info),
               title: Text(context.tr('settingsTemplateGeneralAnnouncement')),
-              subtitle: Text(context.tr('settingsTemplateGeneralAnnouncementDesc')),
+              subtitle: Text(
+                context.tr('settingsTemplateGeneralAnnouncementDesc'),
+              ),
             ),
           ],
         ),
@@ -431,7 +447,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showInfoSnackbar(context.tr('settingsTemplateEditorComingSoon'));
+              Helpers.showInfoSnackbar(
+                context.tr('settingsTemplateEditorComingSoon'),
+              );
             },
             child: Text(context.tr('settingsEditTemplates')),
           ),
@@ -476,7 +494,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar(context.tr('settingsAttendanceSettingsUpdated'));
+              Helpers.showSuccessSnackbar(
+                context.tr('settingsAttendanceSettingsUpdated'),
+              );
             },
             child: Text(context.tr('save')),
           ),
@@ -517,7 +537,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Helpers.showSuccessSnackbar(context.tr('settingsPaymentSettingsUpdated'));
+              Helpers.showSuccessSnackbar(
+                context.tr('settingsPaymentSettingsUpdated'),
+              );
             },
             child: Text(context.tr('save')),
           ),
@@ -568,7 +590,10 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
   }
 
   Future<void> _performDataExport(String format) async {
-    final reportController = Provider.of<ReportController>(context, listen: false);
+    final reportController = Provider.of<ReportController>(
+      context,
+      listen: false,
+    );
     final choirId = widget.choir.id;
     final exportedMsg = context.tr('settingsChoirDataExported');
     final noDataMsg = context.tr('choirNoDataForExportMessage');
@@ -652,7 +677,9 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${context.tr('settingsTypeToConfirmDeletion')} "${widget.choir.name}" ${context.tr('settingsToConfirmDeletionSuffix')}'),
+            Text(
+              '${context.tr('settingsTypeToConfirmDeletion')} "${widget.choir.name}" ${context.tr('settingsToConfirmDeletionSuffix')}',
+            ),
             const SizedBox(height: 16),
             CustomTextField(
               label: context.tr('settingsTypeChoirNameToConfirm'),
@@ -690,9 +717,7 @@ class _ChoirSettingsScreenState extends State<ChoirSettingsScreen> {
     try {
       // Show loading indicator
       Get.dialog(
-        const Center(
-          child: CircularProgressIndicator(),
-        ),
+        const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
 

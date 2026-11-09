@@ -8,7 +8,7 @@ class DatabaseSetupService {
   static Future<bool> createMusicTable() async {
     try {
       Logger.info('Creating music table...');
-      
+
       // First, check if the table already exists
       const checkTableQuery = '''
         SELECT EXISTS (
@@ -17,13 +17,13 @@ class DatabaseSetupService {
           AND table_name = 'music'
         );
       ''';
-      
-      final checkResult = await _supabase.rpc('exec_sql', params: {
-        'sql_query': checkTableQuery
-      }).catchError((error) {
-        Logger.error('Error checking if music table exists: $error');
-        return null;
-      });
+
+      final checkResult = await _supabase
+          .rpc('exec_sql', params: {'sql_query': checkTableQuery})
+          .catchError((error) {
+            Logger.error('Error checking if music table exists: $error');
+            return null;
+          });
 
       if (checkResult != null && checkResult == true) {
         Logger.info('Music table already exists');
@@ -58,9 +58,7 @@ class DatabaseSetupService {
         );
       ''';
 
-      await _supabase.rpc('exec_sql', params: {
-        'sql_query': createTableQuery
-      });
+      await _supabase.rpc('exec_sql', params: {'sql_query': createTableQuery});
 
       Logger.info('Music table created successfully');
 
@@ -75,9 +73,7 @@ class DatabaseSetupService {
 
       for (final indexSql in indexes) {
         try {
-          await _supabase.rpc('exec_sql', params: {
-            'sql_query': indexSql
-          });
+          await _supabase.rpc('exec_sql', params: {'sql_query': indexSql});
         } catch (e) {
           Logger.error('Error creating index: $e');
           // Continue with other indexes even if one fails
@@ -87,9 +83,12 @@ class DatabaseSetupService {
       Logger.info('Music table indexes created');
 
       // Enable RLS
-      await _supabase.rpc('exec_sql', params: {
-        'sql_query': 'ALTER TABLE public.music ENABLE ROW LEVEL SECURITY;'
-      });
+      await _supabase.rpc(
+        'exec_sql',
+        params: {
+          'sql_query': 'ALTER TABLE public.music ENABLE ROW LEVEL SECURITY;',
+        },
+      );
 
       // Create RLS policies
       final policies = [
@@ -115,14 +114,12 @@ class DatabaseSetupService {
           FOR DELETE
           TO authenticated
           USING (is_public = true);
-        '''
+        ''',
       ];
 
       for (final policy in policies) {
         try {
-          await _supabase.rpc('exec_sql', params: {
-            'sql_query': policy
-          });
+          await _supabase.rpc('exec_sql', params: {'sql_query': policy});
         } catch (e) {
           Logger.error('Error creating policy: $e');
           // Continue with other policies even if one fails
@@ -136,7 +133,6 @@ class DatabaseSetupService {
 
       Logger.info('Music table setup completed successfully');
       return true;
-
     } catch (e) {
       Logger.error('Error creating music table: $e');
       return false;
@@ -193,7 +189,8 @@ Katika upendo wako''',
           'is_public': true,
           'source_website': 'https://www.swahilimusicnotes.com',
           'tags': ['thanksgiving', 'gratitude', 'swahili', 'traditional'],
-          'sheet_music_url': 'https://www.swahilimusicnotes.com/song/download/30290/pdf/1617548702-1asante-kwa-kunishirikisha-kiitikio.pdf'
+          'sheet_music_url':
+              'https://www.swahilimusicnotes.com/song/download/30290/pdf/1617548702-1asante-kwa-kunishirikisha-kiitikio.pdf',
         },
         {
           'title': 'Nimshukuru Mwenyezi',
@@ -238,7 +235,7 @@ Tusifu jina lake''',
           'language': 'Swahili',
           'is_public': true,
           'source_website': 'https://www.swahilimusicnotes.com',
-          'tags': ['praise', 'worship', 'swahili', 'traditional']
+          'tags': ['praise', 'worship', 'swahili', 'traditional'],
         },
         {
           'title': 'Bwana Ni Mchungaji Wangu',
@@ -283,8 +280,8 @@ Kwa kuwa wewe u pamoja nami''',
           'language': 'Swahili',
           'is_public': true,
           'source_website': 'Traditional',
-          'tags': ['psalm', 'comfort', 'swahili', 'traditional']
-        }
+          'tags': ['psalm', 'comfort', 'swahili', 'traditional'],
+        },
       ];
 
       for (final music in sampleMusic) {
@@ -296,7 +293,6 @@ Kwa kuwa wewe u pamoja nami''',
       }
 
       Logger.info('Sample music data inserted successfully');
-
     } catch (e) {
       Logger.error('Error inserting sample music data: $e');
     }
@@ -317,7 +313,7 @@ Kwa kuwa wewe u pamoja nami''',
   static Future<void> initializeDatabase() async {
     try {
       Logger.info('Initializing database...');
-      
+
       final tableExists = await musicTableExists();
       if (!tableExists) {
         Logger.info('Music table does not exist, creating...');

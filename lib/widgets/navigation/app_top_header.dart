@@ -40,16 +40,16 @@ class AppTopHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initial = user.fullName.isNotEmpty ? user.fullName[0].toUpperCase() : 'U';
+    final initial = user.fullName.isNotEmpty
+        ? user.fullName[0].toUpperCase()
+        : 'U';
 
     return Container(
       height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: const BoxDecoration(
         color: MusicLibraryColors.card,
-        border: Border(
-          bottom: BorderSide(color: MusicLibraryColors.border),
-        ),
+        border: Border(bottom: BorderSide(color: MusicLibraryColors.border)),
       ),
       child: Row(
         children: [
@@ -70,7 +70,10 @@ class AppTopHeader extends StatelessWidget {
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                   hintText: searchHint ?? context.tr('navSearchHint'),
-                  hintStyle: mlText(size: 13, color: MusicLibraryColors.textSecondary),
+                  hintStyle: mlText(
+                    size: 13,
+                    color: MusicLibraryColors.textSecondary,
+                  ),
                   prefixIcon: const Icon(
                     Icons.search,
                     size: 18,
@@ -81,7 +84,10 @@ class AppTopHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          _NotificationBell(count: notificationCount, onTap: onNotificationsTap),
+          _NotificationBell(
+            count: notificationCount,
+            onTap: onNotificationsTap,
+          ),
           const SizedBox(width: 16),
           InkWell(
             onTap: onProfileTap,
@@ -113,12 +119,17 @@ class AppTopHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        user.fullName.isEmpty ? context.tr('navUserFallback') : user.fullName,
+                        user.fullName.isEmpty
+                            ? context.tr('navUserFallback')
+                            : user.fullName,
                         style: mlText(size: 13, weight: FontWeight.w600),
                       ),
                       Text(
                         _roleLabel(context, user.role),
-                        style: mlText(size: 11, color: MusicLibraryColors.textSecondary),
+                        style: mlText(
+                          size: 11,
+                          color: MusicLibraryColors.textSecondary,
+                        ),
                       ),
                     ],
                   ),

@@ -3,32 +3,34 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends ChangeNotifier {
   static const String _themeKey = 'theme_mode';
-  
+
   ThemeMode _themeMode = ThemeMode.system;
-  
+
   ThemeMode get themeMode => _themeMode;
-  
+
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
     }
     return _themeMode == ThemeMode.dark;
   }
-  
+
   bool get isLightMode {
     if (_themeMode == ThemeMode.system) {
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.light;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.light;
     }
     return _themeMode == ThemeMode.light;
   }
-  
+
   bool get isSystemMode => _themeMode == ThemeMode.system;
-  
+
   Future<void> loadTheme() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final themeModeIndex = prefs.getInt(_themeKey) ?? 0;
-      
+
       switch (themeModeIndex) {
         case 0:
           _themeMode = ThemeMode.system;
@@ -42,22 +44,22 @@ class ThemeController extends ChangeNotifier {
         default:
           _themeMode = ThemeMode.system;
       }
-      
+
       notifyListeners();
     } catch (e) {
       // If loading fails, use system default
       _themeMode = ThemeMode.system;
     }
   }
-  
+
   Future<void> setThemeMode(ThemeMode mode) async {
     try {
       _themeMode = mode;
       notifyListeners();
-      
+
       final prefs = await SharedPreferences.getInstance();
       int themeModeIndex;
-      
+
       switch (mode) {
         case ThemeMode.system:
           themeModeIndex = 0;
@@ -69,14 +71,14 @@ class ThemeController extends ChangeNotifier {
           themeModeIndex = 2;
           break;
       }
-      
+
       await prefs.setInt(_themeKey, themeModeIndex);
     } catch (e) {
       // If saving fails, revert to previous mode
       notifyListeners();
     }
   }
-  
+
   Future<void> toggleTheme() async {
     switch (_themeMode) {
       case ThemeMode.system:
@@ -90,7 +92,7 @@ class ThemeController extends ChangeNotifier {
         break;
     }
   }
-  
+
   String getThemeDisplayName() {
     switch (_themeMode) {
       case ThemeMode.system:
@@ -101,7 +103,7 @@ class ThemeController extends ChangeNotifier {
         return 'Dark';
     }
   }
-  
+
   IconData getThemeIcon() {
     switch (_themeMode) {
       case ThemeMode.system:

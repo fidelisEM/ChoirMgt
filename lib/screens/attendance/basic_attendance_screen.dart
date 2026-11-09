@@ -46,9 +46,7 @@ class _BasicAttendanceScreenState extends State<BasicAttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: AppColors.backgroundGradient,
-      ),
+      decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
       child: SafeArea(
         child: Column(
           children: [
@@ -127,7 +125,7 @@ class _BasicAttendanceScreenState extends State<BasicAttendanceScreen> {
                 ],
               ),
             ),
-            
+
             // Attendance Records
             Expanded(
               child: Container(
@@ -148,7 +146,9 @@ class _BasicAttendanceScreenState extends State<BasicAttendanceScreen> {
                       child: ListView.builder(
                         itemCount: _attendanceRecords.length,
                         itemBuilder: (context, index) {
-                          return _buildAttendanceCard(_attendanceRecords[index]);
+                          return _buildAttendanceCard(
+                            _attendanceRecords[index],
+                          );
                         },
                       ),
                     ),
@@ -214,9 +214,14 @@ class _BasicAttendanceScreenState extends State<BasicAttendanceScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: _getPercentageColor(percentage).withValues(alpha: 0.1),
+                    color: _getPercentageColor(
+                      percentage,
+                    ).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -259,10 +264,7 @@ class _BasicAttendanceScreenState extends State<BasicAttendanceScreen> {
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            color: color.withValues(alpha: 0.7),
-          ),
+          style: TextStyle(fontSize: 12, color: color.withValues(alpha: 0.7)),
         ),
       ],
     );

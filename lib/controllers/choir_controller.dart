@@ -28,9 +28,11 @@ class ChoirController extends ChangeNotifier {
   // Initialize the controller and restore persisted choir selection
   Future<void> initialize() async {
     if (_initialized) return;
-    
+
     try {
-      Logger.debug('ChoirController - Initializing and restoring choir selection');
+      Logger.debug(
+        'ChoirController - Initializing and restoring choir selection',
+      );
       await _restoreSelectedChoir();
       _initialized = true;
     } catch (e) {
@@ -43,14 +45,14 @@ class ChoirController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       if (adminView) {
         _choirs = await _choirService.getAllChoirs();
       } else if (userId != null) {
         // Load choirs where user is admin or leader
         final adminChoirs = await _choirService.getChoirsByAdmin(userId);
         final leaderChoirs = await _choirService.getChoirsByLeader(userId);
-        
+
         // Combine and remove duplicates
         final allChoirs = [...adminChoirs, ...leaderChoirs];
         final uniqueChoirs = <String, ChoirModel>{};
@@ -61,7 +63,7 @@ class ChoirController extends ChangeNotifier {
       } else {
         _choirs = await _choirService.getAllChoirs();
       }
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load choirs: $e');
@@ -98,10 +100,10 @@ class ChoirController extends ChangeNotifier {
       );
 
       await _choirService.createChoir(choir);
-      
+
       // Reload choirs to get the updated list
       await loadChoirs(userId: adminId, adminView: true);
-      
+
       _setLoading(false);
       return true;
     } catch (e) {
@@ -117,13 +119,15 @@ class ChoirController extends ChangeNotifier {
       _selectedChoir = choir;
       _setLoading(true);
       _clearError();
-      
+
       // Persist the selected choir
       await _persistSelectedChoir(choir);
-      Logger.debug('ChoirController - Selected and persisted choir: ${choir.name}');
-      
+      Logger.debug(
+        'ChoirController - Selected and persisted choir: ${choir.name}',
+      );
+
       _choirMembers = await _choirService.getChoirMembers(choir.id);
-      
+
       _setLoading(false);
       notifyListeners();
     } catch (e) {
@@ -137,30 +141,34 @@ class ChoirController extends ChangeNotifier {
     try {
       Logger.debug('ChoirController: Starting updateChoir for ID: ${choir.id}');
       Logger.debug('ChoirController: Choir name to update: "${choir.name}"');
-      
+
       _setLoading(true);
       _clearError();
 
       final success = await _choirService.updateChoir(choir);
       Logger.debug('ChoirController: Service returned success: $success');
-      
+
       if (success) {
         // Update local data
         final index = _choirs.indexWhere((c) => c.id == choir.id);
         Logger.debug('ChoirController: Found choir at index: $index');
         if (index != -1) {
-          Logger.debug('ChoirController: Updating local choir from "${_choirs[index].name}" to "${choir.name}"');
+          Logger.debug(
+            'ChoirController: Updating local choir from "${_choirs[index].name}" to "${choir.name}"',
+          );
           _choirs[index] = choir;
         }
         if (_selectedChoir?.id == choir.id) {
-          Logger.debug('ChoirController: Updating selected choir from "${_selectedChoir?.name}" to "${choir.name}"');
+          Logger.debug(
+            'ChoirController: Updating selected choir from "${_selectedChoir?.name}" to "${choir.name}"',
+          );
           _selectedChoir = choir;
         }
         notifyListeners(); // Ensure UI updates
       } else {
         Logger.error('ChoirController: Update failed, error: $errorMessage');
       }
-      
+
       _setLoading(false);
       return success;
     } catch (e) {
@@ -177,7 +185,7 @@ class ChoirController extends ChangeNotifier {
       _clearError();
 
       final success = await _choirService.deleteChoir(choirId);
-      
+
       if (success) {
         _choirs.removeWhere((c) => c.id == choirId);
         if (_selectedChoir?.id == choirId) {
@@ -185,7 +193,7 @@ class ChoirController extends ChangeNotifier {
           _choirMembers.clear();
         }
       }
-      
+
       _setLoading(false);
       return success;
     } catch (e) {
@@ -200,9 +208,9 @@ class ChoirController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _choirs = await _choirService.searchChoirs(query);
-      
+
       _setLoading(false);
       notifyListeners(); // Ensure UI updates with search results
     } catch (e) {
@@ -231,12 +239,12 @@ class ChoirController extends ChangeNotifier {
 
       // Add member to choir
       await _choirService.addMemberToChoir(member);
-      
+
       // Reload choir members
       if (_selectedChoir?.id == choirId) {
         _choirMembers = await _choirService.getChoirMembers(choirId);
       }
-      
+
       _setLoading(false);
       return true;
     } catch (e) {
@@ -255,15 +263,18 @@ class ChoirController extends ChangeNotifier {
       _setLoading(true);
       _clearError();
 
-      final success = await _choirService.removeMemberFromChoir(memberId, choirId);
-      
+      final success = await _choirService.removeMemberFromChoir(
+        memberId,
+        choirId,
+      );
+
       if (success) {
         // Reload choir members
         if (_selectedChoir?.id == choirId) {
           _choirMembers = await _choirService.getChoirMembers(choirId);
         }
       }
-      
+
       _setLoading(false);
       return success;
     } catch (e) {
@@ -277,17 +288,25 @@ class ChoirController extends ChangeNotifier {
   Future<Map<String, dynamic>> getChoirStatistics(String choirId) async {
     try {
       final members = await _choirService.getChoirMembers(choirId);
-      
-      final activeMembers = members.where((m) => m.status == MemberStatus.active).length;
-      final inactiveMembers = members.where((m) => m.status == MemberStatus.inactive).length;
-      final suspendedMembers = members.where((m) => m.status == MemberStatus.suspended).length;
-      
+
+      final activeMembers = members
+          .where((m) => m.status == MemberStatus.active)
+          .length;
+      final inactiveMembers = members
+          .where((m) => m.status == MemberStatus.inactive)
+          .length;
+      final suspendedMembers = members
+          .where((m) => m.status == MemberStatus.suspended)
+          .length;
+
       final totalOutstandingFees = members.fold<double>(
-        0, (sum, member) => sum + member.outstandingFees
+        0,
+        (sum, member) => sum + member.outstandingFees,
       );
-      
+
       final totalPaid = members.fold<double>(
-        0, (sum, member) => sum + member.totalPaid
+        0,
+        (sum, member) => sum + member.totalPaid,
       );
 
       return {
@@ -297,8 +316,9 @@ class ChoirController extends ChangeNotifier {
         'suspended_members': suspendedMembers,
         'total_outstanding_fees': totalOutstandingFees,
         'total_paid': totalPaid,
-        'average_attendance': members.isNotEmpty 
-            ? members.map((m) => m.attendanceRate).reduce((a, b) => a + b) / members.length
+        'average_attendance': members.isNotEmpty
+            ? members.map((m) => m.attendanceRate).reduce((a, b) => a + b) /
+                  members.length
             : 0.0,
       };
     } catch (e) {
@@ -353,19 +373,25 @@ class ChoirController extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final choirJson = prefs.getString(_selectedChoirKey);
-      
+
       if (choirJson != null) {
         final choirData = jsonDecode(choirJson) as Map<String, dynamic>;
         _selectedChoir = ChoirModel.fromJson(choirData);
-        Logger.debug('ChoirController - Restored choir selection: ${_selectedChoir!.name}');
-        
+        Logger.debug(
+          'ChoirController - Restored choir selection: ${_selectedChoir!.name}',
+        );
+
         // Load choir members for the restored choir
         try {
-          _choirMembers = await _choirService.getChoirMembers(_selectedChoir!.id);
+          _choirMembers = await _choirService.getChoirMembers(
+            _selectedChoir!.id,
+          );
         } catch (e) {
-          Logger.error('ChoirController - Error loading members for restored choir: $e');
+          Logger.error(
+            'ChoirController - Error loading members for restored choir: $e',
+          );
         }
-        
+
         notifyListeners();
       } else {
         Logger.debug('ChoirController - No persisted choir selection found');

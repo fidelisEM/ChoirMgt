@@ -44,7 +44,11 @@ class AppSidebar extends StatelessWidget {
                       color: MusicLibraryColors.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.church, color: Colors.white, size: 18),
+                    child: const Icon(
+                      Icons.church,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -86,13 +90,15 @@ class AppSidebar extends StatelessWidget {
                           child: Row(
                             children: [
                               Icon(
-                                enabled ? items[index].icon : Icons.lock_outline,
+                                enabled
+                                    ? items[index].icon
+                                    : Icons.lock_outline,
                                 size: 20,
                                 color: isSelected
                                     ? Colors.white
                                     : enabled
-                                        ? Colors.white70
-                                        : Colors.white30,
+                                    ? Colors.white70
+                                    : Colors.white30,
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -106,8 +112,8 @@ class AppSidebar extends StatelessWidget {
                                     color: isSelected
                                         ? Colors.white
                                         : enabled
-                                            ? Colors.white70
-                                            : Colors.white30,
+                                        ? Colors.white70
+                                        : Colors.white30,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),

@@ -1,7 +1,6 @@
 import '../models/models.dart';
 
 class ArchdioceseParishSampleData {
-  
   static List<ArchdioceseModel> getSampleArchdioceses() {
     return [
       // United States - Major Archdioceses
@@ -77,14 +76,15 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Thomas Wenski',
         createdAt: DateTime.now().subtract(const Duration(days: 230)),
       ),
-      
+
       // Kenya - Archdioceses
       ArchdioceseModel(
         id: 'arch_nairobi_009',
         name: 'Roman Catholic Archdiocese of Nairobi',
         code: 'NAI',
         country: 'Kenya',
-        description: 'The Roman Catholic Archdiocese of Nairobi (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Nairobi (Metropolitan See)',
         bishop: 'Archbishop Philip Anyolo',
         createdAt: DateTime.now().subtract(const Duration(days: 220)),
       ),
@@ -93,7 +93,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Mombasa',
         code: 'MSA',
         country: 'Kenya',
-        description: 'The Roman Catholic Archdiocese of Mombasa (Metropolitan See of Mombasa Province)',
+        description:
+            'The Roman Catholic Archdiocese of Mombasa (Metropolitan See of Mombasa Province)',
         bishop: 'Archbishop Alphonce Zizzamia',
         createdAt: DateTime.now().subtract(const Duration(days: 210)),
       ),
@@ -102,7 +103,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Kisumu',
         code: 'KSM',
         country: 'Kenya',
-        description: 'The Roman Catholic Archdiocese of Kisumu (Metropolitan See of Kisumu Province)',
+        description:
+            'The Roman Catholic Archdiocese of Kisumu (Metropolitan See of Kisumu Province)',
         bishop: 'Archbishop Maurice Muhatia',
         createdAt: DateTime.now().subtract(const Duration(days: 200)),
       ),
@@ -111,7 +113,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Nyeri',
         code: 'NYE',
         country: 'Kenya',
-        description: 'The Roman Catholic Archdiocese of Nyeri (Metropolitan See of Nyeri Province)',
+        description:
+            'The Roman Catholic Archdiocese of Nyeri (Metropolitan See of Nyeri Province)',
         bishop: 'Archbishop Anthony Muheria',
         createdAt: DateTime.now().subtract(const Duration(days: 190)),
       ),
@@ -120,7 +123,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Eldoret',
         code: 'ELD',
         country: 'Kenya',
-        description: 'The Roman Catholic Archdiocese of Eldoret (Metropolitan See of Eldoret Province)',
+        description:
+            'The Roman Catholic Archdiocese of Eldoret (Metropolitan See of Eldoret Province)',
         bishop: 'Archbishop Maurice Crowley',
         createdAt: DateTime.now().subtract(const Duration(days: 180)),
       ),
@@ -131,7 +135,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Machakos',
         code: 'MAC',
         country: 'Kenya',
-        description: 'Diocese covering Machakos County and parts of Makueni County',
+        description:
+            'Diocese covering Machakos County and parts of Makueni County',
         bishop: 'Bishop Norman King\'oo',
         createdAt: DateTime.now().subtract(const Duration(days: 170)),
       ),
@@ -140,7 +145,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Ngong',
         code: 'NGO',
         country: 'Kenya',
-        description: 'Diocese covering Kajiado County and southern parts of Nairobi',
+        description:
+            'Diocese covering Kajiado County and southern parts of Nairobi',
         bishop: 'Bishop John Oballa Owaa',
         createdAt: DateTime.now().subtract(const Duration(days: 165)),
       ),
@@ -167,7 +173,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Malindi',
         code: 'MAL',
         country: 'Kenya',
-        description: 'Diocese covering Kilifi County, Malindi, and surrounding coastal areas',
+        description:
+            'Diocese covering Kilifi County, Malindi, and surrounding coastal areas',
         bishop: 'Bishop Emmanuel Barbara',
         createdAt: DateTime.now().subtract(const Duration(days: 150)),
       ),
@@ -176,7 +183,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Voi',
         code: 'VOI',
         country: 'Kenya',
-        description: 'Diocese covering Taita-Taveta County and surrounding areas',
+        description:
+            'Diocese covering Taita-Taveta County and surrounding areas',
         bishop: 'Bishop Peter Kihara Kariuki',
         createdAt: DateTime.now().subtract(const Duration(days: 145)),
       ),
@@ -266,7 +274,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kericho',
         code: 'KER',
         country: 'Kenya',
-        description: 'Diocese covering Kericho County and parts of Bomet County',
+        description:
+            'Diocese covering Kericho County and parts of Bomet County',
         bishop: 'Bishop Alfred Rotich',
         createdAt: DateTime.now().subtract(const Duration(days: 95)),
       ),
@@ -284,7 +293,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kitui',
         code: 'KTI',
         country: 'Kenya',
-        description: 'Diocese covering Kitui County and parts of Mwingi and surrounding areas',
+        description:
+            'Diocese covering Kitui County and parts of Mwingi and surrounding areas',
         bishop: 'Bishop Anthony Muheria',
         createdAt: DateTime.now().subtract(const Duration(days: 85)),
       ),
@@ -293,7 +303,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Nyahururu',
         code: 'NYA',
         country: 'Kenya',
-        description: 'Diocese covering Laikipia and Nyandarua Counties in central Kenya',
+        description:
+            'Diocese covering Laikipia and Nyandarua Counties in central Kenya',
         bishop: 'Bishop Joseph Mbatia',
         createdAt: DateTime.now().subtract(const Duration(days: 80)),
       ),
@@ -322,7 +333,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Kampala',
         code: 'KMP',
         country: 'Uganda',
-        description: 'The Roman Catholic Archdiocese of Kampala (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Kampala (Metropolitan See)',
         bishop: 'Archbishop Paul Ssemogerere',
         createdAt: DateTime.now().subtract(const Duration(days: 365)),
       ),
@@ -331,7 +343,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Gulu',
         code: 'GUL',
         country: 'Uganda',
-        description: 'The Roman Catholic Archdiocese of Gulu (Metropolitan See of Gulu Province)',
+        description:
+            'The Roman Catholic Archdiocese of Gulu (Metropolitan See of Gulu Province)',
         bishop: 'Archbishop John Baptist Odama',
         createdAt: DateTime.now().subtract(const Duration(days: 355)),
       ),
@@ -340,7 +353,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Mbarara',
         code: 'MBA',
         country: 'Uganda',
-        description: 'The Roman Catholic Archdiocese of Mbarara (Metropolitan See of Mbarara Province)',
+        description:
+            'The Roman Catholic Archdiocese of Mbarara (Metropolitan See of Mbarara Province)',
         bishop: 'Archbishop Lambert Bainomugisha',
         createdAt: DateTime.now().subtract(const Duration(days: 345)),
       ),
@@ -349,7 +363,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Tororo',
         code: 'TOR',
         country: 'Uganda',
-        description: 'The Roman Catholic Archdiocese of Tororo (Metropolitan See of Tororo Province)',
+        description:
+            'The Roman Catholic Archdiocese of Tororo (Metropolitan See of Tororo Province)',
         bishop: 'Archbishop Emmanuel Obbo',
         createdAt: DateTime.now().subtract(const Duration(days: 335)),
       ),
@@ -360,7 +375,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Arua',
         code: 'ARU',
         country: 'Uganda',
-        description: 'Diocese covering Arua District and surrounding West Nile region',
+        description:
+            'Diocese covering Arua District and surrounding West Nile region',
         bishop: 'Bishop Sabino Ocan Odoki',
         createdAt: DateTime.now().subtract(const Duration(days: 325)),
       ),
@@ -369,7 +385,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Lira',
         code: 'LIR',
         country: 'Uganda',
-        description: 'Diocese covering Lira District and surrounding northern Uganda areas',
+        description:
+            'Diocese covering Lira District and surrounding northern Uganda areas',
         bishop: 'Bishop Joseph Franzelli',
         createdAt: DateTime.now().subtract(const Duration(days: 315)),
       ),
@@ -378,7 +395,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Soroti',
         code: 'SOR',
         country: 'Uganda',
-        description: 'Diocese covering Soroti District and surrounding Teso sub-region',
+        description:
+            'Diocese covering Soroti District and surrounding Teso sub-region',
         bishop: 'Bishop Joe Eciru',
         createdAt: DateTime.now().subtract(const Duration(days: 305)),
       ),
@@ -387,7 +405,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Jinja',
         code: 'JIN',
         country: 'Uganda',
-        description: 'Diocese covering Jinja District and surrounding eastern Uganda areas',
+        description:
+            'Diocese covering Jinja District and surrounding eastern Uganda areas',
         bishop: 'Bishop Charles Martin Wamika',
         createdAt: DateTime.now().subtract(const Duration(days: 295)),
       ),
@@ -396,7 +415,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kasana–Luweero',
         code: 'KAS',
         country: 'Uganda',
-        description: 'Diocese covering Luweero District and surrounding central Uganda areas',
+        description:
+            'Diocese covering Luweero District and surrounding central Uganda areas',
         bishop: 'Bishop Paul Ssemogerere',
         createdAt: DateTime.now().subtract(const Duration(days: 285)),
       ),
@@ -405,7 +425,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Hoima',
         code: 'HOI',
         country: 'Uganda',
-        description: 'Diocese covering Hoima District and surrounding Bunyoro areas',
+        description:
+            'Diocese covering Hoima District and surrounding Bunyoro areas',
         bishop: 'Bishop Vincent Kirabo',
         createdAt: DateTime.now().subtract(const Duration(days: 275)),
       ),
@@ -414,7 +435,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Fort Portal',
         code: 'FTP',
         country: 'Uganda',
-        description: 'Diocese covering Kabarole District and surrounding areas in western Uganda',
+        description:
+            'Diocese covering Kabarole District and surrounding areas in western Uganda',
         bishop: 'Bishop Robert Muhiirwa',
         createdAt: DateTime.now().subtract(const Duration(days: 265)),
       ),
@@ -423,7 +445,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kabale',
         code: 'KAB',
         country: 'Uganda',
-        description: 'Diocese covering Kabale District and surrounding southwestern Uganda areas',
+        description:
+            'Diocese covering Kabale District and surrounding southwestern Uganda areas',
         bishop: 'Bishop Callist Rubaramira',
         createdAt: DateTime.now().subtract(const Duration(days: 255)),
       ),
@@ -432,7 +455,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kasese',
         code: 'KSE',
         country: 'Uganda',
-        description: 'Diocese covering Kasese District and surrounding Rwenzori areas',
+        description:
+            'Diocese covering Kasese District and surrounding Rwenzori areas',
         bishop: 'Bishop Francis Aquirinus Kibira',
         createdAt: DateTime.now().subtract(const Duration(days: 245)),
       ),
@@ -441,7 +465,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Kotido',
         code: 'KTD',
         country: 'Uganda',
-        description: 'Diocese covering Kotido District and surrounding Karamoja region',
+        description:
+            'Diocese covering Kotido District and surrounding Karamoja region',
         bishop: 'Bishop Giuseppe Filippi',
         createdAt: DateTime.now().subtract(const Duration(days: 235)),
       ),
@@ -450,7 +475,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Moroto',
         code: 'MOR',
         country: 'Uganda',
-        description: 'Diocese covering Moroto District and eastern Karamoja region',
+        description:
+            'Diocese covering Moroto District and eastern Karamoja region',
         bishop: 'Bishop Damiano Guzzetti',
         createdAt: DateTime.now().subtract(const Duration(days: 225)),
       ),
@@ -459,7 +485,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Nebbi',
         code: 'NEB',
         country: 'Uganda',
-        description: 'Diocese covering Nebbi District and surrounding West Nile region',
+        description:
+            'Diocese covering Nebbi District and surrounding West Nile region',
         bishop: 'Bishop Raphael p\'Mony Wokorach',
         createdAt: DateTime.now().subtract(const Duration(days: 215)),
       ),
@@ -470,7 +497,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Kigali',
         code: 'KGL',
         country: 'Rwanda',
-        description: 'The Roman Catholic Archdiocese of Kigali (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Kigali (Metropolitan See)',
         bishop: 'Archbishop Antoine Kambanda',
         createdAt: DateTime.now().subtract(const Duration(days: 400)),
       ),
@@ -479,7 +507,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Butare',
         code: 'BUT',
         country: 'Rwanda',
-        description: 'The Roman Catholic Archdiocese of Butare (Southern Rwanda)',
+        description:
+            'The Roman Catholic Archdiocese of Butare (Southern Rwanda)',
         bishop: 'Archbishop Philippe Rukamba',
         createdAt: DateTime.now().subtract(const Duration(days: 390)),
       ),
@@ -537,7 +566,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Bujumbura',
         code: 'BJM',
         country: 'Burundi',
-        description: 'The Roman Catholic Archdiocese of Bujumbura (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Bujumbura (Metropolitan See)',
         bishop: 'Archbishop Gervais Banshimiyubusa',
         createdAt: DateTime.now().subtract(const Duration(days: 450)),
       ),
@@ -546,7 +576,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Gitega',
         code: 'GIT',
         country: 'Burundi',
-        description: 'The Roman Catholic Archdiocese of Gitega (Central Burundi)',
+        description:
+            'The Roman Catholic Archdiocese of Gitega (Central Burundi)',
         bishop: 'Archbishop Joachim Ntahondereye',
         createdAt: DateTime.now().subtract(const Duration(days: 440)),
       ),
@@ -577,7 +608,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Juba',
         code: 'JUB',
         country: 'South Sudan',
-        description: 'The Roman Catholic Archdiocese of Juba (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Juba (Metropolitan See)',
         bishop: 'Archbishop Stephen Ameyu Martin Mulla',
         createdAt: DateTime.now().subtract(const Duration(days: 500)),
       ),
@@ -633,7 +665,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Tombura-Yambio',
         code: 'TYA',
         country: 'South Sudan',
-        description: 'Diocese covering Tombura, Yambio, and Western Equatoria region',
+        description:
+            'Diocese covering Tombura, Yambio, and Western Equatoria region',
         bishop: 'Bishop Barani Eduardo Hiiboro Kussala',
         createdAt: DateTime.now().subtract(const Duration(days: 440)),
       ),
@@ -644,7 +677,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Addis Ababa',
         code: 'ADD',
         country: 'Ethiopia',
-        description: 'The Roman Catholic Archdiocese of Addis Ababa (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Addis Ababa (Metropolitan See)',
         bishop: 'Archbishop Lesanu Christos Matheos',
         createdAt: DateTime.now().subtract(const Duration(days: 550)),
       ),
@@ -653,7 +687,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Dire Dawa',
         code: 'DDD',
         country: 'Ethiopia',
-        description: 'The Roman Catholic Archdiocese of Dire Dawa (Eastern Ethiopia)',
+        description:
+            'The Roman Catholic Archdiocese of Dire Dawa (Eastern Ethiopia)',
         bishop: 'Archbishop Tesfasellassie Medhin',
         createdAt: DateTime.now().subtract(const Duration(days: 540)),
       ),
@@ -662,7 +697,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Adigrat',
         code: 'ADG',
         country: 'Ethiopia',
-        description: 'The Roman Catholic Archdiocese of Adigrat (Tigray region, Northern Ethiopia)',
+        description:
+            'The Roman Catholic Archdiocese of Adigrat (Tigray region, Northern Ethiopia)',
         bishop: 'Archbishop Tesfaselassie Medhin',
         createdAt: DateTime.now().subtract(const Duration(days: 530)),
       ),
@@ -720,7 +756,8 @@ class ArchdioceseParishSampleData {
         name: 'Apostolic Vicariate of Mogadishu',
         code: 'MOG',
         country: 'Somalia',
-        description: 'Apostolic Vicariate covering all of Somalia (limited Catholic presence)',
+        description:
+            'Apostolic Vicariate covering all of Somalia (limited Catholic presence)',
         bishop: 'Apostolic Vicar Giorgio Bertin',
         createdAt: DateTime.now().subtract(const Duration(days: 600)),
       ),
@@ -731,7 +768,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Djibouti',
         code: 'DJI',
         country: 'Djibouti',
-        description: 'Diocese covering the entire country of Djibouti (small Catholic presence)',
+        description:
+            'Diocese covering the entire country of Djibouti (small Catholic presence)',
         bishop: 'Bishop Giorgio Bertin',
         createdAt: DateTime.now().subtract(const Duration(days: 650)),
       ),
@@ -742,7 +780,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Khartoum',
         code: 'KRT',
         country: 'Sudan',
-        description: 'The Roman Catholic Archdiocese of Khartoum (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Khartoum (Metropolitan See)',
         bishop: 'Archbishop Michael Didi Adgum Mangoria',
         createdAt: DateTime.now().subtract(const Duration(days: 700)),
       ),
@@ -764,7 +803,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Lagos',
         code: 'LAG',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Lagos (Metropolitan See)',
+        description:
+            'The Roman Catholic Archdiocese of Lagos (Metropolitan See)',
         bishop: 'Archbishop Adewale Martins',
         createdAt: DateTime.now().subtract(const Duration(days: 800)),
       ),
@@ -773,7 +813,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Abuja',
         code: 'ABJ',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Abuja (Federal Capital Territory)',
+        description:
+            'The Roman Catholic Archdiocese of Abuja (Federal Capital Territory)',
         bishop: 'Archbishop Ignatius Kaigama',
         createdAt: DateTime.now().subtract(const Duration(days: 790)),
       ),
@@ -782,7 +823,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Onitsha',
         code: 'ONI',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Onitsha (Southeastern Nigeria)',
+        description:
+            'The Roman Catholic Archdiocese of Onitsha (Southeastern Nigeria)',
         bishop: 'Archbishop Valerian Okeke',
         createdAt: DateTime.now().subtract(const Duration(days: 780)),
       ),
@@ -791,7 +833,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Ibadan',
         code: 'IBD',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Ibadan (Southwestern Nigeria)',
+        description:
+            'The Roman Catholic Archdiocese of Ibadan (Southwestern Nigeria)',
         bishop: 'Archbishop Gabriel Abegunrin',
         createdAt: DateTime.now().subtract(const Duration(days: 770)),
       ),
@@ -809,7 +852,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Calabar',
         code: 'CAL',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Calabar (Cross River State)',
+        description:
+            'The Roman Catholic Archdiocese of Calabar (Cross River State)',
         bishop: 'Archbishop Joseph Ekuwem',
         createdAt: DateTime.now().subtract(const Duration(days: 750)),
       ),
@@ -818,7 +862,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Kaduna',
         code: 'KAD',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Kaduna (Northern Nigeria)',
+        description:
+            'The Roman Catholic Archdiocese of Kaduna (Northern Nigeria)',
         bishop: 'Archbishop Matthew Ndagoso',
         createdAt: DateTime.now().subtract(const Duration(days: 740)),
       ),
@@ -865,7 +910,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Port Harcourt',
         code: 'PHC',
         country: 'Nigeria',
-        description: 'The Roman Catholic Diocese of Port Harcourt (Rivers State)',
+        description:
+            'The Roman Catholic Diocese of Port Harcourt (Rivers State)',
         bishop: 'Bishop Camillus Umoh',
         createdAt: DateTime.now().subtract(const Duration(days: 690)),
       ),
@@ -912,7 +958,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Accra',
         code: 'ACC',
         country: 'Ghana',
-        description: 'The Roman Catholic Archdiocese of Accra (Greater Accra Region)',
+        description:
+            'The Roman Catholic Archdiocese of Accra (Greater Accra Region)',
         bishop: 'Archbishop John Bonaventure Kwofie',
         createdAt: DateTime.now().subtract(const Duration(days: 770)),
       ),
@@ -921,7 +968,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Cape Coast',
         code: 'CPC',
         country: 'Ghana',
-        description: 'The Roman Catholic Archdiocese of Cape Coast (Central Region)',
+        description:
+            'The Roman Catholic Archdiocese of Cape Coast (Central Region)',
         bishop: 'Archbishop Matthias Kobena Nketsiah',
         createdAt: DateTime.now().subtract(const Duration(days: 765)),
       ),
@@ -930,7 +978,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Kumasi',
         code: 'KUM',
         country: 'Ghana',
-        description: 'The Roman Catholic Archdiocese of Kumasi (Ashanti Region)',
+        description:
+            'The Roman Catholic Archdiocese of Kumasi (Ashanti Region)',
         bishop: 'Archbishop Gabriel Justice Yaw Anokye',
         createdAt: DateTime.now().subtract(const Duration(days: 760)),
       ),
@@ -939,18 +988,20 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Tamale',
         code: 'TAM',
         country: 'Ghana',
-        description: 'The Roman Catholic Archdiocese of Tamale (Northern Region)',
+        description:
+            'The Roman Catholic Archdiocese of Tamale (Northern Region)',
         bishop: 'Archbishop Philip Naameh',
         createdAt: DateTime.now().subtract(const Duration(days: 755)),
       ),
-      
+
       // Ghana - Dioceses
       ArchdioceseModel(
         id: 'dioc_sekondi_148',
         name: 'Roman Catholic Diocese of Sekondi-Takoradi',
         code: 'SEK',
         country: 'Ghana',
-        description: 'The Roman Catholic Diocese of Sekondi-Takoradi (Western Region)',
+        description:
+            'The Roman Catholic Diocese of Sekondi-Takoradi (Western Region)',
         bishop: 'Bishop John Baptist Attakruh',
         createdAt: DateTime.now().subtract(const Duration(days: 750)),
       ),
@@ -977,7 +1028,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Keta-Akatsi',
         code: 'KET',
         country: 'Ghana',
-        description: 'The Roman Catholic Diocese of Keta-Akatsi (Coastal Volta Region)',
+        description:
+            'The Roman Catholic Diocese of Keta-Akatsi (Coastal Volta Region)',
         bishop: 'Bishop Gabriel Edoe Kumordji',
         createdAt: DateTime.now().subtract(const Duration(days: 735)),
       ),
@@ -986,7 +1038,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Navrongo-Bolgatanga',
         code: 'NAV',
         country: 'Ghana',
-        description: 'The Roman Catholic Diocese of Navrongo-Bolgatanga (Upper East Region)',
+        description:
+            'The Roman Catholic Diocese of Navrongo-Bolgatanga (Upper East Region)',
         bishop: 'Bishop Alfred Agyenta',
         createdAt: DateTime.now().subtract(const Duration(days: 730)),
       ),
@@ -1006,7 +1059,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Abidjan',
         code: 'ABI',
         country: 'Ivory Coast',
-        description: 'The Roman Catholic Archdiocese of Abidjan (Abidjan District)',
+        description:
+            'The Roman Catholic Archdiocese of Abidjan (Abidjan District)',
         bishop: 'Archbishop Jean-Pierre Kutwa',
         createdAt: DateTime.now().subtract(const Duration(days: 760)),
       ),
@@ -1024,29 +1078,32 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Yamoussoukro',
         code: 'YAM',
         country: 'Ivory Coast',
-        description: 'The Roman Catholic Archdiocese of Yamoussoukro (Central Ivory Coast)',
+        description:
+            'The Roman Catholic Archdiocese of Yamoussoukro (Central Ivory Coast)',
         bishop: 'Archbishop Marcellin Yao Kouadio',
         createdAt: DateTime.now().subtract(const Duration(days: 740)),
       ),
 
-      // Ivory Coast - Dioceses  
+      // Ivory Coast - Dioceses
       ArchdioceseModel(
         id: 'dioc_san_pedro_118',
         name: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         code: 'SPE',
         country: 'Ivory Coast',
-        description: 'The Roman Catholic Diocese of San Pedro (Southwest Ivory Coast)',
+        description:
+            'The Roman Catholic Diocese of San Pedro (Southwest Ivory Coast)',
         bishop: 'Bishop Marie-Daniel Dadiet',
         createdAt: DateTime.now().subtract(const Duration(days: 730)),
       ),
-      
+
       // Cameroon - Archdioceses
       ArchdioceseModel(
         id: 'arch_yaounde_119',
         name: 'Roman Catholic Archdiocese of Yaoundé',
         code: 'YAO',
         country: 'Cameroon',
-        description: 'The Roman Catholic Archdiocese of Yaoundé (Central Cameroon)',
+        description:
+            'The Roman Catholic Archdiocese of Yaoundé (Central Cameroon)',
         bishop: 'Archbishop Jean Mbarga',
         createdAt: DateTime.now().subtract(const Duration(days: 720)),
       ),
@@ -1055,7 +1112,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Douala',
         code: 'DLA',
         country: 'Cameroon',
-        description: 'The Roman Catholic Archdiocese of Douala (Littoral Region)',
+        description:
+            'The Roman Catholic Archdiocese of Douala (Littoral Region)',
         bishop: 'Archbishop Samuel Kleda',
         createdAt: DateTime.now().subtract(const Duration(days: 710)),
       ),
@@ -1120,7 +1178,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Maroua-Mokolo',
         code: 'MAR',
         country: 'Cameroon',
-        description: 'The Roman Catholic Diocese of Maroua-Mokolo (Far North Region)',
+        description:
+            'The Roman Catholic Diocese of Maroua-Mokolo (Far North Region)',
         bishop: 'Bishop Bruno Ateba Edo',
         createdAt: DateTime.now().subtract(const Duration(days: 640)),
       ),
@@ -1156,7 +1215,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Diocese of Nkongsamba',
         code: 'NKO',
         country: 'Cameroon',
-        description: 'The Roman Catholic Diocese of Nkongsamba (Littoral Region)',
+        description:
+            'The Roman Catholic Diocese of Nkongsamba (Littoral Region)',
         bishop: 'Bishop Dieudonné Watio',
         createdAt: DateTime.now().subtract(const Duration(days: 600)),
       ),
@@ -1169,14 +1229,15 @@ class ArchdioceseParishSampleData {
         bishop: 'Bishop Dieudonné Bogmis',
         createdAt: DateTime.now().subtract(const Duration(days: 590)),
       ),
-      
+
       // Nigeria - Major Archdioceses
       ArchdioceseModel(
         id: 'arch_abuja_133',
         name: 'Roman Catholic Archdiocese of Abuja',
         code: 'ABJ',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Abuja (Federal Capital Territory)',
+        description:
+            'The Roman Catholic Archdiocese of Abuja (Federal Capital Territory)',
         bishop: 'Archbishop Ignatius Kaigama',
         createdAt: DateTime.now().subtract(const Duration(days: 580)),
       ),
@@ -1194,7 +1255,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Onitsha',
         code: 'ONI',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Onitsha (Anambra State)',
+        description:
+            'The Roman Catholic Archdiocese of Onitsha (Anambra State)',
         bishop: 'Archbishop Valerian Okeke',
         createdAt: DateTime.now().subtract(const Duration(days: 570)),
       ),
@@ -1257,7 +1319,8 @@ class ArchdioceseParishSampleData {
         name: 'Roman Catholic Archdiocese of Port Harcourt',
         code: 'PHC',
         country: 'Nigeria',
-        description: 'The Roman Catholic Archdiocese of Port Harcourt (Rivers State)',
+        description:
+            'The Roman Catholic Archdiocese of Port Harcourt (Rivers State)',
         bishop: 'Archbishop Paulinus Ezeokafor',
         createdAt: DateTime.now().subtract(const Duration(days: 535)),
       ),
@@ -1279,7 +1342,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Callistus Onaga',
         createdAt: DateTime.now().subtract(const Duration(days: 525)),
       ),
-      
+
       // Italy - Major Archdioceses
       ArchdioceseModel(
         id: 'arch_rome_154',
@@ -1317,7 +1380,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Giuseppe Betori',
         createdAt: DateTime.now().subtract(const Duration(days: 505)),
       ),
-      
+
       // Philippines
       ArchdioceseModel(
         id: 'arch_manila_035',
@@ -1328,7 +1391,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Cardinal Jose Advincula',
         createdAt: DateTime.now().subtract(const Duration(days: 150)),
       ),
-      
+
       // Canada - Major Archdioceses
       ArchdioceseModel(
         id: 'arch_toronto_036',
@@ -1357,7 +1420,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop J. Michael Miller',
         createdAt: DateTime.now().subtract(const Duration(days: 120)),
       ),
-      
+
       // United Kingdom
       ArchdioceseModel(
         id: 'arch_westminster_039',
@@ -1386,7 +1449,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Malcolm McMahon',
         createdAt: DateTime.now().subtract(const Duration(days: 90)),
       ),
-      
+
       // Australia
       ArchdioceseModel(
         id: 'arch_sydney_042',
@@ -1415,7 +1478,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Mark Coleridge',
         createdAt: DateTime.now().subtract(const Duration(days: 60)),
       ),
-      
+
       // Brazil
       ArchdioceseModel(
         id: 'arch_saopaulo_045',
@@ -1444,7 +1507,7 @@ class ArchdioceseParishSampleData {
         bishop: 'Archbishop Paulo Cezar Costa',
         createdAt: DateTime.now().subtract(const Duration(days: 30)),
       ),
-      
+
       // Italy
       ArchdioceseModel(
         id: 'arch_milan_048',
@@ -1493,8 +1556,8 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Michael Smith',
         createdAt: DateTime.now().subtract(const Duration(days: 340)),
       ),
-      
-      // Chicago Parishes  
+
+      // Chicago Parishes
       ParishModel(
         id: 'parish_holyname_chi_001',
         name: 'Holy Name Cathedral',
@@ -1565,7 +1628,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. David O\'Connell',
         createdAt: DateTime.now().subtract(const Duration(days: 280)),
       ),
-      
+
       // Nairobi Parishes (Archdiocese of Nairobi)
       ParishModel(
         id: 'parish_hf_nai_001',
@@ -1766,7 +1829,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Samuel Ndung\'u',
         createdAt: DateTime.now().subtract(const Duration(days: 223)),
       ),
-      
+
       // Machakos Diocese Parishes
       ParishModel(
         id: 'parish_sjc_mac_001',
@@ -1880,7 +1943,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. James Mwangeka',
         createdAt: DateTime.now().subtract(const Duration(days: 186)),
       ),
-      
+
       // Kisumu Parishes
       ParishModel(
         id: 'parish_teresa_ksm_001',
@@ -3267,7 +3330,8 @@ class ArchdioceseParishSampleData {
       // Djibouti Diocese Parishes/Chapels
       ParishModel(
         id: 'parish_olgs_dji_001',
-        name: 'Cathedral of Our Lady of the Good Shepherd – Djibouti (Cathedral)',
+        name:
+            'Cathedral of Our Lady of the Good Shepherd – Djibouti (Cathedral)',
         code: 'OLGS',
         archdioceseId: 'dio_djibouti_093',
         archdioceseName: 'Roman Catholic Diocese of Djibouti',
@@ -4649,7 +4713,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Fr. Magdalen Séka',
         createdAt: DateTime.now().subtract(const Duration(days: 742)),
       ),
-      
+
       // Manila Parishes
       ParishModel(
         id: 'parish_mnlcat_007',
@@ -4674,7 +4738,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Luciano Cruz',
         createdAt: DateTime.now().subtract(const Duration(days: 130)),
       ),
-      
+
       // Toronto Parishes
       ParishModel(
         id: 'parish_stmichael_tor_001',
@@ -4710,7 +4774,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Anthony Onikoyi',
         createdAt: DateTime.now().subtract(const Duration(days: 133)),
       ),
-      
+
       // Montreal Parishes
       ParishModel(
         id: 'parish_maryreine_mtl_001',
@@ -4735,7 +4799,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Msgr. Barry Jones',
         createdAt: DateTime.now().subtract(const Duration(days: 124)),
       ),
-      
+
       // Westminster Parishes
       ParishModel(
         id: 'parish_westminster_cat_001',
@@ -4771,7 +4835,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Fr. Mark Vickers',
         createdAt: DateTime.now().subtract(const Duration(days: 103)),
       ),
-      
+
       // Sydney Parishes
       ParishModel(
         id: 'parish_stmary_syd_001',
@@ -4796,7 +4860,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Fr. Paul Vigano',
         createdAt: DateTime.now().subtract(const Duration(days: 74)),
       ),
-      
+
       // São Paulo Parishes
       ParishModel(
         id: 'parish_se_cathedral_sao_001',
@@ -4821,7 +4885,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Pe. Marcos Almeida',
         createdAt: DateTime.now().subtract(const Duration(days: 44)),
       ),
-      
+
       // Rio de Janeiro Parishes
       ParishModel(
         id: 'parish_candelaria_rio_001',
@@ -4845,7 +4909,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Pe. Carlos Roberto',
         createdAt: DateTime.now().subtract(const Duration(days: 34)),
       ),
-      
+
       // Milan Parishes
       ParishModel(
         id: 'parish_duomo_milan_001',
@@ -4870,7 +4934,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Don Marco Navoni',
         createdAt: DateTime.now().subtract(const Duration(days: 14)),
       ),
-      
+
       // Adding comprehensive parishes for the Nigerian archdioceses and dioceses
 
       // Onitsha Archdiocese - Additional Parishes (3-20)
@@ -5090,7 +5154,7 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Fr. Francis Adebayo',
         createdAt: DateTime.now().subtract(const Duration(days: 761)),
       ),
-      
+
       // Bouaké Archdiocese Parishes (Ivory Coast) - 20 Parishes
       ParishModel(
         id: 'parish_stc_bou_001',
@@ -5581,7 +5645,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Peter Cathedral – San Pedro (Cathedral)',
         code: 'SPC',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'Centre Ville, San Pedro',
         phoneNumber: '+225-34-715014',
         email: 'info@sanpedrodiocese.ci',
@@ -5593,7 +5658,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Joseph Parish – San Pedro Central',
         code: 'STJ',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Central',
         phoneNumber: '+225-34-715015',
         email: 'stjoseph@sanpedrodiocese.ci',
@@ -5605,7 +5671,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Mary Parish – San Pedro East',
         code: 'STM',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro East',
         phoneNumber: '+225-34-715016',
         email: 'stmary@sanpedrodiocese.ci',
@@ -5617,7 +5684,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Paul Parish – San Pedro West',
         code: 'STPA',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro West',
         phoneNumber: '+225-34-715017',
         email: 'stpaul@sanpedrodiocese.ci',
@@ -5629,7 +5697,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Augustine Parish – San Pedro North',
         code: 'STA',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro North',
         phoneNumber: '+225-34-715018',
         email: 'staugustine@sanpedrodiocese.ci',
@@ -5641,7 +5710,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Michael Parish – San Pedro South',
         code: 'STM',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro South',
         phoneNumber: '+225-34-715019',
         email: 'stmichael@sanpedrodiocese.ci',
@@ -5653,7 +5723,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Anthony Parish – San Pedro Market Area',
         code: 'STAN',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Market Area',
         phoneNumber: '+225-34-715020',
         email: 'stanthony@sanpedrodiocese.ci',
@@ -5665,7 +5736,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Charles Lwanga Parish – San Pedro Residential Area',
         code: 'STCL',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Residential Area',
         phoneNumber: '+225-34-715021',
         email: 'stcharles@sanpedrodiocese.ci',
@@ -5677,7 +5749,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Francis of Assisi Parish – San Pedro New Town',
         code: 'STFA',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro New Town',
         phoneNumber: '+225-34-715022',
         email: 'stfrancis@sanpedrodiocese.ci',
@@ -5689,7 +5762,8 @@ class ArchdioceseParishSampleData {
         name: 'Sacred Heart Parish – San Pedro Old Town',
         code: 'SH',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Old Town',
         phoneNumber: '+225-34-715023',
         email: 'sacredheart@sanpedrodiocese.ci',
@@ -5701,7 +5775,8 @@ class ArchdioceseParishSampleData {
         name: 'Holy Family Parish – San Pedro Hills',
         code: 'HF',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Hills',
         phoneNumber: '+225-34-715024',
         email: 'holyfamily@sanpedrodiocese.ci',
@@ -5713,7 +5788,8 @@ class ArchdioceseParishSampleData {
         name: 'St. John the Evangelist Parish – San Pedro North East',
         code: 'STJE',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro North East',
         phoneNumber: '+225-34-715025',
         email: 'stjohn@sanpedrodiocese.ci',
@@ -5725,7 +5801,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Jude Thaddeus Parish – San Pedro South East',
         code: 'STJT',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro South East',
         phoneNumber: '+225-34-715026',
         email: 'stjude@sanpedrodiocese.ci',
@@ -5737,7 +5814,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Benedict Parish – San Pedro Central East',
         code: 'STB',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Central East',
         phoneNumber: '+225-34-715027',
         email: 'stbenedict@sanpedrodiocese.ci',
@@ -5749,7 +5827,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Patrick Parish – San Pedro Central West',
         code: 'STPAT',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Central West',
         phoneNumber: '+225-34-715028',
         email: 'stpatrick@sanpedrodiocese.ci',
@@ -5761,7 +5840,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Catherine Parish – San Pedro East Hills',
         code: 'STC',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro East Hills',
         phoneNumber: '+225-34-715029',
         email: 'stcatherine@sanpedrodiocese.ci',
@@ -5773,7 +5853,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Elizabeth Parish – San Pedro West Hills',
         code: 'STE',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro West Hills',
         phoneNumber: '+225-34-715030',
         email: 'stelizabeth@sanpedrodiocese.ci',
@@ -5785,7 +5866,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Michael the Archangel Parish – San Pedro North West',
         code: 'STMA',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro North West',
         phoneNumber: '+225-34-715031',
         email: 'stmichaelarch@sanpedrodiocese.ci',
@@ -5797,7 +5879,8 @@ class ArchdioceseParishSampleData {
         name: 'St. Mary Magdalene Parish – San Pedro South West',
         code: 'STMM',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro South West',
         phoneNumber: '+225-34-715032',
         email: 'stmarymagdalene@sanpedrodiocese.ci',
@@ -5809,14 +5892,15 @@ class ArchdioceseParishSampleData {
         name: 'St. Theresa Parish – San Pedro Central Hills',
         code: 'STT',
         archdioceseId: 'dioc_san_pedro_118',
-        archdioceseName: 'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
+        archdioceseName:
+            'Roman Catholic Diocese of San Pedro-en-Côte d\'Ivoire',
         address: 'San Pedro Central Hills',
         phoneNumber: '+225-34-715033',
         email: 'sttheresa@sanpedrodiocese.ci',
         pastor: 'Rev. Fr. Thérèse Koné',
         createdAt: DateTime.now().subtract(const Duration(days: 712)),
       ),
-      
+
       // Cameroon Parishes - 14 Jurisdictions × 20 Parishes = 280 Parishes
 
       // Yaoundé Archdiocese Parishes (Cameroon) - 20 Parishes
@@ -9208,21 +9292,20 @@ class ArchdioceseParishSampleData {
         pastor: 'Rev. Fr. Cristo Re Milano',
         createdAt: DateTime.now().subtract(const Duration(days: 496)),
       ),
-      
     ];
   }
-  
+
   static Map<String, List<ParishModel>> getParishesByArchdiocese() {
     final parishes = getSampleParishes();
     final Map<String, List<ParishModel>> result = {};
-    
+
     for (var parish in parishes) {
       if (!result.containsKey(parish.archdioceseId)) {
         result[parish.archdioceseId] = [];
       }
       result[parish.archdioceseId]!.add(parish);
     }
-    
+
     return result;
   }
 }

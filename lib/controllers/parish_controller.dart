@@ -5,7 +5,7 @@ import '../services/parish_service.dart';
 
 class ParishController extends GetxController {
   final ParishService _parishService = ParishService();
-  
+
   var isLoading = false.obs;
   var parishes = <ParishModel>[].obs;
   var selectedParish = Rxn<ParishModel>();
@@ -41,7 +41,9 @@ class ParishController extends GetxController {
     try {
       isLoading.value = true;
       selectedArchdioceseId.value = archdioceseId;
-      final fetchedParishes = await _parishService.getParishesByArchdiocese(archdioceseId);
+      final fetchedParishes = await _parishService.getParishesByArchdiocese(
+        archdioceseId,
+      );
       parishes.value = fetchedParishes;
     } catch (e) {
       Get.snackbar(

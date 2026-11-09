@@ -10,11 +10,7 @@ import '../../widgets/music_notes_viewer.dart';
 import '../../widgets/pdf_document_viewer.dart';
 
 class MusicDetailScreen extends StatefulWidget {
-
-  const MusicDetailScreen({
-    super.key,
-    required this.music,
-  });
+  const MusicDetailScreen({super.key, required this.music});
   final MusicModel music;
 
   @override
@@ -99,10 +95,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
           itemBuilder: (context) => [
             const PopupMenuItem(
               value: 'edit',
-              child: ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Edit'),
-              ),
+              child: ListTile(leading: Icon(Icons.edit), title: Text('Edit')),
             ),
             const PopupMenuItem(
               value: 'delete',
@@ -132,10 +125,9 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: _getCategoryGradient(widget.music.category)
-                          .colors
-                          .first
-                          .withValues(alpha: 0.3),
+                      color: _getCategoryGradient(
+                        widget.music.category,
+                      ).colors.first.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -199,7 +191,11 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.access_time, size: 16, color: AppColors.gray500),
+                const Icon(
+                  Icons.access_time,
+                  size: 16,
+                  color: AppColors.gray500,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Duration: ${widget.music.formattedDuration}',
@@ -222,9 +218,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
         label,
@@ -315,11 +309,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
       height: 520, // Increased height to prevent overflow
       child: TabBarView(
         controller: _tabController,
-        children: [
-          _buildLyricsTab(),
-          _buildNotesTab(),
-          _buildInfoTab(),
-        ],
+        children: [_buildLyricsTab(), _buildNotesTab(), _buildInfoTab()],
       ),
     );
   }
@@ -360,9 +350,9 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
-                  widget.music.lyrics.isNotEmpty 
-                    ? widget.music.lyrics 
-                    : 'No lyrics available for this song.',
+                  widget.music.lyrics.isNotEmpty
+                      ? widget.music.lyrics
+                      : 'No lyrics available for this song.',
                   style: const TextStyle(
                     fontSize: 16,
                     height: 1.8,
@@ -383,7 +373,8 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
       child: Column(
         children: [
           // PDF Sheet Music Viewer
-          if (widget.music.sheetMusicUrl != null && widget.music.sheetMusicUrl!.isNotEmpty)
+          if (widget.music.sheetMusicUrl != null &&
+              widget.music.sheetMusicUrl!.isNotEmpty)
             Expanded(
               flex: 3,
               child: PdfDocumentViewer(
@@ -391,22 +382,20 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                 showFullScreen: false,
               ),
             ),
-          
+
           // Spacing between PDF and chord progressions
-          if (widget.music.sheetMusicUrl != null && 
-              widget.music.sheetMusicUrl!.isNotEmpty && 
+          if (widget.music.sheetMusicUrl != null &&
+              widget.music.sheetMusicUrl!.isNotEmpty &&
               widget.music.musicNotes.isNotEmpty)
             const SizedBox(height: 16),
-          
+
           // Music Notes/Chord Progressions Viewer
           if (widget.music.musicNotes.isNotEmpty)
-            Expanded(
-              flex: 2,
-              child: MusicNotesViewer(music: widget.music),
-            ),
-          
+            Expanded(flex: 2, child: MusicNotesViewer(music: widget.music)),
+
           // No content message
-          if ((widget.music.sheetMusicUrl == null || widget.music.sheetMusicUrl!.isEmpty) && 
+          if ((widget.music.sheetMusicUrl == null ||
+                  widget.music.sheetMusicUrl!.isEmpty) &&
               widget.music.musicNotes.isEmpty)
             const Expanded(
               child: GlassCard(
@@ -453,81 +442,78 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
       child: SingleChildScrollView(
         child: Column(
           children: [
-            _buildInfoCard(
-              'General Information',
-              [
-                _buildInfoRow('Title', widget.music.title),
-                _buildInfoRow('Artist', widget.music.artist),
-                _buildInfoRow('Composer', widget.music.composer),
-                _buildInfoRow('Category', widget.music.displayCategory),
-                _buildInfoRow('Difficulty', widget.music.displayDifficulty),
-                _buildInfoRow('Language', widget.music.language),
-              ],
-            ),
+            _buildInfoCard('General Information', [
+              _buildInfoRow('Title', widget.music.title),
+              _buildInfoRow('Artist', widget.music.artist),
+              _buildInfoRow('Composer', widget.music.composer),
+              _buildInfoRow('Category', widget.music.displayCategory),
+              _buildInfoRow('Difficulty', widget.music.displayDifficulty),
+              _buildInfoRow('Language', widget.music.language),
+            ]),
             const SizedBox(height: 16),
-            _buildInfoCard(
-              'Media & Resources',
-              [
-                _buildInfoRow(
-                  'Audio Available',
-                  widget.music.hasAudio ? 'Yes' : 'No',
-                  icon: widget.music.hasAudio ? Icons.check_circle : Icons.cancel,
-                  iconColor: widget.music.hasAudio ? AppColors.success : AppColors.error,
-                ),
-                _buildInfoRow(
-                  'Sheet Music',
-                  widget.music.hasSheetMusic ? 'Available' : 'Not Available',
-                  icon: widget.music.hasSheetMusic ? Icons.check_circle : Icons.cancel,
-                  iconColor: widget.music.hasSheetMusic ? AppColors.success : AppColors.error,
-                ),
-                if (widget.music.sourceWebsite != null)
-                  _buildInfoRow('Source', widget.music.sourceWebsite!),
-              ],
-            ),
+            _buildInfoCard('Media & Resources', [
+              _buildInfoRow(
+                'Audio Available',
+                widget.music.hasAudio ? 'Yes' : 'No',
+                icon: widget.music.hasAudio ? Icons.check_circle : Icons.cancel,
+                iconColor: widget.music.hasAudio
+                    ? AppColors.success
+                    : AppColors.error,
+              ),
+              _buildInfoRow(
+                'Sheet Music',
+                widget.music.hasSheetMusic ? 'Available' : 'Not Available',
+                icon: widget.music.hasSheetMusic
+                    ? Icons.check_circle
+                    : Icons.cancel,
+                iconColor: widget.music.hasSheetMusic
+                    ? AppColors.success
+                    : AppColors.error,
+              ),
+              if (widget.music.sourceWebsite != null)
+                _buildInfoRow('Source', widget.music.sourceWebsite!),
+            ]),
             const SizedBox(height: 16),
-            _buildInfoCard(
-              'Tags & Metadata',
-              [
-                if (widget.music.tags.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: widget.music.tags.map((tag) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+            _buildInfoCard('Tags & Metadata', [
+              if (widget.music.tags.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: widget.music.tags.map((tag) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.secondary.withValues(alpha: 0.3),
                         ),
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: AppColors.secondary.withValues(alpha: 0.3),
-                          ),
+                      ),
+                      child: Text(
+                        tag,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.w500,
                         ),
-                        child: Text(
-                          tag,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.secondary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ] else ...[
+                const Text(
+                  'No tags available',
+                  style: TextStyle(
+                    color: AppColors.gray500,
+                    fontStyle: FontStyle.italic,
                   ),
-                ] else ...[
-                  const Text(
-                    'No tags available',
-                    style: TextStyle(
-                      color: AppColors.gray500,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
+                ),
               ],
-            ),
+            ]),
           ],
         ),
       ),
@@ -581,11 +567,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
             child: Row(
               children: [
                 if (icon != null) ...[
-                  Icon(
-                    icon,
-                    size: 16,
-                    color: iconColor ?? AppColors.gray600,
-                  ),
+                  Icon(icon, size: 16, color: iconColor ?? AppColors.gray600),
                   const SizedBox(width: 8),
                 ],
                 Expanded(
@@ -656,7 +638,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
     setState(() {
       _isPlaying = !_isPlaying;
     });
-    
+
     Get.snackbar(
       _isPlaying ? 'Playing' : 'Paused',
       '${widget.music.title} by ${widget.music.artist}',
@@ -717,16 +699,18 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
           'Are you sure you want to delete "${widget.music.title}"? This action cannot be undone.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () async {
               Get.back();
-              final musicController = Provider.of<MusicController>(context, listen: false);
-              final success = await musicController.deleteMusic(widget.music.id);
-              
+              final musicController = Provider.of<MusicController>(
+                context,
+                listen: false,
+              );
+              final success = await musicController.deleteMusic(
+                widget.music.id,
+              );
+
               if (success) {
                 Get.back(); // Go back to music list
                 Get.snackbar(
@@ -737,9 +721,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                 );
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Delete'),
           ),
         ],

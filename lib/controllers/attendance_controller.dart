@@ -20,9 +20,12 @@ class AttendanceController extends ChangeNotifier {
 
   List<AttendanceModel> get attendanceRecords => _attendanceRecords;
   List<AttendanceSessionModel> get sessions => _sessions;
-  List<AttendanceRecordModel> get currentSessionRecords => _currentSessionRecords;
+  List<AttendanceRecordModel> get currentSessionRecords =>
+      _currentSessionRecords;
   AttendanceSessionModel? get currentSession => _currentSession;
-  AttendanceSessionModel? get activeSession => _sessions.isNotEmpty ? _sessions.firstWhere((s) => s.isActive, orElse: () => _sessions.first) : null;
+  AttendanceSessionModel? get activeSession => _sessions.isNotEmpty
+      ? _sessions.firstWhere((s) => s.isActive, orElse: () => _sessions.first)
+      : null;
   String? get activeChoirId => _activeChoirId;
   Map<String, double> get attendanceStats => _attendanceStats;
   bool get isLoading => _isLoading;
@@ -34,10 +37,10 @@ class AttendanceController extends ChangeNotifier {
       _setLoading(true);
       _clearError();
       _activeChoirId = choirId;
-      
+
       _attendanceRecords = await _attendanceService.getChoirAttendance(choirId);
       _attendanceStats = await _attendanceService.getAttendanceStats(choirId);
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load attendance records: $e');
@@ -46,20 +49,24 @@ class AttendanceController extends ChangeNotifier {
   }
 
   // Record attendance for multiple members (original batch method)
-  Future<bool> recordAttendanceBatch(List<AttendanceModel> attendanceList) async {
+  Future<bool> recordAttendanceBatch(
+    List<AttendanceModel> attendanceList,
+  ) async {
     try {
       _setLoading(true);
       _clearError();
 
-      final sessionId = await _attendanceService.recordAttendance(attendanceList);
-      
+      final sessionId = await _attendanceService.recordAttendance(
+        attendanceList,
+      );
+
       if (sessionId.isNotEmpty) {
         // Reload attendance data from storage to get the actual saved records
         if (attendanceList.isNotEmpty) {
           final choirId = attendanceList.first.choirId;
           await loadChoirAttendance(choirId);
         }
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -80,15 +87,20 @@ class AttendanceController extends ChangeNotifier {
       _setLoading(true);
       _clearError();
 
-      final success = await _attendanceService.deleteAttendanceSession(sessionId, choirId);
-      
+      final success = await _attendanceService.deleteAttendanceSession(
+        sessionId,
+        choirId,
+      );
+
       if (success) {
         // Remove records with this session ID from local list
-        _attendanceRecords.removeWhere((record) => record.sessionId == sessionId);
-        
+        _attendanceRecords.removeWhere(
+          (record) => record.sessionId == sessionId,
+        );
+
         // Refresh stats
         _attendanceStats = await _attendanceService.getAttendanceStats(choirId);
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -105,31 +117,45 @@ class AttendanceController extends ChangeNotifier {
 
   // Get attendance records for a specific member
   List<AttendanceModel> getMemberAttendance(String memberId) {
-    return _attendanceRecords.where((record) => record.memberId == memberId).toList();
+    return _attendanceRecords
+        .where((record) => record.memberId == memberId)
+        .toList();
   }
 
   // Get attendance records by date range
-  List<AttendanceModel> getAttendanceByDateRange(DateTime startDate, DateTime endDate) {
+  List<AttendanceModel> getAttendanceByDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
     return _attendanceRecords.where((record) {
-      return record.eventDate.isAfter(startDate.subtract(const Duration(days: 1))) &&
-             record.eventDate.isBefore(endDate.add(const Duration(days: 1)));
+      return record.eventDate.isAfter(
+            startDate.subtract(const Duration(days: 1)),
+          ) &&
+          record.eventDate.isBefore(endDate.add(const Duration(days: 1)));
     }).toList();
   }
 
   // Calculate overall attendance rate
   double getOverallAttendanceRate() {
     if (_attendanceRecords.isEmpty) return 0.0;
-    
-    final presentCount = _attendanceRecords.where(
-      (record) => record.status == AttendanceStatus.present || record.status == AttendanceStatus.late
-    ).length;
-    
+
+    final presentCount = _attendanceRecords
+        .where(
+          (record) =>
+              record.status == AttendanceStatus.present ||
+              record.status == AttendanceStatus.late,
+        )
+        .length;
+
     return (presentCount / _attendanceRecords.length) * 100;
   }
 
   // Get unique session IDs
   List<String> getSessionIds() {
-    return _attendanceRecords.map((record) => record.sessionId).toSet().toList();
+    return _attendanceRecords
+        .map((record) => record.sessionId)
+        .toSet()
+        .toList();
   }
 
   // Clear all attendance data
@@ -139,14 +165,14 @@ class AttendanceController extends ChangeNotifier {
       _clearError();
 
       await _attendanceService.clearAllAttendance();
-      
+
       _attendanceRecords.clear();
       _sessions.clear();
       _currentSessionRecords.clear();
       _currentSession = null;
       _attendanceStats.clear();
       _activeChoirId = null;
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Error clearing attendance data: $e');
@@ -199,37 +225,46 @@ class AttendanceController extends ChangeNotifier {
 
       // Get all choir members first
       final memberService = MemberService();
-      final allMembers = await memberService.getChoirMembersWithUserInfo(choirId);
-      
+      final allMembers = await memberService.getChoirMembersWithUserInfo(
+        choirId,
+      );
+
       // Remove duplicate members based on registration number or user ID
       final uniqueMembers = <String, Map<String, dynamic>>{};
       for (final member in allMembers) {
         final memberId = member['id'].toString();
         final regNumber = member['registration_number']?.toString() ?? '';
         final userId = member['user_id']?.toString() ?? '';
-        
+
         // Use registration number as primary key, fallback to user_id, then member_id
-        final uniqueKey = regNumber.isNotEmpty ? regNumber : (userId.isNotEmpty ? userId : memberId);
-        
+        final uniqueKey = regNumber.isNotEmpty
+            ? regNumber
+            : (userId.isNotEmpty ? userId : memberId);
+
         if (!uniqueMembers.containsKey(uniqueKey)) {
           uniqueMembers[uniqueKey] = member;
         } else {
-          Logger.debug('Skipping duplicate member: $uniqueKey - ${member['users']?['full_name']}');
+          Logger.debug(
+            'Skipping duplicate member: $uniqueKey - ${member['users']?['full_name']}',
+          );
         }
       }
-      
+
       final deduplicatedMembers = uniqueMembers.values.toList();
       final totalMembers = deduplicatedMembers.length;
-      
-      Logger.debug('Original choir members: ${allMembers.length}, After deduplication: $totalMembers');
+
+      Logger.debug(
+        'Original choir members: ${allMembers.length}, After deduplication: $totalMembers',
+      );
 
       // Get attendance records for the date range
-      final attendanceRecords = await _attendanceService.getAttendanceByDateRange(
-        choirId: choirId,
-        fromDate: fromDate,
-        toDate: toDate,
-      );
-      
+      final attendanceRecords = await _attendanceService
+          .getAttendanceByDateRange(
+            choirId: choirId,
+            fromDate: fromDate,
+            toDate: toDate,
+          );
+
       Logger.debug('Attendance records found: ${attendanceRecords.length}');
 
       if (attendanceRecords.isEmpty && deduplicatedMembers.isEmpty) {
@@ -247,13 +282,17 @@ class AttendanceController extends ChangeNotifier {
       // Get all sessions in the date range from session data, not just attendance records
       final allSessions = await _attendanceService.getSessions(choirId);
       final sessionsInRange = allSessions.where((session) {
-        return session.date.isAfter(fromDate.subtract(const Duration(days: 1))) &&
-               session.date.isBefore(toDate.add(const Duration(days: 1)));
+        return session.date.isAfter(
+              fromDate.subtract(const Duration(days: 1)),
+            ) &&
+            session.date.isBefore(toDate.add(const Duration(days: 1)));
       }).toList();
       final totalSessions = sessionsInRange.length;
-      
+
       Logger.debug('Total sessions in date range: $totalSessions');
-      Logger.debug('Sessions: ${sessionsInRange.map((s) => '${s.title} (${s.date})').join(', ')}');
+      Logger.debug(
+        'Sessions: ${sessionsInRange.map((s) => '${s.title} (${s.date})').join(', ')}',
+      );
 
       // Initialize attendance data for ALL choir members
       final memberAttendance = <String, Map<String, dynamic>>{};
@@ -262,18 +301,22 @@ class AttendanceController extends ChangeNotifier {
       // Create entries for all choir members (including those with no attendance records)
       for (final member in deduplicatedMembers) {
         final memberId = member['id'].toString();
-        Logger.debug('Processing member: $memberId - ${member['users']?['full_name']}');
-        
+        Logger.debug(
+          'Processing member: $memberId - ${member['users']?['full_name']}',
+        );
+
         // Check for duplicate member IDs
         if (memberAttendance.containsKey(memberId)) {
           Logger.warning('Duplicate member ID found: $memberId');
           continue; // Skip duplicates
         }
-        
+
         memberAttendance[memberId] = {
           'member_data': member,
-          'total_sessions': totalSessions, // This is the total sessions available
-          'sessions_attended': 0, // This is the sessions this member actually attended
+          'total_sessions':
+              totalSessions, // This is the total sessions available
+          'sessions_attended':
+              0, // This is the sessions this member actually attended
           'present': 0,
           'late': 0,
           'absent': 0,
@@ -286,7 +329,7 @@ class AttendanceController extends ChangeNotifier {
       for (final record in attendanceRecords) {
         final memberId = record.memberId;
         Logger.debug('Processing attendance record for member: $memberId');
-        
+
         // Only add records for members that exist in the choir
         if (memberRecords.containsKey(memberId)) {
           memberRecords[memberId]!.add(record);
@@ -299,36 +342,41 @@ class AttendanceController extends ChangeNotifier {
       for (final memberId in memberAttendance.keys) {
         final records = memberRecords[memberId]!;
         final sessionRecords = <String, AttendanceModel>{};
-        
+
         // Get the latest record for each session (in case of duplicates)
         for (final record in records) {
           sessionRecords[record.sessionId] = record;
         }
-        
+
         // Count attendance statuses
         for (final record in sessionRecords.values) {
           switch (record.status) {
             case AttendanceStatus.present:
-              memberAttendance[memberId]!['present'] = (memberAttendance[memberId]!['present'] as int) + 1;
+              memberAttendance[memberId]!['present'] =
+                  (memberAttendance[memberId]!['present'] as int) + 1;
               break;
             case AttendanceStatus.late:
-              memberAttendance[memberId]!['late'] = (memberAttendance[memberId]!['late'] as int) + 1;
+              memberAttendance[memberId]!['late'] =
+                  (memberAttendance[memberId]!['late'] as int) + 1;
               break;
             case AttendanceStatus.absent:
-              memberAttendance[memberId]!['absent'] = (memberAttendance[memberId]!['absent'] as int) + 1;
+              memberAttendance[memberId]!['absent'] =
+                  (memberAttendance[memberId]!['absent'] as int) + 1;
               break;
           }
         }
-        
+
         // Calculate sessions attended: sessions with ANY attendance record (present/late/absent)
         final sessionsWithRecords = sessionRecords.length;
         memberAttendance[memberId]!['sessions_attended'] = sessionsWithRecords;
-        
+
         // Calculate total absent sessions:
         // Sessions with no record + sessions explicitly marked as absent
-        final explicitAbsentCount = memberAttendance[memberId]!['absent'] as int;
+        final explicitAbsentCount =
+            memberAttendance[memberId]!['absent'] as int;
         final sessionsWithNoRecord = totalSessions - sessionsWithRecords;
-        memberAttendance[memberId]!['absent'] = explicitAbsentCount + sessionsWithNoRecord;
+        memberAttendance[memberId]!['absent'] =
+            explicitAbsentCount + sessionsWithNoRecord;
       }
 
       // Calculate attendance rates
@@ -336,7 +384,7 @@ class AttendanceController extends ChangeNotifier {
         final present = member['present'] as int;
         final late = member['late'] as int;
         final total = member['total_sessions'] as int;
-        
+
         if (total > 0) {
           member['attendance_rate'] = ((present + late) / total) * 100;
         }
@@ -354,9 +402,9 @@ class AttendanceController extends ChangeNotifier {
         });
       }
 
-      // Calculate summary statistics  
+      // Calculate summary statistics
       double avgAttendanceRate = 0.0;
-      
+
       if (memberAttendance.isNotEmpty) {
         final totalRate = memberAttendance.values
             .map((m) => m['attendance_rate'] as double)
@@ -377,7 +425,9 @@ class AttendanceController extends ChangeNotifier {
         },
       };
 
-      Logger.debug('Final report summary - total_sessions: $totalSessions, total_members: $totalMembers');
+      Logger.debug(
+        'Final report summary - total_sessions: $totalSessions, total_members: $totalMembers',
+      );
       Logger.debug('Member attendance entries: ${memberAttendance.length}');
 
       _setLoading(false);
@@ -397,25 +447,36 @@ class AttendanceController extends ChangeNotifier {
       _activeChoirId = choirId;
 
       Logger.debug('Loading attendance sessions for choir $choirId');
-      
+
       // Debug: Inspect what's in SharedPreferences
       await _attendanceService.debugSharedPreferences();
-      
+
       // First, try to load actual saved sessions from SharedPreferences
       _sessions = await _attendanceService.getSessions(choirId);
-      Logger.debug('Loaded ${_sessions.length} saved sessions from SharedPreferences');
-      
+      Logger.debug(
+        'Loaded ${_sessions.length} saved sessions from SharedPreferences',
+      );
+
       // If no saved sessions exist, create sessions from existing attendance records as fallback
       if (_sessions.isEmpty) {
-        Logger.debug('No saved sessions found, creating sessions from attendance records');
-        final attendanceRecords = await _attendanceService.getChoirAttendance(choirId);
-        final sessionIds = attendanceRecords.map((r) => r.sessionId).toSet().toList();
-        
+        Logger.debug(
+          'No saved sessions found, creating sessions from attendance records',
+        );
+        final attendanceRecords = await _attendanceService.getChoirAttendance(
+          choirId,
+        );
+        final sessionIds = attendanceRecords
+            .map((r) => r.sessionId)
+            .toSet()
+            .toList();
+
         if (sessionIds.isNotEmpty) {
           _sessions = sessionIds.map((sessionId) {
-            final sessionRecords = attendanceRecords.where((r) => r.sessionId == sessionId).toList();
+            final sessionRecords = attendanceRecords
+                .where((r) => r.sessionId == sessionId)
+                .toList();
             final firstRecord = sessionRecords.first;
-            
+
             return AttendanceSessionModel(
               id: sessionId,
               choirId: choirId,
@@ -431,19 +492,25 @@ class AttendanceController extends ChangeNotifier {
               createdAt: firstRecord.recordedAt,
             );
           }).toList();
-          Logger.debug('Created ${_sessions.length} sessions from attendance records');
+          Logger.debug(
+            'Created ${_sessions.length} sessions from attendance records',
+          );
         } else {
-          Logger.debug('No attendance records found, sessions list remains empty');
+          Logger.debug(
+            'No attendance records found, sessions list remains empty',
+          );
         }
       }
 
       // Sort by date descending
       _sessions.sort((a, b) => b.date.compareTo(a.date));
-      
+
       // Load attendance records and stats
       await loadChoirAttendance(choirId);
-      
-      Logger.debug('Session loading completed. Total sessions: ${_sessions.length}');
+
+      Logger.debug(
+        'Session loading completed. Total sessions: ${_sessions.length}',
+      );
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load attendance sessions: $e');
@@ -460,9 +527,13 @@ class AttendanceController extends ChangeNotifier {
       _currentSession = session;
 
       // Get all attendance records for this session
-      final allRecords = await _attendanceService.getChoirAttendance(session.choirId);
-      final sessionAttendance = allRecords.where((r) => r.sessionId == session.id).toList();
-      
+      final allRecords = await _attendanceService.getChoirAttendance(
+        session.choirId,
+      );
+      final sessionAttendance = allRecords
+          .where((r) => r.sessionId == session.id)
+          .toList();
+
       // Convert to AttendanceRecordModel format
       _currentSessionRecords = sessionAttendance.map((attendance) {
         return AttendanceRecordModel(
@@ -551,7 +622,7 @@ class AttendanceController extends ChangeNotifier {
       _clearError();
 
       final now = DateTime.now();
-      
+
       // Create session using the service to save it persistently
       final newSession = await _attendanceService.createSession(
         choirId: choirId,
@@ -588,17 +659,17 @@ class AttendanceController extends ChangeNotifier {
       _clearError();
 
       final now = DateTime.now();
-      
+
       for (int i = 0; i < memberIds.length; i++) {
         final memberId = memberIds[i];
         final existingRecordIndex = _currentSessionRecords.indexWhere(
-          (r) => r.memberId == memberId && r.sessionId == sessionId
+          (r) => r.memberId == memberId && r.sessionId == sessionId,
         );
 
         // Generate unique ID by adding index to avoid duplicates when processing multiple records at once
-        final recordId = existingRecordIndex != -1 
-          ? _currentSessionRecords[existingRecordIndex].id
-          : '${sessionId}_${memberId}_${now.millisecondsSinceEpoch}_$i';
+        final recordId = existingRecordIndex != -1
+            ? _currentSessionRecords[existingRecordIndex].id
+            : '${sessionId}_${memberId}_${now.millisecondsSinceEpoch}_$i';
 
         final record = AttendanceRecordModel(
           id: recordId,
@@ -632,10 +703,14 @@ class AttendanceController extends ChangeNotifier {
 
   // Get session attendance rate
   double getSessionAttendanceRate(String sessionId) {
-    final sessionRecords = _currentSessionRecords.where((r) => r.sessionId == sessionId).toList();
+    final sessionRecords = _currentSessionRecords
+        .where((r) => r.sessionId == sessionId)
+        .toList();
     if (sessionRecords.isEmpty) return 0.0;
-    
-    final presentCount = sessionRecords.where((r) => r.status == AttendanceStatus.present).length;
+
+    final presentCount = sessionRecords
+        .where((r) => r.status == AttendanceStatus.present)
+        .length;
     return (presentCount / sessionRecords.length) * 100;
   }
 
@@ -656,16 +731,17 @@ class AttendanceController extends ChangeNotifier {
 
       final now = DateTime.now();
       final actualCheckInTime = checkInTime ?? now;
-      
+
       // Get session for time-based calculations
       final session = _sessions.firstWhere(
         (s) => s.id == sessionId,
-        orElse: () => _sessions.isNotEmpty ? _sessions.first : _createDefaultSession(),
+        orElse: () =>
+            _sessions.isNotEmpty ? _sessions.first : _createDefaultSession(),
       );
 
       // Determine status based on time if not explicitly provided and useTimeBasedStatus is true
       AttendanceStatus finalStatus = status ?? AttendanceStatus.present;
-      
+
       if (useTimeBasedStatus && status == null) {
         finalStatus = _timeService.determineAttendanceStatus(
           checkInTime: actualCheckInTime,
@@ -676,13 +752,13 @@ class AttendanceController extends ChangeNotifier {
 
       // Check if record already exists for this member in this session
       final existingRecordIndex = _currentSessionRecords.indexWhere(
-        (r) => r.memberId == memberId && r.sessionId == sessionId
+        (r) => r.memberId == memberId && r.sessionId == sessionId,
       );
 
       // Generate unique ID using UUID-style approach for single records
-      final recordId = existingRecordIndex != -1 
-        ? _currentSessionRecords[existingRecordIndex].id
-        : '${sessionId}_${memberId}_${now.millisecondsSinceEpoch}_${now.microsecondsSinceEpoch.toString().substring(10)}';
+      final recordId = existingRecordIndex != -1
+          ? _currentSessionRecords[existingRecordIndex].id
+          : '${sessionId}_${memberId}_${now.millisecondsSinceEpoch}_${now.microsecondsSinceEpoch.toString().substring(10)}';
 
       final record = AttendanceRecordModel(
         id: recordId,
@@ -693,7 +769,13 @@ class AttendanceController extends ChangeNotifier {
         checkInTime: actualCheckInTime,
         recordedAt: now,
         recordedBy: recordedBy,
-        notes: notes ?? _generateTimeBasedNote(finalStatus, actualCheckInTime, session.startTime),
+        notes:
+            notes ??
+            _generateTimeBasedNote(
+              finalStatus,
+              actualCheckInTime,
+              session.startTime,
+            ),
       );
 
       // Update or add to current session records
@@ -702,7 +784,7 @@ class AttendanceController extends ChangeNotifier {
       } else {
         _currentSessionRecords.add(record);
       }
-      
+
       // Sync with main records
       await _syncWithMainRecords();
 
@@ -729,15 +811,18 @@ class AttendanceController extends ChangeNotifier {
       _clearError();
 
       // Find and update the record
-      final recordIndex = _currentSessionRecords.indexWhere((r) => r.id == recordId);
+      final recordIndex = _currentSessionRecords.indexWhere(
+        (r) => r.id == recordId,
+      );
       if (recordIndex != -1) {
-        _currentSessionRecords[recordIndex] = _currentSessionRecords[recordIndex].copyWith(
-          status: status,
-          checkInTime: checkInTime,
-          notes: notes,
-          recordedAt: DateTime.now(),
-        );
-        
+        _currentSessionRecords[recordIndex] =
+            _currentSessionRecords[recordIndex].copyWith(
+              status: status,
+              checkInTime: checkInTime,
+              notes: notes,
+              recordedAt: DateTime.now(),
+            );
+
         // Also update in the main attendance records
         await _syncWithMainRecords();
       }
@@ -803,9 +888,13 @@ class AttendanceController extends ChangeNotifier {
     );
   }
 
-  String _generateTimeBasedNote(AttendanceStatus status, DateTime checkInTime, DateTime sessionStartTime) {
+  String _generateTimeBasedNote(
+    AttendanceStatus status,
+    DateTime checkInTime,
+    DateTime sessionStartTime,
+  ) {
     final timeDifference = checkInTime.difference(sessionStartTime);
-    
+
     switch (status) {
       case AttendanceStatus.present:
         if (timeDifference.inMinutes <= 0) {

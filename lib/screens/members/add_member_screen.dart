@@ -12,7 +12,6 @@ import '../../utils/logger.dart';
 import '../../widgets/form_widgets.dart';
 
 class AddMemberScreen extends StatefulWidget {
-
   const AddMemberScreen({
     super.key,
     required this.choirId,
@@ -42,8 +41,13 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   }
 
   void _generateRegistrationNumber() async {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    final regNumber = await memberController.generateRegistrationNumber(widget.choirId);
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+    final regNumber = await memberController.generateRegistrationNumber(
+      widget.choirId,
+    );
     _formKey.currentState?.fields['registrationNumber']?.didChange(regNumber);
   }
 
@@ -51,8 +55,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     setState(() {
       _searchQuery = query;
     });
-    
-    final memberController = Provider.of<MemberController>(context, listen: false);
+
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
     memberController.searchAvailableUsers(
       choirId: widget.choirId,
       query: query,
@@ -68,29 +75,41 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
   void _addMember() async {
     if (_selectedUser == null) {
-      context.showErrorMessage('Please select a user to add to the choir', type: ErrorType.validation);
+      context.showErrorMessage(
+        'Please select a user to add to the choir',
+        type: ErrorType.validation,
+      );
       return;
     }
 
     if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
-      context.showErrorMessage('Please check the form and fix any errors', type: ErrorType.validation);
+      context.showErrorMessage(
+        'Please check the form and fix any errors',
+        type: ErrorType.validation,
+      );
       return;
     }
 
     try {
       final formData = _formKey.currentState!.value;
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+
       // Prepare metadata based on role
       Map<String, dynamic>? metadata;
-      if (_selectedRole == MemberRole.leader && formData['leaderPosition'] != null) {
+      if (_selectedRole == MemberRole.leader &&
+          formData['leaderPosition'] != null) {
         metadata = {'position': formData['leaderPosition']};
-      } else if (_selectedRole == MemberRole.committee && formData['committeeName'] != null) {
+      } else if (_selectedRole == MemberRole.committee &&
+          formData['committeeName'] != null) {
         metadata = {'committee': formData['committeeName']};
-      } else if (_selectedRole == MemberRole.trainer && formData['trainerPosition'] != null) {
+      } else if (_selectedRole == MemberRole.trainer &&
+          formData['trainerPosition'] != null) {
         metadata = {'position': formData['trainerPosition']};
       }
-      
+
       await LoadingService.withLoading(
         context,
         () async {
@@ -104,16 +123,18 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           );
 
           if (!success) {
-            throw Exception(memberController.errorMessage ?? 'Failed to add member');
+            throw Exception(
+              memberController.errorMessage ?? 'Failed to add member',
+            );
           }
         },
         loadingMessage: 'Adding ${_selectedUser!.fullName} to choir...',
-        successMessage: '${_selectedUser!.fullName} has been added to the choir!',
+        successMessage:
+            '${_selectedUser!.fullName} has been added to the choir!',
       );
 
       // Success - navigate back
       Get.back(result: true);
-      
     } on AppError catch (e) {
       context.showError(e);
     } catch (e) {
@@ -121,10 +142,12 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         'Failed to add member to choir. Please try again.',
         type: ErrorType.unknown,
       );
-      ErrorService().logError(ErrorService().createDatabaseError(
-        'Add member failed',
-        technicalMessage: e.toString(),
-      ));
+      ErrorService().logError(
+        ErrorService().createDatabaseError(
+          'Add member failed',
+          technicalMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -287,10 +310,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       children: [
         const Text(
           'Member Level',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         Container(
@@ -419,9 +439,13 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Logger.debug('AddMemberScreen build - choirId: ${widget.choirId}, choirName: ${widget.choirName}');
-    Logger.debug('Search query: "$_searchQuery", Selected user: $_selectedUser');
-    
+    Logger.debug(
+      'AddMemberScreen build - choirId: ${widget.choirId}, choirName: ${widget.choirName}',
+    );
+    Logger.debug(
+      'Search query: "$_searchQuery", Selected user: $_selectedUser',
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Member to ${widget.choirName}'),
@@ -437,7 +461,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             icon: const Icon(Icons.info_outline),
             onPressed: () {
               Get.snackbar(
-                'Debug Info', 
+                'Debug Info',
                 'Choir: ${widget.choirId}\nSearch: "$_searchQuery"\nSelected: ${_selectedUser?.fullName ?? "None"}',
                 backgroundColor: Colors.blue,
                 colorText: Colors.white,
@@ -485,7 +509,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 ],
               ),
             ),
-            
+
             // Search results
             if (_searchQuery.isNotEmpty && _selectedUser == null)
               Expanded(
@@ -503,7 +527,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off, size: 64, color: Colors.grey),
+                            Icon(
+                              Icons.search_off,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
                             SizedBox(height: 16),
                             Text('No users found'),
                             Text('Try a different search term'),
@@ -523,8 +551,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             leading: CircleAvatar(
                               backgroundColor: Theme.of(context).primaryColor,
                               child: Text(
-                                user.fullName.isNotEmpty 
-                                    ? user.fullName[0].toUpperCase() 
+                                user.fullName.isNotEmpty
+                                    ? user.fullName[0].toUpperCase()
                                     : 'U',
                                 style: const TextStyle(
                                   color: Colors.white,
@@ -534,7 +562,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             ),
                             title: Text(
                               user.fullName,
-                              style: const TextStyle(fontWeight: FontWeight.w600),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -584,9 +614,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 24,
-                                child: Text(_selectedUser!.fullName.isNotEmpty 
-                                    ? _selectedUser!.fullName[0].toUpperCase() 
-                                    : 'U'),
+                                child: Text(
+                                  _selectedUser!.fullName.isNotEmpty
+                                      ? _selectedUser!.fullName[0].toUpperCase()
+                                      : 'U',
+                                ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -602,9 +634,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                     ),
                                     Text(
                                       _selectedUser!.email,
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                      ),
+                                      style: TextStyle(color: Colors.grey[600]),
                                     ),
                                     if (_selectedUser!.phoneNumber.isNotEmpty)
                                       Text(
@@ -613,10 +643,16 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                    if (_selectedUser!.suggestedChoir.isNotEmpty)
+                                    if (_selectedUser!
+                                        .suggestedChoir
+                                        .isNotEmpty)
                                       Row(
                                         children: [
-                                          Icon(Icons.music_note, size: 14, color: Colors.grey[600]),
+                                          Icon(
+                                            Icons.music_note,
+                                            size: 14,
+                                            color: Colors.grey[600],
+                                          ),
                                           const SizedBox(width: 4),
                                           Text(
                                             'Suggested Choir: ${_selectedUser!.suggestedChoir}',
@@ -643,19 +679,18 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 20),
-                      
+
                       // Member details form
                       Text(
                         'Member Details',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       FormBuilder(
                         key: _formKey,
                         child: Card(
@@ -669,22 +704,23 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                     return RegistrationNumberFormField(
                                       label: 'Registration Number',
                                       initialValue: field.value,
-                                      onChanged: (value) => field.didChange(value),
+                                      onChanged: (value) =>
+                                          field.didChange(value),
                                       required: true,
                                     );
                                   },
                                 ),
-                                
+
                                 const SizedBox(height: 20),
-                                
+
                                 _buildRoleSelection(),
-                                
+
                                 const SizedBox(height: 20),
-                                
+
                                 _buildLevelSelection(),
-                                
+
                                 const SizedBox(height: 20),
-                                
+
                                 // Additional fields based on role
                                 if (_selectedRole == MemberRole.leader)
                                   Column(
@@ -693,39 +729,48 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                         name: 'leaderPosition',
                                         decoration: const InputDecoration(
                                           labelText: 'Leadership Position',
-                                          prefixIcon: Icon(Icons.admin_panel_settings),
+                                          prefixIcon: Icon(
+                                            Icons.admin_panel_settings,
+                                          ),
                                           border: OutlineInputBorder(),
                                         ),
-                                        validator: FormBuilderValidators.compose([
-                                          FormBuilderValidators.required(),
-                                        ]),
-                                        items: const [
-                                          'Chairperson',
-                                          'Vice-Chairperson', 
-                                          'Assistant Chairperson',
-                                          'Secretary',
-                                          'Vice-Secretary',
-                                          'Assistant Secretary',
-                                          'Treasurer',
-                                          'Assistant Treasurer',
-                                          'Organizing Secretary',
-                                          'Music Director',
-                                          'Assistant Music Director',
-                                          'Director',
-                                          'Assistant Director',
-                                          'President',
-                                          'Vice-President',
-                                          'Assistant President',
-                                          'Other',
-                                        ].map((position) => DropdownMenuItem(
-                                          value: position,
-                                          child: Text(position),
-                                        )).toList(),
+                                        validator:
+                                            FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(),
+                                            ]),
+                                        items:
+                                            const [
+                                                  'Chairperson',
+                                                  'Vice-Chairperson',
+                                                  'Assistant Chairperson',
+                                                  'Secretary',
+                                                  'Vice-Secretary',
+                                                  'Assistant Secretary',
+                                                  'Treasurer',
+                                                  'Assistant Treasurer',
+                                                  'Organizing Secretary',
+                                                  'Music Director',
+                                                  'Assistant Music Director',
+                                                  'Director',
+                                                  'Assistant Director',
+                                                  'President',
+                                                  'Vice-President',
+                                                  'Assistant President',
+                                                  'Other',
+                                                ]
+                                                .map(
+                                                  (position) =>
+                                                      DropdownMenuItem(
+                                                        value: position,
+                                                        child: Text(position),
+                                                      ),
+                                                )
+                                                .toList(),
                                       ),
                                       const SizedBox(height: 20),
                                     ],
                                   ),
-                                
+
                                 if (_selectedRole == MemberRole.committee)
                                   Column(
                                     children: [
@@ -733,34 +778,43 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                         name: 'committeeName',
                                         decoration: const InputDecoration(
                                           labelText: 'Committee Name',
-                                          prefixIcon: Icon(Icons.business_center),
+                                          prefixIcon: Icon(
+                                            Icons.business_center,
+                                          ),
                                           border: OutlineInputBorder(),
                                         ),
-                                        validator: FormBuilderValidators.compose([
-                                          FormBuilderValidators.required(),
-                                        ]),
-                                        items: const [
-                                          'Finance Committee',
-                                          'Events Committee',
-                                          'Music Committee',
-                                          'Disciplinary Committee',
-                                          'Fundraising Committee',
-                                          'Welfare Committee',
-                                          'Youth Committee',
-                                          'Women Committee',
-                                          'Men Committee',
-                                          'Publicity Committee',
-                                          'Training Committee',
-                                          'Other',
-                                        ].map((committee) => DropdownMenuItem(
-                                          value: committee,
-                                          child: Text(committee),
-                                        )).toList(),
+                                        validator:
+                                            FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(),
+                                            ]),
+                                        items:
+                                            const [
+                                                  'Finance Committee',
+                                                  'Events Committee',
+                                                  'Music Committee',
+                                                  'Disciplinary Committee',
+                                                  'Fundraising Committee',
+                                                  'Welfare Committee',
+                                                  'Youth Committee',
+                                                  'Women Committee',
+                                                  'Men Committee',
+                                                  'Publicity Committee',
+                                                  'Training Committee',
+                                                  'Other',
+                                                ]
+                                                .map(
+                                                  (committee) =>
+                                                      DropdownMenuItem(
+                                                        value: committee,
+                                                        child: Text(committee),
+                                                      ),
+                                                )
+                                                .toList(),
                                       ),
                                       const SizedBox(height: 20),
                                     ],
                                   ),
-                                
+
                                 if (_selectedRole == MemberRole.trainer)
                                   Column(
                                     children: [
@@ -771,29 +825,36 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                           prefixIcon: Icon(Icons.school),
                                           border: OutlineInputBorder(),
                                         ),
-                                        validator: FormBuilderValidators.compose([
-                                          FormBuilderValidators.required(),
-                                        ]),
-                                        items: const [
-                                          'Head Trainer',
-                                          'Assistant Trainer',
-                                          'Music Trainer',
-                                          'Voice Coach',
-                                          'Choir Master',
-                                          'Assistant Choir Master',
-                                          'Accompanist',
-                                          'Music Theory Instructor',
-                                          'Performance Coach',
-                                          'Other',
-                                        ].map((position) => DropdownMenuItem(
-                                          value: position,
-                                          child: Text(position),
-                                        )).toList(),
+                                        validator:
+                                            FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(),
+                                            ]),
+                                        items:
+                                            const [
+                                                  'Head Trainer',
+                                                  'Assistant Trainer',
+                                                  'Music Trainer',
+                                                  'Voice Coach',
+                                                  'Choir Master',
+                                                  'Assistant Choir Master',
+                                                  'Accompanist',
+                                                  'Music Theory Instructor',
+                                                  'Performance Coach',
+                                                  'Other',
+                                                ]
+                                                .map(
+                                                  (position) =>
+                                                      DropdownMenuItem(
+                                                        value: position,
+                                                        child: Text(position),
+                                                      ),
+                                                )
+                                                .toList(),
                                       ),
                                       const SizedBox(height: 20),
                                     ],
                                   ),
-                                
+
                                 Consumer<MemberController>(
                                   builder: (context, memberController, child) {
                                     return SizedBox(
@@ -831,7 +892,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                         SizedBox(height: 16),
                         Text(
                           'Search for Users',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         SizedBox(height: 8),
                         Text(
@@ -843,9 +907,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   ),
                 ),
               ),
-              
+
             // Fallback container to ensure something is always visible
-            if (_searchQuery.isNotEmpty && _selectedUser == null && _searchQuery.length < 2)
+            if (_searchQuery.isNotEmpty &&
+                _selectedUser == null &&
+                _searchQuery.length < 2)
               const Expanded(
                 child: Center(
                   child: Text('Type at least 2 characters to search'),

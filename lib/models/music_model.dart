@@ -6,17 +6,12 @@ enum MusicCategory {
   contemporary,
   hymn,
   psalm,
-  other
+  other,
 }
 
-enum MusicDifficulty {
-  beginner,
-  intermediate,
-  advanced
-}
+enum MusicDifficulty { beginner, intermediate, advanced }
 
 class MusicModel {
-
   const MusicModel({
     required this.id,
     required this.title,
@@ -231,7 +226,8 @@ extension MusicModelSample on MusicModel {
         composer: 'Unknown',
         category: MusicCategory.swahili,
         difficulty: MusicDifficulty.beginner,
-        lyrics: '''
+        lyrics:
+            '''
 Mungu ni mwema, Mungu ni mwema
 Hakuna kama yeye, hakuna kama yeye
 Milele na milele
@@ -248,8 +244,10 @@ Yeye ni mfalme, yeye ni mfalme
 Anasimamia, anasimamia
 Maisha yetu yote
 Yeye ni mfalme
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: G Major
 Tempo: 120 BPM
 Time Signature: 4/4
@@ -265,7 +263,8 @@ C - G - D - G
 Bridge:
 Em - C - G - D
 Em - C - G - D - G
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['traditional', 'praise', 'swahili', 'beginner'],
         language: 'Swahili',
         duration: 240,
@@ -281,7 +280,8 @@ Em - C - G - D - G
         composer: 'Traditional Arrangement',
         category: MusicCategory.swahili,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Bwana asifiwe, Bwana asifiwe
 Jina lake takatifu
 Bwana asifiwe, Bwana asifiwe
@@ -298,8 +298,10 @@ Bwana asifiwe, Bwana asifiwe
 Jina lake takatifu
 Bwana asifiwe, Bwana asifiwe
 Milele na milele
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: F Major
 Tempo: 108 BPM
 Time Signature: 4/4
@@ -315,7 +317,8 @@ Chorus:
 Bb - F - C - F
 Bb - F - C - Dm
 Bb - F - C - F
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['traditional', 'worship', 'swahili', 'intermediate'],
         language: 'Swahili',
         duration: 300,
@@ -331,7 +334,8 @@ Bb - F - C - F
         composer: 'Modern Arrangement',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Yesu ni mfalme, mfalme wa amani
 Yeye ndiye njia, ukweli na uzima
 Hakuna jina lingine
@@ -348,8 +352,10 @@ Alituweka huru, kutoka dhambi zetu
 Alitupatia maisha, maisha ya milele
 Sasa tunaimba, tunamsifu
 Yeye ndiye bwana wetu
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: D Major
 Tempo: 132 BPM
 Time Signature: 4/4
@@ -367,7 +373,8 @@ G - A - D
 Bridge:
 Bm - G - D - A
 Bm - G - A - D
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['contemporary', 'praise', 'worship', 'modern'],
         language: 'Swahili',
         duration: 285,
@@ -375,7 +382,8 @@ Bm - G - A - D
         updatedAt: now,
         isPublic: true,
         sourceWebsite: 'swahilimusicnotes.com',
-        sheetMusicUrl: 'https://www.swahilimusicnotes.com/song/download/30290/pdf/1617548702-1asante-kwa-kunishirikisha-kiitikio.pdf',
+        sheetMusicUrl:
+            'https://www.swahilimusicnotes.com/song/download/30290/pdf/1617548702-1asante-kwa-kunishirikisha-kiitikio.pdf',
       ),
       MusicModel(
         id: 'swh_004',
@@ -384,7 +392,8 @@ Bm - G - A - D
         composer: 'African Gospel',
         category: MusicCategory.hymn,
         difficulty: MusicDifficulty.beginner,
-        lyrics: '''
+        lyrics:
+            '''
 Nimekuita Yesu, wewe ndiwe rafiki yangu
 Nimekuita Yesu, wewe ndiwe mfalme wangu
 Hautatuacha, hautatutupa
@@ -401,8 +410,10 @@ Wakati wa shida, naita jina lako
 Wakati wa furaha, nakushukuru
 Kila wakati, wewe upo pamoja nami
 Wewe ni Mungu wa kweli
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: C Major
 Tempo: 96 BPM
 Time Signature: 4/4
@@ -420,7 +431,8 @@ F - G - C
 Bridge:
 Am - F - C - G
 Am - F - G - C
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['traditional', 'gospel', 'hymn', 'call-response'],
         language: 'Swahili',
         duration: 220,
@@ -436,7 +448,8 @@ Am - F - G - C
         composer: 'Traditional/Contemporary Mix',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.advanced,
-        lyrics: '''
+        lyrics:
+            '''
 Tuimbe hosana, hosana juu
 Tuimbe hosana, kwa mfalme wetu
 Aliyeingia Yerusalemu
@@ -459,8 +472,10 @@ Mfalme wa amani
 Mfalme wa haki
 Yeye ndiye aliyetuokoa
 Mbarikiwa jina lake
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: E Major
 Tempo: 140 BPM
 Time Signature: 4/4
@@ -486,8 +501,15 @@ Soprano: Main melody
 Alto: Third harmony
 Tenor: Fifth harmony
 Bass: Root and leading tones
-        '''.trim(),
-        tags: ['contemporary', 'celebration', 'palm-sunday', 'advanced', 'harmony'],
+        '''
+                .trim(),
+        tags: [
+          'contemporary',
+          'celebration',
+          'palm-sunday',
+          'advanced',
+          'harmony',
+        ],
         language: 'Swahili',
         duration: 320,
         createdAt: now,
@@ -503,7 +525,8 @@ Bass: Root and leading tones
         composer: 'Contemporary Gospel',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Yesu wewe ni mwanga wa ulimwengu
 Wewe ni njia, ukweli na uzima
 Bila wewe hatuwezi kuona
@@ -526,8 +549,10 @@ Tuangaze, tuangaze
 Mwanga wako utuongoze
 Tuangaze, tuangaze
 Njiani kwako
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: A Major
 Tempo: 126 BPM
 Time Signature: 4/4
@@ -552,7 +577,8 @@ Modern arrangement with:
 - Acoustic guitar fingerpicking
 - Light percussion
 - Vocal harmonies in thirds
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['contemporary', 'worship', 'modern', 'light'],
         language: 'Swahili',
         duration: 275,
@@ -574,7 +600,8 @@ Modern arrangement with:
         composer: 'John Newton',
         category: MusicCategory.hymn,
         difficulty: MusicDifficulty.beginner,
-        lyrics: '''
+        lyrics:
+            '''
 Amazing grace, how sweet the sound
 That saved a wretch like me
 I once was lost, but now I'm found
@@ -589,8 +616,10 @@ Through many dangers, toils and snares
 I have already come
 'Tis grace hath brought me safe thus far
 And grace will lead me home
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: G Major
 Tempo: 72 BPM
 Time Signature: 3/4
@@ -604,7 +633,8 @@ G - D - G - G
 Standard hymn arrangement
 Melody in soprano
 Simple four-part harmony
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['hymn', 'traditional', 'english', 'classic'],
         language: 'English',
         duration: 180,
@@ -618,9 +648,6 @@ Simple four-part harmony
   }
 
   static List<MusicModel> getAllSampleMusic() {
-    return [
-      ...getSampleSwahiliMusic(),
-      ...getSampleEnglishMusic(),
-    ];
+    return [...getSampleSwahiliMusic(), ...getSampleEnglishMusic()];
   }
 }
