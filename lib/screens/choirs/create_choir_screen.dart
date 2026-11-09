@@ -3093,8 +3093,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                               maxLines: 1,
                                             ),
                                             onTap: () {
-                                              if (!mounted || parish.isEmpty)
+                                              if (!mounted || parish.isEmpty) {
                                                 return;
+                                              }
                                               setState(() {
                                                 _selectedParish = parish;
                                                 _parishSearchController.text =

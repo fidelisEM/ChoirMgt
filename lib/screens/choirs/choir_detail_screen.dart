@@ -796,12 +796,14 @@ class _ChoirDetailScreenState extends State<ChoirDetailScreen>
 
     final List<String> parts = [];
     if (active > 0) parts.add('$active ${context.tr('active').toLowerCase()}');
-    if (inactive > 0)
+    if (inactive > 0) {
       parts.add('$inactive ${context.tr('inactive').toLowerCase()}');
-    if (suspended > 0)
+    }
+    if (suspended > 0) {
       parts.add(
         '$suspended ${context.tr('choirSuspendedLabel').toLowerCase()}',
       );
+    }
 
     return parts.join(' • ');
   }
