@@ -7,16 +7,16 @@ Future<void> main() async {
   print('🚀 Choir Management System - Sample Data Generator');
   print('=====================================================');
   print('');
-  
+
   final service = SampleDataService();
-  
+
   try {
     print('Generating comprehensive sample data...');
     print('This includes users, choirs, memberships, and activities.');
     print('');
-    
+
     await service.generateAllSampleData();
-    
+
     print('');
     print('✅ Sample data generation completed successfully!');
     print('');
@@ -32,7 +32,9 @@ Future<void> main() async {
     print('   • Activity feed with recent events and updates');
     print('   • Realistic payment and fee records');
     print('');
-    print('🎯 You can now run the app and see all features working with real data!');
+    print(
+      '🎯 You can now run the app and see all features working with real data!',
+    );
     print('   Run: flutter run');
     print('');
     print('📧 Sample user accounts you can use:');
@@ -40,7 +42,6 @@ Future<void> main() async {
     print('   Leader: michael.conductor@email.com');
     print('   Member: alice.soprano@email.com');
     print('');
-    
   } catch (e) {
     print('❌ Error generating sample data: $e');
     exit(1);

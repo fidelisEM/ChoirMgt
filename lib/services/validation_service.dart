@@ -1,10 +1,8 @@
-
 class ValidationResult {
-
   ValidationResult._({required this.isValid, this.error});
 
   factory ValidationResult.valid() => ValidationResult._(isValid: true);
-  factory ValidationResult.invalid(String error) => 
+  factory ValidationResult.invalid(String error) =>
       ValidationResult._(isValid: false, error: error);
   final bool isValid;
   final String? error;
@@ -37,11 +35,13 @@ class ValidationService {
 
     // Remove spaces, hyphens, parentheses
     final cleanPhone = phone.replaceAll(RegExp(r'[\s\-\(\)]'), '');
-    
+
     // Check if it contains only digits and optional + at start
     final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
     if (!phoneRegex.hasMatch(cleanPhone)) {
-      return ValidationResult.invalid('Please enter a valid phone number (10-15 digits)');
+      return ValidationResult.invalid(
+        'Please enter a valid phone number (10-15 digits)',
+      );
     }
 
     return ValidationResult.valid();
@@ -54,11 +54,15 @@ class ValidationService {
     }
 
     if (name.trim().length < 2) {
-      return ValidationResult.invalid('$fieldName must be at least 2 characters long');
+      return ValidationResult.invalid(
+        '$fieldName must be at least 2 characters long',
+      );
     }
 
     if (name.trim().length > 50) {
-      return ValidationResult.invalid('$fieldName must be less than 50 characters');
+      return ValidationResult.invalid(
+        '$fieldName must be less than 50 characters',
+      );
     }
 
     // Check for valid characters (letters, spaces, hyphens, apostrophes)
@@ -77,12 +81,14 @@ class ValidationService {
     }
 
     if (password.length < 8) {
-      return ValidationResult.invalid('Password must be at least 8 characters long');
+      return ValidationResult.invalid(
+        'Password must be at least 8 characters long',
+      );
     }
 
     if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$').hasMatch(password)) {
       return ValidationResult.invalid(
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
       );
     }
 
@@ -98,18 +104,25 @@ class ValidationService {
     // Allow alphanumeric characters, hyphens, and underscores
     final regNumberRegex = RegExp(r'^[a-zA-Z0-9\-_]+$');
     if (!regNumberRegex.hasMatch(regNumber.trim())) {
-      return ValidationResult.invalid('Registration number can only contain letters, numbers, hyphens, and underscores');
+      return ValidationResult.invalid(
+        'Registration number can only contain letters, numbers, hyphens, and underscores',
+      );
     }
 
     if (regNumber.trim().length < 3 || regNumber.trim().length > 20) {
-      return ValidationResult.invalid('Registration number must be between 3 and 20 characters');
+      return ValidationResult.invalid(
+        'Registration number must be between 3 and 20 characters',
+      );
     }
 
     return ValidationResult.valid();
   }
 
   // Amount validation
-  ValidationResult validateAmount(String? amount, {String fieldName = 'Amount'}) {
+  ValidationResult validateAmount(
+    String? amount, {
+    String fieldName = 'Amount',
+  }) {
     if (amount == null || amount.trim().isEmpty) {
       return ValidationResult.invalid('$fieldName is required');
     }
@@ -141,11 +154,15 @@ class ValidationService {
     final minDate = DateTime(now.year - 10, now.month, now.day);
 
     if (date.isAfter(maxDate)) {
-      return ValidationResult.invalid('$fieldName cannot be more than 1 year in the future');
+      return ValidationResult.invalid(
+        '$fieldName cannot be more than 1 year in the future',
+      );
     }
 
     if (date.isBefore(minDate)) {
-      return ValidationResult.invalid('$fieldName cannot be more than 10 years in the past');
+      return ValidationResult.invalid(
+        '$fieldName cannot be more than 10 years in the past',
+      );
     }
 
     return ValidationResult.valid();
@@ -158,11 +175,15 @@ class ValidationService {
     }
 
     if (name.trim().length < 3) {
-      return ValidationResult.invalid('Choir name must be at least 3 characters long');
+      return ValidationResult.invalid(
+        'Choir name must be at least 3 characters long',
+      );
     }
 
     if (name.trim().length > 100) {
-      return ValidationResult.invalid('Choir name must be less than 100 characters');
+      return ValidationResult.invalid(
+        'Choir name must be less than 100 characters',
+      );
     }
 
     return ValidationResult.valid();
@@ -175,20 +196,26 @@ class ValidationService {
     }
 
     if (title.trim().length < 3) {
-      return ValidationResult.invalid('Event title must be at least 3 characters long');
+      return ValidationResult.invalid(
+        'Event title must be at least 3 characters long',
+      );
     }
 
     if (title.trim().length > 200) {
-      return ValidationResult.invalid('Event title must be less than 200 characters');
+      return ValidationResult.invalid(
+        'Event title must be less than 200 characters',
+      );
     }
 
     return ValidationResult.valid();
   }
 
   // Multiple field validation
-  List<String> validateMultipleFields(Map<String, ValidationResult> validations) {
+  List<String> validateMultipleFields(
+    Map<String, ValidationResult> validations,
+  ) {
     final errors = <String>[];
-    
+
     validations.forEach((field, result) {
       if (!result.isValid && result.error != null) {
         errors.add(result.error!);
@@ -221,7 +248,9 @@ class ValidationService {
 // Extension for form field validation
 extension FormFieldValidation on String? {
   ValidationResult get isValidEmail => ValidationService().validateEmail(this);
-  ValidationResult get isValidPhone => ValidationService().validatePhoneNumber(this);
+  ValidationResult get isValidPhone =>
+      ValidationService().validatePhoneNumber(this);
   ValidationResult get isValidName => ValidationService().validateName(this);
-  ValidationResult get isValidPassword => ValidationService().validatePassword(this);
+  ValidationResult get isValidPassword =>
+      ValidationService().validatePassword(this);
 }

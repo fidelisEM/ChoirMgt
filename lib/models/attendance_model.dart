@@ -1,10 +1,8 @@
-
-
 enum AttendanceStatus { present, late, absent }
+
 enum EventType { rehearsal, service, meeting, other }
 
 class AttendanceModel {
-
   AttendanceModel({
     required this.id,
     required this.sessionId,
@@ -89,7 +87,6 @@ class AttendanceModel {
 }
 
 class AttendanceSessionModel {
-
   AttendanceSessionModel({
     required this.id,
     required this.choirId,
@@ -112,8 +109,8 @@ class AttendanceSessionModel {
       leaderId: json['leaderId'] ?? '',
       date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
       startTime: DateTime.tryParse(json['startTime'] ?? '') ?? DateTime.now(),
-      endTime: json['endTime'] != null 
-          ? DateTime.tryParse(json['endTime'] ?? '') 
+      endTime: json['endTime'] != null
+          ? DateTime.tryParse(json['endTime'] ?? '')
           : null,
       eventType: EventType.values.firstWhere(
         (type) => type.toString().split('.').last == json['eventType'],
@@ -158,7 +155,6 @@ class AttendanceSessionModel {
 }
 
 class AttendanceRecordModel {
-
   AttendanceRecordModel({
     required this.id,
     required this.sessionId,
@@ -181,8 +177,8 @@ class AttendanceRecordModel {
         (status) => status.toString().split('.').last == json['status'],
         orElse: () => AttendanceStatus.absent,
       ),
-      checkInTime: json['checkInTime'] != null 
-          ? DateTime.tryParse(json['checkInTime'] ?? '') 
+      checkInTime: json['checkInTime'] != null
+          ? DateTime.tryParse(json['checkInTime'] ?? '')
           : null,
       notes: json['notes'],
       recordedAt: DateTime.tryParse(json['recordedAt'] ?? '') ?? DateTime.now(),

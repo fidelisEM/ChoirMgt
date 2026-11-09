@@ -30,8 +30,11 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
 
   void _loadChoirs() {
     final authController = Provider.of<AuthController>(context, listen: false);
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (authController.currentUser != null) {
       choirController.loadChoirs(
         userId: authController.currentUser!.id,
@@ -90,11 +93,7 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
+                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
                     'Error loading choirs',
@@ -128,9 +127,12 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
               ? allChoirs
               : allChoirs.where((choir) {
                   final query = _searchController.text.toLowerCase();
-                  final matches = choir.name.toLowerCase().contains(query) ||
-                         choir.description.toLowerCase().contains(query);
-                  Logger.debug('Choir "${choir.name}" matches "$query": $matches');
+                  final matches =
+                      choir.name.toLowerCase().contains(query) ||
+                      choir.description.toLowerCase().contains(query);
+                  Logger.debug(
+                    'Choir "${choir.name}" matches "$query": $matches',
+                  );
                   return matches;
                 }).toList();
 
@@ -149,9 +151,9 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'No choirs found',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -161,7 +163,8 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
                     style: TextStyle(color: Colors.grey[600]),
                     textAlign: TextAlign.center,
                   ),
-                  if (_searchController.text.isEmpty && authController.isAdmin) ...[
+                  if (_searchController.text.isEmpty &&
+                      authController.isAdmin) ...[
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
                       onPressed: () => _showCreateChoirDialog(context),
@@ -190,7 +193,7 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
       floatingActionButton: Consumer<AuthController>(
         builder: (context, authController, child) {
           if (!authController.isAdmin) return const SizedBox.shrink();
-          
+
           return FloatingActionButton(
             onPressed: () => _showCreateChoirDialog(context),
             tooltip: 'Create New Choir',
@@ -201,7 +204,11 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
     );
   }
 
-  Widget _buildChoirCard(BuildContext context, ChoirModel choir, AuthController authController) {
+  Widget _buildChoirCard(
+    BuildContext context,
+    ChoirModel choir,
+    AuthController authController,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -246,9 +253,8 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
                       children: [
                         Text(
                           choir.name,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         if (choir.description.isNotEmpty) ...[
                           const SizedBox(height: 4),
@@ -294,9 +300,11 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
                       color: Colors.orange,
                     ),
                   const Spacer(),
-                  if (authController.isAdmin || choir.leaderId == authController.currentUser?.id)
+                  if (authController.isAdmin ||
+                      choir.leaderId == authController.currentUser?.id)
                     PopupMenuButton<String>(
-                      onSelected: (value) => _handleChoirAction(context, choir, value),
+                      onSelected: (value) =>
+                          _handleChoirAction(context, choir, value),
                       itemBuilder: (context) => [
                         const PopupMenuItem(
                           value: 'edit',
@@ -315,7 +323,10 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
                               children: [
                                 Icon(Icons.delete, size: 16, color: Colors.red),
                                 SizedBox(width: 8),
-                                Text('Delete', style: TextStyle(color: Colors.red)),
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(color: Colors.red),
+                                ),
                               ],
                             ),
                           ),
@@ -368,7 +379,11 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
     Get.to(() => ChoirDetailScreen(choir: choir));
   }
 
-  void _handleChoirAction(BuildContext context, ChoirModel choir, String action) {
+  void _handleChoirAction(
+    BuildContext context,
+    ChoirModel choir,
+    String action,
+  ) {
     switch (action) {
       case 'edit':
         Get.to(() => EditChoirScreen(choir: choir))?.then((result) {
@@ -410,9 +425,12 @@ class _ChoirListScreenState extends State<ChoirListScreen> {
   }
 
   void _deleteChoir(ChoirModel choir) async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     final success = await choirController.deleteChoir(choir.id);
-    
+
     if (success) {
       Get.snackbar(
         'Success',

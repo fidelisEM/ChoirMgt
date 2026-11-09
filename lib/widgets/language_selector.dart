@@ -9,11 +9,7 @@ import '../utils/app_translations.dart';
 import 'custom_widgets.dart';
 
 class LanguageSelector extends StatelessWidget {
-
-  const LanguageSelector({
-    super.key,
-    this.showAsBottomSheet = true,
-  });
+  const LanguageSelector({super.key, this.showAsBottomSheet = true});
   final bool showAsBottomSheet;
 
   @override
@@ -42,13 +38,16 @@ class LanguageSelector extends StatelessWidget {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: L10n.all.map((locale) {
-            final isSelected = languageController.locale.languageCode == locale.languageCode;
-            
+            final isSelected =
+                languageController.locale.languageCode == locale.languageCode;
+
             return GlassCard(
               margin: const EdgeInsets.only(bottom: 12),
               onTap: () async {
                 if (!isSelected) {
-                  final success = await languageController.changeLanguage(locale.languageCode);
+                  final success = await languageController.changeLanguage(
+                    locale.languageCode,
+                  );
                   if (success) {
                     if (showAsBottomSheet && context.mounted) {
                       Navigator.pop(context);
@@ -69,7 +68,7 @@ class LanguageSelector extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: isSelected 
+                      color: isSelected
                           ? AppColors.primary.withValues(alpha: 0.1)
                           : AppColors.gray100,
                       borderRadius: BorderRadius.circular(12),
@@ -90,11 +89,16 @@ class LanguageSelector extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _getLocalizedLanguageName(context, locale.languageCode),
+                          _getLocalizedLanguageName(
+                            context,
+                            locale.languageCode,
+                          ),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: isSelected ? AppColors.primary : AppColors.gray800,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.gray800,
                           ),
                         ),
                         Text(

@@ -7,6 +7,7 @@ import '../../controllers/attendance_controller.dart';
 import '../../controllers/choir_controller.dart';
 import '../../services/export_service.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/helpers.dart';
 import '../../widgets/custom_widgets.dart';
 
@@ -25,7 +26,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
   bool _isExporting = false;
 
   final List<String> _exportFormats = ['PDF', 'Excel'];
-  final List<String> _filterOptions = ['All Members', 'Active Only', 'With Low Attendance'];
+  final List<String> _filterOptions = [
+    'All Members',
+    'Active Only',
+    'With Low Attendance',
+  ];
 
   @override
   void initState() {
@@ -39,14 +44,12 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Export Attendance'),
+        title: Text(context.tr('attExportAttendanceTitle')),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -89,21 +92,18 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Export Attendance Data',
-            style: TextStyle(
+          Text(
+            context.tr('attExportAttendanceDataHeading'),
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppColors.gray800,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Generate detailed attendance reports for analysis',
-            style: TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+          Text(
+            context.tr('attExportHeaderSubtitle'),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -116,9 +116,9 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Date Range',
-            style: TextStyle(
+          Text(
+            context.tr('attDateRangeHeading'),
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.gray800,
@@ -129,7 +129,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             children: [
               Expanded(
                 child: _buildDateField(
-                  'From Date',
+                  context.tr('attFromDateLabel'),
                   _fromDate,
                   (date) => setState(() => _fromDate = date),
                 ),
@@ -137,7 +137,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
               const SizedBox(width: 16),
               Expanded(
                 child: _buildDateField(
-                  'To Date',
+                  context.tr('attToDateLabel'),
                   _toDate,
                   (date) => setState(() => _toDate = date),
                 ),
@@ -150,21 +150,21 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: _setLastWeek,
-                  child: const Text('Last 7 days'),
+                  child: Text(context.tr('attLast7Days')),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton(
                   onPressed: _setLastMonth,
-                  child: const Text('Last 30 days'),
+                  child: Text(context.tr('attLast30Days')),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton(
                   onPressed: _setLastQuarter,
-                  child: const Text('Last 3 months'),
+                  child: Text(context.tr('attLast3Months')),
                 ),
               ),
             ],
@@ -174,7 +174,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     );
   }
 
-  Widget _buildDateField(String label, DateTime? date, Function(DateTime) onDateChanged) {
+  Widget _buildDateField(
+    String label,
+    DateTime? date,
+    Function(DateTime) onDateChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,10 +201,16 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.calendar_today, size: 20, color: AppColors.gray600),
+                const Icon(
+                  Icons.calendar_today,
+                  size: 20,
+                  color: AppColors.gray600,
+                ),
                 const SizedBox(width: 12),
                 Text(
-                  date != null ? DateFormat('MMM dd, yyyy').format(date) : 'Select date',
+                  date != null
+                      ? DateFormat('MMM dd, yyyy').format(date)
+                      : context.tr('attSelectDatePlaceholder'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Spacer(),
@@ -218,9 +228,9 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Export Format',
-            style: TextStyle(
+          Text(
+            context.tr('attExportFormatHeading'),
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.gray800,
@@ -237,7 +247,9 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      format == 'PDF' ? Icons.picture_as_pdf : Icons.table_chart,
+                      format == 'PDF'
+                          ? Icons.picture_as_pdf
+                          : Icons.table_chart,
                       size: 16,
                       color: isSelected ? Colors.white : AppColors.gray600,
                     ),
@@ -267,13 +279,17 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+                const Icon(
+                  Icons.info_outline,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    _selectedFormat == 'PDF' 
-                        ? 'PDF format is ideal for viewing and printing reports'
-                        : 'Excel format allows for detailed data analysis and filtering',
+                    _selectedFormat == 'PDF'
+                        ? context.tr('attPdfFormatDescription')
+                        : context.tr('attExcelFormatDescription'),
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontSize: 12,
@@ -293,9 +309,9 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Filter Options',
-            style: TextStyle(
+          Text(
+            context.tr('attFilterOptionsHeading'),
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.gray800,
@@ -304,10 +320,10 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: _selectedFilter,
-            decoration: const InputDecoration(
-              labelText: 'Member Filter',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.filter_list),
+            decoration: InputDecoration(
+              labelText: context.tr('attMemberFilterLabel'),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.filter_list),
             ),
             items: _filterOptions.map((filter) {
               return DropdownMenuItem<String>(
@@ -324,10 +340,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
           const SizedBox(height: 12),
           Text(
             _getFilterDescription(),
-            style: const TextStyle(
-              color: AppColors.gray600,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppColors.gray600, fontSize: 12),
           ),
         ],
       ),
@@ -337,11 +350,11 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
   String _getFilterDescription() {
     switch (_selectedFilter) {
       case 'All Members':
-        return 'Include all members in the attendance report';
+        return context.tr('attFilterAllDescription');
       case 'Active Only':
-        return 'Include only active members in the report';
+        return context.tr('attFilterActiveDescription');
       case 'With Low Attendance':
-        return 'Include only members with attendance rate below 75%';
+        return context.tr('attFilterLowAttendanceDescription');
       default:
         return '';
     }
@@ -351,17 +364,17 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     return Consumer2<AttendanceController, ChoirController>(
       builder: (context, attendanceController, choirController, child) {
         final selectedChoir = choirController.selectedChoir;
-        
+
         if (selectedChoir == null) {
           return GlassCard(
             child: Container(
               padding: const EdgeInsets.all(20),
-              child: const Column(
+              child: Column(
                 children: [
-                  Icon(Icons.info_outline, size: 48, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No Choir Selected'),
-                  Text('Please select a choir to export attendance data'),
+                  const Icon(Icons.info_outline, size: 48, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text(context.tr('attNoChoirSelectedTitle')),
+                  Text(context.tr('attSelectChoirExportPrompt')),
                 ],
               ),
             ),
@@ -372,23 +385,29 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Export Preview',
-                style: TextStyle(
+              Text(
+                context.tr('attExportPreviewHeading'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.gray800,
                 ),
               ),
               const SizedBox(height: 16),
-              _buildPreviewItem('Choir', selectedChoir.name),
               _buildPreviewItem(
-                'Date Range', 
+                context.tr('attChoirLabel'),
+                selectedChoir.name,
+              ),
+              _buildPreviewItem(
+                context.tr('attDateRangeHeading'),
                 '${DateFormat('MMM dd').format(_fromDate!)} - ${DateFormat('MMM dd, yyyy').format(_toDate!)}',
               ),
-              _buildPreviewItem('Format', _selectedFormat),
-              _buildPreviewItem('Filter', _selectedFilter),
-              _buildPreviewItem('Estimated Members', '${selectedChoir.memberCount}'),
+              _buildPreviewItem(context.tr('attFormatLabel'), _selectedFormat),
+              _buildPreviewItem(context.tr('attFilterLabel'), _selectedFilter),
+              _buildPreviewItem(
+                context.tr('attEstimatedMembersLabel'),
+                '${selectedChoir.memberCount}',
+              ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -396,14 +415,18 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                   color: Colors.green.withAlpha(30),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.check_circle, color: Colors.green, size: 20),
-                    SizedBox(width: 8),
+                    const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Ready to export attendance data',
-                        style: TextStyle(
+                        context.tr('attReadyToExport'),
+                        style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.w600,
                         ),
@@ -432,10 +455,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -448,9 +468,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: _isExporting
           ? const SizedBox(
@@ -467,7 +485,7 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                 const Icon(Icons.download),
                 const SizedBox(width: 8),
                 Text(
-                  'Export ${_selectedFormat.toUpperCase()}',
+                  '${context.tr('attExport')} ${_selectedFormat.toUpperCase()}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -478,7 +496,10 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
     );
   }
 
-  Future<void> _selectDate(DateTime? currentDate, Function(DateTime) onDateChanged) async {
+  Future<void> _selectDate(
+    DateTime? currentDate,
+    Function(DateTime) onDateChanged,
+  ) async {
     final date = await showDatePicker(
       context: context,
       initialDate: currentDate ?? DateTime.now(),
@@ -513,13 +534,16 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
 
   Future<void> _exportAttendance() async {
     if (_fromDate == null || _toDate == null) {
-      Helpers.showErrorSnackbar('Please select date range');
+      Helpers.showErrorSnackbar(context.tr('attSelectDateRangeError'));
       return;
     }
 
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     if (choirController.selectedChoir == null) {
-      Helpers.showErrorSnackbar('Please select a choir first');
+      Helpers.showErrorSnackbar(context.tr('attSelectChoirFirstError'));
       return;
     }
 
@@ -529,16 +553,21 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
 
     try {
       // Generate attendance report data
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      final reportData = await attendanceController.generateAttendanceReportData(
-        choirId: choirController.selectedChoir!.id,
-        fromDate: _fromDate!,
-        toDate: _toDate!,
-        filter: _selectedFilter,
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
       );
+      final reportData = await attendanceController
+          .generateAttendanceReportData(
+            choirId: choirController.selectedChoir!.id,
+            fromDate: _fromDate!,
+            toDate: _toDate!,
+            filter: _selectedFilter,
+          );
 
+      if (!mounted) return;
       if (reportData == null || reportData.isEmpty) {
-        Helpers.showErrorSnackbar('No attendance data found for the selected period');
+        Helpers.showErrorSnackbar(context.tr('attNoDataFoundPeriod'));
         return;
       }
 
@@ -552,32 +581,36 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
         filePath = await exportService.exportAttendanceToExcel(reportData);
       }
 
+      if (!mounted) return;
       if (filePath != null) {
-        Helpers.showSuccessSnackbar('Attendance exported successfully');
-        
+        Helpers.showSuccessSnackbar(context.tr('attExportedSuccessfully'));
+
         // Show file location dialog
         _showExportSuccessDialog(filePath);
       } else {
-        Helpers.showErrorSnackbar('Failed to export attendance data');
+        Helpers.showErrorSnackbar(context.tr('attFailedExportData'));
       }
     } catch (e) {
-      Helpers.showErrorSnackbar('Error exporting attendance: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('attErrorExportingPrefix')}: $e');
     } finally {
-      setState(() {
-        _isExporting = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isExporting = false;
+        });
+      }
     }
   }
 
   void _showExportSuccessDialog(String filePath) {
     Get.dialog(
       AlertDialog(
-        title: const Text('Export Successful'),
+        title: Text(context.tr('attExportSuccessfulTitle')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Attendance data has been exported successfully.'),
+            Text(context.tr('attDataExportedSuccessMsg')),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
@@ -586,11 +619,8 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'File saved to: $filePath',
-                style: const TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                ),
+                '${context.tr('attFileSavedToPrefix')} $filePath',
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
               ),
             ),
           ],
@@ -598,14 +628,14 @@ class _AttendanceExportScreenState extends State<AttendanceExportScreen> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Close'),
+            child: Text(context.tr('close')),
           ),
           ElevatedButton(
             onPressed: () {
               Get.back();
               Get.back(); // Return to previous screen
             },
-            child: const Text('Done'),
+            child: Text(context.tr('done')),
           ),
         ],
       ),

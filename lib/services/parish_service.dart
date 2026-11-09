@@ -8,30 +8,34 @@ class ParishService {
   Future<List<ParishModel>> getParishes({String? archdioceseId}) async {
     try {
       var query = _supabase.from('parishes').select();
-      
+
       if (archdioceseId != null && archdioceseId.isNotEmpty) {
         query = query.eq('archdiocese_id', archdioceseId);
       }
-      
+
       final response = await query.eq('is_active', true).order('name');
       var parishes = (response as List)
           .map((json) => ParishModel.fromJson(json))
           .toList();
-      
+
       // If no data from database, use sample data
       if (parishes.isEmpty) {
         parishes = ArchdioceseParishSampleData.getSampleParishes();
         if (archdioceseId != null && archdioceseId.isNotEmpty) {
-          parishes = parishes.where((p) => p.archdioceseId == archdioceseId).toList();
+          parishes = parishes
+              .where((p) => p.archdioceseId == archdioceseId)
+              .toList();
         }
       }
-      
+
       return parishes;
     } catch (e) {
       // Fallback to sample data if database connection fails
       var parishes = ArchdioceseParishSampleData.getSampleParishes();
       if (archdioceseId != null && archdioceseId.isNotEmpty) {
-        parishes = parishes.where((p) => p.archdioceseId == archdioceseId).toList();
+        parishes = parishes
+            .where((p) => p.archdioceseId == archdioceseId)
+            .toList();
       }
       return parishes;
     }
@@ -52,7 +56,9 @@ class ParishService {
     }
   }
 
-  Future<List<ParishModel>> getParishesByArchdiocese(String archdioceseId) async {
+  Future<List<ParishModel>> getParishesByArchdiocese(
+    String archdioceseId,
+  ) async {
     try {
       final response = await _supabase
           .from('parishes')
@@ -64,14 +70,14 @@ class ParishService {
       var parishes = (response as List)
           .map((json) => ParishModel.fromJson(json))
           .toList();
-      
+
       // If no data from database, use sample data
       if (parishes.isEmpty) {
         parishes = ArchdioceseParishSampleData.getSampleParishes()
             .where((p) => p.archdioceseId == archdioceseId)
             .toList();
       }
-      
+
       return parishes;
     } catch (e) {
       // Fallback to sample data if database connection fails

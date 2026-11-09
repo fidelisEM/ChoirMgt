@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRGenerator {
-  static String generateMemberQRData(String registrationNumber, String choirId) {
+  static String generateMemberQRData(
+    String registrationNumber,
+    String choirId,
+  ) {
     // Simple format: registrationNumber|choirId
     return '$registrationNumber|$choirId';
   }
@@ -36,7 +39,7 @@ class QRGenerator {
     double qrSize = 150,
   }) {
     final qrData = generateMemberQRData(registrationNumber, choirId);
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -45,36 +48,24 @@ class QRGenerator {
           children: [
             const Text(
               'Member QR Code',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             buildQRCodeWidget(qrData, size: qrSize),
             const SizedBox(height: 16),
             Text(
               fullName,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             Text(
               'Reg: $registrationNumber',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
             const SizedBox(height: 8),
             Text(
               'Scan this code for attendance',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey[500]),
               textAlign: TextAlign.center,
             ),
           ],

@@ -13,18 +13,18 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> 
+class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _logoController;
   late AnimationController _textController;
   late AnimationController _backgroundController;
-  
+
   late Animation<double> _logoScale;
   late Animation<double> _logoRotation;
   late Animation<double> _textFade;
   late Animation<double> _textSlide;
   late Animation<double> _backgroundFade;
-  
+
   AuthController? _authController;
 
   @override
@@ -46,12 +46,12 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    
+
     _textController = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    
+
     _backgroundController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen>
     _logoScale = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.elasticOut),
     );
-    
+
     _logoRotation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.easeInOut),
     );
@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen>
     _textFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
     );
-    
+
     _textSlide = Tween<double>(begin: 50.0, end: 0.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeOutCubic),
     );
@@ -96,9 +96,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _checkAuthStatus() async {
     await Future.delayed(const Duration(milliseconds: 3500));
-    
+
     if (!mounted || _authController == null) return;
-    
+
     if (_authController!.isLoggedIn) {
       Get.offAllNamed('/dashboard');
     } else {
@@ -121,18 +121,22 @@ class _SplashScreenState extends State<SplashScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppColors.primary.withValues(alpha: _backgroundFade.value),
-                      AppColors.secondary.withValues(alpha: _backgroundFade.value * 0.8),
+                      AppColors.primary.withValues(
+                        alpha: _backgroundFade.value,
+                      ),
+                      AppColors.secondary.withValues(
+                        alpha: _backgroundFade.value * 0.8,
+                      ),
                     ],
                   ),
                 ),
               );
             },
           ),
-          
+
           // Floating Particles Effect
           ...List.generate(20, (index) => _buildFloatingParticle(index)),
-          
+
           // Main Content
           Center(
             child: Column(
@@ -172,9 +176,9 @@ class _SplashScreenState extends State<SplashScreen>
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Animated Text
                 AnimatedBuilder(
                   animation: _textController,
@@ -213,9 +217,9 @@ class _SplashScreenState extends State<SplashScreen>
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 60),
-                
+
                 // Animated Loading Indicator
                 AnimatedBuilder(
                   animation: _textController,
@@ -233,7 +237,9 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                             child: const CircularProgressIndicator(
                               strokeWidth: 3,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -262,7 +268,7 @@ class _SplashScreenState extends State<SplashScreen>
     final random = index * 123.456;
     final size = 20.0 + (random % 20);
     final left = (random * 17) % MediaQuery.of(context).size.width;
-    
+
     return AnimatedBuilder(
       animation: _backgroundController,
       builder: (context, child) {

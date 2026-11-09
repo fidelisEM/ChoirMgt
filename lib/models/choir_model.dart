@@ -1,5 +1,4 @@
 class ChoirModel {
-  
   ChoirModel({
     required this.id,
     required this.name,
@@ -26,7 +25,11 @@ class ChoirModel {
       description: json['description'] ?? '',
       leaderId: json['leader_id'] ?? json['leaderId'] ?? '',
       adminId: json['admin_id'] ?? json['adminId'] ?? '',
-      createdAt: DateTime.parse(json['created_at'] ?? json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ??
+            json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
       updatedAt: (json['updated_at'] ?? json['updatedAt']) != null
           ? DateTime.parse(json['updated_at'] ?? json['updatedAt'])
           : null,
@@ -71,19 +74,19 @@ class ChoirModel {
       'image_url': imageUrl,
       'tags': tags,
     };
-    
+
     // Include location fields if they have values
     if (location != null) json['location'] = location;
     if (schedule != null) json['schedule'] = schedule;
     if (country != null) json['country'] = country;
     if (diocese != null) json['diocese'] = diocese;
     if (parish != null) json['parish'] = parish;
-    
+
     // Only include id if it's not empty (for updates, not creation)
     if (id.isNotEmpty) {
       json['id'] = id;
     }
-    
+
     return json;
   }
 

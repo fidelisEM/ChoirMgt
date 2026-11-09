@@ -33,7 +33,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     },
     {
       'type': 'attendance',
-      'title': 'Attendance Report', 
+      'title': 'Attendance Report',
       'description': 'Session attendance and member participation',
       'icon': Icons.check_circle,
       'color': Colors.green,
@@ -57,11 +57,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Set default date range (last 6 months to capture test data)
     _toDate = DateTime.now();
     _fromDate = _toDate!.subtract(const Duration(days: 180));
-    
+
     // Load choirs on init
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadChoirs();
@@ -71,9 +71,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Future<void> _loadChoirs() async {
     setState(() => _isLoadingChoirs = true);
     try {
-      final choirController = Provider.of<ChoirController>(context, listen: false);
-      final authController = Provider.of<AuthController>(context, listen: false);
-      
+      final choirController = Provider.of<ChoirController>(
+        context,
+        listen: false,
+      );
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+
       if (authController.currentUser != null) {
         if (authController.currentUser!.role == UserRole.admin) {
           await choirController.loadChoirs(adminView: true);
@@ -111,21 +117,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   void _generateReport(String reportType) async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir == null) {
       Helpers.showErrorSnackbar('Please select a choir first');
       return;
     }
 
     final choirId = choirController.selectedChoir!.id;
-    final reportController = Provider.of<ReportController>(context, listen: false);
+    final reportController = Provider.of<ReportController>(
+      context,
+      listen: false,
+    );
 
     // Show loading dialog
     Get.dialog(
-      const Center(
-        child: CircularProgressIndicator(),
-      ),
+      const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
     );
 
@@ -171,7 +181,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
           // For trends, we'll generate a membership report with historical data
           await reportController.generateMembershipReport(
             choirId: choirId,
-            fromDate: _fromDate ?? DateTime.now().subtract(const Duration(days: 365)),
+            fromDate:
+                _fromDate ?? DateTime.now().subtract(const Duration(days: 365)),
             toDate: _toDate,
             membershipFilter: _membershipFilter,
           );
@@ -197,15 +208,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
           _showExportOptions(reportController);
         } else {
           // Navigate to report details screen
-          Get.to(() => ReportDetailScreen(
-            reportType: reportType,
-            reportData: reportController.currentReport,
-          ));
+          Get.to(
+            () => ReportDetailScreen(
+              reportType: reportType,
+              reportData: reportController.currentReport,
+            ),
+          );
         }
       } else {
         Helpers.showErrorSnackbar('No data available for this report');
       }
-
     } catch (e) {
       // Hide loading
       if (Get.isDialogOpen ?? false) {
@@ -249,10 +261,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             const Icon(Icons.info_outline, color: Colors.orange),
             const SizedBox(width: 12),
             const Expanded(child: Text('No choirs available')),
-            TextButton(
-              onPressed: _loadChoirs,
-              child: const Text('Retry'),
-            ),
+            TextButton(onPressed: _loadChoirs, child: const Text('Retry')),
           ],
         ),
       );
@@ -276,7 +285,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
       }).toList(),
       onChanged: (value) {
         if (value != null) {
-          final selectedChoir = choirController.choirs.firstWhere((c) => c.id == value);
+          final selectedChoir = choirController.choirs.firstWhere(
+            (c) => c.id == value,
+          );
           choirController.selectChoir(selectedChoir);
         }
       },
@@ -339,7 +350,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       ),
       body: Consumer3<ReportController, ChoirController, AuthController>(
         builder: (context, reportController, choirController, authController, child) {
-
           return Column(
             children: [
               // Controls
@@ -358,17 +368,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     // Choir selection dropdown
                     _buildChoirSelection(choirController),
                     const SizedBox(height: 16),
-                    
+
                     // Membership filter (only show if choir is selected)
                     if (choirController.selectedChoir != null) ...[
                       _buildMembershipFilter(),
                       const SizedBox(height: 16),
                     ],
-                    
+
                     Row(
                       children: [
                         Expanded(
@@ -382,7 +391,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.date_range, color: Colors.grey),
+                                  const Icon(
+                                    Icons.date_range,
+                                    color: Colors.grey,
+                                  ),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
@@ -391,7 +403,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           : 'Select date range',
                                     ),
                                   ),
-                                  Icon(Icons.arrow_drop_down, color: Colors.grey[600]),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.grey[600],
+                                  ),
                                 ],
                               ),
                             ),
@@ -402,7 +417,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
               ),
-              
+
               // Report types grid
               Expanded(
                 child: choirController.selectedChoir == null
@@ -438,19 +453,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     : Padding(
                         padding: const EdgeInsets.all(16),
                         child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1.2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1.2,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                              ),
                           itemCount: _reportTypes.length,
                           itemBuilder: (context, index) {
                             final reportType = _reportTypes[index];
                             return Card(
                               elevation: 4,
                               child: InkWell(
-                                onTap: () => _generateReport(reportType['type']),
+                                onTap: () =>
+                                    _generateReport(reportType['type']),
                                 borderRadius: BorderRadius.circular(12),
                                 child: Container(
                                   padding: const EdgeInsets.all(20),
@@ -476,9 +493,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                       const SizedBox(height: 12),
                                       Text(
                                         reportType['title'],
-                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                         textAlign: TextAlign.center,
                                       ),
                                       const SizedBox(height: 8),
@@ -497,7 +517,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                             );
                           },
                         ),
-                ),
+                      ),
               ),
             ],
           );
@@ -505,7 +525,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       ),
     );
   }
-  
+
   void _showExportOptions(ReportController reportController) {
     showModalBottomSheet(
       context: context,
@@ -516,10 +536,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           children: [
             const Text(
               'Export Options',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             ListTile(
@@ -555,7 +572,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
     );
   }
 
-  Future<void> _exportReport(String format, ReportController reportController) async {
+  Future<void> _exportReport(
+    String format,
+    ReportController reportController,
+  ) async {
     try {
       // Navigate to the detail screen with export actions
       final reportData = reportController.currentReport;
@@ -563,14 +583,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
         Helpers.showErrorSnackbar('No report data available');
         return;
       }
-      
-      Get.to(() => ReportDetailScreen(
-        reportType: 'overview',
-        reportData: reportData,
-      ));
+
+      Get.to(
+        () =>
+            ReportDetailScreen(reportType: 'overview', reportData: reportData),
+      );
     } catch (e) {
       Helpers.showErrorSnackbar('Export failed: $e');
     }
   }
-
 }

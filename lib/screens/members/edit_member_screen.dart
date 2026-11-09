@@ -12,11 +12,7 @@ import '../../utils/validators.dart';
 import '../../widgets/custom_widgets.dart';
 
 class EditMemberScreen extends StatefulWidget {
-
-  const EditMemberScreen({
-    super.key,
-    required this.member,
-  });
+  const EditMemberScreen({super.key, required this.member});
   final Map<String, dynamic> member;
 
   @override
@@ -29,7 +25,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _registrationNumberController = TextEditingController();
-  
+
   MemberStatus _selectedStatus = MemberStatus.active;
   MemberRole _selectedRole = MemberRole.choir;
   MemberLevel _selectedLevel = MemberLevel.choir;
@@ -37,7 +33,11 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   String? _selectedPosition;
   String? _selectedCommittee;
 
-  final List<MemberStatus> _statusOptions = [MemberStatus.active, MemberStatus.inactive, MemberStatus.suspended];
+  final List<MemberStatus> _statusOptions = [
+    MemberStatus.active,
+    MemberStatus.inactive,
+    MemberStatus.suspended,
+  ];
   final List<MemberRole> _roleOptions = MemberRole.values;
 
   @override
@@ -51,26 +51,27 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
     _fullNameController.text = userData?['full_name'] ?? '';
     _emailController.text = userData?['email'] ?? '';
     _phoneController.text = userData?['phone_number'] ?? '';
-    _registrationNumberController.text = widget.member['registration_number'] ?? '';
-    
+    _registrationNumberController.text =
+        widget.member['registration_number'] ?? '';
+
     final statusString = widget.member['status'] ?? 'active';
     _selectedStatus = MemberStatus.values.firstWhere(
       (status) => status.name == statusString,
       orElse: () => MemberStatus.active,
     );
-    
+
     final roleString = widget.member['role'] ?? 'choir';
     _selectedRole = MemberRole.values.firstWhere(
       (role) => role.name == roleString,
       orElse: () => MemberRole.choir,
     );
-    
+
     final levelString = widget.member['level'] ?? 'choir';
     _selectedLevel = MemberLevel.values.firstWhere(
       (level) => level.name == levelString,
       orElse: () => MemberLevel.choir,
     );
-    
+
     // Initialize position/committee from metadata
     final metadata = widget.member['metadata'] as Map<String, dynamic>?;
     if (metadata != null) {
@@ -97,9 +98,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -134,11 +133,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
               gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.edit,
-              size: 48,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.edit, size: 48, color: Colors.white),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -152,10 +147,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
           const SizedBox(height: 8),
           const Text(
             'Update member information and settings',
-            style: TextStyle(
-              color: AppColors.gray600,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: AppColors.gray600, fontSize: 16),
           ),
         ],
       ),
@@ -233,7 +225,8 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.badge),
             ),
-            validator: (value) => Validators.required(value, 'registration number'),
+            validator: (value) =>
+                Validators.required(value, 'registration number'),
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<MemberStatus>(
@@ -344,7 +337,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Additional fields based on role
           if (_selectedRole == MemberRole.leader)
             Column(
@@ -356,28 +349,33 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                     prefixIcon: Icon(Icons.admin_panel_settings),
                     border: OutlineInputBorder(),
                   ),
-                  items: const [
-                    'Chairperson',
-                    'Vice-Chairperson',
-                    'Assistant Chairperson',
-                    'Secretary',
-                    'Vice-Secretary',
-                    'Assistant Secretary',
-                    'Treasurer',
-                    'Assistant Treasurer',
-                    'Organizing Secretary',
-                    'Music Director',
-                    'Assistant Music Director',
-                    'Director',
-                    'Assistant Director',
-                    'President',
-                    'Vice-President',
-                    'Assistant President',
-                    'Other',
-                  ].map((position) => DropdownMenuItem(
-                    value: position,
-                    child: Text(position),
-                  )).toList(),
+                  items:
+                      const [
+                            'Chairperson',
+                            'Vice-Chairperson',
+                            'Assistant Chairperson',
+                            'Secretary',
+                            'Vice-Secretary',
+                            'Assistant Secretary',
+                            'Treasurer',
+                            'Assistant Treasurer',
+                            'Organizing Secretary',
+                            'Music Director',
+                            'Assistant Music Director',
+                            'Director',
+                            'Assistant Director',
+                            'President',
+                            'Vice-President',
+                            'Assistant President',
+                            'Other',
+                          ]
+                          .map(
+                            (position) => DropdownMenuItem(
+                              value: position,
+                              child: Text(position),
+                            ),
+                          )
+                          .toList(),
                   onChanged: (value) {
                     setState(() {
                       _selectedPosition = value;
@@ -387,7 +385,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                 const SizedBox(height: 16),
               ],
             ),
-          
+
           if (_selectedRole == MemberRole.committee)
             Column(
               children: [
@@ -398,23 +396,28 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                     prefixIcon: Icon(Icons.business_center),
                     border: OutlineInputBorder(),
                   ),
-                  items: const [
-                    'Finance Committee',
-                    'Events Committee',
-                    'Music Committee',
-                    'Disciplinary Committee',
-                    'Fundraising Committee',
-                    'Welfare Committee',
-                    'Youth Committee',
-                    'Women Committee',
-                    'Men Committee',
-                    'Publicity Committee',
-                    'Training Committee',
-                    'Other',
-                  ].map((committee) => DropdownMenuItem(
-                    value: committee,
-                    child: Text(committee),
-                  )).toList(),
+                  items:
+                      const [
+                            'Finance Committee',
+                            'Events Committee',
+                            'Music Committee',
+                            'Disciplinary Committee',
+                            'Fundraising Committee',
+                            'Welfare Committee',
+                            'Youth Committee',
+                            'Women Committee',
+                            'Men Committee',
+                            'Publicity Committee',
+                            'Training Committee',
+                            'Other',
+                          ]
+                          .map(
+                            (committee) => DropdownMenuItem(
+                              value: committee,
+                              child: Text(committee),
+                            ),
+                          )
+                          .toList(),
                   onChanged: (value) {
                     setState(() {
                       _selectedCommittee = value;
@@ -424,7 +427,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                 const SizedBox(height: 16),
               ],
             ),
-          
+
           if (_selectedRole == MemberRole.trainer)
             Column(
               children: [
@@ -435,21 +438,26 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                     prefixIcon: Icon(Icons.school),
                     border: OutlineInputBorder(),
                   ),
-                  items: const [
-                    'Head Trainer',
-                    'Assistant Trainer',
-                    'Music Trainer',
-                    'Voice Coach',
-                    'Choir Master',
-                    'Assistant Choir Master',
-                    'Accompanist',
-                    'Music Theory Instructor',
-                    'Performance Coach',
-                    'Other',
-                  ].map((position) => DropdownMenuItem(
-                    value: position,
-                    child: Text(position),
-                  )).toList(),
+                  items:
+                      const [
+                            'Head Trainer',
+                            'Assistant Trainer',
+                            'Music Trainer',
+                            'Voice Coach',
+                            'Choir Master',
+                            'Assistant Choir Master',
+                            'Accompanist',
+                            'Music Theory Instructor',
+                            'Performance Coach',
+                            'Other',
+                          ]
+                          .map(
+                            (position) => DropdownMenuItem(
+                              value: position,
+                              child: Text(position),
+                            ),
+                          )
+                          .toList(),
                   onChanged: (value) {
                     setState(() {
                       _selectedPosition = value;
@@ -472,10 +480,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                 Expanded(
                   child: Text(
                     'Role and status changes will affect member access and permissions',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: AppColors.primary, fontSize: 14),
                   ),
                 ),
               ],
@@ -500,10 +505,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
             ),
             child: const Text(
               'Cancel',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -530,10 +532,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                   )
                 : const Text(
                     'Save Changes',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
           ),
         ),
@@ -570,7 +569,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         return 'Trainer';
     }
   }
-  
+
   String _getRoleDescription(MemberRole role) {
     switch (role) {
       case MemberRole.leader:
@@ -587,7 +586,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         return 'Trainer & instructor';
     }
   }
-  
+
   IconData _getRoleIcon(MemberRole role) {
     switch (role) {
       case MemberRole.leader:
@@ -604,7 +603,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         return Icons.school;
     }
   }
-  
+
   Color _getRoleColor(MemberRole role) {
     switch (role) {
       case MemberRole.leader:
@@ -634,7 +633,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         return 'Choir';
     }
   }
-  
+
   String _getLevelDescription(MemberLevel level) {
     switch (level) {
       case MemberLevel.national:
@@ -647,7 +646,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
         return 'Choir level only';
     }
   }
-  
+
   IconData _getLevelIcon(MemberLevel level) {
     switch (level) {
       case MemberLevel.national:
@@ -682,16 +681,26 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
     });
 
     try {
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      final authController = Provider.of<AuthController>(context, listen: false);
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
 
       if (!authController.isChoirLeader) {
-        Helpers.showErrorSnackbar('Only choir leaders can edit member profiles');
+        Helpers.showErrorSnackbar(
+          'Only choir leaders can edit member profiles',
+        );
         return;
       }
 
       Logger.debug('Updating member profile');
-      Logger.debug('Original user name: ${widget.member['users']?['full_name']}');
+      Logger.debug(
+        'Original user name: ${widget.member['users']?['full_name']}',
+      );
       Logger.debug('New name from controller: ${_fullNameController.text}');
 
       // First update the user profile information (name, email, phone)
@@ -699,13 +708,15 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
       final userData = widget.member['users'];
       if (userData != null) {
         // Check if user profile data has changed
-        final hasUserChanges = 
+        final hasUserChanges =
             _fullNameController.text.trim() != (userData['full_name'] ?? '') ||
             _emailController.text.trim() != (userData['email'] ?? '') ||
             _phoneController.text.trim() != (userData['phone_number'] ?? '');
-        
+
         if (hasUserChanges) {
-          Logger.debug('User profile changes detected, updating user profile...');
+          Logger.debug(
+            'User profile changes detected, updating user profile...',
+          );
           final userId = userData['id'];
           if (userId != null) {
             userProfileSuccess = await authController.updateUserProfileByUserId(
@@ -732,32 +743,38 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
       Map<String, dynamic>? metadata;
       if (_selectedRole == MemberRole.leader && _selectedPosition != null) {
         metadata = {'position': _selectedPosition};
-      } else if (_selectedRole == MemberRole.committee && _selectedCommittee != null) {
+      } else if (_selectedRole == MemberRole.committee &&
+          _selectedCommittee != null) {
         metadata = {'committee': _selectedCommittee};
-      } else if (_selectedRole == MemberRole.trainer && _selectedPosition != null) {
+      } else if (_selectedRole == MemberRole.trainer &&
+          _selectedPosition != null) {
         metadata = {'position': _selectedPosition};
       }
-      
+
       final detailsSuccess = await memberController.updateMemberDetails(
         memberId: widget.member['id'],
         choirId: widget.member['choir_id'],
         registrationNumber: _registrationNumberController.text.trim(),
         metadata: metadata,
       );
-      
+
       final roleSuccess = await memberController.updateMemberRole(
         memberId: widget.member['id'],
         choirId: widget.member['choir_id'],
         newRole: _selectedRole.name,
       );
-      
+
       final levelSuccess = await memberController.updateMemberLevel(
         memberId: widget.member['id'],
         choirId: widget.member['choir_id'],
         newLevel: _selectedLevel.name,
       );
 
-      if (success && detailsSuccess && roleSuccess && levelSuccess && userProfileSuccess) {
+      if (success &&
+          detailsSuccess &&
+          roleSuccess &&
+          levelSuccess &&
+          userProfileSuccess) {
         Helpers.showSuccessSnackbar('Member profile updated successfully');
         Get.back(result: true); // Return success indicator
       } else {

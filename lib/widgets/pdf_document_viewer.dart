@@ -209,10 +209,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
             SizedBox(height: 16),
             Text(
               'Loading sheet music...',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppColors.gray600,
-              ),
+              style: TextStyle(fontSize: 16, color: AppColors.gray600),
             ),
           ],
         ),
@@ -232,11 +229,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               const SizedBox(height: 16),
               const Text(
                 'Unable to load PDF',
@@ -249,10 +242,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
               const SizedBox(height: 8),
               Text(
                 _errorMessage ?? 'Unknown error',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.gray500,
-                ),
+                style: const TextStyle(fontSize: 14, color: AppColors.gray500),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -299,11 +289,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.music_off,
-                size: 64,
-                color: AppColors.gray400,
-              ),
+              const Icon(Icons.music_off, size: 64, color: AppColors.gray400),
               const SizedBox(height: 16),
               const Text(
                 'No sheet music available',
@@ -316,10 +302,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
               const SizedBox(height: 8),
               Text(
                 '${widget.music.title} does not have a sheet music PDF on file.',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.gray500,
-                ),
+                style: const TextStyle(fontSize: 14, color: AppColors.gray500),
                 textAlign: TextAlign.center,
               ),
               if (hasSourceWebsite) ...[
@@ -348,11 +331,7 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(12)),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -389,7 +368,9 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
                   Container(
                     margin: const EdgeInsets.only(right: 8),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white24,
                       borderRadius: BorderRadius.circular(20),
@@ -613,10 +594,12 @@ class _PdfDocumentViewerState extends State<PdfDocumentViewer> {
   }
 
   void _openFullScreen() {
-    Get.to(() => PdfDocumentViewer(
-      music: widget.music,
-      pdfUrl: widget.pdfUrl,
-      showFullScreen: true,
-    ));
+    Get.to(
+      () => PdfDocumentViewer(
+        music: widget.music,
+        pdfUrl: widget.pdfUrl,
+        showFullScreen: true,
+      ),
+    );
   }
 }

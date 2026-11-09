@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/logger.dart';
 
 class LanguageController extends ChangeNotifier {
-
   LanguageController() {
     _loadLanguage();
   }
@@ -22,10 +21,9 @@ class LanguageController extends ChangeNotifier {
 
       final prefs = await SharedPreferences.getInstance();
       final languageCode = prefs.getString(_languageKey) ?? 'en';
-      
+
       _locale = Locale(languageCode);
       Logger.info('Language loaded: $languageCode');
-      
     } catch (error) {
       Logger.error('Failed to load language', error);
       _locale = const Locale('en'); // Default to English
@@ -42,11 +40,11 @@ class LanguageController extends ChangeNotifier {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_languageKey, languageCode);
-      
+
       _locale = Locale(languageCode);
-      
+
       Logger.info('Language changed to: $languageCode');
-      
+
       return true;
     } catch (error) {
       Logger.error('Failed to change language', error);
@@ -62,7 +60,7 @@ class LanguageController extends ChangeNotifier {
   }
 
   String get currentLanguageCode => _locale.languageCode;
-  
+
   bool get isEnglish => _locale.languageCode == 'en';
   bool get isSwahili => _locale.languageCode == 'sw';
 }

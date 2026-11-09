@@ -7,15 +7,12 @@ import '../../controllers/auth_controller.dart';
 import '../../controllers/member_controller.dart';
 import '../../models/models.dart';
 import '../../services/export_service.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/helpers.dart';
 import '../qr_scanner_screen.dart';
 
 class SessionDetailScreen extends StatefulWidget {
-
-  const SessionDetailScreen({
-    super.key,
-    required this.session,
-  });
+  const SessionDetailScreen({super.key, required this.session});
   final AttendanceSessionModel session;
 
   @override
@@ -25,7 +22,7 @@ class SessionDetailScreen extends StatefulWidget {
 class _SessionDetailScreenState extends State<SessionDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  
+
   @override
   void initState() {
     super.initState();
@@ -36,21 +33,27 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
   void _loadSessionData() async {
     try {
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+
       // Ensure member data is loaded first
       if (memberController.membersWithUserInfo.isEmpty) {
         await memberController.loadChoirMembers(widget.session.choirId);
       }
-      
+
       // Then select the session and load attendance records
       await attendanceController.selectSession(widget.session);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load session data: $e'),
+            content: Text('${context.tr('attFailedLoadSessionData')}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -65,10 +68,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.session.title,
-              style: const TextStyle(fontSize: 18),
-            ),
+            Text(widget.session.title, style: const TextStyle(fontSize: 18)),
             Text(
               _formatSessionDateTime(widget.session),
               style: TextStyle(
@@ -85,7 +85,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               if (!authController.isChoirLeader || !widget.session.isActive) {
                 return const SizedBox.shrink();
               }
-              
+
               return PopupMenuButton<String>(
                 onSelected: (value) {
                   switch (value) {
@@ -104,45 +104,45 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'qr_scan',
                     child: Row(
                       children: [
-                        Icon(Icons.qr_code_scanner, color: Colors.blue),
-                        SizedBox(width: 8),
-                        Text('QR Code Scanner'),
+                        const Icon(Icons.qr_code_scanner, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attQrCodeScanner')),
                       ],
                     ),
                   ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'bulk_present',
                     child: Row(
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green),
-                        SizedBox(width: 8),
-                        Text('Mark All Present'),
+                        const Icon(Icons.check_circle, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attMarkAllPresent')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'bulk_absent',
                     child: Row(
                       children: [
-                        Icon(Icons.cancel, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Mark All Absent'),
+                        const Icon(Icons.cancel, color: Colors.red),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attMarkAllAbsent')),
                       ],
                     ),
                   ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'export',
                     child: Row(
                       children: [
-                        Icon(Icons.download),
-                        SizedBox(width: 8),
-                        Text('Export Data'),
+                        const Icon(Icons.download),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attExportData')),
                       ],
                     ),
                   ),
@@ -153,212 +153,259 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         ],
       ),
       body: Consumer3<AttendanceController, MemberController, AuthController>(
-        builder: (context, attendanceController, memberController, authController, child) {
-          if (attendanceController.isLoading || memberController.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        builder:
+            (
+              context,
+              attendanceController,
+              memberController,
+              authController,
+              child,
+            ) {
+              if (attendanceController.isLoading ||
+                  memberController.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          // Handle error states
-          if (attendanceController.errorMessage != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error loading attendance data',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    attendanceController.errorMessage!,
-                    style: TextStyle(color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => _loadSessionData(),
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Handle case where members list is empty
-          if (memberController.membersWithUserInfo.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.people_outline, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No choir members found',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Add members to this choir to track attendance',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final members = memberController.membersWithUserInfo
-              .where((member) => 
-                  _searchQuery.isEmpty ||
-                  (member['users']?['full_name']?.toLowerCase() ?? '').contains(_searchQuery.toLowerCase()) ||
-                  (member['registration_number']?.toLowerCase() ?? '').contains(_searchQuery.toLowerCase())
-              )
-              .toList();
-
-          return Column(
-            children: [
-              // Session Info Card
-              Card(
-                margin: const EdgeInsets.all(16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
+              // Handle error states
+              if (attendanceController.errorMessage != null) {
+                return Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: _getEventTypeColor(widget.session.eventType).withAlpha(50),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(
-                              _getEventTypeIcon(widget.session.eventType),
-                              color: _getEventTypeColor(widget.session.eventType),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.session.eventType.toString().split('.').last.toUpperCase(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                if (widget.session.description?.isNotEmpty ?? false)
-                                  Text(
-                                    widget.session.description!,
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          if (widget.session.isActive)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withAlpha(30),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Text(
-                                'ACTIVE',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                        ],
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red[300],
                       ),
                       const SizedBox(height: 16),
-                      _buildAttendanceStats(attendanceController, members),
+                      Text(
+                        context.tr('attErrorLoadingData'),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        attendanceController.errorMessage!,
+                        style: TextStyle(color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => _loadSessionData(),
+                        child: Text(context.tr('retry')),
+                      ),
                     ],
                   ),
-                ),
-              ),
+                );
+              }
 
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Search members...',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _searchQuery = value;
-                    });
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Members List
-              Expanded(
-                child: members.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No members found',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: members.length,
-                        itemBuilder: (context, index) {
-                          final member = members[index];
-                          final attendanceRecord = attendanceController
-                              .getAttendanceRecord(member['id']);
-                          
-                          return _buildMemberAttendanceCard(
-                            member,
-                            attendanceRecord,
-                            authController.isChoirLeader && widget.session.isActive,
-                          );
-                        },
+              // Handle case where members list is empty
+              if (memberController.membersWithUserInfo.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.people_outline,
+                        size: 64,
+                        color: Colors.grey,
                       ),
-              ),
-            ],
-          );
-        },
+                      const SizedBox(height: 16),
+                      Text(
+                        context.tr('attNoMembersFound'),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.tr('attAddMembersPrompt'),
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              final members = memberController.membersWithUserInfo
+                  .where(
+                    (member) =>
+                        _searchQuery.isEmpty ||
+                        (member['users']?['full_name']?.toLowerCase() ?? '')
+                            .contains(_searchQuery.toLowerCase()) ||
+                        (member['registration_number']?.toLowerCase() ?? '')
+                            .contains(_searchQuery.toLowerCase()),
+                  )
+                  .toList();
+
+              return Column(
+                children: [
+                  // Session Info Card
+                  Card(
+                    margin: const EdgeInsets.all(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: _getEventTypeColor(
+                                    widget.session.eventType,
+                                  ).withAlpha(50),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  _getEventTypeIcon(widget.session.eventType),
+                                  color: _getEventTypeColor(
+                                    widget.session.eventType,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.session.eventType
+                                          .toString()
+                                          .split('.')
+                                          .last
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    if (widget
+                                            .session
+                                            .description
+                                            ?.isNotEmpty ??
+                                        false)
+                                      Text(
+                                        widget.session.description!,
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              if (widget.session.isActive)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withAlpha(30),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    context.tr('active').toUpperCase(),
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          _buildAttendanceStats(attendanceController, members),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Search Bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: context.tr('attSearchMembersHint'),
+                        prefixIcon: const Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                        });
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Members List
+                  Expanded(
+                    child: members.isEmpty
+                        ? Center(
+                            child: Text(
+                              context.tr('attNoMembersFoundFiltered'),
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            itemCount: members.length,
+                            itemBuilder: (context, index) {
+                              final member = members[index];
+                              final attendanceRecord = attendanceController
+                                  .getAttendanceRecord(member['id']);
+
+                              return _buildMemberAttendanceCard(
+                                member,
+                                attendanceRecord,
+                                authController.isChoirLeader &&
+                                    widget.session.isActive,
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              );
+            },
       ),
     );
   }
 
-  Widget _buildAttendanceStats(AttendanceController attendanceController, List<Map<String, dynamic>> members) {
+  Widget _buildAttendanceStats(
+    AttendanceController attendanceController,
+    List<Map<String, dynamic>> members,
+  ) {
     final records = attendanceController.currentSessionRecords;
-    
+
     // Deduplicate records by member ID to ensure accurate counts
     final uniqueRecords = <String, AttendanceRecordModel>{};
     for (final record in records) {
       uniqueRecords[record.memberId] = record;
     }
     final deduplicatedRecords = uniqueRecords.values.toList();
-    
-    final present = deduplicatedRecords.where((r) => r.status == AttendanceStatus.present).length;
-    final late = deduplicatedRecords.where((r) => r.status == AttendanceStatus.late).length;
-    final absent = deduplicatedRecords.where((r) => r.status == AttendanceStatus.absent).length;
+
+    final present = deduplicatedRecords
+        .where((r) => r.status == AttendanceStatus.present)
+        .length;
+    final late = deduplicatedRecords
+        .where((r) => r.status == AttendanceStatus.late)
+        .length;
+    final absent = deduplicatedRecords
+        .where((r) => r.status == AttendanceStatus.absent)
+        .length;
     final totalMembers = members.length;
 
     return Row(
       children: [
         Expanded(
           child: _buildStatChip(
-            'Present',
+            context.tr('attPresent'),
             present.toString(),
             Colors.green,
           ),
@@ -366,7 +413,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Late',
+            context.tr('attLate'),
             late.toString(),
             Colors.orange,
           ),
@@ -374,7 +421,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Absent',
+            context.tr('attAbsent'),
             absent.toString(),
             Colors.red,
           ),
@@ -382,7 +429,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatChip(
-            'Total',
+            context.tr('attTotal'),
             totalMembers.toString(),
             Colors.blue,
           ),
@@ -410,10 +457,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           ),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 10,
-              color: color,
-            ),
+            style: TextStyle(fontSize: 10, color: color),
             textAlign: TextAlign.center,
           ),
         ],
@@ -428,7 +472,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   ) {
     AttendanceStatus? currentStatus;
     DateTime? checkInTime;
-    
+
     if (attendanceRecord != null) {
       currentStatus = attendanceRecord.status;
       checkInTime = attendanceRecord.checkInTime;
@@ -464,18 +508,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                   Text(
                     _getMemberRegistration(member),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
                   if (checkInTime != null)
                     Text(
-                      'Checked in: ${_formatTime(checkInTime)}',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 11,
-                      ),
+                      '${context.tr('attCheckedInPrefix')} ${_formatTime(checkInTime)}',
+                      style: TextStyle(color: Colors.grey[500], fontSize: 11),
                     ),
                 ],
               ),
@@ -502,33 +540,41 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 onSelected: (status) => _markAttendance(member, status),
                 child: const Icon(Icons.more_vert),
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.present,
                     child: Row(
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 20),
-                        SizedBox(width: 8),
-                        Text('Present'),
+                        const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attPresent')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.late,
                     child: Row(
                       children: [
-                        Icon(Icons.schedule, color: Colors.orange, size: 20),
-                        SizedBox(width: 8),
-                        Text('Late'),
+                        const Icon(
+                          Icons.schedule,
+                          color: Colors.orange,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attLate')),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: AttendanceStatus.absent,
                     child: Row(
                       children: [
-                        Icon(Icons.cancel, color: Colors.red, size: 20),
-                        SizedBox(width: 8),
-                        Text('Absent'),
+                        const Icon(Icons.cancel, color: Colors.red, size: 20),
+                        const SizedBox(width: 8),
+                        Text(context.tr('attAbsent')),
                       ],
                     ),
                   ),
@@ -541,12 +587,20 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     );
   }
 
-  void _markAttendance(Map<String, dynamic> member, AttendanceStatus status) async {
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+  void _markAttendance(
+    Map<String, dynamic> member,
+    AttendanceStatus status,
+  ) async {
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
     final authController = Provider.of<AuthController>(context, listen: false);
-    
-    final existingRecord = attendanceController.getAttendanceRecord(member['id']);
-    
+
+    final existingRecord = attendanceController.getAttendanceRecord(
+      member['id'],
+    );
+
     if (existingRecord != null) {
       await attendanceController.updateAttendanceRecord(
         recordId: existingRecord.id,
@@ -569,33 +623,48 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   void _markAllAs(AttendanceStatus status) async {
     final result = await Get.dialog<bool>(
       AlertDialog(
-        title: Text('Mark All ${status.toString().split('.').last.toUpperCase()}'),
-        content: Text('Are you sure you want to mark all members as ${status.toString().split('.').last}?'),
+        title: Text(
+          '${context.tr('attMarkAll')} ${status.toString().split('.').last.toUpperCase()}',
+        ),
+        content: Text(
+          '${context.tr('attConfirmMarkAllPrefix')} ${status.toString().split('.').last}?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () => Get.back(result: true),
-            child: const Text('Confirm'),
+            child: Text(context.tr('confirm')),
           ),
         ],
       ),
     );
 
     if (result == true && mounted) {
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      final authController = Provider.of<AuthController>(context, listen: false);
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
 
       final memberAttendance = <String, AttendanceStatus>{};
       for (final member in memberController.membersWithUserInfo) {
         memberAttendance[member['id']] = status;
       }
 
-      final memberIds = memberController.membersWithUserInfo.map<String>((m) => m['id'] as String).toList();
-      
+      final memberIds = memberController.membersWithUserInfo
+          .map<String>((m) => m['id'] as String)
+          .toList();
+
       final success = await attendanceController.bulkRecordAttendance(
         sessionId: widget.session.id,
         status: status,
@@ -603,10 +672,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         recordedBy: authController.currentUser!.id,
       );
 
+      if (!mounted) return;
       if (success) {
         Get.snackbar(
-          'Success',
-          'Attendance recorded for all members',
+          context.tr('attSuccessTitle'),
+          context.tr('attRecordedAllMembers'),
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -626,61 +696,64 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Export Session Attendance',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+        child: Material(
+          color: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.tr('attExportSessionTitle'),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Choose export format for "${widget.session.title}"',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 20),
-            
-            // PDF Export Option
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.red.withAlpha(30),
-                  borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 8),
+              Text(
+                '${context.tr('attChooseExportFormatPrefix')} "${widget.session.title}"',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 20),
+
+              // PDF Export Option
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withAlpha(30),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.picture_as_pdf, color: Colors.red),
                 ),
-                child: const Icon(Icons.picture_as_pdf, color: Colors.red),
+                title: Text(context.tr('attExportAsPdf')),
+                subtitle: Text(context.tr('attPdfDescription')),
+                onTap: () {
+                  Get.back();
+                  _exportSessionToPDF();
+                },
               ),
-              title: const Text('Export as PDF'),
-              subtitle: const Text('Detailed report with formatting'),
-              onTap: () {
-                Get.back();
-                _exportSessionToPDF();
-              },
-            ),
-            
-            // CSV Export Option
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green.withAlpha(30),
-                  borderRadius: BorderRadius.circular(8),
+
+              // CSV Export Option
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withAlpha(30),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.table_chart, color: Colors.green),
                 ),
-                child: const Icon(Icons.table_chart, color: Colors.green),
+                title: Text(context.tr('attExportAsCsv')),
+                subtitle: Text(context.tr('attCsvDescription')),
+                onTap: () {
+                  Get.back();
+                  _exportSessionToCSV();
+                },
               ),
-              title: const Text('Export as CSV'),
-              subtitle: const Text('Spreadsheet format for data analysis'),
-              onTap: () {
-                Get.back();
-                _exportSessionToCSV();
-              },
-            ),
-            
-            const SizedBox(height: 10),
-          ],
+
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
@@ -688,17 +761,23 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
   Future<void> _exportSessionToPDF() async {
     try {
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+
       // Show loading
       Get.dialog(
-        const AlertDialog(
+        AlertDialog(
           content: Row(
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text('Generating PDF report...'),
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Text(context.tr('attGeneratingPdf')),
             ],
           ),
         ),
@@ -707,40 +786,52 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       // Prepare session data for export
       final sessionData = await _prepareSessionDataForExport(
-        memberController, 
-        attendanceController
+        memberController,
+        attendanceController,
       );
 
       final exportService = ExportService();
-      final filePath = await exportService.exportSessionAttendanceToPDF(sessionData);
+      final filePath = await exportService.exportSessionAttendanceToPDF(
+        sessionData,
+      );
 
       Get.back(); // Close loading dialog
 
+      if (!mounted) return;
       if (filePath != null) {
-        Helpers.showSuccessSnackbar('PDF exported successfully');
+        Helpers.showSuccessSnackbar(context.tr('attPdfExportedSuccess'));
         _showExportSuccessDialog(filePath, 'PDF');
       } else {
-        Helpers.showErrorSnackbar('Failed to export PDF');
+        Helpers.showErrorSnackbar(context.tr('attFailedExportPdf'));
       }
     } catch (e) {
       Get.back(); // Close loading dialog if open
-      Helpers.showErrorSnackbar('Error exporting PDF: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar(
+        '${context.tr('attErrorExportingPdfPrefix')}: $e',
+      );
     }
   }
 
   Future<void> _exportSessionToCSV() async {
     try {
-      final memberController = Provider.of<MemberController>(context, listen: false);
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+
       // Show loading
       Get.dialog(
-        const AlertDialog(
+        AlertDialog(
           content: Row(
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text('Generating CSV file...'),
+              const CircularProgressIndicator(),
+              const SizedBox(width: 20),
+              Text(context.tr('attGeneratingCsv')),
             ],
           ),
         ),
@@ -749,24 +840,30 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
       // Prepare session data for export
       final sessionData = await _prepareSessionDataForExport(
-        memberController, 
-        attendanceController
+        memberController,
+        attendanceController,
       );
 
       final exportService = ExportService();
-      final filePath = await exportService.exportSessionAttendanceToCSV(sessionData);
+      final filePath = await exportService.exportSessionAttendanceToCSV(
+        sessionData,
+      );
 
       Get.back(); // Close loading dialog
 
+      if (!mounted) return;
       if (filePath != null) {
-        Helpers.showSuccessSnackbar('CSV exported successfully');
+        Helpers.showSuccessSnackbar(context.tr('attCsvExportedSuccess'));
         _showExportSuccessDialog(filePath, 'CSV');
       } else {
-        Helpers.showErrorSnackbar('Failed to export CSV');
+        Helpers.showErrorSnackbar(context.tr('attFailedExportCsv'));
       }
     } catch (e) {
       Get.back(); // Close loading dialog if open
-      Helpers.showErrorSnackbar('Error exporting CSV: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar(
+        '${context.tr('attErrorExportingCsvPrefix')}: $e',
+      );
     }
   }
 
@@ -776,10 +873,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   ) async {
     final members = memberController.membersWithUserInfo;
     final records = attendanceController.currentSessionRecords;
-    
+
     // Combine member and attendance data
     final attendanceList = <Map<String, dynamic>>[];
-    
+
     for (final member in members) {
       final attendanceRecord = records.firstWhere(
         (record) => record.memberId == member['id'],
@@ -798,16 +895,24 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'member_name': _getMemberName(member),
         'registration_number': _getMemberRegistration(member),
         'email': member['users']?['email'] ?? '',
-        'status': attendanceRecord.status.toString().split('.').last.toUpperCase(),
+        'status': attendanceRecord.status
+            .toString()
+            .split('.')
+            .last
+            .toUpperCase(),
         'check_in_time': attendanceRecord.checkInTime?.toString() ?? '',
         'notes': attendanceRecord.notes ?? '',
       });
     }
 
     // Calculate stats
-    final present = records.where((r) => r.status == AttendanceStatus.present).length;
+    final present = records
+        .where((r) => r.status == AttendanceStatus.present)
+        .length;
     final late = records.where((r) => r.status == AttendanceStatus.late).length;
-    final absent = records.where((r) => r.status == AttendanceStatus.absent).length;
+    final absent = records
+        .where((r) => r.status == AttendanceStatus.absent)
+        .length;
     final notMarked = members.length - records.length;
 
     return {
@@ -815,7 +920,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'title': widget.session.title,
         'date': _formatDate(widget.session.date),
         'start_time': _formatTime(widget.session.startTime),
-        'event_type': widget.session.eventType.toString().split('.').last.toUpperCase(),
+        'event_type': widget.session.eventType
+            .toString()
+            .split('.')
+            .last
+            .toUpperCase(),
         'description': widget.session.description ?? '',
         'grace_minutes': widget.session.graceMinutes,
       },
@@ -825,9 +934,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'present': present,
         'late': late,
         'absent': absent + notMarked,
-        'attendance_rate': members.isNotEmpty 
-          ? ((present + late) / members.length * 100).toStringAsFixed(1)
-          : '0.0',
+        'attendance_rate': members.isNotEmpty
+            ? ((present + late) / members.length * 100).toStringAsFixed(1)
+            : '0.0',
       },
       'exported_at': DateTime.now().toString(),
     };
@@ -836,15 +945,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   void _showExportSuccessDialog(String filePath, String format) {
     Get.dialog(
       AlertDialog(
-        title: const Text('Export Successful'),
+        title: Text(context.tr('attExportSuccessfulTitle')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('$format file has been exported successfully!'),
+            Text('$format ${context.tr('attFileExportedSuccess')}'),
             const SizedBox(height: 10),
             Text(
-              'Location: $filePath',
+              '${context.tr('attLocationPrefix')} $filePath',
               style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
             ),
           ],
@@ -852,7 +961,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('OK'),
+            child: Text(context.tr('attOk')),
           ),
         ],
       ),
@@ -909,14 +1018,19 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   void _openQRScanner() async {
-    final result = await Get.to(() => QRScannerScreen(
-      choirId: widget.session.choirId,
-      sessionId: widget.session.id,
-    ));
-    
+    final result = await Get.to(
+      () => QRScannerScreen(
+        choirId: widget.session.choirId,
+        sessionId: widget.session.id,
+      ),
+    );
+
     if (result == true && mounted) {
       // Reload the attendance data after successful scan
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
       attendanceController.selectSession(widget.session);
     }
   }
@@ -936,12 +1050,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   String _getMemberName(Map<String, dynamic> member) {
-    return member['users']?['full_name'] as String? ?? 'Unknown Member';
+    return member['users']?['full_name'] as String? ??
+        context.tr('attUnknownMember');
   }
 
   String _getMemberRegistration(Map<String, dynamic> member) {
     final registration = member['registration_number'] as String?;
-    return registration?.isNotEmpty == true ? registration! : 'No Registration';
+    return registration?.isNotEmpty == true
+        ? registration!
+        : context.tr('attNoRegistration');
   }
 
   @override

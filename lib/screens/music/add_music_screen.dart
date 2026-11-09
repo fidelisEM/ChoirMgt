@@ -6,12 +6,10 @@ import '../../models/music_model.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/custom_widgets.dart';
 
-class AddMusicScreen extends StatefulWidget { // For editing existing music
+class AddMusicScreen extends StatefulWidget {
+  // For editing existing music
 
-  const AddMusicScreen({
-    super.key,
-    this.music,
-  });
+  const AddMusicScreen({super.key, this.music});
   final MusicModel? music;
 
   @override
@@ -121,9 +119,7 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -458,10 +454,7 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
             ),
             subtitle: const Text(
               'Other users will be able to view this music',
-              style: TextStyle(
-                color: AppColors.gray500,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: AppColors.gray500, fontSize: 12),
             ),
             value: _isPublic,
             onChanged: (value) {
@@ -494,24 +487,26 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
           .toList();
 
       final music = MusicModel(
-        id: widget.music?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id:
+            widget.music?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         title: _titleController.text.trim(),
         artist: _artistController.text.trim(),
-        composer: _composerController.text.trim().isEmpty 
-            ? _artistController.text.trim() 
+        composer: _composerController.text.trim().isEmpty
+            ? _artistController.text.trim()
             : _composerController.text.trim(),
         category: _selectedCategory,
         difficulty: _selectedDifficulty,
         lyrics: _lyricsController.text.trim(),
         musicNotes: _musicNotesController.text.trim(),
-        audioUrl: _audioUrlController.text.trim().isEmpty 
-            ? null 
+        audioUrl: _audioUrlController.text.trim().isEmpty
+            ? null
             : _audioUrlController.text.trim(),
-        videoUrl: _videoUrlController.text.trim().isEmpty 
-            ? null 
+        videoUrl: _videoUrlController.text.trim().isEmpty
+            ? null
             : _videoUrlController.text.trim(),
-        sheetMusicUrl: _sheetMusicUrlController.text.trim().isEmpty 
-            ? null 
+        sheetMusicUrl: _sheetMusicUrlController.text.trim().isEmpty
+            ? null
             : _sheetMusicUrlController.text.trim(),
         tags: tags,
         language: _languageController.text.trim(),
@@ -519,12 +514,15 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
         createdAt: widget.music?.createdAt ?? now,
         updatedAt: now,
         isPublic: _isPublic,
-        sourceWebsite: _sourceWebsiteController.text.trim().isEmpty 
-            ? null 
+        sourceWebsite: _sourceWebsiteController.text.trim().isEmpty
+            ? null
             : _sourceWebsiteController.text.trim(),
       );
 
-      final musicController = Provider.of<MusicController>(context, listen: false);
+      final musicController = Provider.of<MusicController>(
+        context,
+        listen: false,
+      );
       final success = widget.music != null
           ? await musicController.updateMusic(music)
           : await musicController.addMusic(music);
@@ -533,8 +531,8 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
         Get.back();
         Get.snackbar(
           'Success',
-          widget.music != null 
-              ? 'Music updated successfully' 
+          widget.music != null
+              ? 'Music updated successfully'
               : 'Music added successfully',
           backgroundColor: AppColors.success,
           colorText: Colors.white,
@@ -542,8 +540,8 @@ class _AddMusicScreenState extends State<AddMusicScreen> {
       } else {
         Get.snackbar(
           'Error',
-          widget.music != null 
-              ? 'Failed to update music' 
+          widget.music != null
+              ? 'Failed to update music'
               : 'Failed to add music',
           backgroundColor: AppColors.error,
           colorText: Colors.white,

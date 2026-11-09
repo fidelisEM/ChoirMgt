@@ -9,7 +9,6 @@ import '../controllers/member_controller.dart';
 import '../utils/helpers.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  
   const QRScannerScreen({
     super.key,
     required this.choirId,
@@ -24,11 +23,12 @@ class QRScannerScreen extends StatefulWidget {
   State<QRScannerScreen> createState() => _QRScannerScreenState();
 }
 
-class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingObserver {
+class _QRScannerScreenState extends State<QRScannerScreen>
+    with WidgetsBindingObserver {
   MobileScannerController cameraController = MobileScannerController();
   bool isScanning = true;
   bool isProcessing = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -61,7 +61,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
 
   void _onDetect(BarcodeCapture capture) async {
     if (!isScanning || isProcessing) return;
-    
+
     final List<Barcode> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
       final String? code = barcode.rawValue;
@@ -69,13 +69,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
         setState(() {
           isProcessing = true;
         });
-        
+
         await _processQRCode(code);
-        
+
         setState(() {
           isProcessing = false;
         });
-        
+
         break;
       }
     }
@@ -101,7 +101,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
 
       // Find member by registration number
       final member = await _findMemberByRegistrationNumber(registrationNumber);
-      
+
       if (member == null) {
         _showError('Member not found: $registrationNumber');
         return;
@@ -118,33 +118,47 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
       if (widget.onScanComplete != null) {
         widget.onScanComplete!(registrationNumber);
       }
-
     } catch (e) {
       _showError('Error processing QR code: $e');
     }
   }
 
-  Future<Map<String, dynamic>?> _findMemberByRegistrationNumber(String registrationNumber) async {
-    final memberController = Provider.of<MemberController>(context, listen: false);
-    
+  Future<Map<String, dynamic>?> _findMemberByRegistrationNumber(
+    String registrationNumber,
+  ) async {
+    final memberController = Provider.of<MemberController>(
+      context,
+      listen: false,
+    );
+
     // Find member in current members list
     for (final member in memberController.membersWithUserInfo) {
       if (member['registration_number'] == registrationNumber) {
         return member;
       }
     }
-    
+
     return null;
   }
 
-  Future<void> _markAttendance(Map<String, dynamic> member, String sessionId) async {
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+  Future<void> _markAttendance(
+    Map<String, dynamic> member,
+    String sessionId,
+  ) async {
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
     final authController = Provider.of<AuthController>(context, listen: false);
 
     // Check if already marked
-    final existingRecord = attendanceController.getAttendanceRecord(member['id']);
+    final existingRecord = attendanceController.getAttendanceRecord(
+      member['id'],
+    );
     if (existingRecord != null) {
-      _showWarning('Attendance already marked for ${member['users']['full_name']}');
+      _showWarning(
+        'Attendance already marked for ${member['users']['full_name']}',
+      );
       return;
     }
 
@@ -157,15 +171,22 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
       userId: member['user_id'],
       recordedBy: authController.currentUser!.id,
       checkInTime: now,
-      useTimeBasedStatus: true, // This will automatically determine Present/Late/Absent
+      useTimeBasedStatus:
+          true, // This will automatically determine Present/Late/Absent
     );
 
     if (success) {
       // Get the actual recorded status from the attendance controller
-      final recordedRecord = attendanceController.getAttendanceRecord(member['id']);
-      final statusText = recordedRecord?.status.toString().split('.').last.toUpperCase() ?? 'RECORDED';
-      
-      Helpers.showSuccessSnackbar('${member['users']['full_name']} marked as $statusText');
+      final recordedRecord = attendanceController.getAttendanceRecord(
+        member['id'],
+      );
+      final statusText =
+          recordedRecord?.status.toString().split('.').last.toUpperCase() ??
+          'RECORDED';
+
+      Helpers.showSuccessSnackbar(
+        '${member['users']['full_name']} marked as $statusText',
+      );
       Get.back(result: true);
     } else {
       _showError('Failed to mark attendance');
@@ -176,7 +197,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
     final userData = member['users'] ?? {};
     final fullName = userData['full_name'] ?? 'Unknown';
     final registrationNumber = member['registration_number'] ?? '';
-    
+
     Get.dialog(
       AlertDialog(
         title: const Text('Member Found'),
@@ -190,10 +211,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
         ],
       ),
     );
@@ -226,14 +244,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(widget.sessionId != null ? 'Scan for Attendance' : 'Scan QR Code'),
+        title: Text(
+          widget.sessionId != null ? 'Scan for Attendance' : 'Scan QR Code',
+        ),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.flash_on),
-            onPressed: _toggleFlash,
-          ),
+          IconButton(icon: const Icon(Icons.flash_on), onPressed: _toggleFlash),
           IconButton(
             icon: const Icon(Icons.flip_camera_ios),
             onPressed: _switchCamera,
@@ -243,14 +260,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
       body: Stack(
         children: [
           // Camera preview
-          MobileScanner(
-            controller: cameraController,
-            onDetect: _onDetect,
-          ),
-          
+          MobileScanner(controller: cameraController, onDetect: _onDetect),
+
           // Overlay
           _buildScanOverlay(),
-          
+
           // Processing indicator
           if (isProcessing)
             Container(
@@ -297,10 +311,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                 const SizedBox(height: 4),
                 const Text(
                   'Point camera at QR code',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
               ] else ...[
@@ -315,10 +326,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                 ),
                 const Text(
                   'Point camera at any choir member QR code',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -377,7 +385,12 @@ class QRScannerOverlayShape extends ShapeBorder {
       return Path()
         ..moveTo(rect.left, rect.bottom)
         ..lineTo(rect.left, rect.top + borderRadius)
-        ..quadraticBezierTo(rect.left, rect.top, rect.left + borderRadius, rect.top)
+        ..quadraticBezierTo(
+          rect.left,
+          rect.top,
+          rect.left + borderRadius,
+          rect.top,
+        )
         ..lineTo(rect.right, rect.top);
     }
 
@@ -420,16 +433,10 @@ class QRScannerOverlayShape extends ShapeBorder {
     );
 
     canvas
-      ..saveLayer(
-        rect,
-        backgroundPaint,
-      )
+      ..saveLayer(rect, backgroundPaint)
       ..drawRect(rect, backgroundPaint)
       ..drawRRect(
-        RRect.fromRectAndRadius(
-          cutOutRect,
-          Radius.circular(borderRadius),
-        ),
+        RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)),
         boxPaint,
       )
       ..restore();
@@ -438,8 +445,12 @@ class QRScannerOverlayShape extends ShapeBorder {
     final path = Path()
       ..moveTo(cutOutRect.left - borderOffset, cutOutRect.top + mBorderLength)
       ..lineTo(cutOutRect.left - borderOffset, cutOutRect.top + borderRadius)
-      ..quadraticBezierTo(cutOutRect.left - borderOffset, cutOutRect.top - borderOffset,
-          cutOutRect.left + borderRadius, cutOutRect.top - borderOffset)
+      ..quadraticBezierTo(
+        cutOutRect.left - borderOffset,
+        cutOutRect.top - borderOffset,
+        cutOutRect.left + borderRadius,
+        cutOutRect.top - borderOffset,
+      )
       ..lineTo(cutOutRect.left + mBorderLength, cutOutRect.top - borderOffset);
 
     canvas.drawPath(path, borderPaint);
@@ -448,29 +459,56 @@ class QRScannerOverlayShape extends ShapeBorder {
     final path2 = Path()
       ..moveTo(cutOutRect.right - mBorderLength, cutOutRect.top - borderOffset)
       ..lineTo(cutOutRect.right - borderRadius, cutOutRect.top - borderOffset)
-      ..quadraticBezierTo(cutOutRect.right + borderOffset, cutOutRect.top - borderOffset,
-          cutOutRect.right + borderOffset, cutOutRect.top + borderRadius)
+      ..quadraticBezierTo(
+        cutOutRect.right + borderOffset,
+        cutOutRect.top - borderOffset,
+        cutOutRect.right + borderOffset,
+        cutOutRect.top + borderRadius,
+      )
       ..lineTo(cutOutRect.right + borderOffset, cutOutRect.top + mBorderLength);
 
     canvas.drawPath(path2, borderPaint);
 
     // Bottom right corner
     final path3 = Path()
-      ..moveTo(cutOutRect.right + borderOffset, cutOutRect.bottom - mBorderLength)
-      ..lineTo(cutOutRect.right + borderOffset, cutOutRect.bottom - borderRadius)
-      ..quadraticBezierTo(cutOutRect.right + borderOffset, cutOutRect.bottom + borderOffset,
-          cutOutRect.right - borderRadius, cutOutRect.bottom + borderOffset)
-      ..lineTo(cutOutRect.right - mBorderLength, cutOutRect.bottom + borderOffset);
+      ..moveTo(
+        cutOutRect.right + borderOffset,
+        cutOutRect.bottom - mBorderLength,
+      )
+      ..lineTo(
+        cutOutRect.right + borderOffset,
+        cutOutRect.bottom - borderRadius,
+      )
+      ..quadraticBezierTo(
+        cutOutRect.right + borderOffset,
+        cutOutRect.bottom + borderOffset,
+        cutOutRect.right - borderRadius,
+        cutOutRect.bottom + borderOffset,
+      )
+      ..lineTo(
+        cutOutRect.right - mBorderLength,
+        cutOutRect.bottom + borderOffset,
+      );
 
     canvas.drawPath(path3, borderPaint);
 
     // Bottom left corner
     final path4 = Path()
-      ..moveTo(cutOutRect.left + mBorderLength, cutOutRect.bottom + borderOffset)
+      ..moveTo(
+        cutOutRect.left + mBorderLength,
+        cutOutRect.bottom + borderOffset,
+      )
       ..lineTo(cutOutRect.left + borderRadius, cutOutRect.bottom + borderOffset)
-      ..quadraticBezierTo(cutOutRect.left - borderOffset, cutOutRect.bottom + borderOffset,
-          cutOutRect.left - borderOffset, cutOutRect.bottom - borderRadius)
-      ..lineTo(cutOutRect.left - borderOffset, cutOutRect.bottom - mBorderLength);
+      ..quadraticBezierTo(
+        cutOutRect.left - borderOffset,
+        cutOutRect.bottom + borderOffset,
+        cutOutRect.left - borderOffset,
+        cutOutRect.bottom - borderRadius,
+      )
+      ..lineTo(
+        cutOutRect.left - borderOffset,
+        cutOutRect.bottom - mBorderLength,
+      );
 
     canvas.drawPath(path4, borderPaint);
   }

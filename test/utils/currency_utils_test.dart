@@ -7,9 +7,12 @@ void main() {
       expect(CurrencyUtils.formatAmount(1500, 'TZS'), 'TSh 1,500');
     });
 
-    test('formats other currencies with two decimal places when fractional', () {
-      expect(CurrencyUtils.formatAmount(1234.5, 'USD'), '\$ 1,234.50');
-    });
+    test(
+      'formats other currencies with two decimal places when fractional',
+      () {
+        expect(CurrencyUtils.formatAmount(1234.5, 'USD'), '\$ 1,234.50');
+      },
+    );
 
     test('drops decimals for a whole-number amount in a decimal currency', () {
       expect(CurrencyUtils.formatAmount(1000, 'USD'), '\$ 1,000');
@@ -29,13 +32,27 @@ void main() {
       expect(CurrencyUtils.getCurrencySymbol('ZZZ'), 'ZZZ');
     });
 
-    test('getDefaultCurrency is KES', () {
-      expect(CurrencyUtils.getDefaultCurrency(), 'KES');
+    test('getDefaultCurrency is TZS', () {
+      expect(CurrencyUtils.getDefaultCurrency(), 'TZS');
     });
 
     test('getSupportedCurrencies includes all documented currencies', () {
       final supported = CurrencyUtils.getSupportedCurrencies();
-      expect(supported, containsAll(['USD', 'TZS', 'KES', 'UGX', 'RWF', 'EUR', 'GBP', 'ZAR', 'NGN', 'GHS']));
+      expect(
+        supported,
+        containsAll([
+          'USD',
+          'TZS',
+          'KES',
+          'UGX',
+          'RWF',
+          'EUR',
+          'GBP',
+          'ZAR',
+          'NGN',
+          'GHS',
+        ]),
+      );
     });
   });
 
@@ -50,7 +67,11 @@ void main() {
 
     test('round-trips back to (approximately) the original amount', () {
       final converted = CurrencyUtils.convertCurrency(100, 'USD', 'TZS');
-      final roundTripped = CurrencyUtils.convertCurrency(converted, 'TZS', 'USD');
+      final roundTripped = CurrencyUtils.convertCurrency(
+        converted,
+        'TZS',
+        'USD',
+      );
       expect(roundTripped, closeTo(100, 0.0001));
     });
   });

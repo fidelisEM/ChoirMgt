@@ -12,32 +12,33 @@ Future<void> main() async {
   final supabaseUrl = Platform.environment['SUPABASE_URL'];
   final supabaseAnonKey = Platform.environment['SUPABASE_ANON_KEY'];
   if (supabaseUrl == null || supabaseAnonKey == null) {
-    print('❌ Set SUPABASE_URL and SUPABASE_ANON_KEY in the environment before running this script.');
+    print(
+      '❌ Set SUPABASE_URL and SUPABASE_ANON_KEY in the environment before running this script.',
+    );
     exit(1);
   }
 
   // Initialize Supabase
   try {
     print('🔌 Connecting to Supabase...');
-    await Supabase.initialize(
-      url: supabaseUrl,
-      anonKey: supabaseAnonKey,
-    );
+    await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
     print('✅ Connected to Supabase successfully');
   } catch (e) {
     print('❌ Failed to connect to Supabase: $e');
     exit(1);
   }
-  
+
   final service = DatabaseSampleDataService();
-  
+
   try {
     // Check if sample data already exists
     print('🔍 Checking if sample data already exists...');
     final exists = await service.sampleDataExists();
-    
+
     if (exists) {
-      print('⚠️  Sample data already exists. Do you want to clear it first? (y/N)');
+      print(
+        '⚠️  Sample data already exists. Do you want to clear it first? (y/N)',
+      );
       final input = stdin.readLineSync();
       if (input?.toLowerCase() == 'y' || input?.toLowerCase() == 'yes') {
         await service.clearAllSampleData();
@@ -47,7 +48,7 @@ Future<void> main() async {
         exit(0);
       }
     }
-    
+
     print('');
     print('📊 Generating comprehensive database sample data...');
     print('This will create real records in your Supabase database:');
@@ -55,17 +56,21 @@ Future<void> main() async {
     print('   • Choirs table: 5 diverse choirs');
     print('   • Choir_members table: Realistic memberships');
     print('');
-    
+
     await service.generateAllSampleData();
-    
+
     print('');
     print('🎉 Database sample data generation completed successfully!');
     print('');
     print('📊 What was created in your database:');
     print('   • 10 users across different roles:');
     print('     - 1 Admin: admin@choirms.com');
-    print('     - 3 Choir Leaders: michael.conductor@email.com, emily.harmony@email.com, david.music@email.com');
-    print('     - 6 Members: alice.soprano@email.com, james.tenor@email.com, etc.');
+    print(
+      '     - 3 Choir Leaders: michael.conductor@email.com, emily.harmony@email.com, david.music@email.com',
+    );
+    print(
+      '     - 6 Members: alice.soprano@email.com, james.tenor@email.com, etc.',
+    );
     print('   • 5 choirs with realistic data:');
     print('     - St. Mary\'s Cathedral Choir (Traditional)');
     print('     - Harmony Youth Ensemble (Contemporary)');
@@ -89,7 +94,6 @@ Future<void> main() async {
     print('   ✓ Working edit forms with user lookup');
     print('   ✓ Image upload functionality');
     print('');
-    
   } catch (e) {
     print('❌ Error generating sample data: $e');
     print('');

@@ -1,4 +1,5 @@
-class MessageModel { // For threading support
+class MessageModel {
+  // For threading support
 
   MessageModel({
     required this.id,
@@ -27,12 +28,21 @@ class MessageModel { // For threading support
       type: json['type'] ?? 'discussion',
       recipients: List<String>.from(json['recipients'] ?? []),
       readBy: List<String>.from(json['read_by'] ?? []),
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: DateTime.parse(
+        json['created_at'] ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
       isActive: json['is_active'] ?? true,
-      replies: (json['replies'] as List<dynamic>?)
-          ?.map((reply) => MessageReplyModel.fromJson(reply as Map<String, dynamic>))
-          .toList() ?? [],
+      replies:
+          (json['replies'] as List<dynamic>?)
+              ?.map(
+                (reply) =>
+                    MessageReplyModel.fromJson(reply as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
     );
   }
   final String id;
@@ -66,7 +76,7 @@ class MessageModel { // For threading support
       'replies': replies.map((reply) => reply.toJson()).toList(),
     };
   }
-  
+
   // Database-specific JSON for Supabase (excludes replies to avoid circular issues)
   Map<String, dynamic> toDatabaseJson() {
     return {
@@ -113,31 +123,30 @@ class MessageModel { // For threading support
       replies: replies ?? this.replies,
     );
   }
-  
+
   // Helper method to check if message is read by a specific user
   bool isReadByUser(String userId) {
     return readBy.contains(userId);
   }
-  
+
   // Helper method to get unread reply count for a user
   int getUnreadReplyCount(String userId) {
     return replies.where((reply) => !reply.readBy.contains(userId)).length;
   }
-  
+
   // Helper method to check if user can view this message
   bool canUserView(String userId, List<String> userChoirMemberIds) {
     // User can view if:
     // 1. Recipients is empty (all members) OR
     // 2. User is in recipients list OR
     // 3. User is the sender
-    return recipients.isEmpty || 
-           recipients.contains(userId) || 
-           senderId == userId;
+    return recipients.isEmpty ||
+        recipients.contains(userId) ||
+        senderId == userId;
   }
 }
 
 class MessageReplyModel {
-
   MessageReplyModel({
     required this.id,
     required this.messageId,
@@ -161,8 +170,12 @@ class MessageReplyModel {
       content: json['content'] ?? '',
       readBy: List<String>.from(json['read_by'] ?? []),
       isActive: json['is_active'] ?? true,
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: DateTime.parse(
+        json['created_at'] ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
     );
   }
   final String id;
@@ -190,7 +203,7 @@ class MessageReplyModel {
       'updated_at': updatedAt?.toIso8601String(),
     };
   }
-  
+
   // Database-specific JSON for Supabase
   Map<String, dynamic> toDatabaseJson() {
     return {
@@ -203,12 +216,12 @@ class MessageReplyModel {
       'is_active': isActive,
     };
   }
-  
+
   // Helper method to check if reply is read by a specific user
   bool isReadByUser(String userId) {
     return readBy.contains(userId);
   }
-  
+
   // Copy with method for immutable updates
   MessageReplyModel copyWith({
     String? id,

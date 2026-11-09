@@ -12,6 +12,14 @@ class AttendanceService {
 
   final SupabaseClient _supabase = Supabase.instance.client;
   final Uuid _uuid = const Uuid();
+  static final RegExp _uuidPattern = RegExp(
+    r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+  );
+
+  /// uuid columns reject placeholders like '', 'unknown' or 'current-user-id',
+  /// so send null instead of failing the whole write.
+  String? _uuidOrNull(String? value) =>
+      value != null && _uuidPattern.hasMatch(value) ? value : null;
   static const String _attendanceKey = 'attendance_records';
   static const String _sessionsKey = 'attendance_sessions';
 
@@ -20,11 +28,16 @@ class AttendanceService {
       // Try to load from Supabase database first
       final dbRecords = await _loadAttendanceFromDatabase(choirId);
       if (dbRecords.isNotEmpty) {
-        Logger.debug('AttendanceService.getChoirAttendance - Loaded ${dbRecords.length} records from database');
+        Logger.debug(
+          'AttendanceService.getChoirAttendance - Loaded ${dbRecords.length} records from database',
+        );
         return dbRecords;
       }
     } catch (e) {
-      Logger.error('AttendanceService.getChoirAttendance - Error loading from database', e);
+      Logger.error(
+        'AttendanceService.getChoirAttendance - Error loading from database',
+        e,
+      );
       // Fall back to SharedPreferences
     }
 
@@ -32,59 +45,26 @@ class AttendanceService {
     final prefs = await SharedPreferences.getInstance();
     final attendanceJson = prefs.getString('${_attendanceKey}_$choirId');
 
-    Logger.debug('AttendanceService.getChoirAttendance - Looking for key: ${_attendanceKey}_$choirId');
+    Logger.debug(
+      'AttendanceService.getChoirAttendance - Looking for key: ${_attendanceKey}_$choirId',
+    );
 
-    if (attendanceJson == null) {
-      Logger.debug('AttendanceService.getChoirAttendance - No data found, checking for migration');
-
-      // Try to find attendance records for any choir and migrate them
-      final allKeys = prefs.getKeys();
-      final attendanceKeys = allKeys.where((key) => key.startsWith(_attendanceKey)).toList();
-
-      if (attendanceKeys.isNotEmpty) {
-        Logger.debug('AttendanceService.getChoirAttendance - Found ${attendanceKeys.length} attendance keys, checking for migration');
-
-        for (final key in attendanceKeys) {
-          final existingData = prefs.getString(key);
-          if (existingData != null) {
-            try {
-              final List<dynamic> attendanceData = jsonDecode(existingData);
-              final records = attendanceData.map((data) => AttendanceModel.fromJson(data)).toList();
-
-              Logger.debug('AttendanceService.getChoirAttendance - Found ${records.length} attendance records in key: $key');
-
-              if (records.isNotEmpty) {
-                Logger.info('AttendanceService.getChoirAttendance - Migrating ${records.length} attendance records to current choir: $choirId');
-
-                // Update the choir ID in all records
-                final migratedRecords = records.map((record) => record.copyWith(choirId: choirId)).toList();
-
-                // Save under the new choir ID
-                final migratedJson = jsonEncode(migratedRecords.map((r) => r.toJson()).toList());
-                await prefs.setString('${_attendanceKey}_$choirId', migratedJson);
-
-                Logger.info('AttendanceService.getChoirAttendance - Successfully migrated ${migratedRecords.length} attendance records');
-                return migratedRecords;
-              }
-            } catch (e) {
-              Logger.error('AttendanceService.getChoirAttendance - Error parsing attendance from key $key', e);
-            }
-          }
-        }
-      }
-
-      // Return empty list instead of creating sample data
-      return [];
-    }
+    if (attendanceJson == null) return [];
 
     final List<dynamic> attendanceData = jsonDecode(attendanceJson);
-    final records = attendanceData.map((data) => AttendanceModel.fromJson(data)).toList();
-    Logger.debug('AttendanceService.getChoirAttendance - Loaded ${records.length} attendance records');
+    final records = attendanceData
+        .map((data) => AttendanceModel.fromJson(data))
+        .toList();
+    Logger.debug(
+      'AttendanceService.getChoirAttendance - Loaded ${records.length} attendance records',
+    );
     return records;
   }
 
   // Helper method to load attendance from Supabase database
-  Future<List<AttendanceModel>> _loadAttendanceFromDatabase(String choirId) async {
+  Future<List<AttendanceModel>> _loadAttendanceFromDatabase(
+    String choirId,
+  ) async {
     // First get sessions for the choir
     final sessionsResponse = await _supabase
         .from('attendance_sessions')
@@ -130,7 +110,9 @@ class AttendanceService {
           orElse: () => AttendanceStatus.absent,
         ),
         recordedBy: record['recorded_by'] ?? '',
-        recordedAt: DateTime.parse(record['recorded_at'] ?? DateTime.now().toIso8601String()),
+        recordedAt: DateTime.parse(
+          record['recorded_at'] ?? DateTime.now().toIso8601String(),
+        ),
         notes: record['notes'],
       );
     }).toList();
@@ -146,7 +128,7 @@ class AttendanceService {
     return allAttendance.where((attendance) {
       final eventDate = attendance.eventDate;
       return eventDate.isAfter(fromDate.subtract(const Duration(days: 1))) &&
-             eventDate.isBefore(toDate.add(const Duration(days: 1)));
+          eventDate.isBefore(toDate.add(const Duration(days: 1)));
     }).toList();
   }
 
@@ -162,8 +144,11 @@ class AttendanceService {
         ? attendanceList.first.sessionId
         : _uuid.v4();
 
-    Logger.debug('AttendanceService - Recording ${attendanceList.length} records for session $sessionId in choir $choirId');
+    Logger.debug(
+      'AttendanceService - Recording ${attendanceList.length} records for session $sessionId in choir $choirId',
+    );
 
+    var failedRecords = 0;
     try {
       // Save to Supabase database
       for (final attendance in attendanceList) {
@@ -171,24 +156,36 @@ class AttendanceService {
           'id': attendance.id.isNotEmpty ? attendance.id : _uuid.v4(),
           'session_id': sessionId,
           'member_id': attendance.memberId,
-          'user_id': attendance.userId,
+          'user_id': _uuidOrNull(attendance.userId),
           'status': attendance.status.toString().split('.').last,
-          'check_in_time': attendance.status == AttendanceStatus.present || attendance.status == AttendanceStatus.late
+          'check_in_time':
+              attendance.status == AttendanceStatus.present ||
+                  attendance.status == AttendanceStatus.late
               ? attendance.recordedAt.toIso8601String()
               : null,
           'notes': attendance.notes,
           'recorded_at': attendance.recordedAt.toIso8601String(),
-          'recorded_by': attendance.recordedBy,
+          'recorded_by': _uuidOrNull(attendance.recordedBy),
         };
 
         // Insert or update attendance record
-        await _supabase
-            .from('attendance_records')
-            .upsert(attendanceRecord);
+        try {
+          await _supabase
+              .from('attendance_records')
+              .upsert(attendanceRecord, onConflict: 'session_id,member_id');
+        } catch (e) {
+          // Keep going: one bad row must not drop the rest of the session.
+          failedRecords++;
+          Logger.error(
+            'AttendanceService - Error saving record for member ${attendance.memberId}',
+            e,
+          );
+        }
       }
 
-      Logger.info('AttendanceService - Successfully saved ${attendanceList.length} records to database');
-
+      Logger.info(
+        'AttendanceService - Successfully saved ${attendanceList.length} records to database',
+      );
     } catch (e) {
       Logger.error('AttendanceService - Error saving to database', e);
       // Continue with SharedPreferences fallback
@@ -196,44 +193,74 @@ class AttendanceService {
 
     // Also save to SharedPreferences for backward compatibility
     final existingAttendance = await getChoirAttendance(choirId);
-    Logger.debug('AttendanceService - Found ${existingAttendance.length} existing attendance records');
+    Logger.debug(
+      'AttendanceService - Found ${existingAttendance.length} existing attendance records',
+    );
 
     // Remove any existing records for this session to avoid duplicates
     final beforeRemoval = existingAttendance.length;
-    existingAttendance.removeWhere((existing) => existing.sessionId == sessionId);
-    Logger.debug('AttendanceService - Removed ${beforeRemoval - existingAttendance.length} duplicate records for session $sessionId');
+    existingAttendance.removeWhere(
+      (existing) => existing.sessionId == sessionId,
+    );
+    Logger.debug(
+      'AttendanceService - Removed ${beforeRemoval - existingAttendance.length} duplicate records for session $sessionId',
+    );
 
     // Ensure all records have the same session ID and unique individual IDs
-    final updatedAttendance = attendanceList.map((a) =>
-      a.copyWith(
-        sessionId: sessionId,
-        id: a.id.isNotEmpty ? a.id : _uuid.v4()
-      )
-    ).toList();
+    final updatedAttendance = attendanceList
+        .map(
+          (a) => a.copyWith(
+            sessionId: sessionId,
+            id: a.id.isNotEmpty ? a.id : _uuid.v4(),
+          ),
+        )
+        .toList();
 
     existingAttendance.addAll(updatedAttendance);
-    Logger.debug('AttendanceService - Total records after adding new ones: ${existingAttendance.length}');
+    Logger.debug(
+      'AttendanceService - Total records after adding new ones: ${existingAttendance.length}',
+    );
 
     final prefs = await SharedPreferences.getInstance();
-    final attendanceJson = jsonEncode(existingAttendance.map((a) => a.toJson()).toList());
+    final attendanceJson = jsonEncode(
+      existingAttendance.map((a) => a.toJson()).toList(),
+    );
     await prefs.setString('${_attendanceKey}_$choirId', attendanceJson);
 
-    Logger.debug('AttendanceService - Successfully saved attendance data to SharedPreferences');
+    Logger.debug(
+      'AttendanceService - Successfully saved attendance data to SharedPreferences',
+    );
+
+    // The local copy above keeps the data, but the caller must not be told the
+    // save succeeded when the server rejected some of it.
+    if (failedRecords > 0) {
+      throw Exception(
+        '$failedRecords of ${attendanceList.length} attendance records could not be saved to the server',
+      );
+    }
     return sessionId;
   }
 
-  Future<bool> updateSessionAttendance(String choirId, String sessionId, List<AttendanceModel> updatedRecords) async {
+  Future<bool> updateSessionAttendance(
+    String choirId,
+    String sessionId,
+    List<AttendanceModel> updatedRecords,
+  ) async {
     try {
       final existingAttendance = await getChoirAttendance(choirId);
 
       // Remove old records for this session
-      final filteredAttendance = existingAttendance.where((a) => a.sessionId != sessionId).toList();
+      final filteredAttendance = existingAttendance
+          .where((a) => a.sessionId != sessionId)
+          .toList();
 
       // Add updated records
       filteredAttendance.addAll(updatedRecords);
 
       final prefs = await SharedPreferences.getInstance();
-      final attendanceJson = jsonEncode(filteredAttendance.map((a) => a.toJson()).toList());
+      final attendanceJson = jsonEncode(
+        filteredAttendance.map((a) => a.toJson()).toList(),
+      );
       await prefs.setString('${_attendanceKey}_$choirId', attendanceJson);
 
       return true;
@@ -244,10 +271,14 @@ class AttendanceService {
 
   Future<bool> deleteAttendanceSession(String sessionId, String choirId) async {
     final attendance = await getChoirAttendance(choirId);
-    final updatedAttendance = attendance.where((a) => a.sessionId != sessionId).toList();
+    final updatedAttendance = attendance
+        .where((a) => a.sessionId != sessionId)
+        .toList();
 
     final prefs = await SharedPreferences.getInstance();
-    final attendanceJson = jsonEncode(updatedAttendance.map((a) => a.toJson()).toList());
+    final attendanceJson = jsonEncode(
+      updatedAttendance.map((a) => a.toJson()).toList(),
+    );
     await prefs.setString('${_attendanceKey}_$choirId', attendanceJson);
 
     return true;
@@ -281,100 +312,117 @@ class AttendanceService {
     }
 
     final totalRecords = attendance.length;
-    final presentRecords = attendance.where((a) => a.status == AttendanceStatus.present).length;
-    final lateRecords = attendance.where((a) => a.status == AttendanceStatus.late).length;
-    final absentRecords = attendance.where((a) => a.status == AttendanceStatus.absent).length;
+    final presentRecords = attendance
+        .where((a) => a.status == AttendanceStatus.present)
+        .length;
+    final lateRecords = attendance
+        .where((a) => a.status == AttendanceStatus.late)
+        .length;
+    final absentRecords = attendance
+        .where((a) => a.status == AttendanceStatus.absent)
+        .length;
 
     // Recent attendance (last 30 days)
     final recentDate = DateTime.now().subtract(const Duration(days: 30));
-    final recentAttendance = attendance.where((a) => a.eventDate.isAfter(recentDate)).toList();
-    final recentPresent = recentAttendance.where((a) => a.status == AttendanceStatus.present).length;
+    final recentAttendance = attendance
+        .where((a) => a.eventDate.isAfter(recentDate))
+        .toList();
+    final recentPresent = recentAttendance
+        .where((a) => a.status == AttendanceStatus.present)
+        .length;
 
     // Get unique session count
     final uniqueSessions = attendance.map((a) => a.sessionId).toSet().length;
 
     return {
-      'overall_percentage': totalRecords > 0 ? (presentRecords / totalRecords) * 100 : 0.0,
-      'recent_percentage': recentAttendance.isNotEmpty ? (recentPresent / recentAttendance.length) * 100 : 0.0,
+      'overall_percentage': totalRecords > 0
+          ? (presentRecords / totalRecords) * 100
+          : 0.0,
+      'recent_percentage': recentAttendance.isNotEmpty
+          ? (recentPresent / recentAttendance.length) * 100
+          : 0.0,
       'total_sessions': uniqueSessions.toDouble(),
       'present_count': presentRecords.toDouble(),
       'late_count': lateRecords.toDouble(),
       'absent_count': absentRecords.toDouble(),
-      'late_percentage': totalRecords > 0 ? (lateRecords / totalRecords) * 100 : 0.0,
-      'absent_percentage': totalRecords > 0 ? (absentRecords / totalRecords) * 100 : 0.0,
+      'late_percentage': totalRecords > 0
+          ? (lateRecords / totalRecords) * 100
+          : 0.0,
+      'absent_percentage': totalRecords > 0
+          ? (absentRecords / totalRecords) * 100
+          : 0.0,
     };
   }
 
   // Session Management
+  //
+  // Sessions are read from Supabase first so they are the same on every device
+  // and browser; SharedPreferences is a cache and an offline fallback. Newest
+  // first, so callers can treat `.first` as the latest session.
   Future<List<AttendanceSessionModel>> getSessions(String choirId) async {
     final prefs = await SharedPreferences.getInstance();
-    final sessionsJson = prefs.getString('${_sessionsKey}_$choirId');
+    final cacheKey = '${_sessionsKey}_$choirId';
 
-    Logger.debug('AttendanceService.getSessions - Looking for key: ${_sessionsKey}_$choirId');
-    Logger.debug('AttendanceService.getSessions - Found data: ${sessionsJson != null ? 'YES' : 'NO'}');
+    try {
+      final rows = await _supabase
+          .from('attendance_sessions')
+          .select()
+          .eq('choir_id', choirId)
+          .order('created_at', ascending: false);
 
-    if (sessionsJson == null) {
-      // Debug: Show all keys in SharedPreferences
-      final allKeys = prefs.getKeys();
-      Logger.debug('AttendanceService.getSessions - All keys in SharedPreferences: $allKeys');
-
-      // Try to find sessions for any choir and migrate them
-      final sessionKeys = allKeys.where((key) => key.startsWith(_sessionsKey)).toList();
-
-      if (sessionKeys.isNotEmpty) {
-        Logger.debug('AttendanceService.getSessions - Found ${sessionKeys.length} session keys, checking for migration');
-
-        for (final key in sessionKeys) {
-          final existingSessions = prefs.getString(key);
-          if (existingSessions != null) {
-            try {
-              final List<dynamic> existingData = jsonDecode(existingSessions);
-              final sessions = existingData.map((data) => AttendanceSessionModel.fromJson(data)).toList();
-
-              Logger.debug('AttendanceService.getSessions - Found ${sessions.length} sessions in key: $key');
-
-              // Check if any of these sessions should belong to the current choir
-              // For now, let's migrate the first set of sessions we find
-              if (sessions.isNotEmpty) {
-                Logger.info('AttendanceService.getSessions - Migrating ${sessions.length} sessions to current choir: $choirId');
-
-                // Update the choir ID in all sessions
-                final migratedSessions = sessions.map((session) => AttendanceSessionModel(
-                  id: session.id,
-                  choirId: choirId, // Update to current choir ID
-                  leaderId: session.leaderId,
-                  date: session.date,
-                  startTime: session.startTime,
-                  endTime: session.endTime,
-                  eventType: session.eventType,
-                  title: session.title,
-                  description: session.description,
-                  graceMinutes: session.graceMinutes,
-                  isActive: session.isActive,
-                  createdAt: session.createdAt,
-                )).toList();
-
-                // Save under the new choir ID
-                final migratedJson = jsonEncode(migratedSessions.map((s) => s.toJson()).toList());
-                await prefs.setString('${_sessionsKey}_$choirId', migratedJson);
-
-                Logger.info('AttendanceService.getSessions - Successfully migrated ${migratedSessions.length} sessions');
-                return migratedSessions;
-              }
-            } catch (e) {
-              Logger.error('AttendanceService.getSessions - Error parsing sessions from key $key', e);
-            }
-          }
-        }
+      if (rows.isNotEmpty) {
+        final sessions = rows
+            .map<AttendanceSessionModel>(_sessionFromRow)
+            .toList();
+        await prefs.setString(
+          cacheKey,
+          jsonEncode(sessions.map((s) => s.toJson()).toList()),
+        );
+        Logger.debug(
+          'AttendanceService.getSessions - Loaded ${sessions.length} sessions from database',
+        );
+        return sessions;
       }
-
-      return [];
+    } catch (e) {
+      Logger.error(
+        'AttendanceService.getSessions - Error loading from database',
+        e,
+      );
     }
 
+    final sessionsJson = prefs.getString(cacheKey);
+    if (sessionsJson == null) return [];
+
     final List<dynamic> sessionsData = jsonDecode(sessionsJson);
-    final sessions = sessionsData.map((data) => AttendanceSessionModel.fromJson(data)).toList();
-    Logger.debug('AttendanceService.getSessions - Loaded ${sessions.length} sessions');
+    final sessions =
+        sessionsData
+            .map((data) => AttendanceSessionModel.fromJson(data))
+            .toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    Logger.debug(
+      'AttendanceService.getSessions - Loaded ${sessions.length} sessions from local cache',
+    );
     return sessions;
+  }
+
+  AttendanceSessionModel _sessionFromRow(Map<String, dynamic> row) {
+    return AttendanceSessionModel(
+      id: row['id'] ?? '',
+      choirId: row['choir_id'] ?? '',
+      leaderId: row['leader_id'] ?? '',
+      date: DateTime.tryParse(row['date'] ?? '') ?? DateTime.now(),
+      startTime: DateTime.tryParse(row['start_time'] ?? '') ?? DateTime.now(),
+      endTime: DateTime.tryParse(row['end_time'] ?? ''),
+      eventType: EventType.values.firstWhere(
+        (type) => type.toString().split('.').last == row['event_type'],
+        orElse: () => EventType.other,
+      ),
+      title: row['title'] ?? '',
+      description: row['description'],
+      graceMinutes: row['grace_minutes'] ?? 15,
+      isActive: row['is_active'] ?? true,
+      createdAt: DateTime.tryParse(row['created_at'] ?? '') ?? DateTime.now(),
+    );
   }
 
   Future<AttendanceSessionModel> createSession({
@@ -405,7 +453,7 @@ class AttendanceService {
       final sessionRecord = {
         'id': session.id,
         'choir_id': session.choirId,
-        'leader_id': session.leaderId,
+        'leader_id': _uuidOrNull(session.leaderId),
         'date': session.date.toIso8601String().split('T')[0], // Date only
         'start_time': session.startTime.toIso8601String(),
         'end_time': session.endTime?.toIso8601String(),
@@ -417,33 +465,46 @@ class AttendanceService {
         'created_at': session.createdAt.toIso8601String(),
       };
 
-      await _supabase
-          .from('attendance_sessions')
-          .upsert(sessionRecord);
+      await _supabase.from('attendance_sessions').upsert(sessionRecord);
 
-      Logger.info('AttendanceService.createSession - Successfully saved session to database');
-
+      Logger.info(
+        'AttendanceService.createSession - Successfully saved session to database',
+      );
     } catch (e) {
-      Logger.error('AttendanceService.createSession - Error saving session to database', e);
+      Logger.error(
+        'AttendanceService.createSession - Error saving session to database',
+        e,
+      );
       // Continue with SharedPreferences fallback
     }
 
     // Also save to SharedPreferences for backward compatibility
+    // getSessions already includes the session if the database save worked.
     final sessions = await getSessions(choirId);
-    sessions.add(session);
+    if (!sessions.any((s) => s.id == session.id)) {
+      sessions.insert(0, session);
+    }
 
-    Logger.debug('AttendanceService.createSession - Creating session ${session.id} for choir $choirId');
-    Logger.debug('AttendanceService.createSession - Total sessions after adding: ${sessions.length}');
+    Logger.debug(
+      'AttendanceService.createSession - Creating session ${session.id} for choir $choirId',
+    );
+    Logger.debug(
+      'AttendanceService.createSession - Total sessions after adding: ${sessions.length}',
+    );
 
     final prefs = await SharedPreferences.getInstance();
     final sessionsJson = jsonEncode(sessions.map((s) => s.toJson()).toList());
     await prefs.setString('${_sessionsKey}_$choirId', sessionsJson);
 
-    Logger.debug('AttendanceService.createSession - Successfully saved ${sessions.length} sessions to key: ${_sessionsKey}_$choirId');
+    Logger.debug(
+      'AttendanceService.createSession - Successfully saved ${sessions.length} sessions to key: ${_sessionsKey}_$choirId',
+    );
     return session;
   }
 
-  Future<List<AttendanceRecordModel>> getSessionAttendance(String sessionId) async {
+  Future<List<AttendanceRecordModel>> getSessionAttendance(
+    String sessionId,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final recordsJson = prefs.getString('attendance_records_$sessionId');
 
@@ -452,22 +513,33 @@ class AttendanceService {
     }
 
     final List<dynamic> recordsData = jsonDecode(recordsJson);
-    return recordsData.map((data) => AttendanceRecordModel.fromJson(data)).toList();
+    return recordsData
+        .map((data) => AttendanceRecordModel.fromJson(data))
+        .toList();
   }
 
-  Future<bool> saveSessionAttendance(String sessionId, List<AttendanceRecordModel> records) async {
+  Future<bool> saveSessionAttendance(
+    String sessionId,
+    List<AttendanceRecordModel> records,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final recordsJson = jsonEncode(records.map((r) => r.toJson()).toList());
     await prefs.setString('attendance_records_$sessionId', recordsJson);
     return true;
   }
 
-  Future<Map<String, int>> getAttendanceCountsBySession(String sessionId) async {
+  Future<Map<String, int>> getAttendanceCountsBySession(
+    String sessionId,
+  ) async {
     final records = await getSessionAttendance(sessionId);
 
-    final present = records.where((r) => r.status == AttendanceStatus.present).length;
+    final present = records
+        .where((r) => r.status == AttendanceStatus.present)
+        .length;
     final late = records.where((r) => r.status == AttendanceStatus.late).length;
-    final absent = records.where((r) => r.status == AttendanceStatus.absent).length;
+    final absent = records
+        .where((r) => r.status == AttendanceStatus.absent)
+        .length;
 
     return {
       'present': present,
@@ -488,15 +560,20 @@ class AttendanceService {
 
     // Apply filters
     if (fromDate != null) {
-      attendance = attendance.where((a) =>
-        a.eventDate.isAfter(fromDate.subtract(const Duration(days: 1)))
-      ).toList();
+      attendance = attendance
+          .where(
+            (a) =>
+                a.eventDate.isAfter(fromDate.subtract(const Duration(days: 1))),
+          )
+          .toList();
     }
 
     if (toDate != null) {
-      attendance = attendance.where((a) =>
-        a.eventDate.isBefore(toDate.add(const Duration(days: 1)))
-      ).toList();
+      attendance = attendance
+          .where(
+            (a) => a.eventDate.isBefore(toDate.add(const Duration(days: 1))),
+          )
+          .toList();
     }
 
     if (statusFilter != null) {
@@ -504,10 +581,13 @@ class AttendanceService {
     }
 
     if (memberFilter != null && memberFilter.isNotEmpty) {
-      attendance = attendance.where((a) =>
-        a.userId.toLowerCase().contains(memberFilter.toLowerCase()) ||
-        a.memberId.toLowerCase().contains(memberFilter.toLowerCase())
-      ).toList();
+      attendance = attendance
+          .where(
+            (a) =>
+                a.userId.toLowerCase().contains(memberFilter.toLowerCase()) ||
+                a.memberId.toLowerCase().contains(memberFilter.toLowerCase()),
+          )
+          .toList();
     }
 
     // Sort by date (most recent first)
@@ -518,8 +598,8 @@ class AttendanceService {
 
   Future<void> clearAllAttendance() async {
     final prefs = await SharedPreferences.getInstance();
-    final keys = prefs.getKeys().where((key) =>
-      key.startsWith(_attendanceKey) || key.startsWith(_sessionsKey)
+    final keys = prefs.getKeys().where(
+      (key) => key.startsWith(_attendanceKey) || key.startsWith(_sessionsKey),
     );
 
     for (final key in keys) {
@@ -536,7 +616,9 @@ class AttendanceService {
     Logger.debug('Total keys: ${allKeys.length}');
 
     for (final key in allKeys) {
-      if (key.startsWith(_attendanceKey) || key.startsWith(_sessionsKey) || key.contains('selected_choir')) {
+      if (key.startsWith(_attendanceKey) ||
+          key.startsWith(_sessionsKey) ||
+          key.contains('selected_choir')) {
         final value = prefs.getString(key);
         Logger.debug('Key: $key');
         Logger.debug('Value length: ${value?.length ?? 0}');

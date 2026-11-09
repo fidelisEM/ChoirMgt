@@ -21,25 +21,27 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
   Uint8List? _webImageBytes;
-  
+
   // Country search functionality
-  final TextEditingController _countrySearchController = TextEditingController();
+  final TextEditingController _countrySearchController =
+      TextEditingController();
   String? _selectedCountry;
   bool _isCountryDropdownOpen = false;
-  
+
   // Diocese search functionality
-  final TextEditingController _dioceseSearchController = TextEditingController();
+  final TextEditingController _dioceseSearchController =
+      TextEditingController();
   String? _selectedDiocese;
   bool _isCustomDiocese = false;
-  final TextEditingController _customDioceseController = TextEditingController();
-  
+  final TextEditingController _customDioceseController =
+      TextEditingController();
+
   // Parish search functionality
   final TextEditingController _parishSearchController = TextEditingController();
   String? _selectedParish;
   bool _isParishDropdownOpen = false;
   bool _isCustomParish = false;
   final TextEditingController _customParishController = TextEditingController();
-
 
   // Countries list with flags
   static const List<Map<String, String>> _countries = [
@@ -254,7 +256,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Archdiocese of Philadelphia', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Portland', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Saint Louis', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Saint Paul and Minneapolis', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Saint Paul and Minneapolis',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of San Antonio', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of San Francisco', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Santa Fe', 'type': 'Archdiocese'},
@@ -364,7 +369,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Archdiocese of Birmingham', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Cardiff', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Liverpool', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Saint Andrews and Edinburgh', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Saint Andrews and Edinburgh',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Southwark', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Westminster', 'type': 'Archdiocese'},
       {'name': 'Diocese of Aberdeen', 'type': 'Diocese'},
@@ -698,7 +706,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Archdiocese of Rosario', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Salta', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of San Juan de Cuyo', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Santa Fe de la Vera Cruz', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Santa Fe de la Vera Cruz',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Tucumán', 'type': 'Archdiocese'},
       {'name': 'Diocese of Catamarca', 'type': 'Diocese'},
       {'name': 'Diocese of Formosa', 'type': 'Diocese'},
@@ -788,7 +799,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Villarrica', 'type': 'Diocese'},
     ],
     'Italy': [
-      {'name': 'Archdiocese of Amalfi-Cava de\' Tirreni', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Amalfi-Cava de\' Tirreni',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Ancona-Osimo', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Bari-Bitonto', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Bologna', 'type': 'Archdiocese'},
@@ -798,7 +812,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Archdiocese of Milano', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Napoli', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Palermo', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Perugia-Città della Pieve', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Perugia-Città della Pieve',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Pisa', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Roma', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Torino', 'type': 'Archdiocese'},
@@ -973,7 +990,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Archdiocese of Madras and Mylapore', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Madurai', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Nagpur', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Pondicherry and Cuddalore', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Pondicherry and Cuddalore',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Ranchi', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Raipur', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Shillong', 'type': 'Archdiocese'},
@@ -1144,7 +1164,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Dromore', 'type': 'Diocese'},
       {'name': 'Diocese of Elphin', 'type': 'Diocese'},
       {'name': 'Diocese of Ferns', 'type': 'Diocese'},
-      {'name': 'Diocese of Galway, Kilmacduagh and Kilfenora', 'type': 'Diocese'},
+      {
+        'name': 'Diocese of Galway, Kilmacduagh and Kilfenora',
+        'type': 'Diocese',
+      },
       {'name': 'Diocese of Kerry', 'type': 'Diocese'},
       {'name': 'Diocese of Kildare and Leighlin', 'type': 'Diocese'},
       {'name': 'Diocese of Killala', 'type': 'Diocese'},
@@ -1255,14 +1278,20 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Coronel Oviedo', 'type': 'Diocese'},
       {'name': 'Diocese of Encarnación', 'type': 'Diocese'},
       {'name': 'Diocese of Pedro Juan Caballero', 'type': 'Diocese'},
-      {'name': 'Diocese of San Juan Bautista de las Misiones', 'type': 'Diocese'},
+      {
+        'name': 'Diocese of San Juan Bautista de las Misiones',
+        'type': 'Diocese',
+      },
       {'name': 'Diocese of San Lorenzo', 'type': 'Diocese'},
       {'name': 'Diocese of Villarrica del Espíritu Santo', 'type': 'Diocese'},
       {'name': 'Vicariate Apostolic of Chaco Paraguayo', 'type': 'Diocese'},
     ],
     'Guatemala': [
       {'name': 'Archdiocese of Guatemala', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Los Altos Quetzaltenango-Totonicapán', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Los Altos Quetzaltenango-Totonicapán',
+        'type': 'Archdiocese',
+      },
       {'name': 'Diocese of Cobán', 'type': 'Diocese'},
       {'name': 'Diocese of Escuintla', 'type': 'Diocese'},
       {'name': 'Diocese of Huehuetenango', 'type': 'Diocese'},
@@ -1272,7 +1301,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Santa Rosa de Lima', 'type': 'Diocese'},
       {'name': 'Diocese of Sololá-Chimaltenango', 'type': 'Diocese'},
       {'name': 'Diocese of Verapaz', 'type': 'Diocese'},
-      {'name': 'Diocese of Zacapa y Santo Cristo de Esquipulas', 'type': 'Diocese'},
+      {
+        'name': 'Diocese of Zacapa y Santo Cristo de Esquipulas',
+        'type': 'Diocese',
+      },
       {'name': 'Vicariate Apostolic of El Petén', 'type': 'Diocese'},
     ],
     'Costa Rica': [
@@ -1294,7 +1326,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     ],
     'Cuba': [
       {'name': 'Archdiocese of Camagüey', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of San Cristóbal de la Habana', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of San Cristóbal de la Habana',
+        'type': 'Archdiocese',
+      },
       {'name': 'Archdiocese of Santiago de Cuba', 'type': 'Archdiocese'},
       {'name': 'Diocese of Bayamo-Manzanillo', 'type': 'Diocese'},
       {'name': 'Diocese of Cienfuegos', 'type': 'Diocese'},
@@ -1305,12 +1340,18 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     ],
     'Dominican Republic': [
       {'name': 'Archdiocese of Santo Domingo', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of Santiago de los Caballeros', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of Santiago de los Caballeros',
+        'type': 'Archdiocese',
+      },
       {'name': 'Diocese of Baní', 'type': 'Diocese'},
       {'name': 'Diocese of Barahona', 'type': 'Diocese'},
       {'name': 'Diocese of La Vega', 'type': 'Diocese'},
       {'name': 'Diocese of Mao-Monte Cristi', 'type': 'Diocese'},
-      {'name': 'Diocese of Nuestra Señora de la Altagracia en Higüey', 'type': 'Diocese'},
+      {
+        'name': 'Diocese of Nuestra Señora de la Altagracia en Higüey',
+        'type': 'Diocese',
+      },
       {'name': 'Diocese of Puerto Plata', 'type': 'Diocese'},
       {'name': 'Diocese of San Francisco de Macorís', 'type': 'Diocese'},
       {'name': 'Diocese of San Juan de la Maguana', 'type': 'Diocese'},
@@ -1755,21 +1796,39 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Tainan', 'type': 'Diocese'},
     ],
     'Mongolia': [
-      {'name': 'Apostolic Prefecture of Ulaanbaatar', 'type': 'Apostolic Prefecture'},
+      {
+        'name': 'Apostolic Prefecture of Ulaanbaatar',
+        'type': 'Apostolic Prefecture',
+      },
     ],
     'North Korea': [
       {'name': 'Diocese of Pyongyang', 'type': 'Diocese'},
       {'name': 'Diocese of Hamhung', 'type': 'Diocese'},
     ],
     'Laos': [
-      {'name': 'Apostolic Vicariate of Vientiane', 'type': 'Apostolic Vicariate'},
-      {'name': 'Apostolic Vicariate of Savannakhet', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Vientiane',
+        'type': 'Apostolic Vicariate',
+      },
+      {
+        'name': 'Apostolic Vicariate of Savannakhet',
+        'type': 'Apostolic Vicariate',
+      },
       {'name': 'Apostolic Vicariate of Pakse', 'type': 'Apostolic Vicariate'},
-      {'name': 'Apostolic Vicariate of Luang Prabang', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Luang Prabang',
+        'type': 'Apostolic Vicariate',
+      },
     ],
     'Cambodia': [
-      {'name': 'Apostolic Vicariate of Phnom Penh', 'type': 'Apostolic Vicariate'},
-      {'name': 'Apostolic Prefecture of Battambang', 'type': 'Apostolic Prefecture'},
+      {
+        'name': 'Apostolic Vicariate of Phnom Penh',
+        'type': 'Apostolic Vicariate',
+      },
+      {
+        'name': 'Apostolic Prefecture of Battambang',
+        'type': 'Apostolic Prefecture',
+      },
     ],
     'Singapore': [
       {'name': 'Archdiocese of Singapore', 'type': 'Archdiocese'},
@@ -1786,14 +1845,20 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Miri', 'type': 'Diocese'},
     ],
     'Brunei': [
-      {'name': 'Apostolic Vicariate of Brunei Darussalam', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Brunei Darussalam',
+        'type': 'Apostolic Vicariate',
+      },
     ],
     'Jordan': [
       {'name': 'Apostolic Vicariate of Jordan', 'type': 'Apostolic Vicariate'},
     ],
     'Israel': [
       {'name': 'Latin Patriarchate of Jerusalem', 'type': 'Patriarchate'},
-      {'name': 'Patriarchal Exarchate for Catholics of Byzantine Rite', 'type': 'Exarchate'},
+      {
+        'name': 'Patriarchal Exarchate for Catholics of Byzantine Rite',
+        'type': 'Exarchate',
+      },
     ],
     'Palestine': [
       {'name': 'Latin Patriarchate of Jerusalem', 'type': 'Patriarchate'},
@@ -1823,16 +1888,28 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     ],
     'Turkey': [
       {'name': 'Archdiocese of Istanbul', 'type': 'Archdiocese'},
-      {'name': 'Apostolic Vicariate of Anatolia', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Anatolia',
+        'type': 'Apostolic Vicariate',
+      },
       {'name': 'Diocese of Iskenderun', 'type': 'Diocese'},
     ],
     'Egypt': [
-      {'name': 'Apostolic Vicariate of Alexandria', 'type': 'Apostolic Vicariate'},
-      {'name': 'Apostolic Vicariate of Heliopolis', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Alexandria',
+        'type': 'Apostolic Vicariate',
+      },
+      {
+        'name': 'Apostolic Vicariate of Heliopolis',
+        'type': 'Apostolic Vicariate',
+      },
     ],
     'Libya': [
       {'name': 'Apostolic Vicariate of Tripoli', 'type': 'Apostolic Vicariate'},
-      {'name': 'Apostolic Vicariate of Benghazi', 'type': 'Apostolic Vicariate'},
+      {
+        'name': 'Apostolic Vicariate of Benghazi',
+        'type': 'Apostolic Vicariate',
+      },
     ],
     'Tunisia': [
       {'name': 'Archdiocese of Tunis', 'type': 'Archdiocese'},
@@ -2183,7 +2260,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       {'name': 'Diocese of Reykjavík', 'type': 'Diocese'},
     ],
     'Estonia': [
-      {'name': 'Apostolic Administration of Estonia', 'type': 'Apostolic Administration'},
+      {
+        'name': 'Apostolic Administration of Estonia',
+        'type': 'Apostolic Administration',
+      },
     ],
     'Latvia': [
       {'name': 'Archdiocese of Riga', 'type': 'Archdiocese'},
@@ -2234,7 +2314,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     ],
     'Moldova': [
       {'name': 'Diocese of Chișinău', 'type': 'Diocese'},
-    ]
+    ],
   };
 
   Future<void> _pickImage() async {
@@ -2245,7 +2325,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
         maxHeight: 1000,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
         if (kIsWeb) {
           final bytes = await image.readAsBytes();
@@ -2262,9 +2342,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error picking image: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
       }
     }
   }
@@ -2277,7 +2357,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
         maxHeight: 1000,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
         if (kIsWeb) {
           final bytes = await image.readAsBytes();
@@ -2294,9 +2374,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error taking photo: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error taking photo: $e')));
       }
     }
   }
@@ -2346,9 +2426,15 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
   void _createChoir() async {
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final formData = _formKey.currentState!.value;
-      final authController = Provider.of<AuthController>(context, listen: false);
-      final choirController = Provider.of<ChoirController>(context, listen: false);
-      
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+      final choirController = Provider.of<ChoirController>(
+        context,
+        listen: false,
+      );
+
       // Upload image if selected
       String? imageUrl;
       if (_selectedImage != null) {
@@ -2364,7 +2450,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       } else {
         parishName = formData['parish'] as String? ?? '';
       }
-      
+
       // Get diocese name from either form field or custom controller
       String dioceseName;
       if (_isCustomDiocese) {
@@ -2427,7 +2513,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: _selectedImage == null ? Theme.of(context).colorScheme.primary : null,
+                    color: _selectedImage == null
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: Theme.of(context).colorScheme.primary,
@@ -2456,50 +2544,50 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(14),
                           child: kIsWeb && _webImageBytes != null
-                            ? Image.memory(
-                                _webImageBytes!,
-                                fit: BoxFit.cover,
-                                width: 120,
-                                height: 120,
-                              )
-                            : !kIsWeb && _selectedImage != null
-                            ? Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                                width: 120,
-                                height: 120,
-                              )
-                            : Container(
-                                width: 120,
-                                height: 120,
-                                color: Colors.grey[300],
-                                child: const Icon(Icons.image, color: Colors.grey),
-                              ),
+                              ? Image.memory(
+                                  _webImageBytes!,
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                )
+                              : !kIsWeb && _selectedImage != null
+                              ? Image.file(
+                                  _selectedImage!,
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                )
+                              : Container(
+                                  width: 120,
+                                  height: 120,
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.image,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                         ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               Text(
                 'Create New Choir',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               Text(
                 'Fill in the details below to create a new choir',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -2527,9 +2615,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                             FormBuilderValidators.maxLength(50),
                           ]),
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         FormBuilderTextField(
                           name: 'description',
                           decoration: const InputDecoration(
@@ -2540,9 +2628,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                           maxLines: 3,
                           validator: FormBuilderValidators.maxLength(200),
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         // Searchable country dropdown
                         FormBuilderField<String>(
                           name: 'country',
@@ -2557,7 +2645,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                   readOnly: _selectedCountry != null,
                                   decoration: InputDecoration(
                                     labelText: 'Country *',
-                                    hintText: _selectedCountry ?? 'Search or select a country',
+                                    hintText:
+                                        _selectedCountry ??
+                                        'Search or select a country',
                                     prefixIcon: const Icon(Icons.public),
                                     suffixIcon: _selectedCountry != null
                                         ? IconButton(
@@ -2566,28 +2656,42 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                               if (!mounted) return;
                                               setState(() {
                                                 _selectedCountry = null;
-                                                _countrySearchController.clear();
+                                                _countrySearchController
+                                                    .clear();
                                                 _isCountryDropdownOpen = false;
                                                 _selectedDiocese = null;
-                                                _dioceseSearchController.clear();
+                                                _dioceseSearchController
+                                                    .clear();
                                                 _isCustomDiocese = false;
                                                 try {
-                                                  _customDioceseController.clear();
+                                                  _customDioceseController
+                                                      .clear();
                                                 } catch (e) {
                                                   // Ignore clear errors during state changes
                                                 }
                                               });
                                               field.didChange('');
-                                              _formKey.currentState?.fields['diocese']?.didChange('');
-                                              _formKey.currentState?.fields['parish']?.didChange('');
+                                              _formKey
+                                                  .currentState
+                                                  ?.fields['diocese']
+                                                  ?.didChange('');
+                                              _formKey
+                                                  .currentState
+                                                  ?.fields['parish']
+                                                  ?.didChange('');
                                             },
                                           )
                                         : IconButton(
-                                            icon: Icon(_isCountryDropdownOpen ? Icons.expand_less : Icons.expand_more),
+                                            icon: Icon(
+                                              _isCountryDropdownOpen
+                                                  ? Icons.expand_less
+                                                  : Icons.expand_more,
+                                            ),
                                             onPressed: () {
                                               if (!mounted) return;
                                               setState(() {
-                                                _isCountryDropdownOpen = !_isCountryDropdownOpen;
+                                                _isCountryDropdownOpen =
+                                                    !_isCountryDropdownOpen;
                                               });
                                             },
                                           ),
@@ -2611,7 +2715,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                     }
                                   },
                                 ),
-                                
+
                                 if (_isCountryDropdownOpen) ...[
                                   const SizedBox(height: 8),
                                   Container(
@@ -2623,19 +2727,27 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                     child: ListView.builder(
                                       itemCount: _filteredCountries.length,
                                       itemBuilder: (context, index) {
-                                        final country = _filteredCountries[index];
+                                        final country =
+                                            _filteredCountries[index];
                                         return ListTile(
                                           dense: true,
                                           leading: Text(
                                             country['flag'] ?? '',
-                                            style: const TextStyle(fontSize: 20),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                            ),
                                           ),
-                                          title: Text(country['name'] ?? 'Unknown Country'),
+                                          title: Text(
+                                            country['name'] ??
+                                                'Unknown Country',
+                                          ),
                                           onTap: () {
                                             if (!mounted) return;
                                             setState(() {
-                                              _selectedCountry = country['name'];
-                                              _countrySearchController.text = country['name'] ?? '';
+                                              _selectedCountry =
+                                                  country['name'];
+                                              _countrySearchController.text =
+                                                  country['name'] ?? '';
                                               _isCountryDropdownOpen = false;
                                               _selectedDiocese = null;
                                               _dioceseSearchController.clear();
@@ -2643,12 +2755,19 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                               _customDioceseController.clear();
                                             });
                                             if (mounted) {
-                                              final countryName = country['name'];
+                                              final countryName =
+                                                  country['name'];
                                               if (countryName != null) {
                                                 field.didChange(countryName);
                                               }
-                                              _formKey.currentState?.fields['diocese']?.didChange('');
-                                              _formKey.currentState?.fields['parish']?.didChange('');
+                                              _formKey
+                                                  .currentState
+                                                  ?.fields['diocese']
+                                                  ?.didChange('');
+                                              _formKey
+                                                  .currentState
+                                                  ?.fields['parish']
+                                                  ?.didChange('');
                                             }
                                           },
                                         );
@@ -2656,20 +2775,19 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                     ),
                                   ),
                                 ],
-                                
                               ],
                             );
                           },
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         // Simple diocese dropdown with custom option in list
                         FormBuilderDropdown<String>(
                           name: 'diocese',
                           decoration: InputDecoration(
                             labelText: 'Diocese/Archdiocese',
-                            hintText: _selectedCountry == null 
+                            hintText: _selectedCountry == null
                                 ? 'Please select a country first'
                                 : 'Select a diocese or enter custom',
                             prefixIcon: const Icon(Icons.account_balance),
@@ -2678,12 +2796,14 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                             if (_isCustomDiocese) {
                               return null; // Custom diocese validation handled by TextFormField below
                             }
-                            if (value == null || value.isEmpty || value == 'CUSTOM_DIOCESE') {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value == 'CUSTOM_DIOCESE') {
                               return 'Please select a diocese';
                             }
                             return null;
                           },
-                          items: _selectedCountry != null 
+                          items: _selectedCountry != null
                               ? [
                                   // Add custom diocese option at the top
                                   DropdownMenuItem<String>(
@@ -2716,28 +2836,41 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                   ),
                                   // Add all predefined dioceses
                                   ..._availableDioceses.map((diocese) {
-                                    final isArchdiocese = diocese['type'] == 'Archdiocese';
+                                    final isArchdiocese =
+                                        diocese['type'] == 'Archdiocese';
                                     return DropdownMenuItem<String>(
                                       value: diocese['name'],
                                       child: Row(
                                         children: [
                                           Icon(
-                                            isArchdiocese ? Icons.account_balance : Icons.location_city,
+                                            isArchdiocese
+                                                ? Icons.account_balance
+                                                : Icons.location_city,
                                             size: 16,
-                                            color: isArchdiocese ? Colors.purple : Colors.blue,
+                                            color: isArchdiocese
+                                                ? Colors.purple
+                                                : Colors.blue,
                                           ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Text.rich(
                                               TextSpan(
                                                 children: [
-                                                  TextSpan(text: diocese['name'] ?? 'Unknown Diocese'),
                                                   TextSpan(
-                                                    text: ' (${diocese['type'] ?? 'Diocese'})',
+                                                    text:
+                                                        diocese['name'] ??
+                                                        'Unknown Diocese',
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        ' (${diocese['type'] ?? 'Diocese'})',
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color: isArchdiocese ? Colors.purple : Colors.blue,
-                                                      fontWeight: FontWeight.w400,
+                                                      color: isArchdiocese
+                                                          ? Colors.purple
+                                                          : Colors.blue,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                 ],
@@ -2759,18 +2892,20 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                 _selectedDiocese = null;
                                 _customDioceseController.clear();
                               });
-                              _formKey.currentState?.fields['parish']?.didChange('');
+                              _formKey.currentState?.fields['parish']
+                                  ?.didChange('');
                             } else if (value != null && mounted) {
                               setState(() {
                                 _selectedDiocese = value;
                                 _isCustomDiocese = false;
                                 _customDioceseController.clear();
                               });
-                              _formKey.currentState?.fields['parish']?.didChange('');
+                              _formKey.currentState?.fields['parish']
+                                  ?.didChange('');
                             }
                           },
                         ),
-                        
+
                         // Show custom diocese input if custom was selected
                         if (_isCustomDiocese) ...[
                           const SizedBox(height: 16),
@@ -2783,21 +2918,23 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
-                              if (_isCustomDiocese && (value == null || value.trim().isEmpty)) {
+                              if (_isCustomDiocese &&
+                                  (value == null || value.trim().isEmpty)) {
                                 return 'Please enter a diocese name';
                               }
                               return null;
                             },
                             onChanged: (value) {
                               if (mounted) {
-                                _formKey.currentState?.fields['parish']?.didChange('');
+                                _formKey.currentState?.fields['parish']
+                                    ?.didChange('');
                               }
                             },
                           ),
                         ],
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         // Searchable parish dropdown with custom option
                         FormBuilderField<String>(
                           name: 'parish',
@@ -2805,15 +2942,22 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                             if (_isCustomParish) {
                               return null; // Custom parish validation handled by TextFormField below
                             }
-                            if (value == null || value.isEmpty || value == 'CUSTOM_PARISH') {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value == 'CUSTOM_PARISH') {
                               return 'Please select a parish';
                             }
                             return null;
                           },
                           builder: (field) {
-                            final hasSelection = _selectedCountry != null && 
-                                (_selectedDiocese != null || (_isCustomDiocese && _customDioceseController.text.isNotEmpty));
-                            
+                            final hasSelection =
+                                _selectedCountry != null &&
+                                (_selectedDiocese != null ||
+                                    (_isCustomDiocese &&
+                                        _customDioceseController
+                                            .text
+                                            .isNotEmpty));
+
                             if (!hasSelection) {
                               return Container(
                                 padding: const EdgeInsets.all(16),
@@ -2833,7 +2977,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                 ),
                               );
                             }
-                            
+
                             return Column(
                               children: [
                                 TextField(
@@ -2841,7 +2985,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                   readOnly: _selectedParish != null,
                                   decoration: InputDecoration(
                                     labelText: 'Parish *',
-                                    hintText: _selectedParish?.isNotEmpty == true ? _selectedParish : 'Search or select a parish',
+                                    hintText:
+                                        _selectedParish?.isNotEmpty == true
+                                        ? _selectedParish
+                                        : 'Search or select a parish',
                                     prefixIcon: const Icon(Icons.church),
                                     suffixIcon: _selectedParish != null
                                         ? IconButton(
@@ -2857,11 +3004,16 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                             },
                                           )
                                         : IconButton(
-                                            icon: Icon(_isParishDropdownOpen ? Icons.expand_less : Icons.expand_more),
+                                            icon: Icon(
+                                              _isParishDropdownOpen
+                                                  ? Icons.expand_less
+                                                  : Icons.expand_more,
+                                            ),
                                             onPressed: () {
                                               if (!mounted) return;
                                               setState(() {
-                                                _isParishDropdownOpen = !_isParishDropdownOpen;
+                                                _isParishDropdownOpen =
+                                                    !_isParishDropdownOpen;
                                               });
                                             },
                                           ),
@@ -2883,11 +3035,13 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                     }
                                   },
                                 ),
-                                
+
                                 if (_isParishDropdownOpen) ...[
                                   const SizedBox(height: 8),
                                   Container(
-                                    constraints: const BoxConstraints(maxHeight: 200),
+                                    constraints: const BoxConstraints(
+                                      maxHeight: 200,
+                                    ),
                                     decoration: BoxDecoration(
                                       border: Border.all(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(8),
@@ -2932,15 +3086,20 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                                             ),
                                             title: Text(
                                               parish,
-                                              style: const TextStyle(fontSize: 14),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                             ),
                                             onTap: () {
-                                              if (!mounted || parish.isEmpty) return;
+                                              if (!mounted || parish.isEmpty) {
+                                                return;
+                                              }
                                               setState(() {
                                                 _selectedParish = parish;
-                                                _parishSearchController.text = parish;
+                                                _parishSearchController.text =
+                                                    parish;
                                                 _isParishDropdownOpen = false;
                                                 _isCustomParish = false;
                                               });
@@ -2958,7 +3117,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                             );
                           },
                         ),
-                        
+
                         // Show custom parish input if custom was selected
                         if (_isCustomParish) ...[
                           const SizedBox(height: 16),
@@ -2971,22 +3130,25 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
-                              if (_isCustomParish && (value == null || value.trim().isEmpty)) {
+                              if (_isCustomParish &&
+                                  (value == null || value.trim().isEmpty)) {
                                 return 'Please enter a parish name';
                               }
                               return null;
                             },
                           ),
                         ],
-                        
+
                         const SizedBox(height: 32),
-                        
+
                         Consumer<ChoirController>(
                           builder: (context, choirController, child) {
                             return SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: choirController.isLoading ? null : _createChoir,
+                                onPressed: choirController.isLoading
+                                    ? null
+                                    : _createChoir,
                                 child: choirController.isLoading
                                     ? const SizedBox(
                                         height: 20,
@@ -3005,9 +3167,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -3058,9 +3220,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     }
     return _countries.where((country) {
       final name = country['name'];
-      return name != null && name
-          .toLowerCase()
-          .contains(_countrySearchController.text.toLowerCase());
+      return name != null &&
+          name.toLowerCase().contains(
+            _countrySearchController.text.toLowerCase(),
+          );
     }).toList();
   }
 
@@ -3076,104 +3239,295 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
   List<String> _getAvailableParishes() {
     final selectedCountry = _selectedCountry;
     String? selectedDiocese;
-    
+
     // Handle both predefined and custom diocese
     if (_isCustomDiocese) {
       selectedDiocese = _customDioceseController.text.trim();
     } else {
       selectedDiocese = _selectedDiocese;
     }
-    
-    if (selectedCountry == null || selectedDiocese == null || selectedDiocese.isEmpty) {
+
+    if (selectedCountry == null ||
+        selectedDiocese == null ||
+        selectedDiocese.isEmpty) {
       return [];
     }
-    
+
     // Static list of parishes based on known archdioceses
     List<String> availableParishes = [];
-    
+
     if (selectedCountry == 'United States') {
       if (selectedDiocese == 'Archdiocese of New York') {
-        availableParishes = ['St. Patrick\'s Cathedral', 'St. John the Baptist', 'Our Lady of Guadalupe', 'St. Vincent Ferrer'];
+        availableParishes = [
+          'St. Patrick\'s Cathedral',
+          'St. John the Baptist',
+          'Our Lady of Guadalupe',
+          'St. Vincent Ferrer',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Los Angeles') {
-        availableParishes = ['Our Lady of the Angels', 'St. Vibiana', 'Holy Family', 'St. Monica'];
+        availableParishes = [
+          'Our Lady of the Angels',
+          'St. Vibiana',
+          'Holy Family',
+          'St. Monica',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Chicago') {
-        availableParishes = ['Holy Name Cathedral', 'St. Mary of the Angels', 'St. Alphonsus Liguori', 'St. Clement', 'St. Vincent de Paul'];
+        availableParishes = [
+          'Holy Name Cathedral',
+          'St. Mary of the Angels',
+          'St. Alphonsus Liguori',
+          'St. Clement',
+          'St. Vincent de Paul',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Atlanta') {
-        availableParishes = ['Cathedral of Christ the King', 'Shrine of the Immaculate Conception', 'St. Thomas More'];
+        availableParishes = [
+          'Cathedral of Christ the King',
+          'Shrine of the Immaculate Conception',
+          'St. Thomas More',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Baltimore') {
-        availableParishes = ['Basilica of the National Shrine', 'St. Alphonsus', 'Cathedral of Mary Our Queen'];
+        availableParishes = [
+          'Basilica of the National Shrine',
+          'St. Alphonsus',
+          'Cathedral of Mary Our Queen',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Boston') {
-        availableParishes = ['Cathedral of the Holy Cross', 'St. Leonard', 'Sacred Heart', 'St. Mary'];
+        availableParishes = [
+          'Cathedral of the Holy Cross',
+          'St. Leonard',
+          'Sacred Heart',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Cincinnati') {
-        availableParishes = ['Cathedral Basilica of Saint Peter in Chains', 'St. Francis Xavier', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral Basilica of Saint Peter in Chains',
+          'St. Francis Xavier',
+          'Holy Trinity',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Denver') {
-        availableParishes = ['Cathedral Basilica of the Immaculate Conception', 'St. Joseph', 'Holy Family'];
+        availableParishes = [
+          'Cathedral Basilica of the Immaculate Conception',
+          'St. Joseph',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Detroit') {
-        availableParishes = ['Cathedral of the Most Blessed Sacrament', 'St. Aloysius', 'Sacred Heart Major Seminary'];
+        availableParishes = [
+          'Cathedral of the Most Blessed Sacrament',
+          'St. Aloysius',
+          'Sacred Heart Major Seminary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Miami') {
-        availableParishes = ['St. Mary Cathedral', 'Gesu Catholic Church', 'St. Augustine'];
+        availableParishes = [
+          'St. Mary Cathedral',
+          'Gesu Catholic Church',
+          'St. Augustine',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Philadelphia') {
-        availableParishes = ['Cathedral Basilica of Saints Peter and Paul', 'Old St. Joseph', 'St. Patrick'];
+        availableParishes = [
+          'Cathedral Basilica of Saints Peter and Paul',
+          'Old St. Joseph',
+          'St. Patrick',
+        ];
       } else if (selectedDiocese == 'Archdiocese of San Francisco') {
-        availableParishes = ['Cathedral of Saint Mary of the Assumption', 'Old St. Mary', 'St. Ignatius'];
+        availableParishes = [
+          'Cathedral of Saint Mary of the Assumption',
+          'Old St. Mary',
+          'St. Ignatius',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Seattle') {
-        availableParishes = ['St. James Cathedral', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'St. James Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Washington') {
-        availableParishes = ['Cathedral of St. Matthew the Apostle', 'St. Patrick', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral of St. Matthew the Apostle',
+          'St. Patrick',
+          'Holy Trinity',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Hartford') {
-        availableParishes = ['Cathedral of St. Joseph', 'St. Mary', 'Sacred Heart', 'St. Augustine'];
+        availableParishes = [
+          'Cathedral of St. Joseph',
+          'St. Mary',
+          'Sacred Heart',
+          'St. Augustine',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Indianapolis') {
-        availableParishes = ['Saints Peter and Paul Cathedral', 'St. Mary', 'Holy Cross', 'St. Joan of Arc'];
+        availableParishes = [
+          'Saints Peter and Paul Cathedral',
+          'St. Mary',
+          'Holy Cross',
+          'St. Joan of Arc',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Kansas City in Kansas') {
-        availableParishes = ['Cathedral of St. Peter', 'St. Joseph', 'Sacred Heart', 'Holy Family'];
+        availableParishes = [
+          'Cathedral of St. Peter',
+          'St. Joseph',
+          'Sacred Heart',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Louisville') {
-        availableParishes = ['Cathedral of the Assumption', 'St. Agnes', 'Sacred Heart', 'St. Bartholomew'];
+        availableParishes = [
+          'Cathedral of the Assumption',
+          'St. Agnes',
+          'Sacred Heart',
+          'St. Bartholomew',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Milwaukee') {
-        availableParishes = ['Cathedral of St. John the Evangelist', 'St. Josaphat Basilica', 'Gesu Parish'];
+        availableParishes = [
+          'Cathedral of St. John the Evangelist',
+          'St. Josaphat Basilica',
+          'Gesu Parish',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Newark') {
-        availableParishes = ['Cathedral Basilica of the Sacred Heart', 'St. Patrick Pro-Cathedral', 'St. Mary'];
+        availableParishes = [
+          'Cathedral Basilica of the Sacred Heart',
+          'St. Patrick Pro-Cathedral',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of New Orleans') {
-        availableParishes = ['St. Louis Cathedral', 'St. Alphonsus', 'Holy Name of Jesus', 'Mater Dolorosa'];
+        availableParishes = [
+          'St. Louis Cathedral',
+          'St. Alphonsus',
+          'Holy Name of Jesus',
+          'Mater Dolorosa',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Oklahoma City') {
-        availableParishes = ['Cathedral of Our Lady of Perpetual Help', 'St. Joseph', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral of Our Lady of Perpetual Help',
+          'St. Joseph',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Omaha') {
-        availableParishes = ['St. Cecilia Cathedral', 'St. Margaret Mary', 'Sacred Heart', 'St. Robert Bellarmine'];
+        availableParishes = [
+          'St. Cecilia Cathedral',
+          'St. Margaret Mary',
+          'Sacred Heart',
+          'St. Robert Bellarmine',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Portland in Oregon') {
-        availableParishes = ['Cathedral of the Immaculate Conception', 'St. Mary Cathedral', 'Holy Redeemer'];
+        availableParishes = [
+          'Cathedral of the Immaculate Conception',
+          'St. Mary Cathedral',
+          'Holy Redeemer',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Saint Louis') {
-        availableParishes = ['Cathedral Basilica of St. Louis', 'Old Cathedral', 'St. Francis Xavier'];
-      } else if (selectedDiocese == 'Archdiocese of Saint Paul and Minneapolis') {
-        availableParishes = ['Cathedral of St. Paul', 'Basilica of St. Mary', 'St. Olaf', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral Basilica of St. Louis',
+          'Old Cathedral',
+          'St. Francis Xavier',
+        ];
+      } else if (selectedDiocese ==
+          'Archdiocese of Saint Paul and Minneapolis') {
+        availableParishes = [
+          'Cathedral of St. Paul',
+          'Basilica of St. Mary',
+          'St. Olaf',
+          'Holy Trinity',
+        ];
       } else if (selectedDiocese == 'Archdiocese of San Antonio') {
-        availableParishes = ['San Fernando Cathedral', 'St. Mary', 'Sacred Heart', 'St. Anthony de Padua'];
+        availableParishes = [
+          'San Fernando Cathedral',
+          'St. Mary',
+          'Sacred Heart',
+          'St. Anthony de Padua',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Santa Fe') {
-        availableParishes = ['Cathedral Basilica of St. Francis of Assisi', 'Loretto Chapel', 'Holy Faith'];
+        availableParishes = [
+          'Cathedral Basilica of St. Francis of Assisi',
+          'Loretto Chapel',
+          'Holy Faith',
+        ];
       } else if (selectedDiocese == 'Diocese of Albany') {
-        availableParishes = ['Cathedral of the Immaculate Conception', 'St. Mary', 'St. Joseph', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral of the Immaculate Conception',
+          'St. Mary',
+          'St. Joseph',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Diocese of Alexandria') {
-        availableParishes = ['St. Francis Xavier Cathedral', 'St. Mary', 'Sacred Heart', 'St. Anthony'];
+        availableParishes = [
+          'St. Francis Xavier Cathedral',
+          'St. Mary',
+          'Sacred Heart',
+          'St. Anthony',
+        ];
       } else if (selectedDiocese == 'Diocese of Allentown') {
-        availableParishes = ['Cathedral of St. Catharine of Siena', 'St. Thomas More', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral of St. Catharine of Siena',
+          'St. Thomas More',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Diocese of Arlington') {
-        availableParishes = ['Cathedral of St. Thomas More', 'St. Mary', 'Sacred Heart', 'St. John the Apostle'];
+        availableParishes = [
+          'Cathedral of St. Thomas More',
+          'St. Mary',
+          'Sacred Heart',
+          'St. John the Apostle',
+        ];
       } else if (selectedDiocese == 'Diocese of Austin') {
-        availableParishes = ['Cathedral of St. Mary', 'St. Austin', 'Sacred Heart', 'St. Ignatius Martyr'];
+        availableParishes = [
+          'Cathedral of St. Mary',
+          'St. Austin',
+          'Sacred Heart',
+          'St. Ignatius Martyr',
+        ];
       } else if (selectedDiocese == 'Diocese of Baker') {
-        availableParishes = ['St. Francis de Sales Cathedral', 'Sacred Heart', 'St. Thomas', 'St. Mary'];
+        availableParishes = [
+          'St. Francis de Sales Cathedral',
+          'Sacred Heart',
+          'St. Thomas',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Diocese of Baton Rouge') {
-        availableParishes = ['St. Joseph Cathedral', 'St. Agnes', 'Sacred Heart of Jesus', 'Our Lady of Mercy'];
+        availableParishes = [
+          'St. Joseph Cathedral',
+          'St. Agnes',
+          'Sacred Heart of Jesus',
+          'Our Lady of Mercy',
+        ];
       } else if (selectedDiocese == 'Diocese of Birmingham') {
-        availableParishes = ['Cathedral of St. Paul', 'St. Elias Maronite', 'Prince of Peace', 'St. Mark'];
+        availableParishes = [
+          'Cathedral of St. Paul',
+          'St. Elias Maronite',
+          'Prince of Peace',
+          'St. Mark',
+        ];
       } else if (selectedDiocese == 'Diocese of Bridgeport') {
-        availableParishes = ['St. Augustine Cathedral', 'St. Mary', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'St. Augustine Cathedral',
+          'St. Mary',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Diocese of Brooklyn') {
-        availableParishes = ['Cathedral Basilica of St. James', 'St. Patrick', 'Our Lady of Lebanon'];
+        availableParishes = [
+          'Cathedral Basilica of St. James',
+          'St. Patrick',
+          'Our Lady of Lebanon',
+        ];
       } else if (selectedDiocese == 'Diocese of Buffalo') {
-        availableParishes = ['Cathedral of St. Joseph', 'St. Louis', 'St. Stanislaus', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral of St. Joseph',
+          'St. Louis',
+          'St. Stanislaus',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Diocese of Charleston') {
-        availableParishes = ['Cathedral of St. John the Baptist', 'St. Mary', 'Sacred Heart', 'St. Anthony'];
+        availableParishes = [
+          'Cathedral of St. John the Baptist',
+          'St. Mary',
+          'Sacred Heart',
+          'St. Anthony',
+        ];
       } else if (selectedDiocese == 'Diocese of Cleveland') {
-        availableParishes = ['Cathedral of St. John the Evangelist', 'St. Ignatius of Antioch', 'St. Malachi', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral of St. John the Evangelist',
+          'St. Ignatius of Antioch',
+          'St. Malachi',
+          'Sacred Heart',
+        ];
       }
     } else if (selectedCountry == 'Ghana') {
       if (selectedDiocese == 'Roman Catholic Archdiocese of Accra') {
@@ -3197,7 +3551,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Francis of Assisi Parish – Airport',
           'St. Michael and All Angels Parish – Nungua',
           'St. Margaret Mary Parish',
-          'St. Augustine Parish – Cantonments'
+          'St. Augustine Parish – Cantonments',
         ];
       } else if (selectedDiocese == 'Roman Catholic Archdiocese of Kumasi') {
         availableParishes = [
@@ -3210,9 +3564,10 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Monica Parish – Kumasi',
           'Holy Family Parish – Kumasi',
           'St. Louis Parish – Kumasi',
-          'St. Anne Parish – Kumasi'
+          'St. Anne Parish – Kumasi',
         ];
-      } else if (selectedDiocese == 'Roman Catholic Archdiocese of Cape Coast') {
+      } else if (selectedDiocese ==
+          'Roman Catholic Archdiocese of Cape Coast') {
         availableParishes = [
           'Christ the King Cathedral – Cape Coast',
           'Holy Cross Parish – Cape Coast',
@@ -3221,7 +3576,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'Our Lady Star of the Sea Parish',
           'St. Monica Parish – Cape Coast',
           'Holy Spirit Parish – Cape Coast',
-          'St. Augustine Parish – Cape Coast'
+          'St. Augustine Parish – Cape Coast',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Ho') {
         availableParishes = [
@@ -3229,114 +3584,117 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Paul Parish – Ho',
           'Sacred Heart Parish – Ho',
           'St. Francis Xavier Parish – Ho',
-          'Christ the King Parish – Ho'
+          'Christ the King Parish – Ho',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Keta-Akatsi') {
         availableParishes = [
           'St. Anthony Parish – Keta',
           'Sacred Heart Parish – Akatsi',
           'St. Francis Parish – Dzodze',
-          'Christ the King Parish – Anloga'
+          'Christ the King Parish – Anloga',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Kpando') {
         availableParishes = [
           'Christ the King Parish – Kpando',
           'St. Paul Parish – Kpando',
-          'Sacred Heart Parish – Kpando'
+          'Sacred Heart Parish – Kpando',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Jasikan') {
         availableParishes = [
           'St. Augustine Parish – Jasikan',
           'Sacred Heart Parish – Jasikan',
-          'Holy Cross Parish – Jasikan'
+          'Holy Cross Parish – Jasikan',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Wa') {
         availableParishes = [
           'Our Lady of Lourdes Cathedral – Wa',
           'St. Francis Xavier Parish – Wa',
-          'Sacred Heart Parish – Wa'
+          'Sacred Heart Parish – Wa',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Tamale') {
         availableParishes = [
           'Our Lady of Annunciation Cathedral – Tamale',
           'St. Francis Parish – Tamale',
           'Sacred Heart Parish – Tamale',
-          'Christ the King Parish – Tamale'
+          'Christ the King Parish – Tamale',
         ];
-      } else if (selectedDiocese == 'Roman Catholic Diocese of Navrongo-Bolgatanga') {
+      } else if (selectedDiocese ==
+          'Roman Catholic Diocese of Navrongo-Bolgatanga') {
         availableParishes = [
           'Our Lady of Seven Sorrows Cathedral – Navrongo',
           'Sacred Heart Parish – Bolgatanga',
-          'St. Francis Parish – Navrongo'
+          'St. Francis Parish – Navrongo',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Yendi') {
         availableParishes = [
           'Christ the King Parish – Yendi',
-          'Sacred Heart Parish – Yendi'
+          'Sacred Heart Parish – Yendi',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Damongo') {
         availableParishes = [
           'St. Paul Parish – Damongo',
-          'Sacred Heart Parish – Damongo'
+          'Sacred Heart Parish – Damongo',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Sunyani') {
         availableParishes = [
           'Christ the King Cathedral – Sunyani',
           'Sacred Heart Parish – Sunyani',
           'St. James Parish – Sunyani',
-          'Our Lady of Lourdes Parish – Sunyani'
+          'Our Lady of Lourdes Parish – Sunyani',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Techiman') {
         availableParishes = [
           'Our Lady of Lourdes Cathedral – Techiman',
           'Sacred Heart Parish – Techiman',
-          'St. Anthony Parish – Techiman'
+          'St. Anthony Parish – Techiman',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Goaso') {
         availableParishes = [
           'St. Monica Cathedral – Goaso',
-          'Sacred Heart Parish – Goaso'
+          'Sacred Heart Parish – Goaso',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Wiawso') {
         availableParishes = [
           'Sacred Heart Cathedral – Wiawso',
-          'Christ the King Parish – Wiawso'
+          'Christ the King Parish – Wiawso',
         ];
-      } else if (selectedDiocese == 'Roman Catholic Diocese of Sekondi-Takoradi') {
+      } else if (selectedDiocese ==
+          'Roman Catholic Diocese of Sekondi-Takoradi') {
         availableParishes = [
           'St. Anthony Cathedral – Takoradi',
           'Sacred Heart Parish – Sekondi',
           'Our Lady Star of the Sea Parish',
           'Christ the King Parish – Takoradi',
-          'St. Francis Parish – Sekondi'
+          'St. Francis Parish – Sekondi',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Obuasi') {
         availableParishes = [
           'St. Joseph Cathedral – Obuasi',
           'Sacred Heart Parish – Obuasi',
-          'Our Lady of Perpetual Help Parish'
+          'Our Lady of Perpetual Help Parish',
         ];
-      } else if (selectedDiocese == 'Roman Catholic Diocese of Konongo-Mampong') {
+      } else if (selectedDiocese ==
+          'Roman Catholic Diocese of Konongo-Mampong') {
         availableParishes = [
           'Christ the King Parish – Konongo',
-          'Sacred Heart Parish – Mampong'
+          'Sacred Heart Parish – Mampong',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Koforidua') {
         availableParishes = [
           'Sacred Heart Cathedral – Koforidua',
           'Christ the King Parish – Koforidua',
           'St. Joseph Parish – Koforidua',
-          'Our Lady of Lourdes Parish – Koforidua'
+          'Our Lady of Lourdes Parish – Koforidua',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Donkorkrom') {
         availableParishes = [
           'St. Francis Xavier Parish – Donkorkrom',
-          'Sacred Heart Parish – Donkorkrom'
+          'Sacred Heart Parish – Donkorkrom',
         ];
       } else if (selectedDiocese == 'Roman Catholic Diocese of Asamankese') {
         availableParishes = [
           'St. Francis de Sales Parish – Asamankese',
-          'Sacred Heart Parish – Asamankese'
+          'Sacred Heart Parish – Asamankese',
         ];
       }
     } else if (selectedCountry == 'Kenya') {
@@ -3346,25 +3704,25 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Peter Claver Parish',
           'Sacred Heart Parish – Nairobi',
           'Christ the King Parish – Nairobi',
-          'Our Lady of Victories Parish'
+          'Our Lady of Victories Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Kisumu') {
         availableParishes = [
           'Our Lady of Victories Cathedral – Kisumu',
           'Sacred Heart Parish – Kisumu',
-          'St. Theresa Parish – Kisumu'
+          'St. Theresa Parish – Kisumu',
         ];
       } else if (selectedDiocese == 'Archdiocese of Mombasa') {
         availableParishes = [
           'Holy Ghost Cathedral – Mombasa',
           'Sacred Heart Parish – Mombasa',
-          'St. Teresa Parish – Mombasa'
+          'St. Teresa Parish – Mombasa',
         ];
       } else if (selectedDiocese == 'Archdiocese of Nyeri') {
         availableParishes = [
           'Sacred Heart Cathedral – Nyeri',
           'St. Peter Claver Parish – Nyeri',
-          'Christ the King Parish – Nyeri'
+          'Christ the King Parish – Nyeri',
         ];
       }
     } else if (selectedCountry == 'Nigeria') {
@@ -3373,56 +3731,141 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'Holy Cross Cathedral – Lagos',
           'St. Dominic Parish – Yaba',
           'Sacred Heart Parish – Lagos',
-          'Christ the King Parish – Lagos'
+          'Christ the King Parish – Lagos',
         ];
       } else if (selectedDiocese == 'Archdiocese of Abuja') {
         availableParishes = [
           'Our Lady Queen of Nigeria Pro-Cathedral',
           'Sacred Heart Parish – Abuja',
-          'St. Murumba Parish – Abuja'
+          'St. Murumba Parish – Abuja',
         ];
       }
-      
+
       // Continue with existing US dioceses
     } else if (selectedCountry == 'United States') {
       if (selectedDiocese == 'Diocese of Cleveland') {
-        availableParishes = ['Cathedral of St. John the Evangelist', 'St. Malachi', 'St. Ignatius of Antioch'];
+        availableParishes = [
+          'Cathedral of St. John the Evangelist',
+          'St. Malachi',
+          'St. Ignatius of Antioch',
+        ];
       } else if (selectedDiocese == 'Diocese of Columbus') {
-        availableParishes = ['St. Joseph Cathedral', 'St. Patrick', 'Sacred Heart', 'Holy Family'];
+        availableParishes = [
+          'St. Joseph Cathedral',
+          'St. Patrick',
+          'Sacred Heart',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Dallas') {
-        availableParishes = ['Cathedral Santuario de Guadalupe', 'St. Patrick', 'Holy Trinity', 'St. Monica'];
+        availableParishes = [
+          'Cathedral Santuario de Guadalupe',
+          'St. Patrick',
+          'Holy Trinity',
+          'St. Monica',
+        ];
       } else if (selectedDiocese == 'Diocese of Des Moines') {
-        availableParishes = ['Cathedral of St. Ambrose', 'St. Theresa', 'Sacred Heart', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral of St. Ambrose',
+          'St. Theresa',
+          'Sacred Heart',
+          'Holy Trinity',
+        ];
       } else if (selectedDiocese == 'Diocese of El Paso') {
-        availableParishes = ['Cathedral of St. Patrick', 'St. Joseph', 'Sacred Heart', 'Our Lady of Guadalupe'];
+        availableParishes = [
+          'Cathedral of St. Patrick',
+          'St. Joseph',
+          'Sacred Heart',
+          'Our Lady of Guadalupe',
+        ];
       } else if (selectedDiocese == 'Diocese of Fort Worth') {
-        availableParishes = ['Cathedral of St. Patrick', 'St. Andrew', 'Sacred Heart', 'Holy Family'];
+        availableParishes = [
+          'Cathedral of St. Patrick',
+          'St. Andrew',
+          'Sacred Heart',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Fresno') {
-        availableParishes = ['St. John\'s Cathedral', 'St. Anthony of Padua', 'Sacred Heart', 'Holy Spirit'];
+        availableParishes = [
+          'St. John\'s Cathedral',
+          'St. Anthony of Padua',
+          'Sacred Heart',
+          'Holy Spirit',
+        ];
       } else if (selectedDiocese == 'Diocese of Green Bay') {
-        availableParishes = ['Cathedral of St. Francis Xavier', 'St. Willebrord', 'Sacred Heart', 'St. Mary'];
+        availableParishes = [
+          'Cathedral of St. Francis Xavier',
+          'St. Willebrord',
+          'Sacred Heart',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Diocese of Honolulu') {
-        availableParishes = ['Cathedral Basilica of Our Lady of Peace', 'St. Augustine', 'Sacred Heart'];
+        availableParishes = [
+          'Cathedral Basilica of Our Lady of Peace',
+          'St. Augustine',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Diocese of Houston') {
-        availableParishes = ['Co-Cathedral of the Sacred Heart', 'St. Anne', 'Holy Rosary', 'St. Cyril of Alexandria'];
+        availableParishes = [
+          'Co-Cathedral of the Sacred Heart',
+          'St. Anne',
+          'Holy Rosary',
+          'St. Cyril of Alexandria',
+        ];
       } else if (selectedDiocese == 'Diocese of Kansas City') {
-        availableParishes = ['Cathedral of the Immaculate Conception', 'St. Peter', 'Sacred Heart', 'Holy Cross'];
+        availableParishes = [
+          'Cathedral of the Immaculate Conception',
+          'St. Peter',
+          'Sacred Heart',
+          'Holy Cross',
+        ];
       }
     } else if (selectedCountry == 'Kenya') {
       if (selectedDiocese == 'Archdiocese of Kisumu') {
         availableParishes = [
-          'St. Teresa Kibuye Cathedral', 'St. Joseph Milimani', 'Holy Cross', 'St. Monica',
-          'St. Maria Goretti Nyalenda', 'St. John XXIII Rabuor', 'St. Pantaleon', 'St. Augustine Nyahera',
-          'St. Dominic Kianja', 'St. Joseph Nyabondo', 'St. Aloysius Ojolla', 'St. Peter Nyakach',
-          'St. Anne Nyamonye', 'St. Mary Yala', 'St. Joseph Ahero', 'Our Lady Queen of Peace Muhoroni',
-          'St. John Paul II Obambo', 'Awasi Parish', 'Katito Parish', 'Pap Onditi Parish',
-          'Nyando Parish', 'Nyabondo Parish', 'Kombewa Parish', 'Ramba (St. Antony Abbot)',
-          'Bondo Parish', 'Usenge Parish', 'Rangala Parish', 'Kirembe Parish'
+          'St. Teresa Kibuye Cathedral',
+          'St. Joseph Milimani',
+          'Holy Cross',
+          'St. Monica',
+          'St. Maria Goretti Nyalenda',
+          'St. John XXIII Rabuor',
+          'St. Pantaleon',
+          'St. Augustine Nyahera',
+          'St. Dominic Kianja',
+          'St. Joseph Nyabondo',
+          'St. Aloysius Ojolla',
+          'St. Peter Nyakach',
+          'St. Anne Nyamonye',
+          'St. Mary Yala',
+          'St. Joseph Ahero',
+          'Our Lady Queen of Peace Muhoroni',
+          'St. John Paul II Obambo',
+          'Awasi Parish',
+          'Katito Parish',
+          'Pap Onditi Parish',
+          'Nyando Parish',
+          'Nyabondo Parish',
+          'Kombewa Parish',
+          'Ramba (St. Antony Abbot)',
+          'Bondo Parish',
+          'Usenge Parish',
+          'Rangala Parish',
+          'Kirembe Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Nairobi') {
-        availableParishes = ['Holy Family Cathedral', 'St. Peter\'s Parish', 'St. Austin', 'Holy Trinity', 'Sacred Heart'];
+        availableParishes = [
+          'Holy Family Cathedral',
+          'St. Peter\'s Parish',
+          'St. Austin',
+          'Holy Trinity',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Mombasa') {
-        availableParishes = ['Holy Spirit Parish', 'Sacred Heart Cathedral', 'St. Teresa', 'Holy Ghost'];
+        availableParishes = [
+          'Holy Spirit Parish',
+          'Sacred Heart Cathedral',
+          'St. Teresa',
+          'Holy Ghost',
+        ];
       } else if (selectedDiocese == 'Diocese of Eldoret') {
         availableParishes = [
           'Sacred Heart Cathedral Parish – Eldoret',
@@ -3433,7 +3876,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Joseph Parish – Moiben',
           'Our Lady of Fatima Parish – Ziwa',
           'St. Mary Parish – Kaplamai',
-          'Sacred Heart Parish – Uasin Gishu'
+          'Sacred Heart Parish – Uasin Gishu',
         ];
       } else if (selectedDiocese == 'Diocese of Kakamega') {
         availableParishes = [
@@ -3444,7 +3887,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'Holy Family Parish – Lugari',
           'St. Mary Parish – Shinyalu',
           'Our Lady of Lourdes Parish – Khwisero',
-          'St. Augustine Parish – Navakholo'
+          'St. Augustine Parish – Navakholo',
         ];
       } else if (selectedDiocese == 'Diocese of Kericho') {
         availableParishes = [
@@ -3455,128 +3898,363 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Joseph Parish – Litein',
           'Our Lady of Fatima Parish – Roret',
           'St. Mary Parish – Kipkelion',
-          'St. Paul Parish – Bureti'
+          'St. Paul Parish – Bureti',
         ];
       } else if (selectedDiocese == 'Diocese of Kitui') {
-        availableParishes = ['St. Monica Cathedral', 'Sacred Heart', 'St. Joseph', 'St. Francis Xavier'];
+        availableParishes = [
+          'St. Monica Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+          'St. Francis Xavier',
+        ];
       } else if (selectedDiocese == 'Diocese of Machakos') {
-        availableParishes = ['Sacred Heart Cathedral', 'St. Joseph', 'Holy Ghost', 'St. Mary'];
+        availableParishes = [
+          'Sacred Heart Cathedral',
+          'St. Joseph',
+          'Holy Ghost',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Diocese of Malindi') {
-        availableParishes = ['Christ the King Cathedral', 'St. Teresa', 'Sacred Heart', 'Holy Family'];
+        availableParishes = [
+          'Christ the King Cathedral',
+          'St. Teresa',
+          'Sacred Heart',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Maralal') {
-        availableParishes = ['Our Lady of Fatima Cathedral', 'St. Joseph', 'Sacred Heart', 'Holy Spirit'];
+        availableParishes = [
+          'Our Lady of Fatima Cathedral',
+          'St. Joseph',
+          'Sacred Heart',
+          'Holy Spirit',
+        ];
       } else if (selectedDiocese == 'Diocese of Marsabit') {
-        availableParishes = ['St. Joseph the Worker Cathedral', 'Sacred Heart', 'St. Mary', 'Holy Cross'];
+        availableParishes = [
+          'St. Joseph the Worker Cathedral',
+          'Sacred Heart',
+          'St. Mary',
+          'Holy Cross',
+        ];
       } else if (selectedDiocese == 'Diocese of Meru') {
-        availableParishes = ['Cathedral of Our Lady of Consolata', 'St. Joseph', 'Sacred Heart', 'Holy Family'];
+        availableParishes = [
+          'Cathedral of Our Lady of Consolata',
+          'St. Joseph',
+          'Sacred Heart',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Nakuru') {
-        availableParishes = ['Sacred Heart Cathedral', 'St. Christopher', 'St. Joseph', 'Holy Family'];
+        availableParishes = [
+          'Sacred Heart Cathedral',
+          'St. Christopher',
+          'St. Joseph',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Nyahururu') {
-        availableParishes = ['Sacred Heart Cathedral', 'St. Joseph', 'Holy Spirit', 'St. Mary'];
+        availableParishes = [
+          'Sacred Heart Cathedral',
+          'St. Joseph',
+          'Holy Spirit',
+          'St. Mary',
+        ];
       }
     } else if (selectedCountry == 'Philippines') {
       if (selectedDiocese == 'Archdiocese of Manila') {
-        availableParishes = ['Manila Cathedral', 'Binondo Church', 'Malate Church', 'San Agustin Church'];
+        availableParishes = [
+          'Manila Cathedral',
+          'Binondo Church',
+          'Malate Church',
+          'San Agustin Church',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Cebu') {
-        availableParishes = ['Cebu Metropolitan Cathedral', 'Basilica of Santo Niño', 'Sacred Heart Parish'];
+        availableParishes = [
+          'Cebu Metropolitan Cathedral',
+          'Basilica of Santo Niño',
+          'Sacred Heart Parish',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Davao') {
-        availableParishes = ['San Pedro Cathedral', 'Sacred Heart Parish', 'Christ the King'];
+        availableParishes = [
+          'San Pedro Cathedral',
+          'Sacred Heart Parish',
+          'Christ the King',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Cagayan de Oro') {
-        availableParishes = ['St. Augustine Cathedral', 'Sacred Heart', 'St. Joseph', 'Holy Rosary'];
+        availableParishes = [
+          'St. Augustine Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+          'Holy Rosary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Caceres') {
-        availableParishes = ['Naga Metropolitan Cathedral', 'Our Lady of Peñafrancia', 'Sacred Heart'];
+        availableParishes = [
+          'Naga Metropolitan Cathedral',
+          'Our Lady of Peñafrancia',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Jaro') {
-        availableParishes = ['Jaro Metropolitan Cathedral', 'St. Joseph Seminary', 'Sacred Heart'];
+        availableParishes = [
+          'Jaro Metropolitan Cathedral',
+          'St. Joseph Seminary',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Lipa') {
-        availableParishes = ['San Sebastian Cathedral', 'Sacred Heart', 'St. Joseph', 'Our Lady of Peace'];
+        availableParishes = [
+          'San Sebastian Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+          'Our Lady of Peace',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Nueva Segovia') {
-        availableParishes = ['Vigan Cathedral', 'St. Paul', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'Vigan Cathedral',
+          'St. Paul',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Diocese of Baguio') {
-        availableParishes = ['Our Lady of Atonement Cathedral', 'Sacred Heart', 'St. Joseph', 'Holy Family'];
+        availableParishes = [
+          'Our Lady of Atonement Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Diocese of Bacolod') {
-        availableParishes = ['San Sebastian Cathedral', 'St. Joseph', 'Sacred Heart', 'Our Lady of Guadalupe'];
+        availableParishes = [
+          'San Sebastian Cathedral',
+          'St. Joseph',
+          'Sacred Heart',
+          'Our Lady of Guadalupe',
+        ];
       } else if (selectedDiocese == 'Diocese of Dumaguete') {
-        availableParishes = ['St. Catherine of Alexandria Cathedral', 'Sacred Heart', 'St. Paul', 'Holy Cross'];
+        availableParishes = [
+          'St. Catherine of Alexandria Cathedral',
+          'Sacred Heart',
+          'St. Paul',
+          'Holy Cross',
+        ];
       }
     } else if (selectedCountry == 'Canada') {
       if (selectedDiocese == 'Archdiocese of Toronto') {
-        availableParishes = ['St. Michael\'s Cathedral', 'St. Paul\'s Basilica', 'St. Clare of Assisi', 'Holy Rosary'];
+        availableParishes = [
+          'St. Michael\'s Cathedral',
+          'St. Paul\'s Basilica',
+          'St. Clare of Assisi',
+          'Holy Rosary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Montreal') {
-        availableParishes = ['Mary Queen of the World Cathedral', 'St. Patrick\'s Basilica', 'Notre-Dame Basilica'];
+        availableParishes = [
+          'Mary Queen of the World Cathedral',
+          'St. Patrick\'s Basilica',
+          'Notre-Dame Basilica',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Vancouver') {
-        availableParishes = ['Holy Rosary Cathedral', 'St. Paul\'s Hospital Chapel', 'Sacred Heart'];
+        availableParishes = [
+          'Holy Rosary Cathedral',
+          'St. Paul\'s Hospital Chapel',
+          'Sacred Heart',
+        ];
       }
     } else if (selectedCountry == 'United Kingdom') {
       if (selectedDiocese == 'Archdiocese of Westminster') {
-        availableParishes = ['Westminster Cathedral', 'Brompton Oratory', 'St. James Spanish Place', 'Sacred Heart'];
+        availableParishes = [
+          'Westminster Cathedral',
+          'Brompton Oratory',
+          'St. James Spanish Place',
+          'Sacred Heart',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Birmingham') {
-        availableParishes = ['St. Chad\'s Cathedral', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'St. Chad\'s Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Liverpool') {
-        availableParishes = ['Metropolitan Cathedral of Christ the King', 'Our Lady and St. Nicholas', 'Sacred Heart'];
+        availableParishes = [
+          'Metropolitan Cathedral of Christ the King',
+          'Our Lady and St. Nicholas',
+          'Sacred Heart',
+        ];
       }
     } else if (selectedCountry == 'Australia') {
       if (selectedDiocese == 'Archdiocese of Sydney') {
-        availableParishes = ['St. Mary\'s Cathedral', 'St. Patrick\'s Church Hill', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'St. Mary\'s Cathedral',
+          'St. Patrick\'s Church Hill',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Melbourne') {
-        availableParishes = ['St. Patrick\'s Cathedral', 'Sacred Heart', 'St. Joseph', 'Holy Family'];
+        availableParishes = [
+          'St. Patrick\'s Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Brisbane') {
-        availableParishes = ['Cathedral of St. Stephen', 'Holy Spirit', 'Sacred Heart', 'St. Mary'];
+        availableParishes = [
+          'Cathedral of St. Stephen',
+          'Holy Spirit',
+          'Sacred Heart',
+          'St. Mary',
+        ];
       }
     } else if (selectedCountry == 'Brazil') {
       if (selectedDiocese == 'Archdiocese of São Paulo') {
-        availableParishes = ['Sé Cathedral', 'Basílica de Nossa Senhora da Consolação', 'Igreja do Rosário', 'Basílica de São Bento'];
+        availableParishes = [
+          'Sé Cathedral',
+          'Basílica de Nossa Senhora da Consolação',
+          'Igreja do Rosário',
+          'Basílica de São Bento',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Rio de Janeiro') {
-        availableParishes = ['Igreja da Candelária', 'Igreja da Glória do Outeiro', 'Nossa Senhora da Penha', 'São Francisco de Paula'];
+        availableParishes = [
+          'Igreja da Candelária',
+          'Igreja da Glória do Outeiro',
+          'Nossa Senhora da Penha',
+          'São Francisco de Paula',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Brasília') {
-        availableParishes = ['Metropolitan Cathedral of Brasília', 'Nossa Senhora de Fátima', 'São José', 'Sagrado Coração'];
+        availableParishes = [
+          'Metropolitan Cathedral of Brasília',
+          'Nossa Senhora de Fátima',
+          'São José',
+          'Sagrado Coração',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Salvador') {
-        availableParishes = ['Basílica Catedral Primacial', 'Igreja do Senhor do Bonfim', 'Nossa Senhora da Conceição'];
+        availableParishes = [
+          'Basílica Catedral Primacial',
+          'Igreja do Senhor do Bonfim',
+          'Nossa Senhora da Conceição',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Belo Horizonte') {
-        availableParishes = ['Cathedral of Our Lady of Good Success', 'São José', 'Sagrado Coração', 'Nossa Senhora de Lourdes'];
+        availableParishes = [
+          'Cathedral of Our Lady of Good Success',
+          'São José',
+          'Sagrado Coração',
+          'Nossa Senhora de Lourdes',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Fortaleza') {
-        availableParishes = ['Metropolitan Cathedral', 'São José', 'Nossa Senhora de Fátima', 'Sagrado Coração de Jesus'];
+        availableParishes = [
+          'Metropolitan Cathedral',
+          'São José',
+          'Nossa Senhora de Fátima',
+          'Sagrado Coração de Jesus',
+        ];
       }
     } else if (selectedCountry == 'Italy') {
       if (selectedDiocese == 'Archdiocese of Milan') {
-        availableParishes = ['Duomo di Milano', 'Basilica di Sant\'Ambrogio', 'San Lorenzo Maggiore', 'Santa Maria delle Grazie'];
+        availableParishes = [
+          'Duomo di Milano',
+          'Basilica di Sant\'Ambrogio',
+          'San Lorenzo Maggiore',
+          'Santa Maria delle Grazie',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Rome') {
-        availableParishes = ['San Giovanni in Laterano', 'Santa Maria Maggiore', 'San Paolo fuori le Mura', 'Santa Croce'];
+        availableParishes = [
+          'San Giovanni in Laterano',
+          'Santa Maria Maggiore',
+          'San Paolo fuori le Mura',
+          'Santa Croce',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Naples') {
-        availableParishes = ['Naples Cathedral', 'Gesù Nuovo', 'San Lorenzo Maggiore', 'Santa Chiara'];
+        availableParishes = [
+          'Naples Cathedral',
+          'Gesù Nuovo',
+          'San Lorenzo Maggiore',
+          'Santa Chiara',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Florence') {
-        availableParishes = ['Florence Cathedral', 'Santa Croce', 'San Lorenzo', 'Santo Spirito'];
+        availableParishes = [
+          'Florence Cathedral',
+          'Santa Croce',
+          'San Lorenzo',
+          'Santo Spirito',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Venice') {
-        availableParishes = ['St. Mark\'s Basilica', 'San Giorgio Maggiore', 'Santa Maria della Salute', 'San Polo'];
+        availableParishes = [
+          'St. Mark\'s Basilica',
+          'San Giorgio Maggiore',
+          'Santa Maria della Salute',
+          'San Polo',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Turin') {
-        availableParishes = ['Turin Cathedral', 'San Lorenzo', 'Gran Madre di Dio', 'Santa Cristina'];
+        availableParishes = [
+          'Turin Cathedral',
+          'San Lorenzo',
+          'Gran Madre di Dio',
+          'Santa Cristina',
+        ];
       }
     } else if (selectedCountry == 'France') {
       if (selectedDiocese == 'Archdiocese of Paris') {
-        availableParishes = ['Notre-Dame de Paris', 'Saint-Sulpice', 'Sainte-Chapelle', 'Saint-Germain-des-Prés'];
+        availableParishes = [
+          'Notre-Dame de Paris',
+          'Saint-Sulpice',
+          'Sainte-Chapelle',
+          'Saint-Germain-des-Prés',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Lyon') {
-        availableParishes = ['Lyon Cathedral', 'Basilique Notre-Dame de Fourvière', 'Saint-Nizier'];
+        availableParishes = [
+          'Lyon Cathedral',
+          'Basilique Notre-Dame de Fourvière',
+          'Saint-Nizier',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Marseille') {
-        availableParishes = ['Marseille Cathedral', 'Notre-Dame de la Garde', 'Saint-Victor'];
+        availableParishes = [
+          'Marseille Cathedral',
+          'Notre-Dame de la Garde',
+          'Saint-Victor',
+        ];
       }
     } else if (selectedCountry == 'Spain') {
       if (selectedDiocese == 'Archdiocese of Madrid') {
-        availableParishes = ['Almudena Cathedral', 'San Jerónimo el Real', 'San Francisco el Grande'];
+        availableParishes = [
+          'Almudena Cathedral',
+          'San Jerónimo el Real',
+          'San Francisco el Grande',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Barcelona') {
-        availableParishes = ['Barcelona Cathedral', 'Sagrada Família', 'Santa María del Mar'];
+        availableParishes = [
+          'Barcelona Cathedral',
+          'Sagrada Família',
+          'Santa María del Mar',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Seville') {
-        availableParishes = ['Seville Cathedral', 'Santa María la Blanca', 'San Salvador'];
+        availableParishes = [
+          'Seville Cathedral',
+          'Santa María la Blanca',
+          'San Salvador',
+        ];
       }
     } else if (selectedCountry == 'Germany') {
       if (selectedDiocese == 'Archdiocese of Cologne') {
-        availableParishes = ['Cologne Cathedral', 'St. Gereon', 'St. Ursula', 'St. Andreas'];
+        availableParishes = [
+          'Cologne Cathedral',
+          'St. Gereon',
+          'St. Ursula',
+          'St. Andreas',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Munich and Freising') {
-        availableParishes = ['Munich Cathedral', 'St. Michael', 'St. Peter', 'Theatinerkirche'];
+        availableParishes = [
+          'Munich Cathedral',
+          'St. Michael',
+          'St. Peter',
+          'Theatinerkirche',
+        ];
       }
     } else if (selectedCountry == 'Nigeria') {
       if (selectedDiocese == 'Archdiocese of Lagos') {
-        availableParishes = ['Holy Cross Cathedral', 'St. Leo', 'Sacred Heart', 'St. Dominic'];
+        availableParishes = [
+          'Holy Cross Cathedral',
+          'St. Leo',
+          'Sacred Heart',
+          'St. Dominic',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Abuja') {
-        availableParishes = ['Our Lady Queen of Nigeria Cathedral', 'St. Augustine', 'Sacred Heart'];
+        availableParishes = [
+          'Our Lady Queen of Nigeria Cathedral',
+          'St. Augustine',
+          'Sacred Heart',
+        ];
       }
     } else if (selectedCountry == 'Tanzania') {
       if (selectedDiocese == 'Archdiocese of Arusha') {
@@ -3610,7 +4288,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Anne Parish – Maji ya Chai',
           'St. Joachim Parish – Nkoaranga',
           'St. Mary Magdalene Parish – Seela',
-          'St. Dominic Parish – Losinoni'
+          'St. Dominic Parish – Losinoni',
         ];
       } else if (selectedDiocese == 'Diocese of Moshi') {
         availableParishes = [
@@ -3643,7 +4321,7 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
           'St. Ignatius of Loyola Parish – Chekereni',
           'St. Athanasius Parish – Ugweno',
           'St. Bernard Parish – Usseri',
-          'St. Cyprian Parish – Keni'
+          'St. Cyprian Parish – Keni',
         ];
       } else if (selectedDiocese == 'Archdiocese of Dar-es-Salaam') {
         availableParishes = [
@@ -4076,29 +4754,29 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
         ];
       }
     }
-    
+
     // If no specific parishes found, provide a helpful message
     if (availableParishes.isEmpty && selectedDiocese.isNotEmpty) {
       if (_isCustomDiocese) {
         // For custom dioceses, provide some generic options
         availableParishes = [
           'Cathedral Parish',
-          'St. Mary Parish', 
+          'St. Mary Parish',
           'Sacred Heart Parish',
           'St. Joseph Parish',
-          'Holy Family Parish'
+          'Holy Family Parish',
         ];
       } else {
-        // For predefined dioceses without specific parish data, 
+        // For predefined dioceses without specific parish data,
         // show a message indicating parish data is being updated
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     }
-    
+
     return availableParishes;
   }
 
@@ -4109,9 +4787,9 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
       return availableParishes;
     } else {
       return availableParishes.where((parish) {
-        return parish
-            .toLowerCase()
-            .contains(_parishSearchController.text.toLowerCase());
+        return parish.toLowerCase().contains(
+          _parishSearchController.text.toLowerCase(),
+        );
       }).toList();
     }
   }
@@ -4124,7 +4802,6 @@ class _CreateChoirScreenState extends State<CreateChoirScreen> {
     _selectedDiocese = null;
     _isCountryDropdownOpen = false;
     _isCustomDiocese = false;
-    
   }
 
   @override

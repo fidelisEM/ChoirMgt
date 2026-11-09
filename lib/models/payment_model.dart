@@ -1,12 +1,12 @@
-
-
 enum PaymentMethod { cash, bankTransfer, mobilePayment, other }
+
 enum PaymentStatus { completed, pending, refunded, failed }
+
 enum PaymentType { registration, monthly, quarterly, annual, special, other }
+
 enum FeeFrequency { weekly, monthly, quarterly, annually }
 
 class PaymentModel {
-
   PaymentModel({
     required this.id,
     required this.choirId,
@@ -21,7 +21,7 @@ class PaymentModel {
     required this.paymentDate,
     this.receivedBy,
     this.notes,
-    this.currency = 'KES',
+    this.currency = 'TZS',
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
@@ -45,12 +45,12 @@ class PaymentModel {
         (status) => status.toString().split('.').last == json['status'],
         orElse: () => PaymentStatus.completed,
       ),
-      paymentDate: json['payment_date'] != null 
-          ? DateTime.parse(json['payment_date']) 
+      paymentDate: json['payment_date'] != null
+          ? DateTime.parse(json['payment_date'])
           : DateTime.now(),
       receivedBy: json['received_by'] ?? json['receivedBy'],
       notes: json['notes'],
-      currency: json['currency'] ?? 'KES',
+      currency: json['currency'] ?? 'TZS',
     );
   }
   final String id;
@@ -123,7 +123,6 @@ class PaymentModel {
 }
 
 class FeeStructureModel {
-
   FeeStructureModel({
     required this.id,
     required this.choirId,
@@ -148,12 +147,10 @@ class FeeStructureModel {
         (freq) => freq.toString().split('.').last == json['frequency'],
         orElse: () => FeeFrequency.monthly,
       ),
-      effectiveDate: (json['effectiveDate'] ),
-      expiryDate: json['expiryDate'] != null 
-          ? (json['expiryDate'] ) 
-          : null,
+      effectiveDate: (json['effectiveDate']),
+      expiryDate: json['expiryDate'] != null ? (json['expiryDate']) : null,
       isActive: json['isActive'] ?? true,
-      createdAt: (json['createdAt'] ),
+      createdAt: (json['createdAt']),
     );
   }
   final String id;
@@ -176,7 +173,9 @@ class FeeStructureModel {
       'amount': amount,
       'frequency': frequency.toString().split('.').last,
       'effectiveDate': DateTime.now().toIso8601String(),
-      'expiryDate': expiryDate != null ? DateTime.now().toIso8601String() : null,
+      'expiryDate': expiryDate != null
+          ? DateTime.now().toIso8601String()
+          : null,
       'isActive': isActive,
       'createdAt': DateTime.now().toIso8601String(),
     };
@@ -184,7 +183,6 @@ class FeeStructureModel {
 }
 
 class PaymentRecordModel {
-
   PaymentRecordModel({
     required this.id,
     required this.memberId,
@@ -215,12 +213,12 @@ class PaymentRecordModel {
         orElse: () => PaymentMethod.cash,
       ),
       transactionReference: json['transactionReference'],
-      paymentDate: (json['paymentDate'] ),
-      recordedAt: (json['recordedAt'] ),
+      paymentDate: (json['paymentDate']),
+      recordedAt: (json['recordedAt']),
       recordedBy: json['recordedBy'] ?? '',
       notes: json['notes'],
-      forPeriodStart: (json['forPeriodStart'] ),
-      forPeriodEnd: (json['forPeriodEnd'] ),
+      forPeriodStart: (json['forPeriodStart']),
+      forPeriodEnd: (json['forPeriodEnd']),
     );
   }
   final String id;
@@ -259,7 +257,6 @@ class PaymentRecordModel {
 }
 
 class MemberPaymentStatusModel {
-
   MemberPaymentStatusModel({
     required this.memberId,
     required this.userId,

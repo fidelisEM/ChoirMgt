@@ -3,7 +3,10 @@ import '../models/models.dart';
 import '../services/payment_service.dart';
 
 class PaymentController extends ChangeNotifier {
-  final PaymentService _paymentService = PaymentService();
+  PaymentController({PaymentService? paymentService})
+    : _paymentService = paymentService ?? PaymentService();
+
+  final PaymentService _paymentService;
 
   List<Map<String, dynamic>> _payments = [];
   List<Map<String, dynamic>> _outstandingFees = [];
@@ -28,7 +31,7 @@ class PaymentController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _paymentService.getChoirPayments(
         choirId: choirId,
         fromDate: fromDate,
@@ -46,7 +49,7 @@ class PaymentController extends ChangeNotifier {
 
       // Load outstanding fees
       _outstandingFees = await _paymentService.getOutstandingFees(choirId);
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load choir payments: $e');
@@ -63,13 +66,13 @@ class PaymentController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _payments = await _paymentService.getMemberPayments(
         memberId: memberId,
         fromDate: fromDate,
         toDate: toDate,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load member payments: $e');
@@ -88,7 +91,7 @@ class PaymentController extends ChangeNotifier {
     required String description,
     String? reference,
     String? receivedBy,
-    String currency = 'KES',
+    String currency = 'TZS',
     String? memberName,
   }) async {
     try {
@@ -106,7 +109,6 @@ class PaymentController extends ChangeNotifier {
         reference: reference,
         receivedBy: receivedBy,
         currency: currency,
-        memberName: memberName,
       );
 
       if (payment != null) {
@@ -171,6 +173,31 @@ class PaymentController extends ChangeNotifier {
     }
   }
 
+  // Delete a payment and refresh the choir's list and totals
+  Future<bool> deletePayment({
+    required String paymentId,
+    required String choirId,
+  }) async {
+    try {
+      _setLoading(true);
+      _clearError();
+
+      final success = await _paymentService.deletePayment(paymentId);
+      if (!success) {
+        _setError('Failed to delete payment');
+        _setLoading(false);
+        return false;
+      }
+
+      await loadChoirPayments(choirId: choirId);
+      return true;
+    } catch (e) {
+      _setError('Error deleting payment: $e');
+      _setLoading(false);
+      return false;
+    }
+  }
+
   // Update payment status
   Future<bool> updatePaymentStatus({
     required String paymentId,
@@ -202,7 +229,7 @@ class PaymentController extends ChangeNotifier {
         _paymentStats = await _paymentService.getPaymentStatistics(
           choirId: choirId,
         );
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -241,7 +268,7 @@ class PaymentController extends ChangeNotifier {
             _outstandingFees.removeAt(index);
           }
         }
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -267,21 +294,26 @@ class PaymentController extends ChangeNotifier {
 
   // Calculate total outstanding fees
   double getTotalOutstandingFees() {
-    return _outstandingFees.fold(0.0, (sum, fee) => sum + (fee['outstanding_fees'] ?? 0.0));
+    return _outstandingFees.fold(
+      0.0,
+      (sum, fee) => sum + (fee['outstanding_fees'] ?? 0.0),
+    );
   }
 
   // Get payments by status
   List<Map<String, dynamic>> getPaymentsByStatus(PaymentStatus status) {
-    return _payments.where((payment) => 
-      payment['status'] == status.toString().split('.').last
-    ).toList();
+    return _payments
+        .where(
+          (payment) => payment['status'] == status.toString().split('.').last,
+        )
+        .toList();
   }
 
   // Get payments by type
   List<Map<String, dynamic>> getPaymentsByType(PaymentType type) {
-    return _payments.where((payment) => 
-      payment['type'] == type.toString().split('.').last
-    ).toList();
+    return _payments
+        .where((payment) => payment['type'] == type.toString().split('.').last)
+        .toList();
   }
 
   // Clear data

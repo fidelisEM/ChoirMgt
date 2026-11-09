@@ -15,16 +15,20 @@ class MessageScreen extends StatefulWidget {
   State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> with SingleTickerProviderStateMixin {
+class _MessageScreenState extends State<MessageScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final choirController = Provider.of<ChoirController>(context, listen: false);
+      final choirController = Provider.of<ChoirController>(
+        context,
+        listen: false,
+      );
       if (choirController.selectedChoir != null) {
         _loadMessages();
       }
@@ -38,9 +42,15 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   }
 
   void _loadMessages() async {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
-    final communicationController = Provider.of<CommunicationController>(context, listen: false);
-    
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
+    final communicationController = Provider.of<CommunicationController>(
+      context,
+      listen: false,
+    );
+
     if (choirController.selectedChoir != null) {
       await communicationController.loadMessages(
         choirId: choirController.selectedChoir!.id,
@@ -80,30 +90,40 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
         ],
       ),
       body: Consumer3<CommunicationController, ChoirController, AuthController>(
-        builder: (context, communicationController, choirController, authController, child) {
-          if (choirController.selectedChoir == null) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.info_outline, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No Choir Selected'),
-                  Text('Please select a choir from the Choirs tab first'),
-                ],
-              ),
-            );
-          }
+        builder:
+            (
+              context,
+              communicationController,
+              choirController,
+              authController,
+              child,
+            ) {
+              if (choirController.selectedChoir == null) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.info_outline, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text('No Choir Selected'),
+                      Text('Please select a choir from the Choirs tab first'),
+                    ],
+                  ),
+                );
+              }
 
-          return TabBarView(
-            controller: _tabController,
-            children: [
-              _buildAllMessagesTab(communicationController, authController),
-              _buildAnnouncementsTab(communicationController, authController),
-              _buildDiscussionsTab(communicationController, authController),
-            ],
-          );
-        },
+              return TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildAllMessagesTab(communicationController, authController),
+                  _buildAnnouncementsTab(
+                    communicationController,
+                    authController,
+                  ),
+                  _buildDiscussionsTab(communicationController, authController),
+                ],
+              );
+            },
       ),
       floatingActionButton: Consumer<AuthController>(
         builder: (context, authController, child) {
@@ -120,7 +140,10 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildAllMessagesTab(CommunicationController controller, AuthController authController) {
+  Widget _buildAllMessagesTab(
+    CommunicationController controller,
+    AuthController authController,
+  ) {
     if (controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -128,7 +151,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
     if (controller.messages.isEmpty) {
       return _buildEmptyState(
         'No Messages Yet',
-        authController.isChoirLeader 
+        authController.isChoirLeader
             ? 'Start communicating with your choir members'
             : 'Messages from choir leaders will appear here',
         authController.isChoirLeader,
@@ -145,13 +168,18 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildAnnouncementsTab(CommunicationController controller, AuthController authController) {
-    final announcements = controller.messages.where((m) => m.type == 'announcement').toList();
+  Widget _buildAnnouncementsTab(
+    CommunicationController controller,
+    AuthController authController,
+  ) {
+    final announcements = controller.messages
+        .where((m) => m.type == 'announcement')
+        .toList();
 
     if (announcements.isEmpty) {
       return _buildEmptyState(
         'No Announcements',
-        authController.isChoirLeader 
+        authController.isChoirLeader
             ? 'Create your first announcement to keep members informed'
             : 'Choir announcements will appear here',
         authController.isChoirLeader,
@@ -168,8 +196,13 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildDiscussionsTab(CommunicationController controller, AuthController authController) {
-    final discussions = controller.messages.where((m) => m.type == 'discussion').toList();
+  Widget _buildDiscussionsTab(
+    CommunicationController controller,
+    AuthController authController,
+  ) {
+    final discussions = controller.messages
+        .where((m) => m.type == 'discussion')
+        .toList();
 
     if (discussions.isEmpty) {
       return _buildEmptyState(
@@ -194,11 +227,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.message,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.message, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             title,
@@ -211,9 +240,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
           const SizedBox(height: 8),
           Text(
             subtitle,
-            style: TextStyle(
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
           if (showAction) ...[
@@ -225,7 +252,10 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
             ),
           ],
@@ -247,7 +277,9 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: _getMessageTypeColor(message.type).withAlpha(30),
+                  backgroundColor: _getMessageTypeColor(
+                    message.type,
+                  ).withAlpha(30),
                   child: Icon(
                     _getMessageTypeIcon(message.type),
                     color: _getMessageTypeColor(message.type),
@@ -278,9 +310,14 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                           ),
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
-                              color: _getMessageTypeColor(message.type).withAlpha(30),
+                              color: _getMessageTypeColor(
+                                message.type,
+                              ).withAlpha(30),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -299,29 +336,23 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                 ),
                 Text(
                   _formatDateTime(message.createdAt),
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey[500], fontSize: 12),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Content Preview
             Text(
-              message.content.length > 150 
+              message.content.length > 150
                   ? '${message.content.substring(0, 150)}...'
                   : message.content,
-              style: TextStyle(
-                color: Colors.grey[700],
-                height: 1.4,
-              ),
+              style: TextStyle(color: Colors.grey[700], height: 1.4),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Action Buttons
             Row(
               children: [
@@ -352,7 +383,10 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                     onSelected: (value) => _handleMessageAction(message, value),
                     itemBuilder: (context) => [
                       const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                      const PopupMenuItem(value: 'delete', child: Text('Delete')),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
                     ],
                     child: const Icon(Icons.more_vert, color: Colors.grey),
                   ),
@@ -425,34 +459,22 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                 children: [
                   Text(
                     'From: ${message.senderName}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
                   const Spacer(),
                   Text(
                     _formatDateTime(message.createdAt),
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[500], fontSize: 12),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                message.content,
-                style: const TextStyle(height: 1.4),
-              ),
+              Text(message.content, style: const TextStyle(height: 1.4)),
             ],
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -466,18 +488,18 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   }
 
   void _replyToMessage(message) {
-    Get.to(() => ComposeMessageScreen(
-      replyTo: message,
-      subject: 'Re: ${message.subject}',
-    ));
+    Get.to(
+      () => ComposeMessageScreen(
+        replyTo: message,
+        subject: 'Re: ${message.subject}',
+      ),
+    );
   }
 
   void _handleMessageAction(message, String action) {
     switch (action) {
       case 'edit':
-        Get.to(() => ComposeMessageScreen(
-          editMessage: message,
-        ));
+        Get.to(() => ComposeMessageScreen(editMessage: message));
         break;
       case 'delete':
         _showDeleteConfirmation(message);
@@ -491,10 +513,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
         title: const Text('Delete Message'),
         content: Text('Are you sure you want to delete "${message.subject}"?'),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -509,10 +528,13 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   }
 
   void _deleteMessage(message) async {
-    final communicationController = Provider.of<CommunicationController>(context, listen: false);
-    
+    final communicationController = Provider.of<CommunicationController>(
+      context,
+      listen: false,
+    );
+
     final success = await communicationController.deleteMessage(message.id);
-    
+
     if (success) {
       Get.snackbar(
         'Success',

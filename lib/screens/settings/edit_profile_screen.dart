@@ -5,14 +5,16 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/auth_controller.dart';
+import '../../utils/app_translations.dart';
 import '../../utils/helpers.dart';
 import '../../utils/logger.dart';
 import '../../widgets/custom_widgets.dart';
 // Platform-specific image picker
-import 'profile_image_web.dart' if (dart.library.io) 'profile_image_io.dart' as image_picker;
+import 'profile_image_web.dart'
+    if (dart.library.io) 'profile_image_io.dart'
+    as image_picker;
 
 class EditProfileScreen extends StatefulWidget {
-
   const EditProfileScreen({super.key, required this.user});
   final dynamic user;
 
@@ -50,207 +52,215 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Consumer<AuthController>(
       builder: (context, authController, child) {
         final currentUser = authController.currentUser ?? widget.user;
-        
+
         return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Profile'),
-        actions: [
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          appBar: AppBar(
+            title: Text(context.tr('profileEditTitle')),
+            actions: [
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Profile Picture Section
-            Center(
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () => _viewProfileImage(),
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey[300],
-                      backgroundImage: _selectedImageBytes != null 
-                          ? MemoryImage(_selectedImageBytes!)
-                          : (currentUser?.profileImageUrl != null && currentUser!.profileImageUrl!.isNotEmpty)
+            ],
+          ),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // Profile Picture Section
+                Center(
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () => _viewProfileImage(),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: _selectedImageBytes != null
+                              ? MemoryImage(_selectedImageBytes!)
+                              : (currentUser?.profileImageUrl != null &&
+                                    currentUser!.profileImageUrl!.isNotEmpty)
                               ? NetworkImage(currentUser!.profileImageUrl!)
                               : null,
-                      child: (_selectedImageBytes == null && (currentUser?.profileImageUrl?.isEmpty ?? true))
-                          ? Text(
-                              currentUser?.fullName?.substring(0, 1).toUpperCase() ?? 'U',
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                          child:
+                              (_selectedImageBytes == null &&
+                                  (currentUser?.profileImageUrl?.isEmpty ??
+                                      true))
+                              ? Text(
+                                  currentUser?.fullName
+                                          ?.substring(0, 1)
+                                          .toUpperCase() ??
+                                      'U',
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : null,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: _changeProfilePicture,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+                Text(
+                  context.tr('profileTapPhotoHint'),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+
+                // Form Fields
+                CustomTextField(
+                  controller: _fullNameController,
+                  label: context.tr('fullName'),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return context.tr('profileFullNameRequired');
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                CustomTextField(
+                  controller: _emailController,
+                  label: context.tr('emailAddress'),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return context.tr('profileEmailRequired');
+                    }
+                    if (!GetUtils.isEmail(value)) {
+                      return context.tr('profileEnterValidEmail');
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                CustomTextField(
+                  controller: _phoneController,
+                  label: context.tr('phoneNumber'),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value != null &&
+                        value.isNotEmpty &&
+                        !GetUtils.isPhoneNumber(value)) {
+                      return context.tr('profileEnterValidPhone');
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 32),
+
+                // Save Profile Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: _isLoading ? null : _saveProfile,
+                    icon: _isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
                               ),
-                            )
-                          : null,
+                            ),
+                          )
+                        : const Icon(Icons.save),
+                    label: Text(
+                      _isLoading
+                          ? context.tr('profileSaving')
+                          : context.tr('profileSaveProfile'),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: _changeProfilePicture,
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle,
+                ),
+
+                const SizedBox(height: 32),
+
+                // Delete Account Section
+                Card(
+                  color: Colors.red[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.tr('profileDangerZone'),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 16,
+                        const SizedBox(height: 8),
+                        Text(context.tr('profileDeleteAccountWarning')),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _deleteAccount,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: Text(context.tr('profileDeleteAccount')),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 8),
-            Text(
-              'Tap photo to view • Tap camera to change',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-
-            // Form Fields
-            CustomTextField(
-              controller: _fullNameController,
-              label: 'Full Name',
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Full name is required';
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            CustomTextField(
-              controller: _emailController,
-              label: 'Email Address',
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Email is required';
-                }
-                if (!GetUtils.isEmail(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            CustomTextField(
-              controller: _phoneController,
-              label: 'Phone Number',
-              keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value != null && value.isNotEmpty && !GetUtils.isPhoneNumber(value)) {
-                  return 'Please enter a valid phone number';
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 32),
-
-            // Save Profile Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton.icon(
-                onPressed: _isLoading ? null : _saveProfile,
-                icon: _isLoading 
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Icon(Icons.save),
-                label: Text(
-                  _isLoading ? 'Saving...' : 'Save Profile',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
+              ],
             ),
-
-            const SizedBox(height: 32),
-
-            // Delete Account Section
-            Card(
-              color: Colors.red[50],
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Danger Zone',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Once you delete your account, there is no going back. Please be certain.',
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _deleteAccount,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Delete Account'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
       },
     );
   }
@@ -260,7 +270,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final authController = Provider.of<AuthController>(context, listen: false);
     final currentUser = authController.currentUser ?? widget.user;
     String? imageUrl;
-    
+
     if (_selectedImageBytes != null) {
       // Show selected image preview
       Get.dialog(
@@ -268,19 +278,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Selected Profile Image',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  context.tr('profileSelectedImage'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
-                constraints: const BoxConstraints(maxHeight: 400, maxWidth: 400),
-                child: Image.memory(
-                  _selectedImageBytes!,
-                  fit: BoxFit.contain,
+                constraints: const BoxConstraints(
+                  maxHeight: 400,
+                  maxWidth: 400,
                 ),
+                child: Image.memory(_selectedImageBytes!, fit: BoxFit.contain),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -289,14 +302,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text('Close'),
+                      child: Text(context.tr('close')),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Get.back();
                         _changeProfilePicture();
                       },
-                      child: const Text('Change Image'),
+                      child: Text(context.tr('profileChangeImage')),
                     ),
                   ],
                 ),
@@ -305,7 +318,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
       );
-    } else if (currentUser?.profileImageUrl != null && currentUser!.profileImageUrl!.isNotEmpty) {
+    } else if (currentUser?.profileImageUrl != null &&
+        currentUser!.profileImageUrl!.isNotEmpty) {
       // Show current profile image
       imageUrl = currentUser!.profileImageUrl!;
       Get.dialog(
@@ -313,26 +327,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Profile Image',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  context.tr('profileImageTitle'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
-                constraints: const BoxConstraints(maxHeight: 400, maxWidth: 400),
+                constraints: const BoxConstraints(
+                  maxHeight: 400,
+                  maxWidth: 400,
+                ),
                 child: Image.network(
                   imageUrl!,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Padding(
-                      padding: EdgeInsets.all(32.0),
+                    return Padding(
+                      padding: const EdgeInsets.all(32.0),
                       child: Column(
                         children: [
-                          Icon(Icons.error, size: 64, color: Colors.red),
-                          SizedBox(height: 16),
-                          Text('Failed to load image'),
+                          const Icon(Icons.error, size: 64, color: Colors.red),
+                          const SizedBox(height: 16),
+                          Text(context.tr('profileImageLoadFailed')),
                         ],
                       ),
                     );
@@ -346,14 +366,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text('Close'),
+                      child: Text(context.tr('close')),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Get.back();
                         _changeProfilePicture();
                       },
-                      child: const Text('Change Image'),
+                      child: Text(context.tr('profileChangeImage')),
                     ),
                   ],
                 ),
@@ -366,19 +386,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // No profile image, prompt to add one
       Get.dialog(
         AlertDialog(
-          title: const Text('No Profile Image'),
-          content: const Text('You don\'t have a profile image yet. Would you like to add one?'),
+          title: Text(context.tr('profileNoImage')),
+          content: Text(context.tr('profileNoImagePrompt')),
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text('Cancel'),
+              child: Text(context.tr('cancel')),
             ),
             ElevatedButton(
               onPressed: () {
                 Get.back();
                 _changeProfilePicture();
               },
-              child: const Text('Add Image'),
+              child: Text(context.tr('profileAddImage')),
             ),
           ],
         ),
@@ -389,23 +409,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _changeProfilePicture() async {
     try {
       final imageBytes = await image_picker.ProfileImagePicker.pickImage();
-      
+      if (!mounted) return;
+
       if (imageBytes != null) {
         setState(() {
           _selectedImageBytes = imageBytes;
-          _selectedImageName = 'profile_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+          _selectedImageName =
+              'profile_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
         });
-        Helpers.showSuccessSnackbar('Profile picture selected! Save to apply changes.');
+        Helpers.showSuccessSnackbar(context.tr('profilePictureSelected'));
       }
     } catch (e) {
-      Helpers.showErrorSnackbar('Error selecting image: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('profileImageSelectError')}: $e');
     }
   }
 
   void _saveProfile() async {
     Logger.debug('_saveProfile called');
     if (!_formKey.currentState!.validate()) return;
-    
+
     // Prevent multiple simultaneous calls
     if (_isLoading) {
       Logger.debug('Already loading, ignoring duplicate call');
@@ -415,13 +438,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final authController = Provider.of<AuthController>(context, listen: false);
-      
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+
       String? profileImageUrl;
-      
-      Logger.debug('_selectedImageBytes is ${_selectedImageBytes != null ? "NOT NULL" : "NULL"}');
-      Logger.debug('_selectedImageName is ${_selectedImageName != null ? "NOT NULL" : "NULL"}');
-      
+
+      Logger.debug(
+        '_selectedImageBytes is ${_selectedImageBytes != null ? "NOT NULL" : "NULL"}',
+      );
+      Logger.debug(
+        '_selectedImageName is ${_selectedImageName != null ? "NOT NULL" : "NULL"}',
+      );
+
       // Upload profile image if one was selected
       if (_selectedImageBytes != null && _selectedImageName != null) {
         Logger.debug('Uploading profile image...');
@@ -430,17 +460,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _selectedImageName!,
         );
         Logger.debug('Upload result: $profileImageUrl');
-        
+        if (!mounted) return;
+
         if (profileImageUrl == null) {
-          Helpers.showErrorSnackbar('Failed to upload profile picture');
+          Helpers.showErrorSnackbar(context.tr('profileUploadFailed'));
           return;
         }
       } else {
         Logger.debug('No image selected for upload');
       }
-      
-      Logger.debug('About to call updateProfile with profileImageUrl: $profileImageUrl');
-      
+
+      Logger.debug(
+        'About to call updateProfile with profileImageUrl: $profileImageUrl',
+      );
+
       // Update profile with all information
       final success = await authController.updateProfile(
         displayName: _fullNameController.text.trim(),
@@ -448,27 +481,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         profileImageUrl: profileImageUrl,
         email: _emailController.text.trim(),
       );
-      
+
+      if (!mounted) return;
       if (success) {
         // Clear selected image bytes since it's now saved
         setState(() {
           _selectedImageBytes = null;
           _selectedImageName = null;
         });
-        
-        Helpers.showSuccessSnackbar('Profile updated successfully');
+
+        Helpers.showSuccessSnackbar(context.tr('profileUpdatedSuccess'));
         // Delay navigation to avoid navigation stack issues during rebuild
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted) {
-            Get.back(result: true); // Return true to indicate profile was updated
+            Get.back(
+              result: true,
+            ); // Return true to indicate profile was updated
           }
         });
       } else {
         throw Exception('Failed to update profile');
       }
-      
     } catch (e) {
-      Helpers.showErrorSnackbar('Failed to update profile: $e');
+      if (!mounted) return;
+      Helpers.showErrorSnackbar('${context.tr('profileUpdateFailed')}: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -479,18 +515,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _deleteAccount() {
     Get.dialog(
       AlertDialog(
-        title: const Text(
-          'Delete Account',
-          style: TextStyle(color: Colors.red),
+        title: Text(
+          context.tr('profileDeleteAccount'),
+          style: const TextStyle(color: Colors.red),
         ),
-        content: const Text(
-          'Are you absolutely sure you want to delete your account? '
-          'This action cannot be undone and all your data will be permanently lost.',
-        ),
+        content: Text(context.tr('profileDeleteAccountConfirm')),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text(context.tr('cancel')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -501,7 +534,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Delete'),
+            child: Text(context.tr('delete')),
           ),
         ],
       ),
@@ -509,72 +542,87 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _confirmDeleteAccount() {
+    final confirmController = TextEditingController();
     Get.dialog(
-      AlertDialog(
-        title: const Text('Final Confirmation'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Please type "DELETE" to confirm account deletion:'),
-            SizedBox(height: 16),
-            CustomTextField(
-              label: 'Type DELETE to confirm',
+      StatefulBuilder(
+        builder: (dialogContext, setDialogState) => AlertDialog(
+          title: Text(context.tr('settingsFinalConfirmation')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${context.tr('profileTypeDeleteToConfirm')} "DELETE" ${context.tr('profileToConfirmAccountDeletionSuffix')}',
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: context.tr('profileTypeDeleteLabel'),
+                controller: confirmController,
+                onChanged: (_) => setDialogState(() {}),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(context.tr('cancel')),
+            ),
+            ElevatedButton(
+              onPressed: confirmController.text.trim() == 'DELETE'
+                  ? () {
+                      Get.back();
+                      _performAccountDeletion();
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: Text(context.tr('profileDeleteAccount')),
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Get.back();
-              _performAccountDeletion();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Delete Account'),
-          ),
-        ],
       ),
-    );
+    ).whenComplete(confirmController.dispose);
   }
 
   Future<void> _performAccountDeletion() async {
+    // Resolved before any await: the account is gone either way, so the
+    // navigation below must not depend on this screen still being mounted.
+    final deletedMsg = context.tr('profileAccountDeletedSuccess');
+    final deleteRetryMsg = context.tr('profileAccountDeleteFailedRetry');
+    final deleteFailedMsg = context.tr('profileAccountDeleteFailed');
+
     try {
-      final authController = Provider.of<AuthController>(context, listen: false);
-      
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+
       // Show simple loading indicator
       Get.dialog(
-        const Center(
-          child: CircularProgressIndicator(),
-        ),
+        const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-      
+
       final success = await authController.deleteAccount();
-      
+
       // Hide loading
       Get.back();
-      
+
       if (success) {
-        Helpers.showSuccessSnackbar('Account deleted successfully');
+        Helpers.showSuccessSnackbar(deletedMsg);
         // Navigate to login screen
         Get.offAllNamed('/login');
       } else {
-        Helpers.showErrorSnackbar('Failed to delete account. Please try again.');
+        Helpers.showErrorSnackbar(deleteRetryMsg);
       }
-      
     } catch (e) {
       // Hide loading if still showing
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }
-      Helpers.showErrorSnackbar('Failed to delete account: $e');
+      Helpers.showErrorSnackbar('$deleteFailedMsg: $e');
     }
   }
 }

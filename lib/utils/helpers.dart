@@ -211,7 +211,10 @@ class Helpers {
     );
   }
 
-  static String generateMemberQRData(String registrationNumber, String choirId) {
+  static String generateMemberQRData(
+    String registrationNumber,
+    String choirId,
+  ) {
     return '$registrationNumber|$choirId|${DateTime.now().millisecondsSinceEpoch}';
   }
 
@@ -225,7 +228,11 @@ class Helpers {
     return text.split(' ').map((word) => capitalize(word)).join(' ');
   }
 
-  static String truncateText(String text, int maxLength, {String suffix = '...'}) {
+  static String truncateText(
+    String text,
+    int maxLength, {
+    String suffix = '...',
+  }) {
     if (text.length <= maxLength) return text;
     return '${text.substring(0, maxLength)}$suffix';
   }
@@ -245,7 +252,10 @@ class Helpers {
     return list.toSet().toList();
   }
 
-  static Map<K, List<V>> groupBy<K, V>(List<V> list, K Function(V) keyFunction) {
+  static Map<K, List<V>> groupBy<K, V>(
+    List<V> list,
+    K Function(V) keyFunction,
+  ) {
     final Map<K, List<V>> result = {};
     for (final item in list) {
       final key = keyFunction(item);
@@ -388,10 +398,14 @@ class Helpers {
   }
 
   static String generateRandomString(int length) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = DateTime.now().millisecondsSinceEpoch;
     return String.fromCharCodes(
-      List.generate(length, (index) => chars.codeUnitAt((random + index) % chars.length)),
+      List.generate(
+        length,
+        (index) => chars.codeUnitAt((random + index) % chars.length),
+      ),
     );
   }
 }
@@ -400,7 +414,8 @@ class Helpers {
 extension StringExtension on String {
   String get capitalize => Helpers.capitalize(this);
   String get capitalizeWords => Helpers.capitalizeWords(this);
-  String truncate(int maxLength, {String suffix = '...'}) => Helpers.truncateText(this, maxLength, suffix: suffix);
+  String truncate(int maxLength, {String suffix = '...'}) =>
+      Helpers.truncateText(this, maxLength, suffix: suffix);
 }
 
 extension DateTimeExtension on DateTime {

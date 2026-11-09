@@ -2,7 +2,8 @@ class AppConstants {
   // App Information
   static const String appName = 'Choir Management System';
   static const String appVersion = '1.0.0';
-  static const String appDescription = 'A comprehensive choir management system for tracking members, attendance, and payments.';
+  static const String appDescription =
+      'A comprehensive choir management system for tracking members, attendance, and payments.';
 
   // Database Constants
   static const String usersTable = 'users';
@@ -36,7 +37,11 @@ class AppConstants {
 
   // File Extensions
   static const List<String> allowedImageExtensions = ['.jpg', '.jpeg', '.png'];
-  static const List<String> allowedDocumentExtensions = ['.pdf', '.doc', '.docx'];
+  static const List<String> allowedDocumentExtensions = [
+    '.pdf',
+    '.doc',
+    '.docx',
+  ];
   static const List<String> allowedExportExtensions = ['.xlsx', '.pdf'];
 
   // Maximum File Sizes (in bytes)
@@ -109,11 +114,16 @@ class AppConstants {
   static const int receiveTimeout = 30;
 
   // Error Messages
-  static const String networkErrorMessage = 'Network connection error. Please check your internet connection.';
-  static const String timeoutErrorMessage = 'Request timeout. Please try again.';
-  static const String generalErrorMessage = 'An unexpected error occurred. Please try again.';
-  static const String permissionErrorMessage = 'You do not have permission to perform this action.';
-  static const String notFoundErrorMessage = 'The requested resource was not found.';
+  static const String networkErrorMessage =
+      'Network connection error. Please check your internet connection.';
+  static const String timeoutErrorMessage =
+      'Request timeout. Please try again.';
+  static const String generalErrorMessage =
+      'An unexpected error occurred. Please try again.';
+  static const String permissionErrorMessage =
+      'You do not have permission to perform this action.';
+  static const String notFoundErrorMessage =
+      'The requested resource was not found.';
 
   // Success Messages
   static const String createSuccessMessage = 'Created successfully!';
@@ -124,7 +134,8 @@ class AppConstants {
   // Empty State Messages
   static const String noDataMessage = 'No data available';
   static const String noResultsMessage = 'No results found';
-  static const String noPermissionMessage = 'No permission to view this content';
+  static const String noPermissionMessage =
+      'No permission to view this content';
 
   // Loading Messages
   static const String loadingMessage = 'Loading...';
@@ -133,18 +144,23 @@ class AppConstants {
   static const String deletingMessage = 'Deleting...';
 
   // Confirmation Messages
-  static const String deleteConfirmMessage = 'Are you sure you want to delete this item?';
-  static const String unsavedChangesMessage = 'You have unsaved changes. Are you sure you want to leave?';
-  static const String logoutConfirmMessage = 'Are you sure you want to log out?';
+  static const String deleteConfirmMessage =
+      'Are you sure you want to delete this item?';
+  static const String unsavedChangesMessage =
+      'You have unsaved changes. Are you sure you want to leave?';
+  static const String logoutConfirmMessage =
+      'Are you sure you want to log out?';
 
   // Help Text
-  static const String passwordHelpText = 'Password must be at least $minPasswordLength characters long';
+  static const String passwordHelpText =
+      'Password must be at least $minPasswordLength characters long';
   static const String emailHelpText = 'Enter a valid email address';
   static const String phoneHelpText = 'Enter a valid phone number';
   static const String requiredFieldHelpText = 'This field is required';
 
   // Regex Patterns
-  static const String emailRegexPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+  static const String emailRegexPattern =
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
   static const String phoneRegexPattern = r'^\+?[0-9]{10,15}$';
   static const String nameRegexPattern = r'^[a-zA-Z\s]{2,}$';
 

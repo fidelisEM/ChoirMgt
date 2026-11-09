@@ -8,7 +8,6 @@ import '../services/auth_service.dart';
 import '../utils/logger.dart';
 
 class AuthController extends ChangeNotifier {
-
   AuthController() {
     _initializeAuth();
   }
@@ -41,10 +40,7 @@ class AuthController extends ChangeNotifier {
     });
   }
 
-  Future<bool> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> signIn({required String email, required String password}) async {
     try {
       _setLoading(true);
       _clearError();
@@ -92,7 +88,7 @@ class AuthController extends ChangeNotifier {
           // Upload profile image after user is registered
           late Uint8List imageBytes;
           late String fileName;
-          
+
           if (kIsWeb && profileImage is Uint8List) {
             // Web: profileImage is already Uint8List
             imageBytes = profileImage;
@@ -100,26 +96,33 @@ class AuthController extends ChangeNotifier {
           } else if (!kIsWeb && profileImage is File) {
             // Mobile: profileImage is File
             imageBytes = await profileImage.readAsBytes();
-            fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}.${profileImage.path.split('.').last}';
+            fileName =
+                'profile_${DateTime.now().millisecondsSinceEpoch}.${profileImage.path.split('.').last}';
           } else {
             throw Exception('Invalid image data type for current platform');
           }
-          
+
           final profileImageUrl = await _authService.uploadRegistrationImage(
-            imageBytes, 
-            fileName, 
-            _currentUser!.id
+            imageBytes,
+            fileName,
+            _currentUser!.id,
           );
 
           if (profileImageUrl != null) {
             // Update user profile with image URL
-            await _authService.updateUserProfileImage(_currentUser!.id, profileImageUrl);
-            
+            await _authService.updateUserProfileImage(
+              _currentUser!.id,
+              profileImageUrl,
+            );
+
             // Refresh user data to include the new image URL
             _currentUser = await _authService.getCurrentUserProfile();
           }
         } catch (imageError) {
-          Logger.error('Failed to upload profile image during registration', imageError);
+          Logger.error(
+            'Failed to upload profile image during registration',
+            imageError,
+          );
           // Don't fail the entire registration if image upload fails
           // User can upload image later from profile screen
         }
@@ -219,13 +222,19 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<String?> uploadProfileImage(Uint8List imageBytes, String fileName) async {
+  Future<String?> uploadProfileImage(
+    Uint8List imageBytes,
+    String fileName,
+  ) async {
     try {
       _setLoading(true);
       _clearError();
-      
-      final imageUrl = await _authService.uploadProfileImage(imageBytes, fileName);
-      
+
+      final imageUrl = await _authService.uploadProfileImage(
+        imageBytes,
+        fileName,
+      );
+
       _setLoading(false);
       return imageUrl;
     } catch (e) {
@@ -256,8 +265,8 @@ class AuthController extends ChangeNotifier {
   }
 
   bool get isAdmin => _currentUser?.role == UserRole.admin;
-  bool get isChoirLeader => 
-      _currentUser?.role == UserRole.admin || 
+  bool get isChoirLeader =>
+      _currentUser?.role == UserRole.admin ||
       _currentUser?.role == UserRole.choirLeader;
   bool get isChoirMember => _currentUser?.role == UserRole.choirMember;
 

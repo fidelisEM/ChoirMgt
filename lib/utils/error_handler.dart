@@ -12,7 +12,6 @@ enum ErrorType {
 }
 
 class AppError {
-
   const AppError({
     required this.message,
     this.code,
@@ -37,19 +36,19 @@ class AppError {
 class ErrorHandler {
   static String handleError(dynamic error, [StackTrace? stackTrace]) {
     final appError = _parseError(error, stackTrace);
-    
+
     // Log the error
     _logError(appError);
-    
+
     // Return user-friendly message
     return _getUserFriendlyMessage(appError);
   }
-  
+
   static AppError _parseError(dynamic error, [StackTrace? stackTrace]) {
     if (error is AppError) {
       return error;
     }
-    
+
     // Network errors
     if (error.toString().contains('NetworkException') ||
         error.toString().contains('SocketException') ||
@@ -61,7 +60,7 @@ class ErrorHandler {
         stackTrace: stackTrace,
       );
     }
-    
+
     // Authentication errors
     if (error.toString().contains('AuthException') ||
         error.toString().contains('Invalid login credentials') ||
@@ -74,7 +73,7 @@ class ErrorHandler {
         stackTrace: stackTrace,
       );
     }
-    
+
     // Validation errors
     if (error.toString().contains('ValidationException') ||
         error.toString().contains('Invalid') ||
@@ -86,7 +85,7 @@ class ErrorHandler {
         stackTrace: stackTrace,
       );
     }
-    
+
     // Database errors
     if (error.toString().contains('PostgrestException') ||
         error.toString().contains('ForeignKeyViolation') ||
@@ -98,7 +97,7 @@ class ErrorHandler {
         stackTrace: stackTrace,
       );
     }
-    
+
     // Permission errors
     if (error.toString().contains('PermissionException') ||
         error.toString().contains('Forbidden') ||
@@ -110,7 +109,7 @@ class ErrorHandler {
         stackTrace: stackTrace,
       );
     }
-    
+
     // Unknown errors
     return AppError(
       message: error?.toString() ?? 'Unknown error occurred',
@@ -119,30 +118,49 @@ class ErrorHandler {
       stackTrace: stackTrace,
     );
   }
-  
+
   static void _logError(AppError error) {
     switch (error.type) {
       case ErrorType.network:
-        Logger.warning('Network Error: ${error.message}', error.originalError, error.stackTrace);
+        Logger.warning(
+          'Network Error: ${error.message}',
+          error.originalError,
+          error.stackTrace,
+        );
         break;
       case ErrorType.authentication:
-        Logger.warning('Auth Error: ${error.message}', error.originalError, error.stackTrace);
+        Logger.warning(
+          'Auth Error: ${error.message}',
+          error.originalError,
+          error.stackTrace,
+        );
         break;
       case ErrorType.validation:
         Logger.info('Validation Error: ${error.message}', error.originalError);
         break;
       case ErrorType.database:
-        Logger.error('Database Error: ${error.message}', error.originalError, error.stackTrace);
+        Logger.error(
+          'Database Error: ${error.message}',
+          error.originalError,
+          error.stackTrace,
+        );
         break;
       case ErrorType.permission:
-        Logger.warning('Permission Error: ${error.message}', error.originalError);
+        Logger.warning(
+          'Permission Error: ${error.message}',
+          error.originalError,
+        );
         break;
       case ErrorType.unknown:
-        Logger.error('Unknown Error: ${error.message}', error.originalError, error.stackTrace);
+        Logger.error(
+          'Unknown Error: ${error.message}',
+          error.originalError,
+          error.stackTrace,
+        );
         break;
     }
   }
-  
+
   static String _getUserFriendlyMessage(AppError error) {
     switch (error.type) {
       case ErrorType.network:
@@ -162,7 +180,7 @@ class ErrorHandler {
         return 'An unexpected error occurred. Please try again.';
     }
   }
-  
+
   // Specific error creators
   static AppError networkError(String message, [dynamic originalError]) {
     return AppError(
@@ -171,7 +189,7 @@ class ErrorHandler {
       originalError: originalError,
     );
   }
-  
+
   static AppError authenticationError(String message, [dynamic originalError]) {
     return AppError(
       message: message,
@@ -179,15 +197,18 @@ class ErrorHandler {
       originalError: originalError,
     );
   }
-  
-  static AppError validationError(String message, [Map<String, dynamic>? context]) {
+
+  static AppError validationError(
+    String message, [
+    Map<String, dynamic>? context,
+  ]) {
     return AppError(
       message: message,
       type: ErrorType.validation,
       context: context,
     );
   }
-  
+
   static AppError databaseError(String message, [dynamic originalError]) {
     return AppError(
       message: message,
@@ -195,15 +216,18 @@ class ErrorHandler {
       originalError: originalError,
     );
   }
-  
-  static AppError permissionError(String message, [Map<String, dynamic>? context]) {
+
+  static AppError permissionError(
+    String message, [
+    Map<String, dynamic>? context,
+  ]) {
     return AppError(
       message: message,
       type: ErrorType.permission,
       context: context,
     );
   }
-  
+
   // Handle Flutter framework errors
   static void handleFlutterError(FlutterErrorDetails details) {
     final error = AppError(
@@ -212,20 +236,20 @@ class ErrorHandler {
       originalError: details.exception,
       stackTrace: details.stack,
     );
-    
+
     _logError(error);
-    
+
     // In production, send to crash reporting service
     if (AppConfig.isProduction && AppConfig.enableCrashReporting) {
       _sendToCrashReporting(error, details.stack);
     }
   }
-  
+
   // Handle async errors
   static void handleAsyncError(Object error, StackTrace stackTrace) {
     final appError = _parseError(error, stackTrace);
     _logError(appError);
-    
+
     // In production, send to crash reporting service
     if (AppConfig.isProduction && AppConfig.enableCrashReporting) {
       _sendToCrashReporting(appError, stackTrace);
@@ -246,7 +270,7 @@ class ErrorHandler {
       //     if (error.context != null) 'Context: ${error.context}',
       //   ],
       // );
-      
+
       Logger.info('Error sent to crash reporting: ${error.message}');
     } catch (e) {
       Logger.error('Failed to send error to crash reporting', e);

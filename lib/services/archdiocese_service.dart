@@ -8,24 +8,26 @@ class ArchdioceseService {
   Future<List<ArchdioceseModel>> getArchdioceses({String? country}) async {
     try {
       var query = _supabase.from('archdioceses').select();
-      
+
       if (country != null && country.isNotEmpty) {
         query = query.eq('country', country);
       }
-      
+
       final response = await query.eq('is_active', true).order('name');
       var archdioceses = (response as List)
           .map((json) => ArchdioceseModel.fromJson(json))
           .toList();
-      
+
       // If no data from database, use sample data
       if (archdioceses.isEmpty) {
         archdioceses = ArchdioceseParishSampleData.getSampleArchdioceses();
         if (country != null && country.isNotEmpty) {
-          archdioceses = archdioceses.where((a) => a.country == country).toList();
+          archdioceses = archdioceses
+              .where((a) => a.country == country)
+              .toList();
         }
       }
-      
+
       return archdioceses;
     } catch (e) {
       // Fallback to sample data if database connection fails
@@ -52,7 +54,9 @@ class ArchdioceseService {
     }
   }
 
-  Future<ArchdioceseModel> createArchdiocese(ArchdioceseModel archdiocese) async {
+  Future<ArchdioceseModel> createArchdiocese(
+    ArchdioceseModel archdiocese,
+  ) async {
     try {
       final response = await _supabase
           .from('archdioceses')
@@ -66,7 +70,9 @@ class ArchdioceseService {
     }
   }
 
-  Future<ArchdioceseModel> updateArchdiocese(ArchdioceseModel archdiocese) async {
+  Future<ArchdioceseModel> updateArchdiocese(
+    ArchdioceseModel archdiocese,
+  ) async {
     try {
       final response = await _supabase
           .from('archdioceses')
@@ -107,7 +113,8 @@ class ArchdioceseService {
 
       // If no data from database, use sample data
       if (countries.isEmpty) {
-        final sampleArchdioceses = ArchdioceseParishSampleData.getSampleArchdioceses();
+        final sampleArchdioceses =
+            ArchdioceseParishSampleData.getSampleArchdioceses();
         countries = sampleArchdioceses
             .map((a) => a.country)
             .where((country) => country.isNotEmpty)
@@ -119,7 +126,8 @@ class ArchdioceseService {
       return countries;
     } catch (e) {
       // Fallback to sample data if database connection fails
-      final sampleArchdioceses = ArchdioceseParishSampleData.getSampleArchdioceses();
+      final sampleArchdioceses =
+          ArchdioceseParishSampleData.getSampleArchdioceses();
       final countries = sampleArchdioceses
           .map((a) => a.country)
           .where((country) => country.isNotEmpty)

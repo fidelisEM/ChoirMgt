@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/app_config.dart';
@@ -13,7 +14,7 @@ class ErrorBoundary extends StatefulWidget {
     this.onError,
     this.fallback,
   });
-  
+
   final Widget child;
   final void Function(Object error, StackTrace stackTrace)? onError;
   final Widget Function(Object error, StackTrace stackTrace)? fallback;
@@ -29,11 +30,11 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   @override
   void initState() {
     super.initState();
-    
+
     // Set up global error handlers
     FlutterError.onError = (FlutterErrorDetails details) {
       ErrorHandler.handleFlutterError(details);
-      if (mounted) {
+      if (mounted && _isFatal(details.exception)) {
         setState(() {
           _error = details.exception;
           _stackTrace = details.stack;
@@ -55,20 +56,20 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
       if (widget.fallback != null) {
         return widget.fallback!(_error!, _stackTrace!);
       }
-      
+
       return _DefaultErrorWidget(
         error: _error!,
         stackTrace: _stackTrace!,
         onRetry: _resetError,
       );
     }
-    
+
     return ErrorBoundaryWrapper(
       onError: (error, stackTrace) {
         widget.onError?.call(error, stackTrace);
         Logger.exception('Error Boundary', error, stackTrace);
-        
-        if (mounted) {
+
+        if (mounted && _isFatal(error)) {
           setState(() {
             _error = error;
             _stackTrace = stackTrace;
@@ -78,6 +79,25 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
       child: widget.child,
     );
   }
+
+  // Flutter reports some purely cosmetic, debug-mode-only layout warnings
+  // (e.g. an overflowing Row/Column, or a rebuild scheduled mid-frame)
+  // through the same FlutterError.onError channel as genuine crashes.
+  // Those are already visually indicated (the yellow/black stripes) and
+  // never affect release builds, so treating them as fatal here would
+  // replace the whole screen with an error page over what is, from the
+  // user's perspective, a minor visual glitch. Only escalate to the
+  // full-screen fallback for errors that aren't one of these known
+  // non-fatal, debug-only warnings.
+  static bool _isFatal(Object error) {
+    final message = error.toString();
+    const nonFatalPatterns = [
+      'A RenderFlex overflowed',
+      'A RenderFlow overflowed',
+      'Build scheduled during frame',
+    ];
+    return !nonFatalPatterns.any(message.contains);
+  }
 }
 
 class ErrorBoundaryWrapper extends StatefulWidget {
@@ -86,7 +106,7 @@ class ErrorBoundaryWrapper extends StatefulWidget {
     required this.child,
     required this.onError,
   });
-  
+
   final Widget child;
   final void Function(Object error, StackTrace stackTrace) onError;
 
@@ -99,13 +119,18 @@ class _ErrorBoundaryWrapperState extends State<ErrorBoundaryWrapper> {
   Widget build(BuildContext context) {
     return widget.child;
   }
-  
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     // Catch errors in the widget tree
     FlutterError.onError = (FlutterErrorDetails details) {
+      // Replacing the default handler drops Flutter's report, which names the
+      // widget behind errors like overflows. Keep it while debugging.
+      if (kDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      }
       widget.onError(details.exception, details.stack ?? StackTrace.current);
     };
   }
@@ -117,7 +142,7 @@ class _DefaultErrorWidget extends StatelessWidget {
     required this.stackTrace,
     required this.onRetry,
   });
-  
+
   final Object error;
   final StackTrace stackTrace;
   final VoidCallback onRetry;
@@ -163,9 +188,12 @@ class _DefaultErrorWidget extends StatelessWidget {
                         children: [
                           Text(
                             'Error Details:',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onErrorContainer,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onErrorContainer,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           SelectableText(
@@ -173,15 +201,20 @@ class _DefaultErrorWidget extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 12,
-                              color: Theme.of(context).colorScheme.onErrorContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onErrorContainer,
                             ),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             'Stack Trace:',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onErrorContainer,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onErrorContainer,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           SelectableText(
@@ -189,7 +222,9 @@ class _DefaultErrorWidget extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 10,
-                              color: Theme.of(context).colorScheme.onErrorContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onErrorContainer,
                             ),
                           ),
                         ],
@@ -207,10 +242,9 @@ class _DefaultErrorWidget extends StatelessWidget {
                     child: const Text('Try Again'),
                   ),
                   ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/',
-                      (route) => false,
-                    ),
+                    onPressed: () => Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil('/', (route) => false),
                     child: const Text('Go Home'),
                   ),
                 ],
@@ -230,7 +264,7 @@ class GlobalErrorHandler {
     FlutterError.onError = (FlutterErrorDetails details) {
       ErrorHandler.handleFlutterError(details);
     };
-    
+
     // Handle async errors
     PlatformDispatcher.instance.onError = (error, stack) {
       ErrorHandler.handleAsyncError(error, stack);
@@ -248,7 +282,7 @@ class SafeWidget extends StatelessWidget {
     this.fallback,
     this.errorMessage,
   });
-  
+
   final Widget child;
   final void Function(Object error, StackTrace stackTrace)? onError;
   final Widget? fallback;
@@ -276,7 +310,7 @@ class _SafeErrorWidget extends StatelessWidget {
     required this.error,
     required this.isDevelopment,
   });
-  
+
   final String message;
   final Object error;
   final bool isDevelopment;
@@ -314,7 +348,9 @@ class _SafeErrorWidget extends StatelessWidget {
               error.toString(),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontFamily: 'monospace',
-                color: Theme.of(context).colorScheme.onErrorContainer.withValues(alpha: 0.7),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onErrorContainer.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
             ),

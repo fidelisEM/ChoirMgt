@@ -25,10 +25,12 @@ class MemberController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
-      _membersWithUserInfo = await _memberService.getChoirMembersWithUserInfo(choirId);
+
+      _membersWithUserInfo = await _memberService.getChoirMembersWithUserInfo(
+        choirId,
+      );
       _memberStatistics = await _memberService.getMemberStatistics(choirId);
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load choir members: $e');
@@ -50,7 +52,8 @@ class MemberController extends ChangeNotifier {
       _clearError();
 
       // Generate registration number if not provided
-      final registrationNumber = customRegistrationNumber ?? 
+      final registrationNumber =
+          customRegistrationNumber ??
           await _memberService.generateRegistrationNumber(choirId);
 
       final member = await _memberService.addMemberToChoir(
@@ -86,7 +89,7 @@ class MemberController extends ChangeNotifier {
       _clearError();
 
       final success = await _memberService.removeMemberFromChoir(memberId);
-      
+
       if (success) {
         // Reload members list
         await loadChoirMembers(choirId);
@@ -122,15 +125,18 @@ class MemberController extends ChangeNotifier {
       if (updatedMember != null) {
         // Update local data
         final index = _membersWithUserInfo.indexWhere(
-          (m) => m['id'] == memberId
+          (m) => m['id'] == memberId,
         );
         if (index != -1) {
-          _membersWithUserInfo[index]['status'] = status.toString().split('.').last;
+          _membersWithUserInfo[index]['status'] = status
+              .toString()
+              .split('.')
+              .last;
         }
-        
+
         // Reload statistics
         _memberStatistics = await _memberService.getMemberStatistics(choirId);
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -232,11 +238,13 @@ class MemberController extends ChangeNotifier {
 
       if (success) {
         // Update local data
-        final memberIndex = _membersWithUserInfo.indexWhere((m) => m['id'] == memberId);
+        final memberIndex = _membersWithUserInfo.indexWhere(
+          (m) => m['id'] == memberId,
+        );
         if (memberIndex != -1) {
           _membersWithUserInfo[memberIndex]['role'] = newRole;
         }
-        
+
         _setLoading(false);
         return true;
       } else {
@@ -268,7 +276,9 @@ class MemberController extends ChangeNotifier {
 
       if (success) {
         // Update local data
-        final memberIndex = _membersWithUserInfo.indexWhere((m) => m['id'] == memberId);
+        final memberIndex = _membersWithUserInfo.indexWhere(
+          (m) => m['id'] == memberId,
+        );
         if (memberIndex != -1) {
           _membersWithUserInfo[memberIndex]['level'] = newLevel;
         }
@@ -332,9 +342,9 @@ class MemberController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       await _statusService.updateAllMemberStatuses(choirId);
-      
+
       // Reload members to reflect status changes
       await loadChoirMembers(choirId);
       _setLoading(false);
@@ -344,14 +354,21 @@ class MemberController extends ChangeNotifier {
     }
   }
 
-  Future<MemberStatus> checkMemberStatus(String memberId, String choirId) async {
+  Future<MemberStatus> checkMemberStatus(
+    String memberId,
+    String choirId,
+  ) async {
     try {
       final memberData = getMemberById(memberId);
       if (memberData == null) {
         throw Exception('Member not found');
       }
-      
-      return await _statusService.checkMemberStatus(memberId, choirId, memberData);
+
+      return await _statusService.checkMemberStatus(
+        memberId,
+        choirId,
+        memberData,
+      );
     } catch (e) {
       throw Exception('Error checking member status: $e');
     }

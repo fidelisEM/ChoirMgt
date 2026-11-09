@@ -14,11 +14,7 @@ import '../../utils/helpers.dart';
 import '../../utils/logger.dart';
 
 class EditChoirScreen extends StatefulWidget {
-
-  const EditChoirScreen({
-    super.key,
-    required this.choir,
-  });
+  const EditChoirScreen({super.key, required this.choir});
   final ChoirModel choir;
 
   @override
@@ -32,26 +28,29 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
   File? _selectedImage;
   Uint8List? _webImageBytes;
   String? _currentImageUrl;
-  
+
   // Country search functionality
-  final TextEditingController _countrySearchController = TextEditingController();
+  final TextEditingController _countrySearchController =
+      TextEditingController();
   String? _selectedCountry;
   bool _isCountryDropdownOpen = false;
-  
+
   // Diocese search functionality
-  final TextEditingController _dioceseSearchController = TextEditingController();
+  final TextEditingController _dioceseSearchController =
+      TextEditingController();
   String? _selectedDiocese;
   bool _isDioceseDropdownOpen = false;
   bool _isCustomDiocese = false;
-  final TextEditingController _customDioceseController = TextEditingController();
-  
+  final TextEditingController _customDioceseController =
+      TextEditingController();
+
   // Parish search functionality
   final TextEditingController _parishSearchController = TextEditingController();
   String? _selectedParish;
   bool _isParishDropdownOpen = false;
   bool _isCustomParish = false;
   final TextEditingController _customParishController = TextEditingController();
-  
+
   // Add controllers for core fields
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -322,7 +321,10 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
       {'name': 'Archdiocese of Rio de Janeiro', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of Salvador da Bahia', 'type': 'Archdiocese'},
       {'name': 'Archdiocese of São Paulo', 'type': 'Archdiocese'},
-      {'name': 'Archdiocese of São Sebastião do Rio de Janeiro', 'type': 'Archdiocese'},
+      {
+        'name': 'Archdiocese of São Sebastião do Rio de Janeiro',
+        'type': 'Archdiocese',
+      },
     ],
     'Canada': [
       {'name': 'Archdiocese of Edmonton', 'type': 'Archdiocese'},
@@ -602,7 +604,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
       {'name': 'Diocese of Kerry', 'type': 'Diocese'},
       {'name': 'Diocese of Limerick', 'type': 'Diocese'},
       {'name': 'Diocese of Waterford and Lismore', 'type': 'Diocese'},
-    ]
+    ],
   };
 
   @override
@@ -616,17 +618,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
     _selectedCountry = widget.choir.country;
     _selectedDiocese = widget.choir.diocese;
     _selectedParish = widget.choir.parish;
-    
+
     // Initialize core field controllers
     _nameController.text = widget.choir.name;
     _descriptionController.text = widget.choir.description;
-    
+
     _countrySearchController.text = widget.choir.country ?? '';
-    
+
     if (widget.choir.diocese != null) {
-      final dioceseExists = _diocesesByCountry[widget.choir.country]
-          ?.any((d) => d['name'] == widget.choir.diocese) ?? false;
-      
+      final dioceseExists =
+          _diocesesByCountry[widget.choir.country]?.any(
+            (d) => d['name'] == widget.choir.diocese,
+          ) ??
+          false;
+
       if (dioceseExists) {
         _dioceseSearchController.text = widget.choir.diocese!;
       } else {
@@ -634,7 +639,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
         _customDioceseController.text = widget.choir.diocese!;
       }
     }
-    
+
     if (widget.choir.parish != null) {
       _isCustomParish = true;
       _customParishController.text = widget.choir.parish!;
@@ -709,15 +714,9 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
 
   Widget _getImageWidget() {
     if (_webImageBytes != null) {
-      return Image.memory(
-        _webImageBytes!,
-        fit: BoxFit.cover,
-      );
+      return Image.memory(_webImageBytes!, fit: BoxFit.cover);
     } else if (_selectedImage != null) {
-      return Image.file(
-        _selectedImage!,
-        fit: BoxFit.cover,
-      );
+      return Image.file(_selectedImage!, fit: BoxFit.cover);
     } else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
       return Image.network(
         _currentImageUrl!,
@@ -792,9 +791,9 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
             border: const OutlineInputBorder(),
             prefixIcon: const Icon(Icons.public),
             suffixIcon: IconButton(
-              icon: Icon(_isCountryDropdownOpen 
-                  ? Icons.expand_less 
-                  : Icons.expand_more),
+              icon: Icon(
+                _isCountryDropdownOpen ? Icons.expand_less : Icons.expand_more,
+              ),
               onPressed: () {
                 setState(() {
                   _isCountryDropdownOpen = !_isCountryDropdownOpen;
@@ -825,7 +824,10 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
               itemBuilder: (context, index) {
                 final country = _getFilteredCountries()[index];
                 return ListTile(
-                  leading: Text(country['flag']!, style: const TextStyle(fontSize: 20)),
+                  leading: Text(
+                    country['flag']!,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                   title: Text(country['name']!),
                   onTap: () {
                     setState(() {
@@ -852,7 +854,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
 
   Widget _buildDioceseDropdown() {
     final dioceses = _diocesesByCountry[_selectedCountry] ?? [];
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -878,9 +880,11 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
                     tooltip: 'Add Custom Diocese',
                   ),
                   IconButton(
-                    icon: Icon(_isDioceseDropdownOpen 
-                        ? Icons.expand_less 
-                        : Icons.expand_more),
+                    icon: Icon(
+                      _isDioceseDropdownOpen
+                          ? Icons.expand_less
+                          : Icons.expand_more,
+                    ),
                     onPressed: () {
                       setState(() {
                         _isDioceseDropdownOpen = !_isDioceseDropdownOpen;
@@ -959,7 +963,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
 
   Widget _buildParishField() {
     final availableParishes = _getAvailableParishes();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -975,9 +979,11 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
                 children: [
                   if (availableParishes.isNotEmpty)
                     IconButton(
-                      icon: Icon(_isParishDropdownOpen 
-                          ? Icons.expand_less 
-                          : Icons.expand_more),
+                      icon: Icon(
+                        _isParishDropdownOpen
+                            ? Icons.expand_less
+                            : Icons.expand_more,
+                      ),
                       onPressed: () {
                         setState(() {
                           _isParishDropdownOpen = !_isParishDropdownOpen;
@@ -1017,7 +1023,9 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
               return null;
             },
           ),
-        if (!_isCustomParish && _isParishDropdownOpen && availableParishes.isNotEmpty)
+        if (!_isCustomParish &&
+            _isParishDropdownOpen &&
+            availableParishes.isNotEmpty)
           Container(
             height: 200,
             decoration: BoxDecoration(
@@ -1028,10 +1036,11 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
               itemCount: availableParishes.length,
               itemBuilder: (context, index) {
                 final parish = availableParishes[index];
-                final isMessage = parish.contains('Parish data for this diocese') || 
-                                parish.contains('Please select') || 
-                                parish.contains('Or contact support');
-                
+                final isMessage =
+                    parish.contains('Parish data for this diocese') ||
+                    parish.contains('Please select') ||
+                    parish.contains('Or contact support');
+
                 return ListTile(
                   leading: Icon(isMessage ? Icons.info : Icons.church),
                   title: Text(
@@ -1042,13 +1051,15 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
                     ),
                   ),
                   enabled: !isMessage,
-                  onTap: isMessage ? null : () {
-                    setState(() {
-                      _selectedParish = parish;
-                      _parishSearchController.text = parish;
-                      _isParishDropdownOpen = false;
-                    });
-                  },
+                  onTap: isMessage
+                      ? null
+                      : () {
+                          setState(() {
+                            _selectedParish = parish;
+                            _parishSearchController.text = parish;
+                            _isParishDropdownOpen = false;
+                          });
+                        },
                 );
               },
             ),
@@ -1096,8 +1107,8 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
         const SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
-            onPressed: choirController.isLoading 
-                ? null 
+            onPressed: choirController.isLoading
+                ? null
                 : () => _updateChoir(choirController),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
@@ -1123,82 +1134,145 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
     if (_countrySearchController.text.isEmpty) {
       return _countries;
     }
-    
+
     return _countries.where((country) {
-      return country['name']!
-          .toLowerCase()
-          .contains(_countrySearchController.text.toLowerCase());
+      return country['name']!.toLowerCase().contains(
+        _countrySearchController.text.toLowerCase(),
+      );
     }).toList();
   }
 
   List<Map<String, String>> _getFilteredDioceses() {
     final dioceses = _diocesesByCountry[_selectedCountry] ?? [];
-    
+
     if (_dioceseSearchController.text.isEmpty) {
       return dioceses;
     }
-    
+
     return dioceses.where((diocese) {
-      return diocese['name']!
-          .toLowerCase()
-          .contains(_dioceseSearchController.text.toLowerCase());
+      return diocese['name']!.toLowerCase().contains(
+        _dioceseSearchController.text.toLowerCase(),
+      );
     }).toList();
   }
 
   List<String> _getAvailableParishes() {
     final selectedCountry = _selectedCountry;
     String? selectedDiocese;
-    
+
     // Handle both predefined and custom diocese
     if (_isCustomDiocese) {
       selectedDiocese = _customDioceseController.text.trim();
     } else {
       selectedDiocese = _selectedDiocese;
     }
-    
-    if (selectedCountry == null || selectedDiocese == null || selectedDiocese.isEmpty) {
+
+    if (selectedCountry == null ||
+        selectedDiocese == null ||
+        selectedDiocese.isEmpty) {
       return [];
     }
-    
+
     // Static list of parishes based on known archdioceses
     List<String> availableParishes = [];
-    
+
     if (selectedCountry == 'United States') {
       if (selectedDiocese == 'Archdiocese of New York') {
-        availableParishes = ['St. Patrick\'s Cathedral', 'St. John the Baptist', 'Our Lady of Guadalupe', 'St. Vincent Ferrer'];
+        availableParishes = [
+          'St. Patrick\'s Cathedral',
+          'St. John the Baptist',
+          'Our Lady of Guadalupe',
+          'St. Vincent Ferrer',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Los Angeles') {
-        availableParishes = ['Our Lady of the Angels', 'St. Vibiana', 'Holy Family', 'St. Monica'];
+        availableParishes = [
+          'Our Lady of the Angels',
+          'St. Vibiana',
+          'Holy Family',
+          'St. Monica',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Chicago') {
-        availableParishes = ['Holy Name Cathedral', 'St. Mary of the Angels', 'St. Alphonsus Liguori', 'St. Clement', 'St. Vincent de Paul'];
+        availableParishes = [
+          'Holy Name Cathedral',
+          'St. Mary of the Angels',
+          'St. Alphonsus Liguori',
+          'St. Clement',
+          'St. Vincent de Paul',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Atlanta') {
-        availableParishes = ['Cathedral of Christ the King', 'Shrine of the Immaculate Conception', 'St. Thomas More'];
+        availableParishes = [
+          'Cathedral of Christ the King',
+          'Shrine of the Immaculate Conception',
+          'St. Thomas More',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Baltimore') {
-        availableParishes = ['Basilica of the National Shrine', 'St. Alphonsus', 'Cathedral of Mary Our Queen'];
+        availableParishes = [
+          'Basilica of the National Shrine',
+          'St. Alphonsus',
+          'Cathedral of Mary Our Queen',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Boston') {
-        availableParishes = ['Cathedral of the Holy Cross', 'St. Leonard', 'Sacred Heart', 'St. Mary'];
+        availableParishes = [
+          'Cathedral of the Holy Cross',
+          'St. Leonard',
+          'Sacred Heart',
+          'St. Mary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Cincinnati') {
-        availableParishes = ['Cathedral Basilica of Saint Peter in Chains', 'St. Francis Xavier', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral Basilica of Saint Peter in Chains',
+          'St. Francis Xavier',
+          'Holy Trinity',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Denver') {
-        availableParishes = ['Cathedral Basilica of the Immaculate Conception', 'St. Joseph', 'Holy Family'];
+        availableParishes = [
+          'Cathedral Basilica of the Immaculate Conception',
+          'St. Joseph',
+          'Holy Family',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Detroit') {
-        availableParishes = ['Cathedral of the Most Blessed Sacrament', 'St. Aloysius', 'Sacred Heart Major Seminary'];
+        availableParishes = [
+          'Cathedral of the Most Blessed Sacrament',
+          'St. Aloysius',
+          'Sacred Heart Major Seminary',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Miami') {
-        availableParishes = ['St. Mary Cathedral', 'Gesu Catholic Church', 'St. Augustine'];
+        availableParishes = [
+          'St. Mary Cathedral',
+          'Gesu Catholic Church',
+          'St. Augustine',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Philadelphia') {
-        availableParishes = ['Cathedral Basilica of Saints Peter and Paul', 'Old St. Joseph', 'St. Patrick'];
+        availableParishes = [
+          'Cathedral Basilica of Saints Peter and Paul',
+          'Old St. Joseph',
+          'St. Patrick',
+        ];
       } else if (selectedDiocese == 'Archdiocese of San Francisco') {
-        availableParishes = ['Cathedral of Saint Mary of the Assumption', 'Old St. Mary', 'St. Ignatius'];
+        availableParishes = [
+          'Cathedral of Saint Mary of the Assumption',
+          'Old St. Mary',
+          'St. Ignatius',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Seattle') {
-        availableParishes = ['St. James Cathedral', 'Sacred Heart', 'St. Joseph'];
+        availableParishes = [
+          'St. James Cathedral',
+          'Sacred Heart',
+          'St. Joseph',
+        ];
       } else if (selectedDiocese == 'Archdiocese of Washington') {
-        availableParishes = ['Cathedral of St. Matthew the Apostle', 'St. Patrick', 'Holy Trinity'];
+        availableParishes = [
+          'Cathedral of St. Matthew the Apostle',
+          'St. Patrick',
+          'Holy Trinity',
+        ];
       } else {
-        // For predefined dioceses without specific parish data, 
+        // For predefined dioceses without specific parish data,
         // show a message indicating parish data is being updated
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Ghana') {
@@ -1223,7 +1297,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Francis of Assisi Parish – Airport',
           'St. Michael and All Angels Parish – Nungua',
           'St. Margaret Mary Parish',
-          'St. Augustine Parish – Cantonments'
+          'St. Augustine Parish – Cantonments',
         ];
       } else if (selectedDiocese == 'Roman Catholic Archdiocese of Kumasi') {
         availableParishes = [
@@ -1236,13 +1310,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Monica Parish – Kumasi',
           'Holy Family Parish – Kumasi',
           'St. Louis Parish – Kumasi',
-          'St. Anne Parish – Kumasi'
+          'St. Anne Parish – Kumasi',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Kenya') {
@@ -1252,25 +1326,25 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Peter Claver Parish',
           'Sacred Heart Parish – Nairobi',
           'Christ the King Parish – Nairobi',
-          'Our Lady of Victories Parish'
+          'Our Lady of Victories Parish',
         ];
       } else if (selectedDiocese == 'Roman Catholic Archdiocese of Kisumu') {
         availableParishes = [
           'Our Lady of Victories Cathedral – Kisumu',
           'Sacred Heart Parish – Kisumu',
-          'St. Theresa Parish – Kisumu'
+          'St. Theresa Parish – Kisumu',
         ];
       } else if (selectedDiocese == 'Roman Catholic Archdiocese of Mombasa') {
         availableParishes = [
           'Holy Ghost Cathedral – Mombasa',
           'Sacred Heart Parish – Mombasa',
-          'St. Teresa Parish – Mombasa'
+          'St. Teresa Parish – Mombasa',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Nigeria') {
@@ -1279,19 +1353,19 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Holy Cross Cathedral – Lagos',
           'St. Dominic Parish – Yaba',
           'Sacred Heart Parish – Lagos',
-          'Christ the King Parish – Lagos'
+          'Christ the King Parish – Lagos',
         ];
       } else if (selectedDiocese == 'Roman Catholic Archdiocese of Abuja') {
         availableParishes = [
           'Our Lady Queen of Nigeria Pro-Cathedral',
           'Sacred Heart Parish – Abuja',
-          'St. Murumba Parish – Abuja'
+          'St. Murumba Parish – Abuja',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Uganda') {
@@ -1301,19 +1375,19 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Christ the King Parish – Kampala',
           'Sacred Heart Parish – Kampala',
           'St. Augustine Parish – Kampala',
-          'Holy Family Parish – Kampala'
+          'Holy Family Parish – Kampala',
         ];
       } else if (selectedDiocese == 'Archdiocese of Gulu') {
         availableParishes = [
           'Sacred Heart Cathedral – Gulu',
           'St. Joseph Parish – Gulu',
-          'St. Monica Parish – Gulu'
+          'St. Monica Parish – Gulu',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Tanzania') {
@@ -1322,19 +1396,19 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Joseph Cathedral – Dar es Salaam',
           'Sacred Heart Parish – Dar es Salaam',
           'St. Peter Parish – Dar es Salaam',
-          'Holy Cross Parish – Dar es Salaam'
+          'Holy Cross Parish – Dar es Salaam',
         ];
       } else if (selectedDiocese == 'Archdiocese of Arusha') {
         availableParishes = [
           'St. Teresa Cathedral – Arusha',
           'St. Joseph Parish – Arusha',
-          'Sacred Heart Parish – Arusha'
+          'Sacred Heart Parish – Arusha',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Rwanda') {
@@ -1343,13 +1417,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Sainte-Famille Cathedral – Kigali',
           'St. Michel Parish – Kigali',
           'Sacred Heart Parish – Kigali',
-          'St. Paul Parish – Kigali'
+          'St. Paul Parish – Kigali',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Ethiopia') {
@@ -1357,13 +1431,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
         availableParishes = [
           'Holy Trinity Cathedral – Addis Ababa',
           'St. Joseph Parish – Addis Ababa',
-          'Sacred Heart Parish – Addis Ababa'
+          'Sacred Heart Parish – Addis Ababa',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Mexico') {
@@ -1372,20 +1446,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Metropolitan Cathedral – Mexico City',
           'Basilica of Our Lady of Guadalupe',
           'Sacred Heart Parish – Mexico City',
-          'San José Parish – Mexico City'
+          'San José Parish – Mexico City',
         ];
       } else if (selectedDiocese == 'Archdiocese of Guadalajara') {
         availableParishes = [
           'Cathedral of Guadalajara',
           'Sanctuary of Our Lady of Zapopan',
           'Sacred Heart Parish – Guadalajara',
-          'San Juan de Dios Parish'
+          'San Juan de Dios Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Argentina') {
@@ -1394,13 +1468,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Metropolitan Cathedral – Buenos Aires',
           'San Ignacio Parish',
           'Sacred Heart Parish – Buenos Aires',
-          'San Francisco Parish'
+          'San Francisco Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Colombia') {
@@ -1409,13 +1483,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Primatial Cathedral – Bogotá',
           'Sacred Heart Parish – Bogotá',
           'San Ignacio Parish',
-          'La Candelaria Parish'
+          'La Candelaria Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Italy') {
@@ -1425,20 +1499,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Peter\'s Basilica',
           'St. Mary Major',
           'St. Paul Outside the Walls',
-          'Santa Maria in Trastevere'
+          'Santa Maria in Trastevere',
         ];
       } else if (selectedDiocese == 'Archdiocese of Milano') {
         availableParishes = [
           'Milan Cathedral',
           'Sant\'Ambrogio Basilica',
           'San Lorenzo Maggiore',
-          'Santa Maria delle Grazie'
+          'Santa Maria delle Grazie',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'France') {
@@ -1448,13 +1522,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Sainte-Chapelle',
           'Saint-Sulpice',
           'Sacred Heart Basilica',
-          'Saint-Germain-des-Prés'
+          'Saint-Germain-des-Prés',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Spain') {
@@ -1463,13 +1537,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Almudena Cathedral – Madrid',
           'San Isidro Church',
           'Sacred Heart Parish – Madrid',
-          'San Francisco el Grande'
+          'San Francisco el Grande',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'India') {
@@ -1478,19 +1552,19 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Holy Name Cathedral – Mumbai',
           'Sacred Heart Parish – Mumbai',
           'St. Michael\'s Church',
-          'Our Lady of the Mount'
+          'Our Lady of the Mount',
         ];
       } else if (selectedDiocese == 'Archdiocese of Delhi') {
         availableParishes = [
           'Sacred Heart Cathedral – New Delhi',
           'St. Columba\'s Church',
-          'Sacred Heart Parish – Delhi'
+          'Sacred Heart Parish – Delhi',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Indonesia') {
@@ -1499,13 +1573,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Cathedral of Our Lady of the Assumption – Jakarta',
           'St. Mary of Fatima Parish',
           'Sacred Heart Parish – Jakarta',
-          'St. Francis Xavier Parish'
+          'St. Francis Xavier Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'South Korea') {
@@ -1514,13 +1588,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Myeongdong Cathedral – Seoul',
           'Sacred Heart Parish – Seoul',
           'St. Mary\'s Parish – Seoul',
-          'Holy Family Parish'
+          'Holy Family Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'South Africa') {
@@ -1529,20 +1603,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Mary\'s Cathedral – Cape Town',
           'Sacred Heart Parish – Cape Town',
           'St. Joseph Parish',
-          'Holy Trinity Parish'
+          'Holy Trinity Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Johannesburg') {
         availableParishes = [
           'Christ the King Cathedral – Johannesburg',
           'Sacred Heart Parish – Johannesburg',
           'St. Peter Parish',
-          'Holy Family Parish'
+          'Holy Family Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Ireland') {
@@ -1552,19 +1626,19 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Sacred Heart Parish – Dublin',
           'St. Patrick\'s Cathedral',
           'Christ Church Cathedral',
-          'St. Teresa\'s Parish'
+          'St. Teresa\'s Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Armagh') {
         availableParishes = [
           'St. Patrick\'s Cathedral – Armagh',
           'Sacred Heart Parish – Armagh',
-          'St. Malachy\'s Parish'
+          'St. Malachy\'s Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Canada') {
@@ -1573,20 +1647,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Michael\'s Cathedral – Toronto',
           'Sacred Heart Parish – Toronto',
           'St. Paul\'s Basilica',
-          'Holy Family Parish'
+          'Holy Family Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Montreal') {
         availableParishes = [
           'Mary, Queen of the World Cathedral – Montreal',
           'St. Patrick\'s Basilica',
           'Sacred Heart Parish – Montreal',
-          'Notre-Dame Basilica'
+          'Notre-Dame Basilica',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Australia') {
@@ -1595,20 +1669,20 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'St. Mary\'s Cathedral – Sydney',
           'Sacred Heart Parish – Sydney',
           'St. Patrick\'s Parish',
-          'Holy Family Parish'
+          'Holy Family Parish',
         ];
       } else if (selectedDiocese == 'Archdiocese of Melbourne') {
         availableParishes = [
           'St. Patrick\'s Cathedral – Melbourne',
           'Sacred Heart Parish – Melbourne',
           'St. Mary\'s Parish',
-          'Holy Trinity Parish'
+          'Holy Trinity Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Germany') {
@@ -1617,13 +1691,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Cologne Cathedral',
           'Sacred Heart Parish – Cologne',
           'St. Gereon\'s Basilica',
-          'Great St. Martin Church'
+          'Great St. Martin Church',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else if (selectedCountry == 'Poland') {
@@ -1632,13 +1706,13 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           'Wawel Cathedral – Kraków',
           'Sacred Heart Parish – Kraków',
           'St. Mary\'s Basilica',
-          'St. Florian\'s Parish'
+          'St. Florian\'s Parish',
         ];
       } else {
         availableParishes = [
           'Parish data for this diocese is being updated...',
           'Please select "Enter a custom Diocese" to add your specific parish',
-          'Or contact support to request parish data for $selectedDiocese'
+          'Or contact support to request parish data for $selectedDiocese',
         ];
       }
     } else {
@@ -1646,10 +1720,10 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
       availableParishes = [
         'Parish data for this diocese is being updated...',
         'Please select "Enter a custom Diocese" to add your specific parish',
-        'Or contact support to request parish data for $selectedDiocese'
+        'Or contact support to request parish data for $selectedDiocese',
       ];
     }
-    
+
     return availableParishes;
   }
 
@@ -1661,7 +1735,7 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
         maxWidth: 500,
         maxHeight: 500,
       );
-      
+
       if (image != null) {
         if (kIsWeb) {
           final bytes = await image.readAsBytes();
@@ -1695,24 +1769,28 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
         Helpers.showErrorSnackbar('Choir name is required');
         return;
       }
-      
+
       Logger.debug('Original choir name: ${widget.choir.name}');
       Logger.debug('New name from controller: ${_nameController.text}');
       Logger.debug('Description controller: ${_descriptionController.text}');
-      
+
       final updatedChoir = widget.choir.copyWith(
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim(),
         updatedAt: DateTime.now(), // Set current time for update timestamp
         country: _selectedCountry,
-        diocese: _isCustomDiocese ? _customDioceseController.text : _selectedDiocese,
-        parish: _isCustomParish ? _customParishController.text : _selectedParish,
+        diocese: _isCustomDiocese
+            ? _customDioceseController.text
+            : _selectedDiocese,
+        parish: _isCustomParish
+            ? _customParishController.text
+            : _selectedParish,
       );
-      
+
       Logger.debug('Updated choir name: ${updatedChoir.name}');
-      
+
       String? imageUrl = _currentImageUrl;
-      
+
       // Upload new image if one was selected
       if (_webImageBytes != null || _selectedImage != null) {
         Logger.debug('Uploading new choir image...');
@@ -1724,12 +1802,18 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
               name: 'choir_image_${widget.choir.id}.jpg',
               mimeType: 'image/jpeg',
             );
-            imageUrl = await _choirService.uploadChoirImage(widget.choir.id, tempFile);
+            imageUrl = await _choirService.uploadChoirImage(
+              widget.choir.id,
+              tempFile,
+            );
           } else if (_selectedImage != null) {
             // For mobile platforms
-            imageUrl = await _choirService.uploadChoirImageFromFile(widget.choir.id, _selectedImage!);
+            imageUrl = await _choirService.uploadChoirImageFromFile(
+              widget.choir.id,
+              _selectedImage!,
+            );
           }
-          
+
           if (imageUrl != null) {
             Logger.info('Image uploaded successfully: $imageUrl');
             setState(() {
@@ -1749,11 +1833,11 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
           // Continue with choir update even if image upload fails
         }
       }
-      
+
       final success = await choirController.updateChoir(
         updatedChoir.copyWith(imageUrl: imageUrl),
       );
-      
+
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -1765,7 +1849,9 @@ class _EditChoirScreenState extends State<EditChoirScreen> {
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(choirController.errorMessage ?? 'Failed to update choir'),
+            content: Text(
+              choirController.errorMessage ?? 'Failed to update choir',
+            ),
             backgroundColor: Colors.red,
           ),
         );

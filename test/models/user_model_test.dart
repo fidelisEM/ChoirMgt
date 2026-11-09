@@ -112,12 +112,33 @@ void main() {
         createdAt: DateTime.parse('2026-01-01T00:00:00.000Z'),
       );
 
-      final updated = original.copyWith(fullName: 'B', role: UserRole.choirLeader);
+      final updated = original.copyWith(
+        fullName: 'B',
+        role: UserRole.choirLeader,
+      );
 
       expect(updated.fullName, 'B');
       expect(updated.role, UserRole.choirLeader);
       expect(updated.id, original.id);
       expect(updated.email, original.email);
+    });
+  });
+
+  group('UserModel.isAdmin', () {
+    UserModel withRole(UserRole role) => UserModel(
+      id: 'u',
+      email: 'e@example.com',
+      fullName: 'n',
+      phoneNumber: '',
+      role: role,
+      createdAt: DateTime.utc(2026),
+    );
+
+    test('is true only for admin and superAdmin', () {
+      expect(withRole(UserRole.superAdmin).isAdmin, isTrue);
+      expect(withRole(UserRole.admin).isAdmin, isTrue);
+      expect(withRole(UserRole.choirLeader).isAdmin, isFalse);
+      expect(withRole(UserRole.choirMember).isAdmin, isFalse);
     });
   });
 }

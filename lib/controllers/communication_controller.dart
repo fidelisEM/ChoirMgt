@@ -179,7 +179,7 @@ class CommunicationController extends ChangeNotifier {
   Future<void> markAsRead(String messageId, String userId) async {
     try {
       await _communicationService.markMessageAsRead(messageId, userId);
-      
+
       // Update local message
       final messageIndex = _messages.indexWhere((m) => m.id == messageId);
       if (messageIndex != -1) {
@@ -193,9 +193,12 @@ class CommunicationController extends ChangeNotifier {
 
   // Get unread message count
   int getUnreadCount(String userId) {
-    return _messages.where((message) => 
-      !message.readBy.contains(userId) && message.senderId != userId
-    ).length;
+    return _messages
+        .where(
+          (message) =>
+              !message.readBy.contains(userId) && message.senderId != userId,
+        )
+        .length;
   }
 
   // Get messages by type
@@ -206,11 +209,14 @@ class CommunicationController extends ChangeNotifier {
   // Search messages
   List<MessageModel> searchMessages(String query) {
     final lowercaseQuery = query.toLowerCase();
-    return _messages.where((message) => 
-      message.subject.toLowerCase().contains(lowercaseQuery) ||
-      message.content.toLowerCase().contains(lowercaseQuery) ||
-      message.senderName.toLowerCase().contains(lowercaseQuery)
-    ).toList();
+    return _messages
+        .where(
+          (message) =>
+              message.subject.toLowerCase().contains(lowercaseQuery) ||
+              message.content.toLowerCase().contains(lowercaseQuery) ||
+              message.senderName.toLowerCase().contains(lowercaseQuery),
+        )
+        .toList();
   }
 
   // Clear all messages

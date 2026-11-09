@@ -5,7 +5,8 @@ import '../../utils/logger.dart';
 class ProfileImagePicker {
   static Future<Uint8List?> pickImage() async {
     try {
-      final html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+      final html.FileUploadInputElement uploadInput =
+          html.FileUploadInputElement();
       uploadInput.multiple = false;
       uploadInput.accept = 'image/*';
       Logger.debug('FileUploadInputElement created');
@@ -18,7 +19,7 @@ class ProfileImagePicker {
 
         final file = files!.first;
         Logger.debug('File selected: ${file.name}, size: ${file.size}');
-        
+
         final reader = html.FileReader();
         reader.readAsArrayBuffer(file);
         reader.onLoad.listen((event) {
@@ -32,7 +33,7 @@ class ProfileImagePicker {
 
       uploadInput.click();
       Logger.debug('File input clicked');
-      
+
       return null; // This is a simplified implementation
     } catch (e) {
       Logger.error('Error picking image on web', e);

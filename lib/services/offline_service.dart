@@ -16,13 +16,13 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final existingActions = prefs.getStringList(_pendingActionsKey) ?? [];
-      
+
       action['timestamp'] = DateTime.now().toIso8601String();
       action['id'] = DateTime.now().millisecondsSinceEpoch.toString();
-      
+
       existingActions.add(jsonEncode(action));
       await prefs.setStringList(_pendingActionsKey, existingActions);
-      
+
       debugPrint('Queued offline action: ${action['type']}');
     } catch (e) {
       debugPrint('Error queuing offline action: $e');
@@ -34,9 +34,11 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final actionStrings = prefs.getStringList(_pendingActionsKey) ?? [];
-      
+
       return actionStrings
-          .map((actionString) => jsonDecode(actionString) as Map<String, dynamic>)
+          .map(
+            (actionString) => jsonDecode(actionString) as Map<String, dynamic>,
+          )
           .toList();
     } catch (e) {
       debugPrint('Error getting pending actions: $e');
@@ -93,12 +95,12 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final actionStrings = prefs.getStringList(_pendingActionsKey) ?? [];
-      
+
       final filteredActions = actionStrings.where((actionString) {
         final action = jsonDecode(actionString) as Map<String, dynamic>;
         return action['id'] != actionId;
       }).toList();
-      
+
       await prefs.setStringList(_pendingActionsKey, filteredActions);
     } catch (e) {
       debugPrint('Error removing action: $e');
@@ -110,12 +112,12 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cacheMap = await _getCacheMap();
-      
+
       cacheMap[key] = {
         'data': data,
         'timestamp': DateTime.now().toIso8601String(),
       };
-      
+
       await prefs.setString(_cachedDataKey, jsonEncode(cacheMap));
       debugPrint('Cached data for key: $key');
     } catch (e) {
@@ -128,20 +130,20 @@ class OfflineService {
     try {
       final cacheMap = await _getCacheMap();
       final cachedEntry = cacheMap[key];
-      
+
       if (cachedEntry == null) return null;
-      
+
       if (maxAge != null) {
         final timestamp = DateTime.parse(cachedEntry['timestamp']);
         final age = DateTime.now().difference(timestamp);
-        
+
         if (age > maxAge) {
           // Data is too old, remove it
           await _removeCachedData(key);
           return null;
         }
       }
-      
+
       return cachedEntry['data'] as T;
     } catch (e) {
       debugPrint('Error getting cached data: $e');
@@ -154,7 +156,7 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cacheString = prefs.getString(_cachedDataKey);
-      
+
       if (cacheString == null) return {};
       return jsonDecode(cacheString) as Map<String, dynamic>;
     } catch (e) {
@@ -168,7 +170,7 @@ class OfflineService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cacheMap = await _getCacheMap();
-      
+
       cacheMap.remove(key);
       await prefs.setString(_cachedDataKey, jsonEncode(cacheMap));
     } catch (e) {
@@ -203,12 +205,12 @@ class OfflineService {
     try {
       final cacheMap = await _getCacheMap();
       final pendingActions = await getPendingActions();
-      
+
       int totalSize = 0;
       for (final entry in cacheMap.values) {
         totalSize += jsonEncode(entry).length;
       }
-      
+
       return {
         'cached_items': cacheMap.length,
         'pending_actions': pendingActions.length,
@@ -223,10 +225,10 @@ class OfflineService {
 
   String? _getOldestCacheEntry(Map<String, dynamic> cacheMap) {
     if (cacheMap.isEmpty) return null;
-    
+
     DateTime? oldest;
     String? oldestKey;
-    
+
     for (final entry in cacheMap.entries) {
       final timestamp = DateTime.parse(entry.value['timestamp']);
       if (oldest == null || timestamp.isBefore(oldest)) {
@@ -234,7 +236,7 @@ class OfflineService {
         oldestKey = entry.key;
       }
     }
-    
+
     return oldestKey;
   }
 }
@@ -250,28 +252,25 @@ mixin OfflineCapable {
     try {
       // Try online action first
       final result = await onlineAction();
-      
+
       // If successful and we have cached offline actions, process them
       if (await _hasConnection()) {
         OfflineService().processPendingActions();
       }
-      
+
       return result;
     } catch (e) {
       // Online action failed, check if it's a connection issue
       if (await _isConnectionError(e)) {
         // Queue for later processing
-        await OfflineService().queueAction({
-          'type': actionType,
-          ...actionData,
-        });
-        
+        await OfflineService().queueAction({'type': actionType, ...actionData});
+
         // Return offline fallback if available
         if (offlineFallback != null) {
           return offlineFallback();
         }
       }
-      
+
       rethrow;
     }
   }
@@ -286,8 +285,8 @@ mixin OfflineCapable {
     // Check if error indicates connection issues
     final errorString = error.toString().toLowerCase();
     return errorString.contains('network') ||
-           errorString.contains('connection') ||
-           errorString.contains('timeout') ||
-           errorString.contains('unreachable');
+        errorString.contains('connection') ||
+        errorString.contains('timeout') ||
+        errorString.contains('unreachable');
   }
 }

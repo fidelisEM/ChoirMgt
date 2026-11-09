@@ -1,5 +1,4 @@
 class ArchdioceseModel {
-
   ArchdioceseModel({
     required this.id,
     required this.name,
@@ -19,7 +18,9 @@ class ArchdioceseModel {
       country: json['country'] ?? '',
       description: json['description'],
       bishop: json['bishop'],
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ?? DateTime.now().toIso8601String(),
+      ),
       isActive: json['is_active'] ?? true,
     );
   }

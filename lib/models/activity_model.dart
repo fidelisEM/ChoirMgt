@@ -12,7 +12,6 @@ enum ActivityType {
 }
 
 class ActivityModel {
-
   ActivityModel({
     required this.id,
     required this.choirId,
@@ -35,7 +34,9 @@ class ActivityModel {
       ),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      timestamp: DateTime.parse(json['timestamp'] ?? DateTime.now().toIso8601String()),
+      timestamp: DateTime.parse(
+        json['timestamp'] ?? DateTime.now().toIso8601String(),
+      ),
       metadata: json['metadata'],
     );
   }

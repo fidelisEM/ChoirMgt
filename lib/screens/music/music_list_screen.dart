@@ -21,14 +21,17 @@ class _MusicListScreenState extends State<MusicListScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
   }
 
   Future<void> _loadData() async {
-    final musicController = Provider.of<MusicController>(context, listen: false);
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
     await musicController.loadPublicMusic();
     await musicController.loadFeaturedMusic();
     await musicController.loadPopularMusic();
@@ -45,7 +48,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2D7D52), // Sea Green from SwahiliMusicNotes.com
+        backgroundColor: const Color(
+          0xFF2D7D52,
+        ), // Sea Green from SwahiliMusicNotes.com
         foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black26,
@@ -87,11 +92,15 @@ class _MusicListScreenState extends State<MusicListScreen> {
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF88C4FF)),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF88C4FF),
+                          ),
                         ),
                       )
                     : const Icon(Icons.sync, color: Colors.white),
-                onPressed: musicController.isSyncing ? null : () => _syncFromSwahiliNotes(),
+                onPressed: musicController.isSyncing
+                    ? null
+                    : () => _syncFromSwahiliNotes(),
                 tooltip: 'Sync from SwahiliMusicNotes.com',
               );
             },
@@ -154,7 +163,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 if (musicController.isLoading) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2D7D52)),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFF2D7D52),
+                      ),
                     ),
                   );
                 }
@@ -164,16 +175,16 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 }
 
                 final musicList = _getFilteredMusic(musicController);
-                
+
                 if (musicList.isEmpty) {
                   return _buildEmptyState('No music found');
                 }
 
                 return RefreshIndicator(
                   onRefresh: () => musicController.refreshData(),
-                  child: _isGridView 
-                    ? _buildMusicGrid(musicList)
-                    : _buildMusicList(musicList),
+                  child: _isGridView
+                      ? _buildMusicGrid(musicList)
+                      : _buildMusicList(musicList),
                 );
               },
             ),
@@ -219,10 +230,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 children: [
                   Text(
                     '${_getFilteredMusic(musicController).length} songs',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(width: 16),
                   IconButton(
@@ -247,8 +255,15 @@ class _MusicListScreenState extends State<MusicListScreen> {
   }
 
   Widget _buildNavigationBar() {
-    final categories = ['All', 'Swahili', 'English', 'Hymns', 'Traditional', 'Contemporary'];
-    
+    final categories = [
+      'All',
+      'Swahili',
+      'English',
+      'Hymns',
+      'Traditional',
+      'Contemporary',
+    ];
+
     return Container(
       color: const Color(0xFF2D7D52), // Sea Green
       height: 50,
@@ -307,7 +322,10 @@ class _MusicListScreenState extends State<MusicListScreen> {
                   hintText: 'Search songs, artists, or lyrics...',
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 onChanged: _onSearchChanged,
               ),
@@ -324,7 +342,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                         ),
                       )
                     : const Icon(Icons.sync, size: 18);
@@ -346,33 +366,44 @@ class _MusicListScreenState extends State<MusicListScreen> {
   // Filter helper methods
   List<MusicModel> _getFilteredMusic(MusicController musicController) {
     List<MusicModel> music = musicController.filteredMusic;
-    
+
     if (_selectedCategory != 'All') {
       switch (_selectedCategory) {
         case 'Swahili':
-          music = music.where((m) => m.category == MusicCategory.swahili).toList();
+          music = music
+              .where((m) => m.category == MusicCategory.swahili)
+              .toList();
           break;
         case 'English':
-          music = music.where((m) => m.category == MusicCategory.english).toList();
+          music = music
+              .where((m) => m.category == MusicCategory.english)
+              .toList();
           break;
         case 'Hymns':
           music = music.where((m) => m.category == MusicCategory.hymn).toList();
           break;
         case 'Traditional':
-          music = music.where((m) => m.category == MusicCategory.psalm).toList();
+          music = music
+              .where((m) => m.category == MusicCategory.psalm)
+              .toList();
           break;
         case 'Contemporary':
-          music = music.where((m) => m.category == MusicCategory.contemporary).toList();
+          music = music
+              .where((m) => m.category == MusicCategory.contemporary)
+              .toList();
           break;
       }
     }
-    
+
     return music;
   }
 
   void _filterByCategory(String category) {
-    final musicController = Provider.of<MusicController>(context, listen: false);
-    
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
+
     if (category == 'All') {
       musicController.clearFilters();
     } else {
@@ -404,8 +435,11 @@ class _MusicListScreenState extends State<MusicListScreen> {
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 4 :
-                       MediaQuery.of(context).size.width > 800 ? 3 : 2,
+        crossAxisCount: MediaQuery.of(context).size.width > 1200
+            ? 4
+            : MediaQuery.of(context).size.width > 800
+            ? 3
+            : 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
         childAspectRatio: 0.75,
@@ -470,7 +504,10 @@ class _MusicListScreenState extends State<MusicListScreen> {
                     top: 8,
                     right: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(8),
@@ -518,10 +555,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                     const SizedBox(height: 4),
                     Text(
                       'by ${music.artist}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -529,9 +563,14 @@ class _MusicListScreenState extends State<MusicListScreen> {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF88C4FF).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF88C4FF,
+                            ).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -563,10 +602,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                         const SizedBox(width: 4),
                         const Text(
                           '1.2k',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 11, color: Colors.grey),
                         ),
                         const Spacer(),
                         Icon(
@@ -630,16 +666,16 @@ class _MusicListScreenState extends State<MusicListScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'by ${music.artist} • ${music.language}',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 13, color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFF2B7CE9).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
@@ -656,9 +692,14 @@ class _MusicListScreenState extends State<MusicListScreen> {
                       const SizedBox(width: 8),
                       if (music.hasSheetMusic)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE74C3C).withValues(alpha: 0.1),
+                            color: const Color(
+                              0xFFE74C3C,
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const Text(
@@ -692,10 +733,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 ),
                 const Text(
                   '1.2k views',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 11, color: Colors.grey),
                 ),
               ],
             ),
@@ -729,11 +767,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.music_note,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.music_note, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             message,
@@ -746,10 +780,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
           const SizedBox(height: 8),
           const Text(
             'Add music or fetch from online sources',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
         ],
       ),
@@ -761,11 +792,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.red[400],
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.red[400]),
           const SizedBox(height: 16),
           const Text(
             'Error Loading Music',
@@ -778,10 +805,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
           const SizedBox(height: 8),
           Text(
             errorMessage,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -833,7 +857,10 @@ class _MusicListScreenState extends State<MusicListScreen> {
 
   // Event handlers
   void _onSearchChanged(String query) {
-    final musicController = Provider.of<MusicController>(context, listen: false);
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
     musicController.searchMusic(query);
   }
 
@@ -846,8 +873,11 @@ class _MusicListScreenState extends State<MusicListScreen> {
   }
 
   void _fetchFromWeb() async {
-    final musicController = Provider.of<MusicController>(context, listen: false);
-    
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
+
     Get.dialog(
       AlertDialog(
         title: const Text('Fetch Music from Web'),
@@ -867,20 +897,15 @@ class _MusicListScreenState extends State<MusicListScreen> {
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
             SizedBox(height: 12),
-            Text(
-              'This may take a few moments. Continue?',
-            ),
+            Text('This may take a few moments. Continue?'),
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () async {
               Get.back();
-              
+
               // Show loading indicator
               Get.dialog(
                 const AlertDialog(
@@ -896,7 +921,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 ),
                 barrierDismissible: false,
               );
-              
+
               try {
                 await musicController.fetchSwahiliMusicFromWeb();
                 Get.back(); // Close loading dialog
@@ -926,8 +951,11 @@ class _MusicListScreenState extends State<MusicListScreen> {
   }
 
   void _syncFromSwahiliNotes() async {
-    final musicController = Provider.of<MusicController>(context, listen: false);
-    
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
+
     Get.dialog(
       AlertDialog(
         title: const Row(
@@ -958,7 +986,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
               decoration: BoxDecoration(
                 color: const Color(0xFF2B7CE9).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFF2B7CE9).withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: const Color(0xFF2B7CE9).withValues(alpha: 0.3),
+                ),
               ),
               child: const Row(
                 children: [
@@ -981,17 +1011,14 @@ class _MusicListScreenState extends State<MusicListScreen> {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton.icon(
             onPressed: () async {
               Get.back();
-              
+
               try {
                 final result = await musicController.forceSyncNow();
-                
+
                 if (result.success) {
                   Get.snackbar(
                     'Sync Complete',
@@ -1034,8 +1061,11 @@ class _MusicListScreenState extends State<MusicListScreen> {
   }
 
   void _cloneEntireWebsite() async {
-    final musicController = Provider.of<MusicController>(context, listen: false);
-    
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
+
     Get.dialog(
       AlertDialog(
         title: const Row(
@@ -1062,12 +1092,30 @@ class _MusicListScreenState extends State<MusicListScreen> {
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('✓ Complete website structure', style: TextStyle(fontSize: 12)),
-                  Text('✓ All music pages and categories', style: TextStyle(fontSize: 12)),
-                  Text('✓ Sheet music PDF downloads', style: TextStyle(fontSize: 12)),
-                  Text('✓ Lyrics and chord progressions', style: TextStyle(fontSize: 12)),
-                  Text('✓ Images and styling assets', style: TextStyle(fontSize: 12)),
-                  Text('✓ Cached offline access', style: TextStyle(fontSize: 12)),
+                  Text(
+                    '✓ Complete website structure',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '✓ All music pages and categories',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '✓ Sheet music PDF downloads',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '✓ Lyrics and chord progressions',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '✓ Images and styling assets',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    '✓ Cached offline access',
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ],
               ),
             ),
@@ -1077,7 +1125,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
               decoration: BoxDecoration(
                 color: const Color(0xFFF39C12).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFFF39C12).withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: const Color(0xFFF39C12).withValues(alpha: 0.3),
+                ),
               ),
               child: const Row(
                 children: [
@@ -1100,14 +1150,11 @@ class _MusicListScreenState extends State<MusicListScreen> {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton.icon(
             onPressed: () async {
               Get.back();
-              
+
               // Show progress dialog
               Get.dialog(
                 const AlertDialog(
@@ -1128,16 +1175,16 @@ class _MusicListScreenState extends State<MusicListScreen> {
                 ),
                 barrierDismissible: false,
               );
-              
+
               try {
                 final result = await musicController.cloneWebsite(
                   includeImages: true,
                   includePDFs: true,
                   cacheContent: true,
                 );
-                
+
                 Get.back(); // Close progress dialog
-                
+
                 if (result.success) {
                   Get.dialog(
                     AlertDialog(
@@ -1152,22 +1199,32 @@ class _MusicListScreenState extends State<MusicListScreen> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Successfully cloned SwahiliMusicNotes.com!'),
+                          const Text(
+                            'Successfully cloned SwahiliMusicNotes.com!',
+                          ),
                           const SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF27AE60).withValues(alpha: 0.1),
+                              color: const Color(
+                                0xFF27AE60,
+                              ).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('📄 Pages processed: ${result.totalPages}'),
+                                Text(
+                                  '📄 Pages processed: ${result.totalPages}',
+                                ),
                                 Text('🎵 Songs cloned: ${result.songsCloned}'),
-                                Text('📑 PDFs downloaded: ${result.pdfsDownloaded}'),
+                                Text(
+                                  '📑 PDFs downloaded: ${result.pdfsDownloaded}',
+                                ),
                                 Text('⚡ Assets cached: ${result.assetsCache}'),
-                                Text('⏱️ Time taken: ${result.duration.inMinutes}m ${result.duration.inSeconds % 60}s'),
+                                Text(
+                                  '⏱️ Time taken: ${result.duration.inMinutes}m ${result.duration.inSeconds % 60}s',
+                                ),
                               ],
                             ),
                           ),
@@ -1220,9 +1277,12 @@ class _MusicListScreenState extends State<MusicListScreen> {
   }
 
   void _showSyncSettings() async {
-    final musicController = Provider.of<MusicController>(context, listen: false);
+    final musicController = Provider.of<MusicController>(
+      context,
+      listen: false,
+    );
     await musicController.loadSyncStats();
-    
+
     Get.dialog(
       AlertDialog(
         title: const Text('Sync Settings'),
@@ -1245,8 +1305,12 @@ class _MusicListScreenState extends State<MusicListScreen> {
                       children: [
                         Text('Status: ${stats.statusMessage}'),
                         if (stats.nextSyncTime != null)
-                          Text('Next sync: ${_formatDateTime(stats.nextSyncTime!)}'),
-                        Text('Auto-sync: ${stats.syncEnabled ? 'Enabled' : 'Disabled'}'),
+                          Text(
+                            'Next sync: ${_formatDateTime(stats.nextSyncTime!)}',
+                          ),
+                        Text(
+                          'Auto-sync: ${stats.syncEnabled ? 'Enabled' : 'Disabled'}',
+                        ),
                       ],
                     ),
                   ),
@@ -1267,10 +1331,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
           },
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Close')),
           ElevatedButton(
             onPressed: () {
               musicController.forceSyncNow();
@@ -1286,7 +1347,7 @@ class _MusicListScreenState extends State<MusicListScreen> {
   String _formatDateTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = dateTime.difference(now);
-    
+
     if (difference.inDays > 0) {
       return 'in ${difference.inDays} days';
     } else if (difference.inHours > 0) {
@@ -1297,5 +1358,4 @@ class _MusicListScreenState extends State<MusicListScreen> {
       return 'soon';
     }
   }
-
 }

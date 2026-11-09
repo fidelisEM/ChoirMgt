@@ -77,55 +77,56 @@ class EnvConfig {
         'TERMS_OF_SERVICE_URL': _termsOfServiceUrl,
       });
   }
-  
+
   // Get string value
   String getString(String key, {String? defaultValue}) {
     // For web, we only use cached defaults (environment variables not accessible)
     // For mobile/desktop, environment variables would be handled differently
     return _cache[key] ?? defaultValue ?? '';
   }
-  
+
   // Get boolean value
   bool getBool(String key, {bool defaultValue = false}) {
     final value = getString(key).toLowerCase();
     return value == 'true' || value == '1' || value == 'yes';
   }
-  
+
   // Get integer value
   int getInt(String key, {int defaultValue = 0}) {
     final value = getString(key);
     return int.tryParse(value) ?? defaultValue;
   }
-  
+
   // Get double value
   double getDouble(String key, {double defaultValue = 0.0}) {
     final value = getString(key);
     return double.tryParse(value) ?? defaultValue;
   }
-  
-  // Check if environment is production  
-  bool get isProduction => getString('ENVIRONMENT').toLowerCase() == 'production';
+
+  // Check if environment is production
+  bool get isProduction =>
+      getString('ENVIRONMENT').toLowerCase() == 'production';
   bool get isStaging => getString('ENVIRONMENT').toLowerCase() == 'staging';
-  bool get isDevelopment => getString('ENVIRONMENT').toLowerCase() == 'development' || 
-                           getString('ENVIRONMENT').isEmpty; // Default to development
-  
+  bool get isDevelopment =>
+      getString('ENVIRONMENT').toLowerCase() == 'development' ||
+      getString('ENVIRONMENT').isEmpty; // Default to development
+
   // Validate required configuration
   bool validateConfig() {
-    final requiredKeys = [
-      'SUPABASE_URL',
-      'SUPABASE_ANON_KEY',
-    ];
-    
+    final requiredKeys = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
+
     for (final key in requiredKeys) {
       final value = getString(key);
-      if (value.isEmpty || value.contains('your-') || value.contains('placeholder')) {
+      if (value.isEmpty ||
+          value.contains('your-') ||
+          value.contains('placeholder')) {
         return false;
       }
     }
-    
+
     return true;
   }
-  
+
   // Get configuration summary (for debugging - no sensitive data)
   Map<String, dynamic> getConfigSummary() {
     return {
@@ -139,12 +140,12 @@ class EnvConfig {
       'supabaseConfigured': !getString('SUPABASE_URL').contains('your-'),
     };
   }
-  
+
   // Override for testing
   void setTestValue(String key, String value) {
     _cache[key] = value;
   }
-  
+
   // Clear test values
   void clearTestValues() {
     _loadDefaults();

@@ -38,7 +38,8 @@ class ResponsiveUtils {
     }
   }
 
-  static double getFontSize(BuildContext context, {
+  static double getFontSize(
+    BuildContext context, {
     required double mobile,
     required double tablet,
     required double desktop,
@@ -52,7 +53,8 @@ class ResponsiveUtils {
     }
   }
 
-  static double getSpacing(BuildContext context, {
+  static double getSpacing(
+    BuildContext context, {
     required double mobile,
     required double tablet,
     required double desktop,
@@ -72,11 +74,11 @@ class ResponsiveUtils {
     double? maxWidth,
   }) {
     final effectiveMaxWidth = maxWidth ?? getMaxWidth(context);
-    
+
     if (isMobile(context)) {
       return child;
     }
-    
+
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: effectiveMaxWidth),

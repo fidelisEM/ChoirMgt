@@ -24,7 +24,10 @@ void main() {
 
     test('does not flag ordinary text', () {
       expect(SecurityHelper.containsSQLInjection('Jane Doe'), isFalse);
-      expect(SecurityHelper.containsSQLInjection('choir practice at 6pm'), isFalse);
+      expect(
+        SecurityHelper.containsSQLInjection('choir practice at 6pm'),
+        isFalse,
+      );
     });
   });
 
@@ -43,6 +46,22 @@ void main() {
   });
 
   group('SecurityHelper.hasPermission', () {
+    test('super_admin has every admin permission', () {
+      for (final permission in ['manage_users', 'manage_payments', 'delete']) {
+        expect(SecurityHelper.hasPermission('super_admin', permission), isTrue);
+      }
+    });
+
+    test('leader can manage payments and attendance but not users', () {
+      expect(SecurityHelper.hasPermission('leader', 'manage_payments'), isTrue);
+      expect(
+        SecurityHelper.hasPermission('leader', 'manage_attendance'),
+        isTrue,
+      );
+      expect(SecurityHelper.hasPermission('leader', 'manage_users'), isFalse);
+      expect(SecurityHelper.hasPermission('leader', 'delete'), isFalse);
+    });
+
     test('admin has the broadest permission set', () {
       expect(SecurityHelper.hasPermission('admin', 'manage_users'), isTrue);
       expect(SecurityHelper.hasPermission('admin', 'delete'), isTrue);
@@ -87,7 +106,10 @@ void main() {
 
   group('SecurityHelper.maskSensitiveData', () {
     test('masks the middle, keeping visibleChars at each end', () {
-      final masked = SecurityHelper.maskSensitiveData('1234567890', visibleChars: 2);
+      final masked = SecurityHelper.maskSensitiveData(
+        '1234567890',
+        visibleChars: 2,
+      );
       expect(masked, '12******90');
     });
 

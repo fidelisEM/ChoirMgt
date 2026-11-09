@@ -18,16 +18,18 @@ class WebMusicFetcher {
   // Fetch music data from multiple Swahili music websites
   Future<List<MusicModel>> fetchSwahiliMusicFromWeb() async {
     final List<MusicModel> allMusic = [];
-    
+
     try {
       Logger.info('Starting web fetch from Swahili music sites...');
-      
+
       // For now, return enhanced sample data that would come from these sites
       // In a real implementation, you would scrape these websites
       final webMusic = await _getSwahiliMusicFromSites();
       allMusic.addAll(webMusic);
-      
-      Logger.info('Successfully fetched ${allMusic.length} songs from web sources');
+
+      Logger.info(
+        'Successfully fetched ${allMusic.length} songs from web sources',
+      );
       return allMusic;
     } catch (e) {
       Logger.error('Error fetching music from web: $e');
@@ -53,7 +55,8 @@ class WebMusicFetcher {
         composer: 'East African Traditional',
         category: MusicCategory.traditional,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Hakuna kama wewe, Bwana
 Hakuna kama wewe, Mungu wangu
 Wewe ni mkuu, wewe ni mfalme
@@ -70,8 +73,10 @@ Wewe ni mwanga katika giza
 Wewe ni nguvu katika udhaifu
 Wewe ni matumaini katika kuyumba
 Hakuna kama wewe
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: Bb Major
 Tempo: 110 BPM
 Time Signature: 4/4
@@ -88,7 +93,8 @@ Eb - F - Bb
 
 Traditional African rhythm pattern
 Call and response style recommended
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['traditional', 'call-response', 'swahili', 'web-sourced'],
         language: 'Swahili',
         duration: 260,
@@ -97,7 +103,7 @@ Call and response style recommended
         isPublic: true,
         sourceWebsite: 'swahilimusicnotes.com',
       ),
-      
+
       MusicModel(
         id: 'web_swh_002',
         title: 'Mungu Yu Mwema',
@@ -105,7 +111,8 @@ Call and response style recommended
         composer: 'Contemporary African',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.beginner,
-        lyrics: '''
+        lyrics:
+            '''
 Mungu yu mwema, siku zote
 Mungu yu mwema, kwa mimi
 Bila jasho, bila juhudi
@@ -121,8 +128,10 @@ Bridge:
 Asante, asante, kwa upendo wako
 Asante, asante, kwa neema yako
 Asante, asante, Mungu wangu
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: C Major
 Tempo: 120 BPM
 Time Signature: 4/4
@@ -142,7 +151,8 @@ Am - F - C - G
 Am - F - G - C
 
 Simple chord progression for easy learning
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['contemporary', 'gospel', 'easy', 'praise'],
         language: 'Swahili',
         duration: 200,
@@ -159,7 +169,8 @@ Simple chord progression for easy learning
         composer: 'Traditional Hymn',
         category: MusicCategory.hymn,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Tunaimba nyimbo za Kristo
 Tunaimba kwa moyo wote
 Yeye ndiye aliyetuokoa
@@ -176,8 +187,10 @@ Tunaimba, tunaimba, nyimbo za shangwe
 Tunaimba, tunaimba, kwa Kristo
 Tunaimba, tunaimba, nyimbo za shangwe
 Yeye ndiye mfalme wetu
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: F Major
 Tempo: 100 BPM
 Time Signature: 4/4
@@ -194,7 +207,8 @@ Bb - C - F
 
 Traditional hymn arrangement
 Four-part harmony recommended
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['hymn', 'traditional', 'four-part', 'salvation'],
         language: 'Swahili',
         duration: 240,
@@ -211,7 +225,8 @@ Four-part harmony recommended
         composer: 'Modern Gospel Arrangement',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.advanced,
-        lyrics: '''
+        lyrics:
+            '''
 Barikiwa Yesu, mfalme wa mfalme
 Barikiwa Yesu, bwana wa mabwana
 Jina lako ni juu ya majina yote
@@ -233,8 +248,10 @@ Bridge:
 Hosana, hosana, hosana juu
 Hosana, hosana, kwa mfalme wetu
 (Repeat and build)
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: G Major
 Tempo: 135 BPM
 Time Signature: 4/4
@@ -259,7 +276,8 @@ Advanced features:
 - Dynamic builds
 - Complex harmonies
 - Rhythmic variations
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['contemporary', 'advanced', 'modulation', 'worship'],
         language: 'Swahili',
         duration: 300,
@@ -276,7 +294,8 @@ Advanced features:
         composer: 'Pan-African Gospel',
         category: MusicCategory.contemporary,
         difficulty: MusicDifficulty.intermediate,
-        lyrics: '''
+        lyrics:
+            '''
 Wewe ni Mungu, wa ajabu
 Wewe ni Mungu, wa miujiza
 Hakuna kama wewe katika ulimwengu
@@ -298,8 +317,10 @@ Bridge:
 Mfalme, mfalme, wewe ni mfalme
 Mungu, Mungu, wewe ni Mungu
 Baba, Baba, wewe ni Baba yetu
-        '''.trim(),
-        musicNotes: '''
+        '''
+                .trim(),
+        musicNotes:
+            '''
 Key: D Major
 Tempo: 118 BPM
 Time Signature: 4/4
@@ -321,7 +342,8 @@ G - D - A - D
 
 African percussion patterns recommended
 Hand claps on beats 2 and 4
-        '''.trim(),
+        '''
+                .trim(),
         tags: ['contemporary', 'african-rhythm', 'worship', 'creator'],
         language: 'Swahili',
         duration: 280,
@@ -363,18 +385,18 @@ Hand claps on beats 2 and 4
   Future<List<MusicModel>> fetchFromSpecificSite(String siteUrl) async {
     try {
       Logger.info('Attempting to fetch music from: $siteUrl');
-      
+
       // In a real implementation, you would:
       // 1. Make HTTP request to the site
       // 2. Parse HTML/JSON response
       // 3. Extract music data
       // 4. Convert to MusicModel objects
-      
+
       // For now, return sample data based on the site
       if (siteUrl.contains('swahilimusicnotes.com')) {
         return await _getSwahiliMusicFromSites();
       }
-      
+
       return [];
     } catch (e) {
       Logger.error('Error fetching from $siteUrl: $e');
@@ -390,7 +412,7 @@ Hand claps on beats 2 and 4
   // Health check for music sources
   Future<Map<String, bool>> checkSourcesHealth() async {
     final Map<String, bool> health = {};
-    
+
     for (final site in swahiliMusicSites) {
       try {
         // In real implementation, ping the sites
@@ -401,7 +423,7 @@ Hand claps on beats 2 and 4
         health[site] = false;
       }
     }
-    
+
     return health;
   }
 
@@ -421,7 +443,7 @@ extension WebContentParser on String {
     // - Musical notes/chords
     // - Categories/genres
     // - Difficulty levels
-    
+
     return [];
   }
 }

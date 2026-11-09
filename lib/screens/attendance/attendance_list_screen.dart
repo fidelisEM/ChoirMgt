@@ -26,10 +26,18 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
   }
 
   void _loadAttendanceSessions() {
-    final choirController = Provider.of<ChoirController>(context, listen: false);
+    final choirController = Provider.of<ChoirController>(
+      context,
+      listen: false,
+    );
     if (choirController.selectedChoir != null) {
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      attendanceController.loadAttendanceSessions(choirId: choirController.selectedChoir!.id);
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+      attendanceController.loadAttendanceSessions(
+        choirId: choirController.selectedChoir!.id,
+      );
     }
   }
 
@@ -46,136 +54,159 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
         ],
       ),
       body: Consumer3<AttendanceController, AuthController, ChoirController>(
-        builder: (context, attendanceController, authController, choirController, child) {
-          final selectedChoir = choirController.selectedChoir;
-          
-          if (selectedChoir == null) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.info_outline, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No Choir Selected'),
-                  Text('Please select a choir from the Choirs tab first'),
-                ],
-              ),
-            );
-          }
+        builder:
+            (
+              context,
+              attendanceController,
+              authController,
+              choirController,
+              child,
+            ) {
+              final selectedChoir = choirController.selectedChoir;
 
-          if (attendanceController.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (attendanceController.errorMessage != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error loading attendance',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    attendanceController.errorMessage!,
-                    style: TextStyle(color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      attendanceController.clearError();
-                      _loadAttendanceSessions();
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final sessions = attendanceController.sessions;
-          final stats = attendanceController.attendanceStats;
-
-          return Column(
-            children: [
-              // Statistics Bar
-              if (stats.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+              if (selectedChoir == null) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatItem('Sessions', stats['total_sessions']?.toString() ?? '0', Colors.blue),
-                      _buildStatItem('Present', stats['present_count']?.toString() ?? '0', Colors.green),
-                      _buildStatItem('Absent', stats['absent_count']?.toString() ?? '0', Colors.red),
-                      _buildStatItem(
-                        'Rate', 
-                        '${(stats['attendance_rate'] ?? 0.0).toStringAsFixed(1)}%', 
-                        Colors.orange
+                      Icon(Icons.info_outline, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text('No Choir Selected'),
+                      Text('Please select a choir from the Choirs tab first'),
+                    ],
+                  ),
+                );
+              }
+
+              if (attendanceController.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (attendanceController.errorMessage != null) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red[300],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error loading attendance',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        attendanceController.errorMessage!,
+                        style: TextStyle(color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          attendanceController.clearError();
+                          _loadAttendanceSessions();
+                        },
+                        child: const Text('Retry'),
                       ),
                     ],
                   ),
-                ),
+                );
+              }
 
-              // Sessions List
-              Expanded(
-                child: sessions.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.event_note_outlined,
-                              size: 64,
-                              color: Colors.grey[400],
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'No attendance sessions',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Create your first attendance session',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            if (authController.isChoirLeader) ...[
-                              const SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: () => _createAttendanceSession(selectedChoir.id),
-                                icon: const Icon(Icons.add),
-                                label: const Text('Create Session'),
-                              ),
-                            ],
-                          ],
-                        ),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: () async => _loadAttendanceSessions(),
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: sessions.length,
-                          itemBuilder: (context, index) {
-                            final session = sessions[index];
-                            return _buildSessionCard(session, authController);
-                          },
-                        ),
+              final sessions = attendanceController.sessions;
+              final stats = attendanceController.attendanceStats;
+
+              return Column(
+                children: [
+                  // Statistics Bar
+                  if (stats.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Theme.of(context).colorScheme.surface,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildStatItem(
+                            'Sessions',
+                            stats['total_sessions']?.toString() ?? '0',
+                            Colors.blue,
+                          ),
+                          _buildStatItem(
+                            'Present',
+                            stats['present_count']?.toString() ?? '0',
+                            Colors.green,
+                          ),
+                          _buildStatItem(
+                            'Absent',
+                            stats['absent_count']?.toString() ?? '0',
+                            Colors.red,
+                          ),
+                          _buildStatItem(
+                            'Rate',
+                            '${(stats['attendance_rate'] ?? 0.0).toStringAsFixed(1)}%',
+                            Colors.orange,
+                          ),
+                        ],
                       ),
-              ),
-            ],
-          );
-        },
+                    ),
+
+                  // Sessions List
+                  Expanded(
+                    child: sessions.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.event_note_outlined,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'No attendance sessions',
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(color: Colors.grey[600]),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Create your first attendance session',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                if (authController.isChoirLeader) ...[
+                                  const SizedBox(height: 16),
+                                  ElevatedButton.icon(
+                                    onPressed: () => _createAttendanceSession(
+                                      selectedChoir.id,
+                                    ),
+                                    icon: const Icon(Icons.add),
+                                    label: const Text('Create Session'),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () async => _loadAttendanceSessions(),
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(16),
+                              itemCount: sessions.length,
+                              itemBuilder: (context, index) {
+                                final session = sessions[index];
+                                return _buildSessionCard(
+                                  session,
+                                  authController,
+                                );
+                              },
+                            ),
+                          ),
+                  ),
+                ],
+              );
+            },
       ),
       floatingActionButton: Consumer2<AuthController, ChoirController>(
         builder: (context, authController, choirController, child) {
@@ -183,7 +214,7 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
           if (selectedChoir == null || !authController.isChoirLeader) {
             return const SizedBox.shrink();
           }
-          
+
           return FloatingActionButton(
             onPressed: () => _createAttendanceSession(selectedChoir.id),
             tooltip: 'Create Attendance Session',
@@ -205,18 +236,15 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
             color: color,
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
       ],
     );
   }
 
-  Widget _buildSessionCard(AttendanceSessionModel session, AuthController authController) {
+  Widget _buildSessionCard(
+    AttendanceSessionModel session,
+    AuthController authController,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -232,7 +260,9 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: _getEventTypeColor(session.eventType).withAlpha(50),
+                      color: _getEventTypeColor(
+                        session.eventType,
+                      ).withAlpha(50),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -266,7 +296,10 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                   ),
                   if (session.isActive)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.green.withAlpha(30),
                         borderRadius: BorderRadius.circular(12),
@@ -286,10 +319,7 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                 const SizedBox(height: 8),
                 Text(
                   session.description!,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -299,7 +329,11 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                 children: [
                   _buildInfoChip(
                     icon: Icons.event,
-                    label: session.eventType.toString().split('.').last.toUpperCase(),
+                    label: session.eventType
+                        .toString()
+                        .split('.')
+                        .last
+                        .toUpperCase(),
                     color: _getEventTypeColor(session.eventType),
                   ),
                   const SizedBox(width: 8),
@@ -422,9 +456,14 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
     );
 
     if (result == true && mounted) {
-      final attendanceController = Provider.of<AttendanceController>(context, listen: false);
-      final success = await attendanceController.endAttendanceSession(session.id);
-      
+      final attendanceController = Provider.of<AttendanceController>(
+        context,
+        listen: false,
+      );
+      final success = await attendanceController.endAttendanceSession(
+        session.id,
+      );
+
       if (success) {
         Get.snackbar(
           'Success',
@@ -444,9 +483,12 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
   }
 
   void _showStatistics() {
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
     final stats = attendanceController.attendanceStats;
-    
+
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(20),
@@ -460,16 +502,31 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
           children: [
             Text(
               'Attendance Statistics',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildStatsRow('Total Sessions', stats['total_sessions']?.toString() ?? '0'),
-            _buildStatsRow('Total Records', stats['total_records']?.toString() ?? '0'),
-            _buildStatsRow('Present Count', stats['present_count']?.toString() ?? '0'),
-            _buildStatsRow('Late Count', stats['late_count']?.toString() ?? '0'),
-            _buildStatsRow('Absent Count', stats['absent_count']?.toString() ?? '0'),
+            _buildStatsRow(
+              'Total Sessions',
+              stats['total_sessions']?.toString() ?? '0',
+            ),
+            _buildStatsRow(
+              'Total Records',
+              stats['total_records']?.toString() ?? '0',
+            ),
+            _buildStatsRow(
+              'Present Count',
+              stats['present_count']?.toString() ?? '0',
+            ),
+            _buildStatsRow(
+              'Late Count',
+              stats['late_count']?.toString() ?? '0',
+            ),
+            _buildStatsRow(
+              'Absent Count',
+              stats['absent_count']?.toString() ?? '0',
+            ),
             _buildStatsRow(
               'Attendance Rate',
               '${(stats['attendance_rate'] ?? 0.0).toStringAsFixed(1)}%',
@@ -487,10 +544,7 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );

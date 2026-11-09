@@ -1,5 +1,4 @@
 class ParishModel {
-
   ParishModel({
     required this.id,
     required this.name,
@@ -25,7 +24,9 @@ class ParishModel {
       phoneNumber: json['phone_number'],
       email: json['email'],
       pastor: json['pastor'],
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['created_at'] ?? DateTime.now().toIso8601String(),
+      ),
       isActive: json['is_active'] ?? true,
     );
   }

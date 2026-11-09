@@ -43,10 +43,10 @@ class FeeService {
       );
 
       _feeDefinitions.add(feeDefinition);
-      
+
       // Auto-generate member fees for all current members
       await _generateMemberFeesForDefinition(feeDefinition);
-      
+
       Logger.info('Created fee definition: ${feeDefinition.name}');
       return feeDefinition;
     } catch (e, stackTrace) {
@@ -55,11 +55,14 @@ class FeeService {
     }
   }
 
-  Future<List<FeeDefinitionModel>> getChoirFeeDefinitions(String choirId) async {
+  Future<List<FeeDefinitionModel>> getChoirFeeDefinitions(
+    String choirId,
+  ) async {
     return _feeDefinitions.where((fee) => fee.choirId == choirId).toList();
   }
 
-  Future<FeeDefinitionModel?> updateFeeDefinition(String feeId, {
+  Future<FeeDefinitionModel?> updateFeeDefinition(
+    String feeId, {
     String? name,
     String? description,
     double? amount,
@@ -85,12 +88,12 @@ class FeeService {
       );
 
       _feeDefinitions[index] = updatedFee;
-      
+
       // Update existing member fees if amount changed
       if (amount != null && amount != _feeDefinitions[index].amount) {
         await _updateMemberFeesForDefinition(updatedFee);
       }
-      
+
       Logger.info('Updated fee definition: ${updatedFee.name}');
       return updatedFee;
     } catch (e, stackTrace) {
@@ -132,10 +135,14 @@ class FeeService {
   }
 
   // Member Fee Management
-  Future<void> _generateMemberFeesForDefinition(FeeDefinitionModel feeDefinition) async {
+  Future<void> _generateMemberFeesForDefinition(
+    FeeDefinitionModel feeDefinition,
+  ) async {
     try {
-      final members = await _memberService.getChoirMembersWithUserInfo(feeDefinition.choirId);
-      
+      final members = await _memberService.getChoirMembersWithUserInfo(
+        feeDefinition.choirId,
+      );
+
       for (final member in members) {
         final dueDate = _calculateDueDate(feeDefinition);
         if (dueDate != null) {
@@ -151,16 +158,24 @@ class FeeService {
     }
   }
 
-  Future<void> _updateMemberFeesForDefinition(FeeDefinitionModel feeDefinition) async {
+  Future<void> _updateMemberFeesForDefinition(
+    FeeDefinitionModel feeDefinition,
+  ) async {
     try {
       final memberFees = _memberFees
-          .where((fee) => fee.feeDefinitionId == feeDefinition.id && fee.status == FeeStatus.pending)
+          .where(
+            (fee) =>
+                fee.feeDefinitionId == feeDefinition.id &&
+                fee.status == FeeStatus.pending,
+          )
           .toList();
 
       for (final memberFee in memberFees) {
         final index = _memberFees.indexWhere((fee) => fee.id == memberFee.id);
         if (index != -1) {
-          _memberFees[index] = memberFee.copyWith(amountDue: feeDefinition.amount);
+          _memberFees[index] = memberFee.copyWith(
+            amountDue: feeDefinition.amount,
+          );
         }
       }
     } catch (e, stackTrace) {
@@ -189,7 +204,7 @@ class FeeService {
 
   DateTime? _calculateDueDate(FeeDefinitionModel feeDefinition) {
     final now = DateTime.now();
-    
+
     switch (feeDefinition.type) {
       case FeeType.weekly:
         return now.add(const Duration(days: 7));
@@ -217,10 +232,12 @@ class FeeService {
   Future<List<MemberFeeModel>> getOverdueFees(String choirId) async {
     final now = DateTime.now();
     return _memberFees
-        .where((fee) => 
-            fee.choirId == choirId && 
-            fee.dueDate.isBefore(now) && 
-            !fee.isPaid)
+        .where(
+          (fee) =>
+              fee.choirId == choirId &&
+              fee.dueDate.isBefore(now) &&
+              !fee.isPaid,
+        )
         .toList();
   }
 
@@ -235,7 +252,9 @@ class FeeService {
     DateTime? paidAt,
   }) async {
     try {
-      final memberFeeIndex = _memberFees.indexWhere((fee) => fee.id == memberFeeId);
+      final memberFeeIndex = _memberFees.indexWhere(
+        (fee) => fee.id == memberFeeId,
+      );
       if (memberFeeIndex == -1) {
         throw Exception('Member fee not found');
       }
@@ -258,16 +277,24 @@ class FeeService {
 
       // Update member fee
       final newAmountPaid = memberFee.amountPaid + amount;
-      final newStatus = _calculateFeeStatus(memberFee.amountDue, newAmountPaid, memberFee.dueDate);
-      
+      final newStatus = _calculateFeeStatus(
+        memberFee.amountDue,
+        newAmountPaid,
+        memberFee.dueDate,
+      );
+
       _memberFees[memberFeeIndex] = memberFee.copyWith(
         amountPaid: newAmountPaid,
         status: newStatus,
         paidAt: newStatus == FeeStatus.paid ? payment.paidAt : null,
-        paymentReference: newStatus == FeeStatus.paid ? payment.reference : null,
+        paymentReference: newStatus == FeeStatus.paid
+            ? payment.reference
+            : null,
       );
 
-      Logger.info('Recorded payment: \$$amount for member ${memberFee.memberId}');
+      Logger.info(
+        'Recorded payment: \$$amount for member ${memberFee.memberId}',
+      );
       return payment;
     } catch (e, stackTrace) {
       Logger.error('Failed to record payment', e, stackTrace);
@@ -275,7 +302,11 @@ class FeeService {
     }
   }
 
-  FeeStatus _calculateFeeStatus(double amountDue, double amountPaid, DateTime dueDate) {
+  FeeStatus _calculateFeeStatus(
+    double amountDue,
+    double amountPaid,
+    DateTime dueDate,
+  ) {
     final isPaid = amountPaid >= amountDue;
     final isOverdue = DateTime.now().isAfter(dueDate);
     final hasPartialPayment = amountPaid > 0 && amountPaid < amountDue;
@@ -305,8 +336,14 @@ class FeeService {
     final payments = await getChoirPayments(choirId);
 
     final totalDue = fees.fold<double>(0, (sum, fee) => sum + fee.amountDue);
-    final totalPaid = payments.fold<double>(0, (sum, payment) => sum + payment.amount);
-    final totalOutstanding = fees.fold<double>(0, (sum, fee) => sum + fee.outstandingAmount);
+    final totalPaid = payments.fold<double>(
+      0,
+      (sum, payment) => sum + payment.amount,
+    );
+    final totalOutstanding = fees.fold<double>(
+      0,
+      (sum, fee) => sum + fee.outstandingAmount,
+    );
 
     final paidFees = fees.where((fee) => fee.isPaid).length;
     final overdueFees = fees.where((fee) => fee.isOverdue).length;
@@ -327,7 +364,9 @@ class FeeService {
   }
 
   double _calculateAveragePaymentTime(List<MemberFeeModel> fees) {
-    final paidFees = fees.where((fee) => fee.isPaid && fee.paidAt != null).toList();
+    final paidFees = fees
+        .where((fee) => fee.isPaid && fee.paidAt != null)
+        .toList();
     if (paidFees.isEmpty) return 0;
 
     final totalDays = paidFees.fold<int>(0, (sum, fee) {
@@ -341,11 +380,14 @@ class FeeService {
   Future<void> generateRecurringFees(String choirId) async {
     try {
       final feeDefinitions = await getChoirFeeDefinitions(choirId);
-      final recurringDefinitions = feeDefinitions.where((def) => 
-          def.isActive && 
-          def.type != FeeType.oneTime && 
-          def.type != FeeType.event
-      ).toList();
+      final recurringDefinitions = feeDefinitions
+          .where(
+            (def) =>
+                def.isActive &&
+                def.type != FeeType.oneTime &&
+                def.type != FeeType.event,
+          )
+          .toList();
 
       for (final definition in recurringDefinitions) {
         await _generateNextRecurringFee(definition);
@@ -358,16 +400,18 @@ class FeeService {
   }
 
   Future<void> _generateNextRecurringFee(FeeDefinitionModel definition) async {
-    final members = await _memberService.getChoirMembersWithUserInfo(definition.choirId);
+    final members = await _memberService.getChoirMembersWithUserInfo(
+      definition.choirId,
+    );
     final nextDueDate = definition.getNextDueDate();
-    
+
     if (nextDueDate == null) return;
 
     for (final member in members) {
       // Check if member already has a fee for this period
       final existingFee = _memberFees.firstWhere(
-        (fee) => 
-            fee.memberId == member['id'] && 
+        (fee) =>
+            fee.memberId == member['id'] &&
             fee.feeDefinitionId == definition.id &&
             _isSamePeriod(fee.dueDate, nextDueDate, definition.type),
         orElse: () => MemberFeeModel(
@@ -398,7 +442,8 @@ class FeeService {
       case FeeType.monthly:
         return date1.year == date2.year && date1.month == date2.month;
       case FeeType.quarterly:
-        return date1.year == date2.year && _getQuarter(date1) == _getQuarter(date2);
+        return date1.year == date2.year &&
+            _getQuarter(date1) == _getQuarter(date2);
       case FeeType.annual:
         return date1.year == date2.year;
       case FeeType.oneTime:

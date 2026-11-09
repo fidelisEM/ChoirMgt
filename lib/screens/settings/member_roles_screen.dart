@@ -10,7 +10,6 @@ import '../../theme/app_colors.dart';
 import '../../utils/helpers.dart';
 
 class MemberRolesScreen extends StatefulWidget {
-
   const MemberRolesScreen({super.key, required this.choir});
   final ChoirModel choir;
 
@@ -26,7 +25,13 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
       'role': 'leader',
       'title': 'Choir Leader',
       'description': 'Full access to manage choir, members, and settings',
-      'permissions': ['Manage Members', 'Edit Settings', 'Delete Choir', 'View Reports', 'Manage Payments'],
+      'permissions': [
+        'Manage Members',
+        'Edit Settings',
+        'Delete Choir',
+        'View Reports',
+        'Manage Payments',
+      ],
       'color': Colors.red,
       'icon': Icons.admin_panel_settings,
     },
@@ -34,7 +39,12 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
       'role': 'assistant',
       'title': 'Assistant Leader',
       'description': 'Help manage choir activities and members',
-      'permissions': ['Manage Members', 'Take Attendance', 'View Reports', 'Send Messages'],
+      'permissions': [
+        'Manage Members',
+        'Take Attendance',
+        'View Reports',
+        'Send Messages',
+      ],
       'color': Colors.orange,
       'icon': Icons.supervisor_account,
     },
@@ -50,7 +60,11 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
       'role': 'treasurer',
       'title': 'Treasurer',
       'description': 'Manage payments and financial records',
-      'permissions': ['Manage Payments', 'View Financial Reports', 'Export Data'],
+      'permissions': [
+        'Manage Payments',
+        'View Financial Reports',
+        'Export Data',
+      ],
       'color': Colors.green,
       'icon': Icons.account_balance,
     },
@@ -78,7 +92,10 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
     });
 
     try {
-      final memberController = Provider.of<MemberController>(context, listen: false);
+      final memberController = Provider.of<MemberController>(
+        context,
+        listen: false,
+      );
       await memberController.loadChoirMembers(widget.choir.id);
     } catch (e) {
       Helpers.showErrorSnackbar('Failed to load members: $e');
@@ -98,23 +115,30 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
         foregroundColor: Colors.white,
       ),
       body: Consumer3<MemberController, ChoirController, AuthController>(
-        builder: (context, memberController, choirController, authController, child) {
-          if (_isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        builder:
+            (
+              context,
+              memberController,
+              choirController,
+              authController,
+              child,
+            ) {
+              if (_isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildRoleDefinitions(),
-                const SizedBox(height: 24),
-                _buildMembersList(memberController, authController),
-              ],
-            ),
-          );
-        },
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildRoleDefinitions(),
+                    const SizedBox(height: 24),
+                    _buildMembersList(memberController, authController),
+                  ],
+                ),
+              );
+            },
       ),
     );
   }
@@ -169,10 +193,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
                       ),
                       Text(
                         role['description'] as String,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
                     ],
                   ),
@@ -182,10 +203,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
             const SizedBox(height: 12),
             const Text(
               'Permissions:',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -193,7 +211,10 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
               runSpacing: 4,
               children: (role['permissions'] as List<String>).map((permission) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: (role['color'] as Color).withAlpha(20),
                     borderRadius: BorderRadius.circular(12),
@@ -215,7 +236,10 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
     );
   }
 
-  Widget _buildMembersList(MemberController memberController, AuthController authController) {
+  Widget _buildMembersList(
+    MemberController memberController,
+    AuthController authController,
+  ) {
     final members = memberController.membersWithUserInfo;
 
     return Column(
@@ -234,10 +258,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
             const Spacer(),
             Text(
               '${members.length} members',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
           ],
         ),
@@ -245,7 +266,9 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
         if (members.isEmpty)
           _buildEmptyState()
         else
-          ...members.map((member) => _buildMemberRoleCard(member, authController)),
+          ...members.map(
+            (member) => _buildMemberRoleCard(member, authController),
+          ),
       ],
     );
   }
@@ -256,11 +279,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            Icon(
-              Icons.people_outline,
-              size: 48,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.people_outline, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 16),
             const Text(
               'No Members Found',
@@ -273,10 +292,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
             const SizedBox(height: 8),
             Text(
               'Add members to the choir to assign roles',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
               textAlign: TextAlign.center,
             ),
           ],
@@ -285,15 +301,19 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
     );
   }
 
-  Widget _buildMemberRoleCard(Map<String, dynamic> member, AuthController authController) {
+  Widget _buildMemberRoleCard(
+    Map<String, dynamic> member,
+    AuthController authController,
+  ) {
     final userData = member['users'] ?? {};
     final fullName = userData['full_name'] ?? 'Unknown Member';
     final email = userData['email'] ?? '';
     final currentRole = member['role'] ?? 'member';
-    
+
     // Don't allow changing the leader's role
     final isLeader = member['id'] == widget.choir.leaderId;
-    final canEdit = authController.currentUser?.id == widget.choir.leaderId && !isLeader;
+    final canEdit =
+        authController.currentUser?.id == widget.choir.leaderId && !isLeader;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -327,10 +347,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
                   if (email.isNotEmpty)
                     Text(
                       email,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
                   const SizedBox(height: 4),
                   Row(
@@ -352,7 +369,10 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
                       if (isLeader) ...[
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.red.withAlpha(20),
                             borderRadius: BorderRadius.circular(8),
@@ -376,21 +396,25 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
               PopupMenuButton<String>(
                 onSelected: (role) => _changeRole(member, role),
                 itemBuilder: (context) => _roleDefinitions
-                    .where((role) => role['role'] != 'leader') // Can't assign leader role
-                    .map((role) => PopupMenuItem<String>(
-                          value: role['role'] as String,
-                          child: Row(
-                            children: [
-                              Icon(
-                                role['icon'] as IconData,
-                                size: 20,
-                                color: role['color'] as Color,
-                              ),
-                              const SizedBox(width: 12),
-                              Text(role['title'] as String),
-                            ],
-                          ),
-                        ))
+                    .where(
+                      (role) => role['role'] != 'leader',
+                    ) // Can't assign leader role
+                    .map(
+                      (role) => PopupMenuItem<String>(
+                        value: role['role'] as String,
+                        child: Row(
+                          children: [
+                            Icon(
+                              role['icon'] as IconData,
+                              size: 20,
+                              color: role['color'] as Color,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(role['title'] as String),
+                          ],
+                        ),
+                      ),
+                    )
                     .toList(),
                 child: const Icon(Icons.more_vert),
               )
@@ -433,9 +457,7 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
     final confirmed = await Get.dialog<bool>(
       AlertDialog(
         title: const Text('Change Member Role'),
-        content: Text(
-          'Change $fullName\'s role to ${_getRoleTitle(newRole)}?'
-        ),
+        content: Text('Change $fullName\'s role to ${_getRoleTitle(newRole)}?'),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -455,8 +477,11 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
       });
 
       try {
-        final memberController = Provider.of<MemberController>(context, listen: false);
-        
+        final memberController = Provider.of<MemberController>(
+          context,
+          listen: false,
+        );
+
         // Update member role (this would need to be implemented in the controller)
         final success = await memberController.updateMemberRole(
           memberId: member['id'],
@@ -465,7 +490,9 @@ class _MemberRolesScreenState extends State<MemberRolesScreen> {
         );
 
         if (success) {
-          Helpers.showSuccessSnackbar('$fullName\'s role updated to ${_getRoleTitle(newRole)}');
+          Helpers.showSuccessSnackbar(
+            '$fullName\'s role updated to ${_getRoleTitle(newRole)}',
+          );
           _loadMembers(); // Reload to show changes
         } else {
           Helpers.showErrorSnackbar('Failed to update member role');

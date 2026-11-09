@@ -7,11 +7,10 @@ enum ErrorType {
   validation,
   authentication,
   permission,
-  unknown
+  unknown,
 }
 
 class AppError {
-
   AppError({
     required this.message,
     this.technicalMessage,
@@ -38,7 +37,7 @@ class ErrorService {
 
   void logError(AppError error) {
     _errorLog.add(error);
-    
+
     // Log to console in debug mode
     if (kDebugMode) {
       debugPrint('🔴 ${error.type.name.toUpperCase()}: ${error.message}');

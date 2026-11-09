@@ -5,7 +5,7 @@ import '../services/archdiocese_service.dart';
 
 class ArchdioceseController extends GetxController {
   final ArchdioceseService _archdioceseService = ArchdioceseService();
-  
+
   var isLoading = false.obs;
   var archdioceses = <ArchdioceseModel>[].obs;
   var selectedArchdiocese = Rxn<ArchdioceseModel>();
@@ -60,7 +60,9 @@ class ArchdioceseController extends GetxController {
   Future<void> createArchdiocese(ArchdioceseModel archdiocese) async {
     try {
       isLoading.value = true;
-      final newArchdiocese = await _archdioceseService.createArchdiocese(archdiocese);
+      final newArchdiocese = await _archdioceseService.createArchdiocese(
+        archdiocese,
+      );
       archdioceses.add(newArchdiocese);
       Get.snackbar(
         'Success',
@@ -85,7 +87,9 @@ class ArchdioceseController extends GetxController {
   Future<void> updateArchdiocese(ArchdioceseModel archdiocese) async {
     try {
       isLoading.value = true;
-      final updatedArchdiocese = await _archdioceseService.updateArchdiocese(archdiocese);
+      final updatedArchdiocese = await _archdioceseService.updateArchdiocese(
+        archdiocese,
+      );
       final index = archdioceses.indexWhere((a) => a.id == archdiocese.id);
       if (index != -1) {
         archdioceses[index] = updatedArchdiocese;

@@ -24,14 +24,14 @@ class ReportController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _currentReport = await _reportService.generateMembershipReport(
         choirId: choirId,
         fromDate: fromDate,
         toDate: toDate,
         membershipFilter: membershipFilter,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to generate membership report: $e');
@@ -48,13 +48,13 @@ class ReportController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _currentReport = await _reportService.generateAttendanceReport(
         choirId: choirId,
         fromDate: fromDate,
         toDate: toDate,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to generate attendance report: $e');
@@ -71,13 +71,13 @@ class ReportController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _currentReport = await _reportService.generateFinancialReport(
         choirId: choirId,
         fromDate: fromDate,
         toDate: toDate,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to generate financial report: $e');
@@ -94,13 +94,13 @@ class ReportController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _currentReport = await _reportService.generateChoirOverviewReport(
         choirId: choirId,
         fromDate: fromDate,
         toDate: toDate,
       );
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to generate choir overview report: $e');
@@ -113,9 +113,9 @@ class ReportController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       _dashboardStats = await _reportService.getDashboardStats(choirId);
-      
+
       _setLoading(false);
     } catch (e) {
       _setError('Failed to load dashboard statistics: $e');
@@ -126,7 +126,7 @@ class ReportController extends ChangeNotifier {
   // Export current report to CSV
   String exportCurrentReportToCSV() {
     if (_currentReport.isEmpty) return '';
-    
+
     final reportType = _currentReport['report_type'] as String? ?? '';
     return _reportService.exportToCSV(_currentReport, reportType);
   }
@@ -154,7 +154,7 @@ class ReportController extends ChangeNotifier {
   Map<String, DateTime?> get reportPeriod {
     final fromStr = _currentReport['period_from'] as String?;
     final toStr = _currentReport['period_to'] as String?;
-    
+
     return {
       'from': fromStr != null ? DateTime.parse(fromStr) : null,
       'to': toStr != null ? DateTime.parse(toStr) : null,
@@ -165,17 +165,25 @@ class ReportController extends ChangeNotifier {
   Map<String, double> calculateTrends() {
     if (_dashboardStats.isEmpty) return {};
 
-    final current = _dashboardStats['current_period'] as Map<String, dynamic>? ?? {};
-    final previous = _dashboardStats['previous_period'] as Map<String, dynamic>? ?? {};
+    final current =
+        _dashboardStats['current_period'] as Map<String, dynamic>? ?? {};
+    final previous =
+        _dashboardStats['previous_period'] as Map<String, dynamic>? ?? {};
 
-    final currentMembership = current['membership'] as Map<String, dynamic>? ?? {};
-    final previousMembership = previous['membership'] as Map<String, dynamic>? ?? {};
+    final currentMembership =
+        current['membership'] as Map<String, dynamic>? ?? {};
+    final previousMembership =
+        previous['membership'] as Map<String, dynamic>? ?? {};
 
-    final currentAttendance = current['attendance'] as Map<String, dynamic>? ?? {};
-    final previousAttendance = previous['attendance'] as Map<String, dynamic>? ?? {};
+    final currentAttendance =
+        current['attendance'] as Map<String, dynamic>? ?? {};
+    final previousAttendance =
+        previous['attendance'] as Map<String, dynamic>? ?? {};
 
-    final currentFinancial = current['financial'] as Map<String, dynamic>? ?? {};
-    final previousFinancial = previous['financial'] as Map<String, dynamic>? ?? {};
+    final currentFinancial =
+        current['financial'] as Map<String, dynamic>? ?? {};
+    final previousFinancial =
+        previous['financial'] as Map<String, dynamic>? ?? {};
 
     return {
       'membership_growth': _calculatePercentageChange(
@@ -206,14 +214,15 @@ class ReportController extends ChangeNotifier {
   List<Map<String, dynamic>> getTopPerformers() {
     if (_currentReport['report_type'] != 'attendance') return [];
 
-    final memberAttendance = _currentReport['member_attendance'] as Map<String, dynamic>? ?? {};
-    
+    final memberAttendance =
+        _currentReport['member_attendance'] as Map<String, dynamic>? ?? {};
+
     final performers = <Map<String, dynamic>>[];
-    
+
     memberAttendance.forEach((memberId, data) {
       final memberData = data['member_data'] ?? {};
       final userData = memberData['users'] ?? {};
-      
+
       performers.add({
         'member_id': memberId,
         'name': userData['full_name'] ?? '',
@@ -225,8 +234,10 @@ class ReportController extends ChangeNotifier {
     });
 
     // Sort by attendance rate
-    performers.sort((a, b) => b['attendance_rate'].compareTo(a['attendance_rate']));
-    
+    performers.sort(
+      (a, b) => b['attendance_rate'].compareTo(a['attendance_rate']),
+    );
+
     return performers.take(10).toList();
   }
 
@@ -235,7 +246,8 @@ class ReportController extends ChangeNotifier {
     if (_currentReport['report_type'] != 'financial') return {};
 
     final summary = _currentReport['summary'] as Map<String, dynamic>? ?? {};
-    final breakdowns = _currentReport['breakdowns'] as Map<String, dynamic>? ?? {};
+    final breakdowns =
+        _currentReport['breakdowns'] as Map<String, dynamic>? ?? {};
 
     return {
       'total_collected': summary['completed_amount'] ?? 0.0,
@@ -249,14 +261,14 @@ class ReportController extends ChangeNotifier {
 
   String _getMostPopular(Map<String, dynamic> breakdown) {
     if (breakdown.isEmpty) return '';
-    
+
     var maxEntry = breakdown.entries.first;
     for (final entry in breakdown.entries) {
       if (entry.value > maxEntry.value) {
         maxEntry = entry;
       }
     }
-    
+
     return maxEntry.key;
   }
 

@@ -7,13 +7,10 @@ import 'package:provider/provider.dart';
 import '../../controllers/attendance_controller.dart';
 import '../../controllers/auth_controller.dart';
 import '../../models/models.dart';
+import '../../utils/app_translations.dart';
 
 class CreateSessionScreen extends StatefulWidget {
-
-  const CreateSessionScreen({
-    super.key,
-    required this.choirId,
-  });
+  const CreateSessionScreen({super.key, required this.choirId});
   final String choirId;
 
   @override
@@ -30,7 +27,7 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Attendance Session'),
+        title: Text(context.tr('attCreateSessionTitle')),
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
       ),
@@ -50,19 +47,18 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Session Details',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            context.tr('attSessionDetailsHeading'),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderTextField(
                             name: 'title',
-                            decoration: const InputDecoration(
-                              labelText: 'Session Title',
-                              hintText: 'e.g., Sunday Service, Choir Practice',
-                              prefixIcon: Icon(Icons.title),
+                            decoration: InputDecoration(
+                              labelText: context.tr('attSessionTitleLabel'),
+                              hintText: context.tr('attSessionTitleHint'),
+                              prefixIcon: const Icon(Icons.title),
                             ),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
@@ -70,12 +66,12 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                             ]),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderDropdown<EventType>(
                             name: 'eventType',
-                            decoration: const InputDecoration(
-                              labelText: 'Event Type',
-                              prefixIcon: Icon(Icons.category),
+                            decoration: InputDecoration(
+                              labelText: context.tr('attEventTypeLabel'),
+                              prefixIcon: const Icon(Icons.category),
                             ),
                             validator: FormBuilderValidators.required(),
                             items: _eventTypes.map((type) {
@@ -96,13 +92,15 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                             }).toList(),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderTextField(
                             name: 'description',
-                            decoration: const InputDecoration(
-                              labelText: 'Description (Optional)',
-                              hintText: 'Additional details about the session',
-                              prefixIcon: Icon(Icons.description),
+                            decoration: InputDecoration(
+                              labelText: context.tr(
+                                'attDescriptionOptionalLabel',
+                              ),
+                              hintText: context.tr('attDescriptionHint'),
+                              prefixIcon: const Icon(Icons.description),
                             ),
                             maxLines: 3,
                           ),
@@ -110,9 +108,9 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -120,56 +118,57 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Schedule',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            context.tr('attScheduleHeading'),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderDateTimePicker(
                             name: 'date',
                             inputType: InputType.date,
-                            decoration: const InputDecoration(
-                              labelText: 'Date',
-                              prefixIcon: Icon(Icons.calendar_today),
+                            decoration: InputDecoration(
+                              labelText: context.tr('date'),
+                              prefixIcon: const Icon(Icons.calendar_today),
                             ),
                             initialValue: DateTime.now(),
                             validator: FormBuilderValidators.required(),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderDateTimePicker(
                             name: 'startTime',
                             inputType: InputType.time,
-                            decoration: const InputDecoration(
-                              labelText: 'Start Time',
-                              prefixIcon: Icon(Icons.access_time),
+                            decoration: InputDecoration(
+                              labelText: context.tr('attStartTimeLabel'),
+                              prefixIcon: const Icon(Icons.access_time),
                             ),
                             initialValue: DateTime.now(),
                             validator: FormBuilderValidators.required(),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           FormBuilderSlider(
                             name: 'graceMinutes',
-                            decoration: const InputDecoration(
-                              labelText: 'Grace Period (minutes)',
-                              helperText: 'How long after start time members can still mark as present',
+                            decoration: InputDecoration(
+                              labelText: context.tr('attGracePeriodLabel'),
+                              helperText: context.tr('attGracePeriodHelper'),
                             ),
                             min: 5,
                             max: 60,
                             initialValue: 15,
                             divisions: 11,
-                            valueWidget: (value) => Text('$value minutes'),
+                            valueWidget: (value) => Text(
+                              '$value ${context.tr('attMinutesSuffix')}',
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -185,12 +184,14 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             )
-                          : const Text(
-                              'Create Session',
-                              style: TextStyle(
+                          : Text(
+                              context.tr('attCreateSessionButton'),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -211,16 +212,32 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
 
     final formData = _formKey.currentState!.value;
     final authController = Provider.of<AuthController>(context, listen: false);
-    final attendanceController = Provider.of<AttendanceController>(context, listen: false);
+    final attendanceController = Provider.of<AttendanceController>(
+      context,
+      listen: false,
+    );
 
     setState(() {
       _isLoading = true;
     });
+    final trAttFailedCreateSession = context.tr(
+      'attFailedCreateSession',
+    ); // resolved before awaits
+    final trAttSessionCreatedSuccess = context.tr(
+      'attSessionCreatedSuccess',
+    ); // resolved before awaits
+    final trAttSuccessTitle = context.tr(
+      'attSuccessTitle',
+    ); // resolved before awaits
+    final trAttUnexpectedErrorPrefix = context.tr(
+      'attUnexpectedErrorPrefix',
+    ); // resolved before awaits
+    final trError = context.tr('error'); // resolved before awaits
 
     try {
       final date = formData['date'] as DateTime;
       final startTime = formData['startTime'] as DateTime;
-      
+
       // Combine date and time
       final sessionDateTime = DateTime(
         date.year,
@@ -244,16 +261,16 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
       if (success) {
         Get.back();
         Get.snackbar(
-          'Success',
-          'Attendance session created successfully',
+          trAttSuccessTitle,
+          trAttSessionCreatedSuccess,
           backgroundColor: Colors.green,
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
         );
       } else {
         Get.snackbar(
-          'Error',
-          attendanceController.errorMessage ?? 'Failed to create session',
+          trError,
+          attendanceController.errorMessage ?? trAttFailedCreateSession,
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
@@ -261,14 +278,15 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
       }
     } catch (e) {
       Get.snackbar(
-        'Error',
-        'An unexpected error occurred: $e',
+        trError,
+        '$trAttUnexpectedErrorPrefix: $e',
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
 
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
@@ -303,13 +321,13 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
   String _getEventTypeLabel(EventType eventType) {
     switch (eventType) {
       case EventType.rehearsal:
-        return 'Rehearsal';
+        return context.tr('attEventRehearsal');
       case EventType.service:
-        return 'Service';
+        return context.tr('attEventService');
       case EventType.meeting:
-        return 'Meeting';
+        return context.tr('attEventMeeting');
       case EventType.other:
-        return 'Other';
+        return context.tr('attEventOther');
     }
   }
 }

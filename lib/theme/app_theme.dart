@@ -9,26 +9,26 @@ class AppTheme {
   static const Color errorColor = Color(0xFFEF4444);
   static const Color warningColor = Color(0xFFF59E0B);
   static const Color successColor = Color(0xFF10B981);
-  
+
   // Gradient Colors
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-  
+
   static const LinearGradient secondaryGradient = LinearGradient(
     colors: [Color(0xFF06D6A0), Color(0xFF0891B2)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-  
+
   static const LinearGradient backgroundGradient = LinearGradient(
     colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
-  
+
   // Dark Mode Gradients
   static const LinearGradient darkBackgroundGradient = LinearGradient(
     colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
@@ -208,7 +208,7 @@ class AppTheme {
     ),
     textTheme: lightTextTheme,
     scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-    
+
     // AppBar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -220,12 +220,9 @@ class AppTheme {
         fontWeight: FontWeight.w600,
         color: const Color(0xFF1E293B),
       ),
-      iconTheme: const IconThemeData(
-        color: Color(0xFF475569),
-        size: 24,
-      ),
+      iconTheme: const IconThemeData(color: Color(0xFF475569), size: 24),
     ),
-    
+
     // Card Theme
     cardTheme: CardThemeData(
       elevation: 0,
@@ -236,7 +233,7 @@ class AppTheme {
         side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
       ),
     ),
-    
+
     // Elevated Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -244,48 +241,33 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        textStyle: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
-    
+
     // Outlined Button Theme
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: primaryColor,
         side: BorderSide(color: primaryColor.withValues(alpha: 0.3)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        textStyle: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
-    
+
     // Text Button Theme
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
-    
+
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -316,7 +298,7 @@ class AppTheme {
         color: const Color(0xFF64748B),
       ),
     ),
-    
+
     // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -333,7 +315,7 @@ class AppTheme {
         fontWeight: FontWeight.w500,
       ),
     ),
-    
+
     // Floating Action Button Theme
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
@@ -341,7 +323,7 @@ class AppTheme {
       elevation: 4,
       shape: CircleBorder(),
     ),
-    
+
     // Chip Theme
     chipTheme: ChipThemeData(
       backgroundColor: primaryColor.withValues(alpha: 0.1),
@@ -350,19 +332,15 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         color: primaryColor,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
     ),
-    
+
     // Dialog Theme
     dialogTheme: DialogThemeData(
       backgroundColor: Colors.white,
       elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       titleTextStyle: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -390,7 +368,7 @@ class AppTheme {
     ),
     textTheme: darkTextTheme,
     scaffoldBackgroundColor: const Color(0xFF0F172A),
-    
+
     // AppBar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -402,12 +380,9 @@ class AppTheme {
         fontWeight: FontWeight.w600,
         color: const Color(0xFFE2E8F0),
       ),
-      iconTheme: const IconThemeData(
-        color: Color(0xFF94A3B8),
-        size: 24,
-      ),
+      iconTheme: const IconThemeData(color: Color(0xFF94A3B8), size: 24),
     ),
-    
+
     // Card Theme
     cardTheme: CardThemeData(
       elevation: 0,
@@ -418,7 +393,7 @@ class AppTheme {
         side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
       ),
     ),
-    
+
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -449,7 +424,7 @@ class AppTheme {
         color: const Color(0xFF94A3B8),
       ),
     ),
-    
+
     // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: const Color(0xFF1E293B),
@@ -500,9 +475,15 @@ class AppTheme {
   ];
 
   // Custom Border Radius
-  static const BorderRadius cardBorderRadius = BorderRadius.all(Radius.circular(16));
-  static const BorderRadius buttonBorderRadius = BorderRadius.all(Radius.circular(12));
-  static const BorderRadius inputBorderRadius = BorderRadius.all(Radius.circular(12));
+  static const BorderRadius cardBorderRadius = BorderRadius.all(
+    Radius.circular(16),
+  );
+  static const BorderRadius buttonBorderRadius = BorderRadius.all(
+    Radius.circular(12),
+  );
+  static const BorderRadius inputBorderRadius = BorderRadius.all(
+    Radius.circular(12),
+  );
 
   // Animation Durations
   static const Duration fastAnimation = Duration(milliseconds: 200);
